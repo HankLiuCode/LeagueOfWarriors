@@ -17,9 +17,6 @@ MonoBehaviour:
   mover: {fileID: 1456116392418787684}
   fighter: {fileID: 5896219556624422186}
   health: {fileID: 147317876023596135}
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 256
 --- !u!1001 &2966553367041608794
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -125,10 +122,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -1912019647740877411, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
         type: 3}
+      propertyPath: attackDamage
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -1912019647740877411, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
+        type: 3}
       propertyPath: projectilePrefab
       value: 
       objectReference: {fileID: 3249255232821780769, guid: 02b1b90b0e8b6dc46997d7958b5b0723,
         type: 3}
+    - target: {fileID: -1912019647740877411, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
+        type: 3}
+      propertyPath: timeBetweenAttacks
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2346826292116582866, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
         type: 3}
       propertyPath: health

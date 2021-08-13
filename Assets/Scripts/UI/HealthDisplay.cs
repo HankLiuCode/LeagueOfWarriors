@@ -21,7 +21,6 @@ namespace Dota.UI
                 this.health = health;
             }
 
-
             if (health != null)
             {
                 healthFill.fillAmount = health.GetHealthPercent();

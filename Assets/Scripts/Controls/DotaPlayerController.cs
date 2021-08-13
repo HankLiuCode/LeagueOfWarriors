@@ -14,20 +14,12 @@ namespace Dota.Controls
         [SerializeField] DotaMover mover = null;
         [SerializeField] DotaFighter fighter = null;
         [SerializeField] Health health = null;
-        [SerializeField] AbilityStore abilityStore = null;
 
         private void Update()
         {
             if (!isLocalPlayer) { return; }
 
             if (health.IsDead()) { return; }
-
-            // Use Abilities
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                abilityStore.Use(0, gameObject);
-            }
-            
 
             if (Input.GetMouseButtonDown(1))
             {
@@ -38,13 +30,13 @@ namespace Dota.Controls
 
                     if (fighter.CanAttack(go))
                     {
-                        fighter.CmdTryAttack(go);
+                        fighter.StartAttack(go);
                         return;
                     }
                     else
                     {
-                        fighter.CmdStopAttack();
-                        mover.CmdMoveTo(hit.point);
+                        fighter.StopAttack();
+                        mover.MoveTo(hit.point);
                     }
                 }
             }

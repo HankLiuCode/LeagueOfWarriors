@@ -12,13 +12,16 @@ namespace Dota.Combat
         Health target;
         float timeSinceLastAttack = Mathf.Infinity;
 
-        [SerializeField] float attackDuration = 1f;
-        [SerializeField] bool isAttacking = false;
-
         [SerializeField] float attackRange = 2f;
         [SerializeField] float timeBetweenAttacks = 1f;
         [SerializeField] float attackDamage = 20f;
+
+        [SerializeField] float attackDuration = 1f;
+        [SerializeField] bool isAttacking = false;
+
         [SerializeField] Animator animator = null;
+        [SerializeField] NetworkAnimator netAnimator = null;
+
         [SerializeField] Health health = null;
 
         [SerializeField] Transform rightHand = null;
@@ -31,19 +34,46 @@ namespace Dota.Combat
 
         #region Server
 
-        [ClientRpc]
-        private void RpcTriggerAttackAnimation()
+        [Server]
+        public void ServerDealDamageTo(Health health, float damage)
         {
-            if (!isAttacking)
-            {
-                StartCoroutine(AttackAnimation());
-            }
+            health.ServerTakeDamage(damage);
+        }
+
+        [Command]
+        public void CmdDealDamageTo(Health health, float damage)
+        {
+            ServerDealDamageTo(health, damage);
+        }
+
+        [Server]
+        public void ServerSpawnProjectile(Health target, GameObject owner, float attackDamage)
+        {
+            Projectile projectile = Instantiate(projectilePrefab, rightHand.transform.position, Quaternion.identity);
+            NetworkServer.Spawn(projectile.gameObject, owner.GetComponent<NetworkIdentity>().connectionToClient);
+            projectile.SetTarget(target, attackDamage);
+        }
+
+        [Command]
+        public void CmdSpawnProjectile(Health target, GameObject owner, float attackDamage)
+        {
+            ServerSpawnProjectile(target, owner, attackDamage);
+        }
+
+        #endregion
+
+        #region Client
+        private void TriggerStopAttackAnimation()
+        {
+            netAnimator.ResetTrigger("attack");
+            netAnimator.SetTrigger("stopAttack");
         }
 
         IEnumerator AttackAnimation()
         {
-            animator.ResetTrigger("stopAttack");
-            animator.SetTrigger("attack");
+            netAnimator.ResetTrigger("stopAttack");
+            netAnimator.SetTrigger("attack");
+
             isAttacking = true;
             float timeSinceAttackStart = 0;
 
@@ -57,80 +87,55 @@ namespace Dota.Combat
             yield return null;
         }
 
-        [ClientRpc]
-        private void RpcTriggerStopAttackAnimation()
+        private void AttackBehaviour()
         {
-            animator.ResetTrigger("attack");
-            animator.SetTrigger("stopAttack");
+            Vector3 targetDir = target.transform.position - transform.position;
+            transform.LookAt(transform.position + Quaternion.AngleAxis(atkRotAdjust, Vector3.up) * targetDir);
+
+            if (timeSinceLastAttack > timeBetweenAttacks && !isAttacking)
+            {
+                StartCoroutine(AttackAnimation());
+                timeSinceLastAttack = 0;
+            }
         }
 
-        [Server]
-        public void ServerTryAttack(GameObject combatTarget)
+        public bool CanAttack(GameObject combatTarget)
+        {
+            if (combatTarget == gameObject) return false;
+            Health health = combatTarget.GetComponent<Health>();
+            if (health == null) return false;
+            return true;
+        }
+
+        public void StartAttack(GameObject combatTarget)
         {
             Health health = combatTarget.GetComponent<Health>();
             if (health == null) { return; }
             target = health;
         }
 
-        [Server]
-        public void ServerStopAttack()
+        public void StopAttack()
         {
             target = null;
-            RpcTriggerStopAttackAnimation();
+            TriggerStopAttackAnimation();
         }
 
-        [Command]
-        public void CmdTryAttack(GameObject combatTarget)
-        {
-            ServerTryAttack(combatTarget);
-        }
-
-        [Command]
-        public void CmdStopAttack()
-        {
-            ServerStopAttack();
-        }
-
-        [Server]
-        private bool GetIsInRange()
-        {
-            return Vector3.Distance(transform.position, target.transform.position) < attackRange;
-        }
-
-        [Server]
-        private void ServerAttackBehaviour()
-        {
-            Vector3 targetDir = target.transform.position - transform.position;
-            transform.LookAt(transform.position + Quaternion.AngleAxis(atkRotAdjust, Vector3.up) * targetDir);
-
-            if (timeSinceLastAttack > timeBetweenAttacks)
-            {
-                RpcTriggerAttackAnimation();
-                timeSinceLastAttack = 0;
-            }
-        }
-
-        [Server]
         void MeleeAttack()
         {
-            target.ServerTakeDamage(attackDamage);
+            CmdDealDamageTo(target, attackDamage);
         }
 
-        [Server]
         void RangedAttack()
         {
-            Projectile projectile = Instantiate(projectilePrefab, rightHand.transform.position, Quaternion.identity);
-            NetworkServer.Spawn(projectile.gameObject);
-            projectile.SetTarget(target, attackDamage);
+            CmdSpawnProjectile(target, gameObject, attackDamage);
         }
-
+        
         // Animation Event
-        [Server]
         void Hit()
         {
-            if(target == null) { return; }
+            if (target == null) { return; }
 
-            if(projectilePrefab == null)
+            if (projectilePrefab == null)
             {
                 MeleeAttack();
             }
@@ -140,38 +145,30 @@ namespace Dota.Combat
             }
         }
 
-        #endregion
-
-        #region Client
-        public bool CanAttack(GameObject combatTarget)
+        private bool GetIsInRange()
         {
-            if (combatTarget == gameObject) return false;
-            Health health = combatTarget.GetComponent<Health>();
-            if (health == null) return false;
-            return true;
+            return Vector3.Distance(transform.position, target.transform.position) < attackRange;
         }
 
         private void Update()
         {
-            if (isServer)
+            if (!hasAuthority) { return; }
+
+            timeSinceLastAttack += Time.deltaTime;
+
+            if (target == null) { return; }
+
+            if (target.IsDead()) { return; }
+
+            if (!GetIsInRange())
             {
-                timeSinceLastAttack += Time.deltaTime;
-
-                if (target == null) { return; }
-
-                if (target.IsDead()) { return; }
-
-                if (!GetIsInRange())
-                {
-                    // !!!
-                    if (isAttacking) { return; }
-                    GetComponent<DotaMover>().ServerMoveTo(target.transform.position);
-                }
-                else
-                {
-                    GetComponent<DotaMover>().ServerMoveStop();
-                    ServerAttackBehaviour();
-                }
+                if (isAttacking) { return; }
+                GetComponent<DotaMover>().MoveTo(target.transform.position);
+            }
+            else
+            {
+                GetComponent<DotaMover>().MoveStop();
+                AttackBehaviour();
             }
         }
 

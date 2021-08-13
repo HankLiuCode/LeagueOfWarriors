@@ -9,69 +9,37 @@ namespace Dota.Movement
 {
     public class DotaMover : NetworkBehaviour
     {
-        [SerializeField] NavMeshAgent agent = null;
         [SerializeField] Animator animator = null;
         [SerializeField] Health health = null;
-
-        // animator parameters
-        [SyncVar]
-        float forwardSpeed;
+        [SerializeField] PathFollower pathFollower = null;
 
 
-        #region Server
-
-        [Server]
-        public void ServerMoveTo(Vector3 position)
+        #region Client
+        [Client]
+        public void MoveTo(Vector3 position)
         {
-            agent.isStopped = false;
-            agent.SetDestination(position);
+            pathFollower.isStopped = false;
+            pathFollower.SetDestination(position);
         }
-
-        [Server]
-        public void ServerMoveStop()
-        {
-            agent.isStopped = true;
-        }
-
-        [Command]
-        public void CmdMoveTo(Vector3 position)
-        {
-            ServerMoveTo(position);
-        }
-
-        [Command]
-        public void CmdMoveStop()
-        {
-            ServerMoveStop();
-        }
-
-        [Server]
-        private void ServerUpdateAnimator()
-        {
-            Vector3 velocity = agent.velocity;
-            Vector3 localVelocity = transform.InverseTransformDirection(velocity);
-            forwardSpeed = localVelocity.z;
-        }
-
-        #endregion
 
         [Client]
-        private void ClientUpdateAnimator()
+        public void MoveStop()
         {
-            animator.SetFloat("forwardSpeed", forwardSpeed);
+            pathFollower.isStopped = true;
         }
 
+        [ClientCallback]
         private void Update()
         {
-            if (isServer)
-            {
-                agent.enabled = !health.IsDead();
-                
-                ServerUpdateAnimator();
-            }
+            if (!hasAuthority) { return; }
 
-            ClientUpdateAnimator();
+            pathFollower.SetEnabled(!health.IsDead());
+
+            Vector3 velocity = pathFollower.velocity;
+            Vector3 localVelocity = transform.InverseTransformDirection(velocity);
+            float forwardSpeed = localVelocity.z;
+            animator.SetFloat("forwardSpeed", forwardSpeed);
         }
+        #endregion
     }
-
 }

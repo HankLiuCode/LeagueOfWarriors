@@ -17,8 +17,7 @@ MonoBehaviour:
   mover: {fileID: 7430938237228223884}
   fighter: {fileID: 2520116531659708866}
   health: {fileID: 8151994728667568271}
-  abilityStore: {fileID: 7527290909652487929}
---- !u!114 &7527290909652487929
+--- !u!114 &6807771561974058203
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -27,14 +26,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 7430938237228223883}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c4093a31508b634fb30d19609b93e80, type: 3}
+  m_Script: {fileID: 11500000, guid: 52bf61089dc9acc49ae19af364fc2971, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilities:
-  - {fileID: 11400000, guid: 3ebbfab0394d8ac4d862514d57e13257, type: 2}
-  - {fileID: 11400000, guid: 3ebbfab0394d8ac4d862514d57e13257, type: 2}
-  - {fileID: 11400000, guid: 0567061641e9aa04984ddb45154bfb1a, type: 2}
-  - {fileID: 11400000, guid: 0567061641e9aa04984ddb45154bfb1a, type: 2}
+  syncMode: 0
+  syncInterval: 0.1
+  preparePrefab: {fileID: 1758179270434475576, guid: 64374d58a690bf442b61cf8643a67ba8,
+    type: 3}
+  spellPrefab: {fileID: 7987796186782911869, guid: c1ade20b1ef4d6e4690055d87994696d,
+    type: 3}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 256
+  health: {fileID: 8151994728667568271}
+  spellUIPrefab: {fileID: 3442229067447584668, guid: 4d3c611ca9b745745a608bcf2b61bd74,
+    type: 3}
+  damage: 50
+  radius: 3
+  delayTime: 3
 --- !u!1001 &5156169539221519455
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44,13 +53,32 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -1912019647740877411, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1912019647740877411, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
+        type: 3}
       propertyPath: attackRange
       value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: -1912019647740877411, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
         type: 3}
       propertyPath: attackDamage
-      value: 20
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -1912019647740877411, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
+        type: 3}
+      propertyPath: timeBetweenAttacks
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2081357944305167, guid: 33a1a1fe5117a294aaf85ef98cf558ab, type: 3}
+      propertyPath: clientAuthority
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346826292116582864, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2346826292116582868, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
         type: 3}

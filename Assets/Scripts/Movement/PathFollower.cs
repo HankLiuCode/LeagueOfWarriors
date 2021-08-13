@@ -1,0 +1,28 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.AI;
+
+
+public class PathFollower : MonoBehaviour
+{
+    [SerializeField] NavMeshAgent agent = null;
+
+    public bool isStopped { get { return agent.isStopped; } set { agent.isStopped = value;  } }
+    public Vector3 velocity { get { return agent.velocity; } set { agent.velocity = value; } }
+
+    public void SetEnabled(bool isEnabled)
+    {
+        agent.enabled = isEnabled;
+    }
+
+    public bool GetEnabled()
+    {
+        return agent.enabled;
+    }
+
+    public void SetDestination(Vector3 position)
+    {
+        agent.SetDestination(position);
+    }
+}

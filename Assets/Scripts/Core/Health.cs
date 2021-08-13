@@ -32,16 +32,6 @@ namespace Dota.Core
             return isDead;
         }
 
-        public void TakeDamage(float damage)
-        {
-            healthPoint = Mathf.Max(healthPoint - damage, 0);
-            if (healthPoint == 0 && !isDead)
-            {
-                RpcTriggerDeathAnimation();
-                isDead = true;
-            }
-        }
-
         #region Server
         [ClientRpc]
         private void RpcTriggerDeathAnimation()
@@ -65,20 +55,13 @@ namespace Dota.Core
         {
             healthPoint = Mathf.Min(healthPoint + amount);
         }
-        #endregion
 
-
-        #region Client
         [Command]
         public void CmdTakeDamage(float damage)
         {
             ServerTakeDamage(damage);
         }
 
-        public void ClientTakeDamage(float damage)
-        {
-            CmdTakeDamage(damage);
-        }
         #endregion
     }
 
