@@ -31,7 +31,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  preparePrefab: {fileID: 1758179270434475576, guid: 64374d58a690bf442b61cf8643a67ba8,
+  indicatorPrefab: {fileID: 7509079907997610509, guid: f7e58577928620441a8e147c3a9eaf13,
+    type: 3}
+  spellRangePrefab: {fileID: 3863486996862453941, guid: bf00ad13d1f143542a75c4b4b93f9805,
+    type: 3}
+  damageRadiusPrefab: {fileID: 7449486549517724255, guid: 39273ae671b38d5429ffc87492fe8995,
     type: 3}
   spellPrefab: {fileID: 7987796186782911869, guid: c1ade20b1ef4d6e4690055d87994696d,
     type: 3}
@@ -39,11 +43,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   health: {fileID: 8151994728667568271}
-  spellUIPrefab: {fileID: 3442229067447584668, guid: 4d3c611ca9b745745a608bcf2b61bd74,
-    type: 3}
+  maxRange: 5
   damage: 50
-  radius: 3
-  delayTime: 3
+  damageRadius: 2
+  delayTime: 0.8
 --- !u!1001 &5156169539221519455
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -84,6 +87,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Anubis
+      objectReference: {fileID: 0}
+    - target: {fileID: 2346826292116582868, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2346826292116582868, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
         type: 3}
