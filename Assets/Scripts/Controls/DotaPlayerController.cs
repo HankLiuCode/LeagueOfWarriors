@@ -17,7 +17,7 @@ namespace Dota.Controls
 
         private void Update()
         {
-            if (!isLocalPlayer) { return; }
+            if (!hasAuthority) { return; }
 
             if (health.IsDead()) { return; }
 
