@@ -5,5 +5,8 @@ using Mirror;
 
 public class SkillShot : NetworkBehaviour 
 { 
-    
+    public void Test()
+    {
+
+    }
 }

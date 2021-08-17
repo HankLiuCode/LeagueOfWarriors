@@ -10,7 +10,6 @@ namespace Dota.Controls
 {
     public class DotaPlayerController : NetworkBehaviour
     {
-
         [SerializeField] DotaMover mover = null;
         [SerializeField] DotaFighter fighter = null;
         [SerializeField] Health health = null;
