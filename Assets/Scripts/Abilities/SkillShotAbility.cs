@@ -52,6 +52,14 @@ public class SkillShotAbility : NetworkBehaviour
 
 
     #region Client
+
+    public override void OnStartAuthority()
+    {
+        directionIndicator = Instantiate(indicatorPrefab).GetComponent<DirectionIndicator>();
+        directionIndicator.SetLength(travelDist);
+        directionIndicator.gameObject.SetActive(false);
+    }
+
     [ClientCallback]
     private void Update()
     {
@@ -68,9 +76,7 @@ public class SkillShotAbility : NetworkBehaviour
     [Client]
     IEnumerator ShowSpellUI()
     {
-        directionIndicator = directionIndicator ?? Instantiate(indicatorPrefab).GetComponent<DirectionIndicator>();
         directionIndicator.gameObject.SetActive(true);
-        directionIndicator.SetLength(travelDist);
 
         while (true)
         {

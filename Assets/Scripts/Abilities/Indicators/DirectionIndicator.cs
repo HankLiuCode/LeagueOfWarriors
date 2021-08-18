@@ -11,7 +11,6 @@ public class DirectionIndicator : MonoBehaviour
     [SerializeField] float length = 1f;
     [SerializeField] float width = 1f;
 
-
     public void SetPosition(Vector3 position)
     {
         transform.position = position;

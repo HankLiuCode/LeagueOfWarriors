@@ -43,6 +43,30 @@ MonoBehaviour:
   damage: 50
   travelDist: 15
   delayTime: 1
+--- !u!114 &4414856001966157371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7430938237228223883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd41c770bcf494042b3ce6c016d114b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4876036393359554972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7430938237228223883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e483e3bb68b1ca458cb359957d4ea03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6807771561974058203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,6 +90,7 @@ MonoBehaviour:
   spellPrefab: {fileID: 7987796186782911869, guid: c1ade20b1ef4d6e4690055d87994696d,
     type: 3}
   animator: {fileID: 5761216534591629567}
+  actionScheduler: {fileID: 4876036393359554972}
   groundMask:
     serializedVersion: 2
     m_Bits: 256
@@ -89,7 +114,7 @@ PrefabInstance:
     - target: {fileID: -1912019647740877411, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
         type: 3}
       propertyPath: attackRange
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -1912019647740877411, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
         type: 3}
@@ -104,7 +129,7 @@ PrefabInstance:
     - target: {fileID: -1912019647740877411, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
         type: 3}
       propertyPath: timeBetweenAttacks
-      value: 0.2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2081357944305167, guid: 33a1a1fe5117a294aaf85ef98cf558ab, type: 3}
       propertyPath: clientAuthority
@@ -120,6 +145,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2346826292116582867, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
+        type: 3}
+      propertyPath: actionScheduler
+      value: 
+      objectReference: {fileID: 4876036393359554972}
     - target: {fileID: 2346826292116582868, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
         type: 3}
       propertyPath: m_Name
