@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace Dota.Combat
 {
+    // !!! when timeBetweenAttack is larger than (time between start Animation and Hit Event) player jitters
     public class DotaFighter : NetworkBehaviour
     {
         Health target;
@@ -19,18 +20,14 @@ namespace Dota.Combat
         [SerializeField] float attackDuration = 1f;
         [SerializeField] bool isAttacking = false;
 
-        [SerializeField] Animator animator = null;
         [SerializeField] NetworkAnimator netAnimator = null;
-
-        [SerializeField] Health health = null;
+        IEnumerator attackCoroutine = null;
 
         [SerializeField] Transform rightHand = null;
         [SerializeField] Transform leftHand = null;
 
         // if basic attack is melee then its null
         [SerializeField] Projectile projectilePrefab = null;
-
-        float atkRotAdjust = 70f;
 
         #region Server
 
@@ -63,41 +60,6 @@ namespace Dota.Combat
         #endregion
 
         #region Client
-        private void TriggerStopAttackAnimation()
-        {
-            netAnimator.ResetTrigger("attack");
-            netAnimator.SetTrigger("stopAttack");
-        }
-
-        IEnumerator AttackAnimation()
-        {
-            netAnimator.ResetTrigger("stopAttack");
-            netAnimator.SetTrigger("attack");
-
-            isAttacking = true;
-            float timeSinceAttackStart = 0;
-
-            while (timeSinceAttackStart < attackDuration)
-            {
-                timeSinceAttackStart += Time.deltaTime;
-                yield return null;
-            }
-
-            isAttacking = false;
-            yield return null;
-        }
-
-        private void AttackBehaviour()
-        {
-            Vector3 targetDir = target.transform.position - transform.position;
-            transform.LookAt(transform.position + Quaternion.AngleAxis(atkRotAdjust, Vector3.up) * targetDir);
-
-            if (timeSinceLastAttack > timeBetweenAttacks && !isAttacking)
-            {
-                StartCoroutine(AttackAnimation());
-                timeSinceLastAttack = 0;
-            }
-        }
 
         public bool CanAttack(GameObject combatTarget)
         {
@@ -118,6 +80,12 @@ namespace Dota.Combat
         {
             target = null;
             TriggerStopAttackAnimation();
+        }
+
+        private void TriggerStopAttackAnimation()
+        {
+            netAnimator.ResetTrigger("attack");
+            netAnimator.SetTrigger("stopAttack");
         }
 
         void MeleeAttack()
@@ -162,16 +130,18 @@ namespace Dota.Combat
 
             if (!GetIsInRange())
             {
-                if (isAttacking) { return; }
                 GetComponent<DotaMover>().MoveTo(target.transform.position);
             }
             else
             {
-                GetComponent<DotaMover>().MoveStop();
-                AttackBehaviour();
+                if (timeSinceLastAttack > timeBetweenAttacks)
+                {
+                    netAnimator.ResetTrigger("stopAttack");
+                    netAnimator.SetTrigger("attack");
+                    timeSinceLastAttack = 0;
+                }
             }
         }
-
         #endregion
     }
 }
