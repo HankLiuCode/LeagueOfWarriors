@@ -18,7 +18,8 @@ GameObject:
   - component: {fileID: -1912019647740877411}
   - component: {fileID: 3940597873018315984}
   - component: {fileID: 611811190922548384}
-  - component: {fileID: 2081357944305167}
+  - component: {fileID: 4540463795899185057}
+  - component: {fileID: 144636352726154768}
   m_Layer: 9
   m_Name: Character
   m_TagString: Untagged
@@ -146,6 +147,9 @@ MonoBehaviour:
   animator: {fileID: 611811190922548384}
   health: {fileID: 3940597873018315984}
   pathFollower: {fileID: 5558408376210752181}
+  maxSpeed: 5
+  actionScheduler: {fileID: 144636352726154768}
+  priority: 0
 --- !u!114 &-1912019647740877411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,11 +167,7 @@ MonoBehaviour:
   attackRange: 2
   timeBetweenAttacks: 0.5
   attackDamage: 20
-  attackDuration: 1
-  isAttacking: 0
-  animator: {fileID: 611811190922548384}
-  netAnimator: {fileID: 2081357944305167}
-  health: {fileID: 3940597873018315984}
+  netAnimator: {fileID: 4540463795899185057}
   rightHand: {fileID: 0}
   leftHand: {fileID: 0}
   projectilePrefab: {fileID: 0}
@@ -206,7 +206,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &2081357944305167
+--- !u!114 &4540463795899185057
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -222,3 +222,15 @@ MonoBehaviour:
   syncInterval: 0.1
   clientAuthority: 1
   animator: {fileID: 611811190922548384}
+--- !u!114 &144636352726154768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2346826292116582868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e483e3bb68b1ca458cb359957d4ea03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
