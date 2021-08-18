@@ -15,8 +15,7 @@ public class AreaAbility : NetworkBehaviour, IAction
 
     [SerializeField] GameObject damageRadiusPrefab = null;
     [SerializeField] GameObject spellPrefab = null;
-
-    // need networkAnimator
+    
     [SerializeField] NetworkAnimator networkAnimator = null;
 
     [SerializeField] ActionLocker actionLocker = null;
@@ -166,7 +165,7 @@ public class AreaAbility : NetworkBehaviour, IAction
     // Animation Event
     private void AttackPoint()
     {
-        Debug.Log("Attack Point");
+
     }
 
     // Animation Event

@@ -6,11 +6,13 @@ using Mirror;
 
 namespace Dota.Combat
 {
+    // TODO: Make Parent class from skillshot and projectile
     public class Projectile : NetworkBehaviour
     {
         [SerializeField] Health target = null;
         [SerializeField] float speed = 1;
         float damage = 0;
+        GameObject owner;
 
 
         #region Server
@@ -19,8 +21,12 @@ namespace Dota.Combat
         public void ServerDealDamageTo(Health health, float damage)
         {
             health.ServerTakeDamage(damage);
-            Debug.Log("Server Deal Damage");
-            NetworkServer.Destroy(gameObject);
+        }
+
+        [Server]
+        public void ServerSetOwner(GameObject owner)
+        {
+            this.owner = owner;
         }
 
         [Server]
@@ -47,11 +53,13 @@ namespace Dota.Combat
             if (target == null) { return; }
 
             transform.LookAt(GetAimLocation());
+
             transform.Translate(Vector3.forward * speed * Time.deltaTime);
 
             if (Vector3.Distance(transform.position, GetAimLocation()) < 0.1)
             {
                 ServerDealDamageTo(target, damage);
+                NetworkServer.Destroy(gameObject);
             }
         }
         #endregion

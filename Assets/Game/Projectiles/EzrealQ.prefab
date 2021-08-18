@@ -187,7 +187,7 @@ PrefabInstance:
     - target: {fileID: -3141607914337707196, guid: b277ce20c508ae340be6b51949466366,
         type: 3}
       propertyPath: speed
-      value: 30
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 328955915369888929, guid: b277ce20c508ae340be6b51949466366,
         type: 3}
@@ -267,6 +267,11 @@ PrefabInstance:
     - target: {fileID: 328955915369888989, guid: b277ce20c508ae340be6b51949466366,
         type: 3}
       propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 328955915369888990, guid: b277ce20c508ae340be6b51949466366,
+        type: 3}
+      propertyPath: m_CollisionDetection
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 328955915369888991, guid: b277ce20c508ae340be6b51949466366,

@@ -1,53 +1,63 @@
 ﻿using Dota.Controls;
+using Dota.Core;
 using Dota.Networking;
+using Dota.UI;
 using Mirror;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class DotaPlayer : NetworkBehaviour
+namespace Dota.Networking
 {
-    [SerializeField] GameObject characterPrefab = null;
-    [SerializeField] CameraController cameraController = null; // client
-    DotaPlayerController dotaPlayerController = null; // server
-
-    // 1. Need to know if player is in lobby, is in game, is disconnected
-    // 2. Need to know what champion the player chose
-
-    #region Server
-    public override void OnStartServer()
+    public class DotaPlayer : NetworkBehaviour
     {
-        GameObject characterInstance = Instantiate(characterPrefab, Vector3.zero, Quaternion.identity);
-        dotaPlayerController = characterInstance.GetComponent<DotaPlayerController>();
-        NetworkServer.Spawn(characterInstance, connectionToClient);
-    }
-    #endregion
+        [SerializeField] GameObject characterPrefab = null;
+        [SerializeField] HealthDisplay healthDisplay = null;
+        [SerializeField] CameraController cameraController = null; // client
+        DotaPlayerController dotaPlayerController = null; // server
 
+        // 1. Need to know if player is in lobby, is in game, is disconnected
+        // 2. Need to know what champion the player chose
 
-    #region Client
-    public override void OnStartAuthority()
-    {
-        cameraController.gameObject.SetActive(true);
-        cameraController.SetFollowTarget(FindLocalPlayerController().transform);
-    }
-
-    public override void OnStopClient()
-    {
-        if (!hasAuthority) { return; }
-        cameraController.gameObject.SetActive(false);
-    }
-
-    public DotaPlayerController FindLocalPlayerController()
-    {
-        DotaPlayerController[] controllers = GameObject.FindObjectsOfType<DotaPlayerController>();
-        foreach (DotaPlayerController dpc in controllers)
+        #region Server
+        public override void OnStartServer()
         {
-            if (dpc.hasAuthority)
-            {
-                return dpc;
-            }
+            GameObject characterInstance = Instantiate(characterPrefab, Vector3.zero, Quaternion.identity);
+            dotaPlayerController = characterInstance.GetComponent<DotaPlayerController>();
+            NetworkServer.Spawn(characterInstance, connectionToClient);
         }
-        return null;
+        #endregion
+
+
+        #region Client
+        public override void OnStartAuthority()
+        {
+            DotaPlayerController localPlayerController = FindLocalPlayerController();
+            cameraController.gameObject.SetActive(true);
+            cameraController.SetFollowTarget(localPlayerController.transform);
+
+            healthDisplay.gameObject.SetActive(true);
+            healthDisplay.SetHealth(localPlayerController.GetComponent<Health>());
+        }
+
+        public override void OnStopClient()
+        {
+            if (!hasAuthority) { return; }
+            cameraController.gameObject.SetActive(false);
+            healthDisplay.gameObject.SetActive(false);
+        }
+
+        public DotaPlayerController FindLocalPlayerController()
+        {
+            DotaPlayerController[] controllers = GameObject.FindObjectsOfType<DotaPlayerController>();
+            foreach (DotaPlayerController dpc in controllers)
+            {
+                if (dpc.hasAuthority)
+                {
+                    return dpc;
+                }
+            }
+            return null;
+        }
+        #endregion
     }
-    #endregion
+
 }

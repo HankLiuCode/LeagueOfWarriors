@@ -7,5 +7,4 @@ using UnityEngine;
 public class Ability : ScriptableObject
 {
     [SerializeField] GameObject indicator;
-
 }
