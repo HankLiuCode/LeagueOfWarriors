@@ -4,66 +4,112 @@ using UnityEngine;
 using Mirror;
 using Dota.Core;
 
-public class SkillShot : NetworkBehaviour 
+namespace Dota.Abilities
 {
-    [SerializeField] float speed = 8;
-    [SerializeField] Vector3 direction;
-    [SerializeField] float damage = 50;
-    Vector3 startPos;
-    Vector3 destroyPoint;
-    GameObject owner;
-
-    // OnTriggerEnter IsSometimes called twice or more, this prevents it
-    bool hasHit;
-
-
-    #region Server
-
-    [Server]
-    public void ServerDealDamageTo(Health health, float damage)
+    // TODO: Make Parent class from skillshot and projectile
+    public class SkillShot : NetworkBehaviour
     {
-        health.ServerTakeDamage(damage);
-        NetworkServer.Destroy(gameObject);
-    }
+        [SerializeField] float speed = 8;
+        [SerializeField] Vector3 direction;
+        [SerializeField] float damage = 50;
+        Vector3 startPos;
+        GameObject owner;
 
-    [Server]
-    public void ServerSetDirection(Vector3 startPos, Vector3 direction, float travelDist)
-    {
-        this.direction = new Vector3(direction.normalized.x, 0, direction.normalized.z);
-        this.startPos = startPos;
-        destroyPoint = startPos + this.direction.normalized * travelDist;
-    }
+        [SyncVar]
+        Vector3 destroyPoint;
 
-    [Server]
-    public void ServerSetOwner(GameObject owner)
-    {
-        this.owner = owner;
-    }
+        // OnTriggerEnter Is sometimes called twice or more, this prevents it
+        bool hasHit;
 
-    [ServerCallback]
-    private void Update()
-    {
-        transform.forward = destroyPoint - transform.position;
-        transform.position += direction * speed * Time.deltaTime;
+        #region Both
 
-        if(Vector3.Distance(startPos, destroyPoint) < Vector3.Distance(startPos, transform.position))
+        private void Update()
         {
-            NetworkServer.Destroy(gameObject);
+            if (isServer)
+            {
+                ServerUpdate();
+            }
+
+            if (hasAuthority && isClient)
+            {
+                ClientUpdate();
+            }
         }
-    }
-    
-    [ServerCallback]
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.gameObject == owner) { return; }
+        #endregion
 
-        Health health = other.GetComponent<Health>();
-        if (health && !hasHit)
+        #region Server
+
+        [Server]
+        public void ServerDealDamageTo(Health health, float damage)
         {
-            hasHit = true;
             health.ServerTakeDamage(damage);
-            NetworkServer.Destroy(gameObject);
         }
+
+        [Server]
+        public void ServerSetDirection(Vector3 startPos, Vector3 direction, float travelDist)
+        {
+            this.direction = new Vector3(direction.normalized.x, 0, direction.normalized.z);
+            this.startPos = startPos;
+            destroyPoint = startPos + this.direction.normalized * travelDist;
+        }
+
+        [Server]
+        public void ServerSetOwner(GameObject owner)
+        {
+            this.owner = owner;
+        }
+
+        [Server]
+        public void ServerSetDamage(float damage)
+        {
+            this.damage = damage;
+        }
+
+        [ServerCallback]
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject == owner) { return; }
+
+            Health health = other.GetComponent<Health>();
+            if (health && !hasHit)
+            {
+                if (health.IsDead()) { return; }
+
+                hasHit = true;
+                health.ServerTakeDamage(damage);
+                Destroy(gameObject);
+            }
+        }
+
+        [Server]
+        private void ServerUpdate()
+        {
+            transform.forward = destroyPoint - transform.position;
+
+            transform.position += direction * speed * Time.deltaTime;
+
+            if (Vector3.Distance(startPos, destroyPoint) < Vector3.Distance(startPos, transform.position))
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        #endregion
+
+        #region Client
+
+        [Client]
+        private void ClientUpdate()
+        {
+            transform.forward = destroyPoint - transform.position;
+
+            transform.position += direction * speed * Time.deltaTime;
+
+            if (Vector3.Distance(startPos, destroyPoint) < Vector3.Distance(startPos, transform.position))
+            {
+                Destroy(gameObject);
+            }
+        }
+        #endregion
     }
-    #endregion
 }
