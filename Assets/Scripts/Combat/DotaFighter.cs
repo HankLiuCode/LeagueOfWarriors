@@ -17,17 +17,15 @@ namespace Dota.Combat
         [SerializeField] float timeBetweenAttacks = 1f;
         [SerializeField] float attackDamage = 20f;
 
-        [SerializeField] float attackDuration = 1f;
-        [SerializeField] bool isAttacking = false;
-
         [SerializeField] NetworkAnimator netAnimator = null;
-        IEnumerator attackCoroutine = null;
 
         [SerializeField] Transform rightHand = null;
         [SerializeField] Transform leftHand = null;
 
         // if basic attack is melee then its null
         [SerializeField] Projectile projectilePrefab = null;
+
+        bool hasFinishedBackswing = true;
 
         #region Server
 
@@ -99,7 +97,7 @@ namespace Dota.Combat
         }
         
         // Animation Event
-        void Hit()
+        void AttackPoint()
         {
             if (target == null) { return; }
 
@@ -111,6 +109,12 @@ namespace Dota.Combat
             {
                 RangedAttack();
             }
+        }
+
+        // Animation Event
+        void AttackBackSwing()
+        {
+            hasFinishedBackswing = true;
         }
 
         private bool GetIsInRange()
@@ -128,9 +132,14 @@ namespace Dota.Combat
 
             if (target.IsDead()) { return; }
 
+
+
             if (!GetIsInRange())
             {
-                GetComponent<DotaMover>().MoveTo(target.transform.position);
+                if (hasFinishedBackswing)
+                {
+                    GetComponent<DotaMover>().MoveTo(target.transform.position);
+                }
             }
             else
             {
@@ -139,6 +148,7 @@ namespace Dota.Combat
                     netAnimator.ResetTrigger("stopAttack");
                     netAnimator.SetTrigger("attack");
                     timeSinceLastAttack = 0;
+                    hasFinishedBackswing = false;
                 }
             }
         }

@@ -7,12 +7,15 @@ using UnityEngine.AI;
 
 namespace Dota.Movement
 {
-    public class DotaMover : NetworkBehaviour
+    public class DotaMover : NetworkBehaviour, IAction
     {
         [SerializeField] Animator animator = null;
         [SerializeField] Health health = null;
         [SerializeField] PathFollower pathFollower = null;
         [SerializeField] float maxSpeed = 5;
+        [SerializeField] ActionLocker actionScheduler = null;
+
+        [SerializeField] int priority = 0;
 
 
         #region Client
@@ -36,14 +39,23 @@ namespace Dota.Movement
         [Client]
         public void MoveTo(Vector3 position)
         {
-            pathFollower.isStopped = false;
-            pathFollower.SetDestination(position);
+            bool canMove = actionScheduler.TryGetLock(this);
+            if (canMove)
+            {
+                pathFollower.isStopped = false;
+                pathFollower.SetDestination(position);
+            }
         }
 
         [Client]
         public void Stop()
         {
             pathFollower.isStopped = true;
+        }
+
+        public int GetPriority()
+        {
+            return priority;
         }
 
         [ClientCallback]
