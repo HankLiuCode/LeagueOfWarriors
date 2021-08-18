@@ -12,9 +12,27 @@ namespace Dota.Movement
         [SerializeField] Animator animator = null;
         [SerializeField] Health health = null;
         [SerializeField] PathFollower pathFollower = null;
+        [SerializeField] float maxSpeed = 5;
 
 
         #region Client
+        public override void OnStartAuthority()
+        {
+            pathFollower.SetSpeed(maxSpeed);
+        }
+
+        [Client]
+        public void SetSpeed(float speed)
+        {
+            pathFollower.SetSpeed(speed);
+        }
+
+        [Client]
+        public void SetStopRange(float stopRange)
+        {
+            pathFollower.SetStopRange(stopRange);
+        }
+
         [Client]
         public void MoveTo(Vector3 position)
         {
@@ -23,7 +41,7 @@ namespace Dota.Movement
         }
 
         [Client]
-        public void MoveStop()
+        public void Stop()
         {
             pathFollower.isStopped = true;
         }
@@ -37,7 +55,8 @@ namespace Dota.Movement
 
             Vector3 velocity = pathFollower.velocity;
             Vector3 localVelocity = transform.InverseTransformDirection(velocity);
-            float forwardSpeed = localVelocity.z;
+
+            float forwardSpeed = localVelocity.normalized.z;
             animator.SetFloat("forwardSpeed", forwardSpeed);
         }
         #endregion
