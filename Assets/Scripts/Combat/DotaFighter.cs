@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace Dota.Combat
 {
-    // !!! when timeBetweenAttack is larger than (time between start Animation and Hit Event) player jitters
     public class DotaFighter : NetworkBehaviour
     {
         Health target;

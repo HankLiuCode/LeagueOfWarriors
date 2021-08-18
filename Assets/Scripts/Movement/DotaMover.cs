@@ -22,6 +22,7 @@ namespace Dota.Movement
         public override void OnStartAuthority()
         {
             pathFollower.SetSpeed(maxSpeed);
+            
         }
 
         [Client]
