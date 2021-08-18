@@ -40,6 +40,8 @@ MonoBehaviour:
   skillShotPrefab: {fileID: 1188273620969034097, guid: 917adf8708dd37e42b8abe900bfe6c6a,
     type: 3}
   castOffset: {x: 0, y: 0.5, z: 0}
+  networkAnimator: {fileID: 8686479566483180542}
+  actionLocker: {fileID: 4876036393359554972}
   damage: 50
   travelDist: 15
   delayTime: 1
@@ -89,8 +91,8 @@ MonoBehaviour:
     type: 3}
   spellPrefab: {fileID: 7987796186782911869, guid: c1ade20b1ef4d6e4690055d87994696d,
     type: 3}
-  animator: {fileID: 5761216534591629567}
-  actionScheduler: {fileID: 4876036393359554972}
+  networkAnimator: {fileID: 8686479566483180542}
+  actionLocker: {fileID: 4876036393359554972}
   groundMask:
     serializedVersion: 2
     m_Bits: 256
@@ -99,6 +101,7 @@ MonoBehaviour:
   damage: 50
   damageRadius: 2
   delayTime: 0.8
+  priority: 1
 --- !u!1001 &5156169539221519455
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -290,12 +293,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b489b421b8c39b24cb4c74311a575374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!95 &5761216534591629567 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 611811190922548384, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
+--- !u!114 &8686479566483180542 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4540463795899185057, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
     type: 3}
   m_PrefabInstance: {fileID: 5156169539221519455}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7430938237228223883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5156169540073371313
 PrefabInstance:
   m_ObjectHideFlags: 0

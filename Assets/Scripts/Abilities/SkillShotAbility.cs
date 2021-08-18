@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkillShotAbility : NetworkBehaviour
+public class SkillShotAbility : NetworkBehaviour, IAction
 {
     [SerializeField] GameObject indicatorPrefab = null;
     DirectionIndicator directionIndicator = null;
@@ -16,11 +16,13 @@ public class SkillShotAbility : NetworkBehaviour
     [SerializeField] GameObject skillShotPrefab = null;
     [SerializeField] Vector3 castOffset = Vector3.up * 0.5f;
 
+    [SerializeField] NetworkAnimator networkAnimator = null;
+    [SerializeField] ActionLocker actionLocker = null;
+
     [SerializeField] float damage = 50f;
     [SerializeField] float travelDist = 10f;
 
     [SerializeField] float delayTime = 1f;
-
 
     #region Server
     [Server]
@@ -87,9 +89,17 @@ public class SkillShotAbility : NetworkBehaviour
 
                 if (Input.GetMouseButtonDown(0))
                 {
-                    directionIndicator.gameObject.SetActive(false);
-                    CmdSpawnAbilityEffect(directionIndicator.GetDirection());
-                    break;
+                    bool canDo = actionLocker.TryGetLock(this);
+                    if (canDo)
+                    {
+                        directionIndicator.gameObject.SetActive(false);
+
+                        networkAnimator.SetTrigger("abilityD");
+                        transform.LookAt(hit.point, Vector3.up);
+
+                        CmdSpawnAbilityEffect(directionIndicator.GetDirection());
+                        break;
+                    }
                 }
             }
 
@@ -100,6 +110,30 @@ public class SkillShotAbility : NetworkBehaviour
             }
             yield return null;
         }
+    }
+
+    // TODO: Make These Two Animation Events a requirement via interface or abstract class
+
+    // Animation Event
+    private void AttackPoint()
+    {
+        Debug.Log("Skill Shot");
+    }
+
+    // Animation Event
+    private void AttackBackSwing()
+    {
+        actionLocker.ReleaseLock(this);
+    }
+
+    public int GetPriority()
+    {
+        return 1;
+    }
+
+    public void Stop()
+    {
+        
     }
     #endregion
 }

@@ -24,6 +24,7 @@ namespace Dota.Core
         public float GetHealthPercent()
         {
             return healthPoint / maxHealthPoint;
+
         }
         
         public bool IsDead()

@@ -17,9 +17,9 @@ public class AreaAbility : NetworkBehaviour, IAction
     [SerializeField] GameObject spellPrefab = null;
 
     // need networkAnimator
-    [SerializeField] Animator animator = null;
+    [SerializeField] NetworkAnimator networkAnimator = null;
 
-    [SerializeField] ActionLocker actionScheduler = null;
+    [SerializeField] ActionLocker actionLocker = null;
 
     [SerializeField] LayerMask groundMask = new LayerMask();
     [SerializeField] Health health = null;
@@ -127,13 +127,16 @@ public class AreaAbility : NetworkBehaviour, IAction
 
                 if (Input.GetMouseButtonDown(0))
                 {
-                    bool canDo = actionScheduler.TryGetLock(this);
+                    bool canDo = actionLocker.TryGetLock(this);
                     if (canDo)
                     {
                         areaIndicator.gameObject.SetActive(false);
                         spellRangeInstance.gameObject.SetActive(false);
 
-                        animator.SetTrigger("ability1");
+                        networkAnimator.SetTrigger("abilityA");
+
+                        transform.LookAt(castPosition, Vector3.up);
+
                         CmdSpawnAbilityEffect(castPosition, delayTime);
                         break;
                     }
@@ -169,7 +172,7 @@ public class AreaAbility : NetworkBehaviour, IAction
     // Animation Event
     private void AttackBackSwing()
     {
-        actionScheduler.ReleaseLock(this);
+        actionLocker.ReleaseLock(this);
     }
 
     #endregion
