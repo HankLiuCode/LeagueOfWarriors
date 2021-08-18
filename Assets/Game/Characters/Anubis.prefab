@@ -37,7 +37,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   health: {fileID: 8151994728667568271}
+  skillShotPrefab: {fileID: 1188273620969034097, guid: 917adf8708dd37e42b8abe900bfe6c6a,
+    type: 3}
+  castOffset: {x: 0, y: 0.5, z: 0}
   damage: 50
+  travelDist: 15
   delayTime: 1
 --- !u!114 &6807771561974058203
 MonoBehaviour:
@@ -61,6 +65,7 @@ MonoBehaviour:
     type: 3}
   spellPrefab: {fileID: 7987796186782911869, guid: c1ade20b1ef4d6e4690055d87994696d,
     type: 3}
+  animator: {fileID: 5761216534591629567}
   groundMask:
     serializedVersion: 2
     m_Bits: 256
@@ -84,7 +89,7 @@ PrefabInstance:
     - target: {fileID: -1912019647740877411, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
         type: 3}
       propertyPath: attackRange
-      value: 1.5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -1912019647740877411, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
         type: 3}
@@ -93,8 +98,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -1912019647740877411, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
         type: 3}
-      propertyPath: timeBetweenAttacks
+      propertyPath: attackDuration
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1912019647740877411, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
+        type: 3}
+      propertyPath: timeBetweenAttacks
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 2081357944305167, guid: 33a1a1fe5117a294aaf85ef98cf558ab, type: 3}
       propertyPath: clientAuthority
@@ -250,6 +260,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b489b421b8c39b24cb4c74311a575374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &5761216534591629567 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 611811190922548384, guid: 33a1a1fe5117a294aaf85ef98cf558ab,
+    type: 3}
+  m_PrefabInstance: {fileID: 5156169539221519455}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5156169540073371313
 PrefabInstance:
   m_ObjectHideFlags: 0

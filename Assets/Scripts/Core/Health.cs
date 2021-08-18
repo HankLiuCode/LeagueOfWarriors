@@ -8,7 +8,6 @@ namespace Dota.Core
         [SyncVar]
         [SerializeField]
         float healthPoint = 100f;
-
         float maxHealthPoint = 100f;
 
         [SyncVar]
@@ -48,6 +47,7 @@ namespace Dota.Core
                 RpcTriggerDeathAnimation();
                 isDead = true;
             }
+            Debug.Log("Take Damage" + damage);
         }
 
         [Server]

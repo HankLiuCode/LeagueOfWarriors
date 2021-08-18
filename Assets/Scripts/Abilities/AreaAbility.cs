@@ -16,6 +16,8 @@ public class AreaAbility : NetworkBehaviour
     [SerializeField] GameObject damageRadiusPrefab = null;
     [SerializeField] GameObject spellPrefab = null;
 
+    [SerializeField] Animator animator = null;
+
     [SerializeField] LayerMask groundMask = new LayerMask();
     [SerializeField] Health health = null;
 
@@ -78,7 +80,7 @@ public class AreaAbility : NetworkBehaviour
 
         if (health.IsDead()) { return; }
 
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.W))
         {
             StartCoroutine(ShowSpellUI());
         }

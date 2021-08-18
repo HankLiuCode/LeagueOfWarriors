@@ -22,6 +22,11 @@ public class DirectionIndicator : MonoBehaviour
         SetDirection(new Vector2(direction.x, direction.z));
     }
 
+    public Vector3 GetDirection()
+    {
+        return new Vector3(direction.x, 0, direction.y);
+    }
+
     public void SetDirection(Vector2 direction)
     {
         this.direction = direction;
