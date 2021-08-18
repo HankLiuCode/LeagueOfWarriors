@@ -8,9 +8,8 @@ using UnityEngine;
 public class DotaPlayer : NetworkBehaviour
 {
     [SerializeField] GameObject characterPrefab = null;
-    [SerializeField] GameObject cameraPrefab = null;
+    [SerializeField] CameraController cameraController = null; // client
     DotaPlayerController dotaPlayerController = null; // server
-    CameraController cameraController = null; // client
 
     // 1. Need to know if player is in lobby, is in game, is disconnected
     // 2. Need to know what champion the player chose
@@ -28,15 +27,14 @@ public class DotaPlayer : NetworkBehaviour
     #region Client
     public override void OnStartAuthority()
     {
-        GameObject camera = Instantiate(cameraPrefab);
-        cameraController = camera.GetComponent<CameraController>();
+        cameraController.gameObject.SetActive(true);
         cameraController.SetFollowTarget(FindLocalPlayerController().transform);
     }
 
     public override void OnStopClient()
     {
         if (!hasAuthority) { return; }
-        Destroy(cameraController.gameObject);
+        cameraController.gameObject.SetActive(false);
     }
 
     public DotaPlayerController FindLocalPlayerController()
