@@ -100,9 +100,14 @@ namespace Dota.Abilities
                             Health health = hit.collider.GetComponent<Health>();
                             if (health && !health.IsDead())
                             {
-                                networkAnimator.SetTrigger("abilityD");
-                                transform.LookAt(hit.point, Vector3.up);
-                                CmdSpawnProjectile(health);
+                                Vector3 targetPos = health.transform.position;
+
+                                if(Vector3.Distance(targetPos, transform.position) < maxRange)
+                                {
+                                    networkAnimator.SetTrigger("abilityD");
+                                    transform.LookAt(hit.point, Vector3.up);
+                                    CmdSpawnProjectile(health);
+                                }
                             }
                             break;
                         }

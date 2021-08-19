@@ -46,7 +46,7 @@ namespace Dota.Abilities
             skillShotInstance.ServerSetDirection(castPos, direction, travelDist);
             skillShotInstance.ServerSetDamage(damage);
             skillShotInstance.ServerSetSpeed(skillShotSpeed);
-            skillShotInstance.ServerSetOwner(gameObject);
+            skillShotInstance.ServerSetOwner(gameObject.GetComponent<NetworkIdentity>());
 
             yield return null;
         }

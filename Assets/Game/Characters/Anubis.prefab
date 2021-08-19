@@ -45,6 +45,7 @@ MonoBehaviour:
   damage: 5
   travelDist: 15
   delayTime: 1
+  skillShotSpeed: 15
 --- !u!114 &4414856001966157371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70,7 +71,7 @@ MonoBehaviour:
   castOffset: {x: 0, y: 0.5, z: 0}
   networkAnimator: {fileID: 8686479566483180542}
   actionLocker: {fileID: 5012432853328544335}
-  damage: 50
+  damage: 10
   maxRange: 5
   delayTime: 1
 --- !u!114 &4876036393359554972

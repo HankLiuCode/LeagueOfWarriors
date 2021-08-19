@@ -9,13 +9,20 @@ namespace Dota.Abilities
     // TODO: Make Parent class from skillshot and projectile
     public class SkillShot : NetworkBehaviour
     {
-        [SerializeField] float speed = 8;
         [SerializeField] Vector3 direction;
+        [SerializeField] float speed = 8;
         [SerializeField] float damage = 50;
-        Vector3 startPos;
-        GameObject owner;
 
         [SyncVar]
+        [SerializeField]
+        NetworkIdentity owner;
+
+        [SyncVar]
+        [SerializeField]
+        Vector3 startPos;
+
+        [SyncVar]
+        [SerializeField]
         Vector3 destroyPoint;
 
         // OnTriggerEnter Is sometimes called twice or more, this prevents it
@@ -30,9 +37,22 @@ namespace Dota.Abilities
                 ServerUpdate();
             }
 
-            if (hasAuthority && isClient)
+            if (isClient)
             {
                 ClientUpdate();
+            }
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (isServer)
+            {
+                ServerOnTriggerEnter(other);
+            }
+
+            if (isClient)
+            {
+                ClientOnTriggerEnter(other);
             }
         }
         #endregion
@@ -46,21 +66,13 @@ namespace Dota.Abilities
         }
 
         [Server]
-        public void ServerSetDirection(Vector3 startPos, Vector3 direction, float travelDist)
-        {
-            this.direction = new Vector3(direction.normalized.x, 0, direction.normalized.z);
-            this.startPos = startPos;
-            destroyPoint = startPos + this.direction.normalized * travelDist;
-        }
-
-        [Server]
         public void ServerSetSpeed(float speed)
         {
             this.speed = speed;
         }
 
         [Server]
-        public void ServerSetOwner(GameObject owner)
+        public void ServerSetOwner(NetworkIdentity owner)
         {
             this.owner = owner;
         }
@@ -71,20 +83,30 @@ namespace Dota.Abilities
             this.damage = damage;
         }
 
-        [ServerCallback]
-        private void OnTriggerEnter(Collider other)
+        [Server]
+        public void ServerSetDirection(Vector3 startPos, Vector3 direction, float travelDist)
         {
-            if (other.gameObject == owner) { return; }
+            this.direction = new Vector3(direction.normalized.x, 0, direction.normalized.z);
 
+            this.startPos = startPos;
+            destroyPoint = startPos + this.direction.normalized * travelDist;
+        }
+
+        [Server]
+        private void ServerOnTriggerEnter(Collider other)
+        {
+            NetworkIdentity otherIdentity = other.gameObject.GetComponent<NetworkIdentity>();
             Health health = other.GetComponent<Health>();
-            if (health && !hasHit)
+            if (health && !hasHit && otherIdentity != owner)
             {
                 if (health.IsDead()) { return; }
 
                 hasHit = true;
                 health.ServerTakeDamage(damage);
+                gameObject.SetActive(false);
             }
         }
+
 
         [Server]
         private void ServerUpdate()
@@ -95,24 +117,33 @@ namespace Dota.Abilities
 
             if (Vector3.Distance(startPos, destroyPoint) < Vector3.Distance(startPos, transform.position))
             {
-                Debug.Log("ServerDestroy");
+                gameObject.SetActive(false);
             }
         }
-
         #endregion
 
         #region Client
 
+
         [Client]
         private void ClientUpdate()
         {
-            transform.forward = destroyPoint - transform.position;
-
-            transform.position += direction * speed * Time.deltaTime;
-
             if (Vector3.Distance(startPos, destroyPoint) < Vector3.Distance(startPos, transform.position))
             {
-                Destroy(gameObject);
+                gameObject.SetActive(false);
+            }
+        }
+
+        private void ClientOnTriggerEnter(Collider other)
+        {
+            NetworkIdentity otherIdentity = other.gameObject.GetComponent<NetworkIdentity>();
+            Health health = other.GetComponent<Health>();
+            if (health && !hasHit && otherIdentity != owner)
+            {
+                if (health.IsDead()) { return; }
+                
+                hasHit = true;
+                gameObject.SetActive(false);
             }
         }
         #endregion

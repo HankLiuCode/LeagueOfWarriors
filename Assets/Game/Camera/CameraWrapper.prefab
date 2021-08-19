@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4529496317603667577
 Transform:
   m_ObjectHideFlags: 0
@@ -44,9 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd9946dce4c5c1f41b9b316d39694402, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerCam: {fileID: 4529496318378339241}
   screenBorderThickness: 40
   speed: 15
-  player: {fileID: 0}
   offset: {x: 0, y: 0, z: -9}
 --- !u!1 &4529496318378339247
 GameObject:
