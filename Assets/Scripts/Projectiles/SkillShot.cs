@@ -28,6 +28,19 @@ namespace Dota.Abilities
         // OnTriggerEnter Is sometimes called twice or more, this prevents it
         bool hasHit;
 
+        // Client-Side Collision Detection / Server Spawns
+
+        // Update
+        //     skillShot position update on client side
+
+        // OnCollision
+        //      CmdNotifyHasHit
+
+        // CmdNotifyServerHit()
+
+
+
+
         #region Both
 
         private void Update()
@@ -140,8 +153,7 @@ namespace Dota.Abilities
             Health health = other.GetComponent<Health>();
             if (health && !hasHit && otherIdentity != owner)
             {
-                if (health.IsDead()) { return; }
-                
+                //if (health.IsDead()) { return; }
                 hasHit = true;
                 gameObject.SetActive(false);
             }

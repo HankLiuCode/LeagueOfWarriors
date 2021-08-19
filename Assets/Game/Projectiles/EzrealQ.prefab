@@ -189,6 +189,11 @@ PrefabInstance:
       propertyPath: speed
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 328955915369888928, guid: b277ce20c508ae340be6b51949466366,
+        type: 3}
+      propertyPath: syncInterval
+      value: 0.01
+      objectReference: {fileID: 0}
     - target: {fileID: 328955915369888929, guid: b277ce20c508ae340be6b51949466366,
         type: 3}
       propertyPath: m_RootOrder

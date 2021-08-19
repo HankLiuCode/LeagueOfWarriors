@@ -48,7 +48,6 @@ namespace Dota.Core
                 RpcTriggerDeathAnimation();
                 isDead = true;
             }
-            Debug.Log("Take Damage" + damage);
         }
 
         [Server]
