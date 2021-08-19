@@ -14,14 +14,6 @@ namespace Dota.UI
         [SerializeField] Health health;
         [SerializeField] Image healthFill;
         
-        Health health;
-        
-        public void SetHealth(Health health)
-        {
-            this.health = health;
-        }
-
-
         public void SetHealth(Health health)
         {
             this.health = health;
