@@ -241,7 +241,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 463743082136131475}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4437477732593420874 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4321940089516793305, guid: e6ce1f28d01eaee479a42f42d4e2a518,
     type: 3}

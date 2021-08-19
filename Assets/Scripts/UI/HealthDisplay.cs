@@ -10,10 +10,18 @@ namespace Dota.UI
 {
     public class HealthDisplay : MonoBehaviour
     {
+        // for debugging
+        [SerializeField] Health health;
         [SerializeField] Image healthFill;
         
         Health health;
         
+        public void SetHealth(Health health)
+        {
+            this.health = health;
+        }
+
+
         public void SetHealth(Health health)
         {
             this.health = health;
