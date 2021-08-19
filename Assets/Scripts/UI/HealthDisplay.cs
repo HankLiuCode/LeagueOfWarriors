@@ -10,11 +10,10 @@ namespace Dota.UI
 {
     public class HealthDisplay : MonoBehaviour
     {
-        // for debugging
-        [SerializeField] Health health;
         [SerializeField] Image healthFill;
-
-
+        
+        Health health;
+        
         public void SetHealth(Health health)
         {
             this.health = health;
@@ -22,12 +21,6 @@ namespace Dota.UI
 
         private void Update()
         {
-            if(health == null)
-            {
-                Health health = NetworkClient.localPlayer.gameObject.GetComponent<Health>();
-                this.health = health;
-            }
-
             if (health != null)
             {
                 healthFill.fillAmount = health.GetHealthPercent();

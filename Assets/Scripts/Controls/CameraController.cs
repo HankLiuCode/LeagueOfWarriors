@@ -7,7 +7,8 @@ public class CameraController : MonoBehaviour
     [SerializeField] float screenBorderThickness = 30f;
     [SerializeField] float speed = 15f;
     [SerializeField] Vector3 offset = new Vector3(0, 0, 9);
-    [SerializeField] Transform target = null;
+
+    Transform target = null;
     float defaultHeight = 10;
 
 

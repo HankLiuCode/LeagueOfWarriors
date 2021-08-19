@@ -54,6 +54,12 @@ namespace Dota.Abilities
         }
 
         [Server]
+        public void ServerSetSpeed(float speed)
+        {
+            this.speed = speed;
+        }
+
+        [Server]
         public void ServerSetOwner(GameObject owner)
         {
             this.owner = owner;
@@ -77,7 +83,6 @@ namespace Dota.Abilities
 
                 hasHit = true;
                 health.ServerTakeDamage(damage);
-                Destroy(gameObject);
             }
         }
 
@@ -90,7 +95,7 @@ namespace Dota.Abilities
 
             if (Vector3.Distance(startPos, destroyPoint) < Vector3.Distance(startPos, transform.position))
             {
-                Destroy(gameObject);
+                Debug.Log("ServerDestroy");
             }
         }
 

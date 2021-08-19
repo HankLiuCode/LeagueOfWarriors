@@ -26,6 +26,7 @@ namespace Dota.Abilities
         [SerializeField] float travelDist = 10f;
 
         [SerializeField] float delayTime = 1f;
+        [SerializeField] float skillShotSpeed = 15f;
 
         #region Server
         [Server]
@@ -44,6 +45,7 @@ namespace Dota.Abilities
             NetworkServer.Spawn(skillShotInstance.gameObject);
             skillShotInstance.ServerSetDirection(castPos, direction, travelDist);
             skillShotInstance.ServerSetDamage(damage);
+            skillShotInstance.ServerSetSpeed(skillShotSpeed);
             skillShotInstance.ServerSetOwner(gameObject);
 
             yield return null;
