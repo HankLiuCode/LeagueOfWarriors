@@ -42,7 +42,7 @@ MonoBehaviour:
   castOffset: {x: 0, y: 0.5, z: 0}
   networkAnimator: {fileID: 8686479566483180542}
   actionLocker: {fileID: 4876036393359554972}
-  damage: 20
+  damage: 5
   travelDist: 15
   delayTime: 1
 --- !u!114 &4414856001966157371

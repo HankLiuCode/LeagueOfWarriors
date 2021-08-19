@@ -67,7 +67,7 @@ MonoBehaviour:
   syncInterval: 0.1
   characterPrefab: {fileID: 7430938237228223883, guid: f8df72860c3aa584c9b9eaae6cdc6848,
     type: 3}
-  healthDisplay: {fileID: 8610915357941186020}
+  healthDisplay: {fileID: 4437477732593420874}
   cameraController: {fileID: 4355003777937264744}
 --- !u!1001 &192551130748390928
 PrefabInstance:
@@ -241,9 +241,8 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 463743082136131475}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8610915357941186020 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8209945595831315063, guid: e6ce1f28d01eaee479a42f42d4e2a518,
+  m_CorrespondingSourceObject: {fileID: 4321940089516793305, guid: e6ce1f28d01eaee479a42f42d4e2a518,
     type: 3}
   m_PrefabInstance: {fileID: 463743082136131475}
   m_PrefabAsset: {fileID: 0}
