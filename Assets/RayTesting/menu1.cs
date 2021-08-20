@@ -7,7 +7,7 @@ public class menu1 : MonoBehaviour
 {
    public void PlayGame()
     {
-        SceneManager.LoadScene("NetworkSandbox");
+        SceneManager.LoadScene("GameView");
         ///載入遊戲場景
     }
 
@@ -19,7 +19,7 @@ public class menu1 : MonoBehaviour
 
     public void Menu()
     {
-        SceneManager.LoadScene("Loby");
+        SceneManager.LoadScene("Menu");
         ///回選單場景
     }
 
