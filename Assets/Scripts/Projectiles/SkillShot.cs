@@ -6,11 +6,28 @@ using Dota.Core;
 
 public class SkillShot : NetworkBehaviour
 {
-    [SerializeField] float speed = 8;
-    [SerializeField] Vector3 direction;
-    [SerializeField] float damage = 50;
+    [SyncVar]
+    [SerializeField] 
+    float speed = 8;
+    
+    [SyncVar]
+    [SerializeField] 
+    float damage = 50;
+
+    [SyncVar]
+    [SerializeField] 
+    Vector3 direction;
+
+    [SyncVar]
+    [SerializeField]
     Vector3 startPos;
+
+    [SyncVar]
+    [SerializeField]
     Vector3 destroyPoint;
+
+    [SyncVar]
+    [SerializeField]
     NetworkIdentity owner;
 
     // OnTriggerEnter IsSometimes called twice or more, this prevents it
@@ -23,6 +40,18 @@ public class SkillShot : NetworkBehaviour
     public void ServerDealDamageTo(Health health, float damage)
     {
         health.ServerTakeDamage(damage);
+        NetworkServer.Destroy(gameObject);
+    }
+
+    [Command]
+    public void CmdDealDamageTo(Health health, float damage)
+    {
+        ServerDealDamageTo(health, damage);
+    }
+
+    [Command]
+    private void CmdDestroySelf()
+    {
         NetworkServer.Destroy(gameObject);
     }
 
@@ -51,22 +80,29 @@ public class SkillShot : NetworkBehaviour
     {
         this.speed = speed;
     }
-    
-    [ServerCallback]
+
+    #endregion
+
+    #region Client
+    [ClientCallback]
     private void Update()
     {
+        if (!hasAuthority) { return; }
+
         transform.forward = destroyPoint - transform.position;
         transform.position += direction * speed * Time.deltaTime;
 
         if (Vector3.Distance(startPos, destroyPoint) < Vector3.Distance(startPos, transform.position))
         {
-            NetworkServer.Destroy(gameObject);
+            CmdDestroySelf();
         }
     }
 
-    [ServerCallback]
+    [ClientCallback]
     private void OnTriggerEnter(Collider other)
     {
+        if (!hasAuthority) { return; }
+
         NetworkIdentity otherIdentity = other.gameObject.GetComponent<NetworkIdentity>();
         Health health = other.GetComponent<Health>();
         if (health && !hasHit && otherIdentity != owner)
@@ -74,8 +110,7 @@ public class SkillShot : NetworkBehaviour
             if (health.IsDead()) { return; }
 
             hasHit = true;
-            health.ServerTakeDamage(damage);
-            NetworkServer.Destroy(gameObject);
+            CmdDealDamageTo(health, damage);
         }
     }
     #endregion

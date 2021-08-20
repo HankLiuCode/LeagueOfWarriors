@@ -42,7 +42,7 @@ namespace Dota.Abilities
 
             Vector3 castPos = transform.position + castOffset;
             SkillShot skillShotInstance = Instantiate(skillShotPrefab, castPos, Quaternion.identity).GetComponent<SkillShot>();
-            NetworkServer.Spawn(skillShotInstance.gameObject);
+            NetworkServer.Spawn(skillShotInstance.gameObject, gameObject.GetComponent<NetworkIdentity>().connectionToClient);
             skillShotInstance.ServerSetDirection(castPos, direction, travelDist);
             skillShotInstance.ServerSetDamage(damage);
             skillShotInstance.ServerSetSpeed(skillShotSpeed);
