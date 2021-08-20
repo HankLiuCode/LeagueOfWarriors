@@ -60,7 +60,6 @@ namespace Dota.Abilities
 
 
         #region Client
-
         public override void OnStartAuthority()
         {
             directionIndicator = Instantiate(indicatorPrefab).GetComponent<DirectionIndicator>();
@@ -123,7 +122,7 @@ namespace Dota.Abilities
         // Animation Event
         private void AttackPoint()
         {
-            Debug.Log("Skill Shot");
+            
         }
 
         // Animation Event

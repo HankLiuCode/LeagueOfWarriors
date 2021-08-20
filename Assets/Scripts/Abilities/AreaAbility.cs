@@ -79,9 +79,7 @@ public class AreaAbility : NetworkBehaviour, IAction
 
     #endregion
 
-
     #region Client
-
     public override void OnStartAuthority()
     {
         areaIndicator = Instantiate(indicatorPrefab).GetComponent<AreaIndicator>();

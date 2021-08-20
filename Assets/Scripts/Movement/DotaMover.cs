@@ -43,8 +43,13 @@ namespace Dota.Movement
             bool canMove = actionScheduler.TryGetLock(this);
             if (canMove)
             {
+                Debug.Log("CanMove");
                 pathFollower.isStopped = false;
                 pathFollower.SetDestination(position);
+            }
+            else
+            {
+                Debug.Log("CannotMove");
             }
         }
 

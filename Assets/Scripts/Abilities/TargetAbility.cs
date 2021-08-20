@@ -26,7 +26,7 @@ namespace Dota.Abilities
         [SerializeField] float damage = 50f;
         [SerializeField] float maxRange = 5f;
 
-        [SerializeField] float delayTime = 1f;
+        [SerializeField] float delayTime = 0.1f;
 
         #region Server
         [Server]
@@ -38,7 +38,7 @@ namespace Dota.Abilities
         [Server]
         IEnumerator CastSpell(Health health)
         {
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(delayTime);
 
             Vector3 castPos = transform.position + castOffset;
             Projectile projectile = Instantiate(targetProjectilePrefab, castPos, Quaternion.identity).GetComponent<Projectile>();
@@ -93,24 +93,25 @@ namespace Dota.Abilities
                 {
                     if (Input.GetMouseButtonDown(0))
                     {
-                        bool canDo = actionLocker.TryGetLock(this);
-                        if (canDo)
-                        {
-                            spellRangeInstance.gameObject.SetActive(false);
-                            Health health = hit.collider.GetComponent<Health>();
-                            if (health && !health.IsDead())
-                            {
-                                Vector3 targetPos = health.transform.position;
+                        spellRangeInstance.gameObject.SetActive(false);
 
-                                if(Vector3.Distance(targetPos, transform.position) < maxRange)
+                        Health health = hit.collider.GetComponent<Health>();
+                        if (health && !health.IsDead())
+                        {
+                            Vector3 targetPos = health.transform.position;
+
+                            if (Vector3.Distance(targetPos, transform.position) < maxRange)
+                            {
+                                bool canDo = actionLocker.TryGetLock(this);
+                                if (canDo)
                                 {
                                     networkAnimator.SetTrigger("abilityD");
                                     transform.LookAt(hit.point, Vector3.up);
                                     CmdSpawnProjectile(health);
                                 }
                             }
-                            break;
                         }
+                        break;
                     }
                 }
 
