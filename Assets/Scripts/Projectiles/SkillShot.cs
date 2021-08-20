@@ -6,28 +6,13 @@ using Dota.Core;
 
 public class SkillShot : NetworkBehaviour
 {
-    [SyncVar]
-    [SerializeField] 
-    float speed = 8;
-    
-    [SyncVar]
-    [SerializeField] 
-    float damage = 50;
-
-    [SyncVar]
-    [SerializeField] 
-    Vector3 direction;
-
-    [SyncVar]
-    [SerializeField]
+    [SerializeField] float speed = 8;
+    [SerializeField] Vector3 direction;
+    [SerializeField] float damage = 50;
     Vector3 startPos;
-
-    [SyncVar]
-    [SerializeField]
     Vector3 destroyPoint;
 
     [SyncVar]
-    [SerializeField]
     NetworkIdentity owner;
 
     // OnTriggerEnter IsSometimes called twice or more, this prevents it
@@ -40,19 +25,6 @@ public class SkillShot : NetworkBehaviour
     public void ServerDealDamageTo(Health health, float damage)
     {
         health.ServerTakeDamage(damage);
-        NetworkServer.Destroy(gameObject);
-    }
-
-    [Command]
-    public void CmdDealDamageTo(Health health, float damage)
-    {
-        ServerDealDamageTo(health, damage);
-    }
-
-    [Command]
-    private void CmdDestroySelf()
-    {
-        NetworkServer.Destroy(gameObject);
     }
 
     [Server]
@@ -70,39 +42,46 @@ public class SkillShot : NetworkBehaviour
     }
 
     [Server]
+    public void ServerSetSpeed(float speed)
+    {
+        this.speed = speed;
+    }
+
+    [Server]
     public void ServerSetDamage(float damage)
     {
         this.damage = damage;
     }
 
     [Server]
-    public void ServerSetSpeed(float speed)
+    IEnumerator DestroyAfter(float seconds)
     {
-        this.speed = speed;
+        yield return new WaitForSeconds(seconds);
+        NetworkServer.Destroy(gameObject);
     }
 
-    #endregion
+    IEnumerator HitAfter(Health health, float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        NetworkServer.Destroy(gameObject);
+        health.ServerTakeDamage(damage);
+    }
 
-    #region Client
-    [ClientCallback]
+    [ServerCallback]
     private void Update()
     {
-        if (!hasAuthority) { return; }
-
         transform.forward = destroyPoint - transform.position;
         transform.position += direction * speed * Time.deltaTime;
 
         if (Vector3.Distance(startPos, destroyPoint) < Vector3.Distance(startPos, transform.position))
         {
-            CmdDestroySelf();
+            StartCoroutine(DestroyAfter(0.1f));
         }
     }
 
-    [ClientCallback]
+    [ServerCallback]
     private void OnTriggerEnter(Collider other)
     {
-        if (!hasAuthority) { return; }
-
         NetworkIdentity otherIdentity = other.gameObject.GetComponent<NetworkIdentity>();
         Health health = other.GetComponent<Health>();
         if (health && !hasHit && otherIdentity != owner)
@@ -110,7 +89,7 @@ public class SkillShot : NetworkBehaviour
             if (health.IsDead()) { return; }
 
             hasHit = true;
-            CmdDealDamageTo(health, damage);
+            StartCoroutine(HitAfter(health, 0.1f));
         }
     }
     #endregion
