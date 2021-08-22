@@ -68,6 +68,7 @@ MonoBehaviour:
   characterPrefab: {fileID: 7430938237228223883, guid: f8df72860c3aa584c9b9eaae6cdc6848,
     type: 3}
   healthDisplay: {fileID: 4437477732593420874}
+  manaDisplay: {fileID: 750437418862066625}
   cameraController: {fileID: 4355003777937264744}
 --- !u!1001 &192551130748390928
 PrefabInstance:
@@ -246,5 +247,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7925fa430e3a9f4cbc04f1661b8d56d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &750437418862066625 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 866271380279913554, guid: e6ce1f28d01eaee479a42f42d4e2a518,
+    type: 3}
+  m_PrefabInstance: {fileID: 463743082136131475}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b2fc409c9fe9e844a5658c8382eeeeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

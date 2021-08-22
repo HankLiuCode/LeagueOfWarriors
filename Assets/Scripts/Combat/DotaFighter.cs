@@ -22,7 +22,7 @@ namespace Dota.Combat
         [SerializeField] Transform leftHand = null;
 
         // if basic attack is melee then its null
-        [SerializeField] Projectile projectilePrefab = null;
+        [SerializeField] DotaProjectile projectilePrefab = null;
 
         bool hasFinishedBackswing = true;
 
@@ -43,7 +43,7 @@ namespace Dota.Combat
         [Server]
         public void ServerSpawnProjectile(Health target, GameObject owner, float attackDamage)
         {
-            Projectile projectile = Instantiate(projectilePrefab, rightHand.transform.position, Quaternion.identity);
+            DotaProjectile projectile = Instantiate(projectilePrefab, rightHand.transform.position, Quaternion.identity);
             NetworkServer.Spawn(projectile.gameObject, owner.GetComponent<NetworkIdentity>().connectionToClient);
             projectile.SetTarget(target, attackDamage);
         }

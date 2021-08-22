@@ -5,7 +5,7 @@ using UnityEngine;
 using Dota.Controls;
 using Dota.Core;
 
-public class AreaAbility : NetworkBehaviour, IAction
+public class AreaAbility : NetworkBehaviour, IAction, IAbility
 {
     [SerializeField] GameObject indicatorPrefab = null;
     AreaIndicator areaIndicator = null;
@@ -30,9 +30,6 @@ public class AreaAbility : NetworkBehaviour, IAction
     [SerializeField] float delayTime = 1f;
 
     [SerializeField] int priority = 1;
-
-
-    bool hasFinishedBackswing = true;
 
 
     #region Server

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Dota.Abilities
 {
-    public class SkillShotAbility : NetworkBehaviour, IAction
+    public class SkillShotAbility : NetworkBehaviour, IAction, IAbility
     {
         [SerializeField] GameObject indicatorPrefab = null;
         DirectionIndicator directionIndicator = null;

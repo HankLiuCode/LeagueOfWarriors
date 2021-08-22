@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Dota.Abilities
 {
     // TODO: Need to add who is the caster
-    public class TargetAbility : NetworkBehaviour, IAction
+    public class TargetAbility : NetworkBehaviour, IAction, IAbility
     {
         [SerializeField] GameObject spellRangePrefab = null;
         AreaIndicator spellRangeInstance = null;
@@ -41,7 +41,7 @@ namespace Dota.Abilities
             yield return new WaitForSeconds(delayTime);
 
             Vector3 castPos = transform.position + castOffset;
-            Projectile projectile = Instantiate(targetProjectilePrefab, castPos, Quaternion.identity).GetComponent<Projectile>();
+            DotaProjectile projectile = Instantiate(targetProjectilePrefab, castPos, Quaternion.identity).GetComponent<DotaProjectile>();
 
             NetworkServer.Spawn(projectile.gameObject);
             projectile.ServerSetOwner(gameObject);

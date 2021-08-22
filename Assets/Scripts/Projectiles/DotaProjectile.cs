@@ -7,7 +7,7 @@ using Mirror;
 namespace Dota.Combat
 {
     // TODO: Make Parent class from skillshot and projectile
-    public class Projectile : NetworkBehaviour
+    public class DotaProjectile : NetworkBehaviour
     {
         [SerializeField] Health target = null;
         [SerializeField] float speed = 1;

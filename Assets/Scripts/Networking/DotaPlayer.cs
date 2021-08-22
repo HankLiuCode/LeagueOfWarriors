@@ -11,6 +11,7 @@ namespace Dota.Networking
     {
         [SerializeField] GameObject characterPrefab = null;
         [SerializeField] HealthDisplay healthDisplay = null;
+        [SerializeField] ManaDisplay manaDisplay = null;
         [SerializeField] CameraController cameraController = null; // client
         DotaPlayerController dotaPlayerController = null; // server
 
@@ -36,6 +37,9 @@ namespace Dota.Networking
 
             healthDisplay.gameObject.SetActive(true);
             healthDisplay.SetHealth(localPlayerController.GetComponent<Health>());
+
+            manaDisplay.gameObject.SetActive(true);
+            manaDisplay.SetMana(localPlayerController.GetComponent<Mana>());
         }
 
         public override void OnStopClient()
