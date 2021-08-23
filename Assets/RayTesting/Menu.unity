@@ -569,6 +569,7 @@ GameObject:
   - component: {fileID: 1511512044}
   - component: {fileID: 1511512043}
   - component: {fileID: 1511512042}
+  - component: {fileID: 1511512045}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -585,7 +586,7 @@ RectTransform:
   m_GameObject: {fileID: 1511512040}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5473473, y: 1.5473473, z: 1.5473473}
+  m_LocalScale: {x: 2.3935766, y: 2.3935766, z: 2.3935766}
   m_Children:
   - {fileID: 200835742}
   m_Father: {fileID: 1707292535}
@@ -593,7 +594,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 50.785}
+  m_AnchoredPosition: {x: 0, y: 98.6}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1511512042
@@ -618,7 +619,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.8867924, g: 0.5960751, b: 0.30535775, a: 1}
+    m_HighlightedColor: {r: 0.5372549, g: 0.3529412, b: 1, a: 0.8745098}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
@@ -690,6 +691,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1511512040}
   m_CullTransparentMesh: 1
+--- !u!95 &1511512045
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1511512040}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6aa28975c1427e7438fe5ebaf21b7a70, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1707292534
 GameObject:
   m_ObjectHideFlags: 0
@@ -874,7 +894,7 @@ RectTransform:
   m_GameObject: {fileID: 1993581841}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 4.7}
-  m_LocalScale: {x: 0.6420546, y: 0.9363296, z: 1.0700909}
+  m_LocalScale: {x: 0.86124283, y: 1.2559791, z: 1.4354047}
   m_Children:
   - {fileID: 1884198561}
   m_Father: {fileID: 1707292535}
@@ -882,7 +902,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -85.7, y: 36}
+  m_AnchoredPosition: {x: -170.5, y: 87.8}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1993581843
@@ -907,7 +927,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.8862745, g: 0.59607846, b: 0.30588236, a: 1}
+    m_HighlightedColor: {r: 1, g: 0.54509807, b: 0.16470589, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
