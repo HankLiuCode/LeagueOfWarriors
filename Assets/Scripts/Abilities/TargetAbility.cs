@@ -9,13 +9,10 @@ using UnityEngine;
 namespace Dota.Abilities
 {
     // TODO: Need to add who is the caster
-    public class TargetAbility : NetworkBehaviour, IAction, IAbility
+    public class TargetAbility : Ability, IAction
     {
         [SerializeField] GameObject spellRangePrefab = null;
         AreaIndicator spellRangeInstance = null;
-
-        [SerializeField] LayerMask playerMask = new LayerMask();
-        [SerializeField] Health health = null;
 
         [SerializeField] GameObject targetProjectilePrefab = null;
         [SerializeField] Vector3 castOffset = Vector3.up * 0.5f;
@@ -35,6 +32,12 @@ namespace Dota.Abilities
             StartCoroutine(CastSpell(target));
         }
 
+        [Command]
+        public void CmdSpawnProjectile(Health health)
+        {
+            ServerSpawnProjectile(health);
+        }
+
         [Server]
         IEnumerator CastSpell(Health health)
         {
@@ -49,12 +52,6 @@ namespace Dota.Abilities
 
             yield return null;
         }
-
-        [Command]
-        public void CmdSpawnProjectile(Health health)
-        {
-            ServerSpawnProjectile(health);
-        }
         #endregion
 
 
@@ -65,63 +62,6 @@ namespace Dota.Abilities
             spellRangeInstance = Instantiate(spellRangePrefab).GetComponent<AreaIndicator>();
             spellRangeInstance.SetRadius(maxRange);
             spellRangeInstance.gameObject.SetActive(false);
-        }
-
-        [ClientCallback]
-        private void Update()
-        {
-            if (!hasAuthority) { return; }
-
-            if (health.IsDead()) { return; }
-
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                StartCoroutine(ShowSpellUI());
-            }
-        }
-
-        [Client]
-        IEnumerator ShowSpellUI()
-        {
-            spellRangeInstance.gameObject.SetActive(true);
-
-            while (true)
-            {
-                spellRangeInstance.SetPosition(transform.position);
-
-                if (Physics.Raycast(DotaPlayerController.GetMouseRay(), out RaycastHit hit, Mathf.Infinity, playerMask))
-                {
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        spellRangeInstance.gameObject.SetActive(false);
-
-                        Health health = hit.collider.GetComponent<Health>();
-                        if (health && !health.IsDead())
-                        {
-                            Vector3 targetPos = health.transform.position;
-
-                            if (Vector3.Distance(targetPos, transform.position) < maxRange)
-                            {
-                                bool canDo = actionLocker.TryGetLock(this);
-                                if (canDo)
-                                {
-                                    networkAnimator.SetTrigger("abilityD");
-                                    transform.LookAt(hit.point, Vector3.up);
-                                    CmdSpawnProjectile(health);
-                                }
-                            }
-                        }
-                        break;
-                    }
-                }
-
-                if (Input.GetMouseButtonDown(1))
-                {
-                    spellRangeInstance.gameObject.SetActive(false);
-                    break;
-                }
-                yield return null;
-            }
         }
 
         // Animation Event
@@ -149,6 +89,45 @@ namespace Dota.Abilities
         public void Begin()
         {
 
+        }
+
+        public override void ShowIndicator()
+        {
+            spellRangeInstance.gameObject.SetActive(true);
+        }
+
+        public override void UpdateIndicator(AbilityData abilityData)
+        {
+            spellRangeInstance.SetPosition(abilityData.casterPos);
+        }
+
+        public override void HideIndicator()
+        {
+            spellRangeInstance.gameObject.SetActive(false);
+        }
+
+        public override void Cast(AbilityData abilityData)
+        {
+            if (abilityData.target == null) { return; }
+
+            Health health = abilityData.target.GetComponent<Health>();
+
+            if (!health) { return; }
+
+            if (Vector3.Distance(health.transform.position, abilityData.casterPos) > maxRange) { return; }
+
+
+            bool canDo = actionLocker.TryGetLock(this);
+            if (canDo)
+            {
+                networkAnimator.SetTrigger("abilityD");
+
+                transform.LookAt(abilityData.mouseClickPos, Vector3.up);
+
+                abilityData.delayTime = delayTime;
+
+                CmdSpawnProjectile(health);
+            }
         }
         #endregion
     }

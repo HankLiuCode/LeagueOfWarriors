@@ -15,7 +15,10 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   health: {fileID: 8151994728667568271}
-  areaAbility: {fileID: 6807771561974058203}
+  abilityQ: {fileID: 1040239189}
+  abilityW: {fileID: 6807771561974058203}
+  abilityE: {fileID: 4414856001966157371}
+  abilityR: {fileID: 6807771561974058203}
   groundMask:
     serializedVersion: 2
     m_Bits: 256

@@ -6,15 +6,7 @@ using Dota.Controls;
 using Dota.Core;
 
 
-public class AbilityData
-{
-    public Vector3 casterPos;
-    public Vector3 mouseClickPos;
-    public Vector3 castPos;
-    public float delayTime;
-}
-
-public class AreaAbility : NetworkBehaviour, IAction, IAbility
+public class AreaAbility : Ability, IAction
 {
     [SerializeField] GameObject indicatorPrefab = null;
     AreaIndicator areaIndicator = null;
@@ -29,17 +21,12 @@ public class AreaAbility : NetworkBehaviour, IAction, IAbility
 
     [SerializeField] ActionLocker actionLocker = null;
 
-    [SerializeField] LayerMask groundMask = new LayerMask();
-    [SerializeField] Health health = null;
-
     [SerializeField] float maxRange = 2f;
     [SerializeField] float damage = 50f;
 
     [SerializeField] float damageRadius = 1f;
     [SerializeField] float delayTime = 1f;
     [SerializeField] int priority = 1;
-
-    AbilityData abilityData;
 
     #region Server
 
@@ -87,7 +74,6 @@ public class AreaAbility : NetworkBehaviour, IAction, IAbility
     #region Client
     public override void OnStartAuthority()
     {
-        abilityData = new AbilityData();
         areaIndicator = Instantiate(indicatorPrefab).GetComponent<AreaIndicator>();
         spellRangeInstance = Instantiate(spellRangePrefab).GetComponent<AreaIndicator>();
 
@@ -97,14 +83,14 @@ public class AreaAbility : NetworkBehaviour, IAction, IAbility
     }
 
     [Client]
-    public void ShowIndicator()
+    public override void ShowIndicator()
     {
         areaIndicator.gameObject.SetActive(true);
         spellRangeInstance.gameObject.SetActive(true);
     }
 
     [Client]
-    public void UpdateIndicator(AbilityData abilityData)
+    public override void UpdateIndicator(AbilityData abilityData)
     {
         spellRangeInstance.SetPosition(abilityData.casterPos);
         Vector3 direction = (abilityData.mouseClickPos - abilityData.casterPos).normalized;
@@ -117,20 +103,18 @@ public class AreaAbility : NetworkBehaviour, IAction, IAbility
     }
 
     [Client]
-    public void HideIndicator()
+    public override void HideIndicator()
     {
         areaIndicator.gameObject.SetActive(false);
         spellRangeInstance.gameObject.SetActive(false);
     }
 
     [Client]
-    public void Cast(AbilityData abilityData)
+    public override void Cast(AbilityData abilityData)
     {
         bool canDo = actionLocker.TryGetLock(this);
         if (canDo)
         {
-            HideIndicator();
-
             networkAnimator.SetTrigger("abilityA");
 
             transform.LookAt(abilityData.castPos, Vector3.up);
@@ -140,67 +124,6 @@ public class AreaAbility : NetworkBehaviour, IAction, IAbility
             CmdSpawnAbilityEffect(abilityData);
         }
     }
-
-    [ClientCallback]
-    private void Update()
-    {
-        //if (!hasAuthority) { return; }
-
-        //if (health.IsDead()) { return; }
-
-        //if (Input.GetKeyDown(KeyCode.W))
-        //{
-        //    StartCoroutine(ShowSpellUI(abilityData));
-        //}
-    }
-
-    //[Client]
-    //IEnumerator ShowSpellUI(AbilityData abilityData)
-    //{
-    //    ShowIndicator();
-
-    //    while (true)
-    //    {
-    //        spellRangeInstance.SetPosition(transform.position);
-
-    //        if (Physics.Raycast(DotaPlayerController.GetMouseRay(), out RaycastHit hit, Mathf.Infinity, groundMask))
-    //        {
-    //            Vector3 direction = (hit.point - transform.position).normalized;
-    //            float range = (hit.point - transform.position).magnitude;
-
-    //            Vector3 castPosition = transform.position + direction * Mathf.Min(maxRange, range);
-
-    //            areaIndicator.SetPosition(castPosition);
-
-    //            if (Input.GetMouseButtonDown(0))
-    //            {
-    //                bool canDo = actionLocker.TryGetLock(this);
-    //                if (canDo)
-    //                {
-    //                    HideIndicator();
-
-    //                    networkAnimator.SetTrigger("abilityA");
-
-    //                    transform.LookAt(castPosition, Vector3.up);
-
-    //                    abilityData.mouseClickPos = castPosition;
-    //                    abilityData.delayTime = delayTime;
-
-    //                    CmdSpawnAbilityEffect(abilityData);
-    //                    break;
-    //                }
-    //            }
-    //        }
-
-    //        if (Input.GetMouseButtonDown(1))
-    //        {
-    //            HideIndicator();
-    //            break;
-    //        }
-    //        Debug.Log("Area Ability");
-    //        yield return null;
-    //    }
-    //}
 
     public void Begin()
     {
