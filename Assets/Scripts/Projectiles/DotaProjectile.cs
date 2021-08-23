@@ -37,6 +37,15 @@ namespace Dota.Combat
         }
 
         [Server]
+        IEnumerator HitAfter(Health health, float seconds)
+        {
+            yield return new WaitForSeconds(seconds);
+            NetworkServer.Destroy(gameObject);
+            health.ServerTakeDamage(damage);
+        }
+
+
+        [Server]
         private Vector3 GetAimLocation()
         {
             CapsuleCollider targetCapsule = target.GetComponent<CapsuleCollider>();
@@ -54,12 +63,11 @@ namespace Dota.Combat
 
             transform.LookAt(GetAimLocation());
 
-            transform.Translate(Vector3.forward * speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, GetAimLocation(), speed * Time.deltaTime);
 
             if (Vector3.Distance(transform.position, GetAimLocation()) < 0.1)
             {
-                ServerDealDamageTo(target, damage);
-                NetworkServer.Destroy(gameObject);
+                StartCoroutine(HitAfter(target, 0.1f));
             }
         }
         #endregion

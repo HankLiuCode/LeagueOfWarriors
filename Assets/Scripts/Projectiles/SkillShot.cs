@@ -60,6 +60,7 @@ public class SkillShot : NetworkBehaviour
         NetworkServer.Destroy(gameObject);
     }
 
+    [Server]
     IEnumerator HitAfter(Health health, float seconds)
     {
         yield return new WaitForSeconds(seconds);
