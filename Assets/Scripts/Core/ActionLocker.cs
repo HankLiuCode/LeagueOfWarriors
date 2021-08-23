@@ -16,13 +16,15 @@ namespace Dota.Core
             if(turn == null)
             {
                 turn = action;
+                turn.Begin();
                 isLocked = true;
                 return true;
             }
             else if(turn.GetPriority() < action.GetPriority())
             {
-                turn.Stop();
+                turn.End();
                 turn = action;
+                turn.Begin();
                 isLocked = true;
                 return true;
             }
@@ -36,6 +38,7 @@ namespace Dota.Core
         {
             if(owner == turn)
             {
+                turn.End();
                 turn = null;
                 isLocked = false;
             }

@@ -5,6 +5,15 @@ using UnityEngine;
 using Dota.Controls;
 using Dota.Core;
 
+
+public class AbilityData
+{
+    public Vector3 casterPos;
+    public Vector3 mouseClickPos;
+    public Vector3 castPos;
+    public float delayTime;
+}
+
 public class AreaAbility : NetworkBehaviour, IAction, IAbility
 {
     [SerializeField] GameObject indicatorPrefab = null;
@@ -28,26 +37,26 @@ public class AreaAbility : NetworkBehaviour, IAction, IAbility
 
     [SerializeField] float damageRadius = 1f;
     [SerializeField] float delayTime = 1f;
-
     [SerializeField] int priority = 1;
 
+    AbilityData abilityData;
 
     #region Server
 
     [Server]
-    IEnumerator CastSpell(Vector3 position, float delayTime)
+    IEnumerator CastSpell(AbilityData abilityData)
     {
-        NetworkAreaIndicator damageRadiusInstance = Instantiate(damageRadiusPrefab, position, Quaternion.identity).GetComponent<NetworkAreaIndicator>();
+        NetworkAreaIndicator damageRadiusInstance = Instantiate(damageRadiusPrefab, abilityData.castPos, Quaternion.identity).GetComponent<NetworkAreaIndicator>();
         NetworkServer.Spawn(damageRadiusInstance.gameObject);
-        damageRadiusInstance.ServerSetPosition(position);
+        damageRadiusInstance.ServerSetPosition(abilityData.castPos);
         damageRadiusInstance.ServerSetRadius(damageRadius);
 
-        yield return new WaitForSeconds(delayTime);
+        yield return new WaitForSeconds(abilityData.delayTime);
 
-        GameObject effectInstance = Instantiate(spellPrefab, position, Quaternion.identity);
+        GameObject effectInstance = Instantiate(spellPrefab, abilityData.castPos, Quaternion.identity);
         NetworkServer.Spawn(effectInstance, connectionToClient);
 
-        Collider[] colliders = Physics.OverlapSphere(position, damageRadius);
+        Collider[] colliders = Physics.OverlapSphere(abilityData.castPos, damageRadius);
         foreach (Collider c in colliders)
         {
             GameObject go = c.gameObject;
@@ -63,93 +72,144 @@ public class AreaAbility : NetworkBehaviour, IAction, IAbility
     }
 
     [Server]
-    public void ServerSpawnAbilityEffect(Vector3 position, float delayTime)
+    public void ServerSpawnAbilityEffect(AbilityData abilityData)
     {
-        StartCoroutine(CastSpell(position, delayTime));
+        StartCoroutine(CastSpell(abilityData));
     }
 
     [Command]
-    public void CmdSpawnAbilityEffect(Vector3 position, float delayTime)
+    public void CmdSpawnAbilityEffect(AbilityData abilityData)
     {
-        ServerSpawnAbilityEffect(position, delayTime);
+        ServerSpawnAbilityEffect(abilityData);
     }
-
     #endregion
 
     #region Client
     public override void OnStartAuthority()
     {
+        abilityData = new AbilityData();
         areaIndicator = Instantiate(indicatorPrefab).GetComponent<AreaIndicator>();
         spellRangeInstance = Instantiate(spellRangePrefab).GetComponent<AreaIndicator>();
+
         areaIndicator.SetRadius(damageRadius);
         spellRangeInstance.SetRadius(maxRange);
+        HideIndicator();
+    }
+
+    [Client]
+    public void ShowIndicator()
+    {
+        areaIndicator.gameObject.SetActive(true);
+        spellRangeInstance.gameObject.SetActive(true);
+    }
+
+    [Client]
+    public void UpdateIndicator(AbilityData abilityData)
+    {
+        spellRangeInstance.SetPosition(abilityData.casterPos);
+        Vector3 direction = (abilityData.mouseClickPos - abilityData.casterPos).normalized;
+        float range = (abilityData.mouseClickPos - abilityData.casterPos).magnitude;
+        Vector3 castPosition = transform.position + direction * Mathf.Min(maxRange, range);
+        
+        abilityData.castPos = castPosition;
+
+        areaIndicator.SetPosition(castPosition);
+    }
+
+    [Client]
+    public void HideIndicator()
+    {
         areaIndicator.gameObject.SetActive(false);
         spellRangeInstance.gameObject.SetActive(false);
+    }
+
+    [Client]
+    public void Cast(AbilityData abilityData)
+    {
+        bool canDo = actionLocker.TryGetLock(this);
+        if (canDo)
+        {
+            HideIndicator();
+
+            networkAnimator.SetTrigger("abilityA");
+
+            transform.LookAt(abilityData.castPos, Vector3.up);
+
+            abilityData.delayTime = delayTime;
+
+            CmdSpawnAbilityEffect(abilityData);
+        }
     }
 
     [ClientCallback]
     private void Update()
     {
-        if (!hasAuthority) { return; }
+        //if (!hasAuthority) { return; }
 
-        if (health.IsDead()) { return; }
+        //if (health.IsDead()) { return; }
 
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            StartCoroutine(ShowSpellUI());
-        }
+        //if (Input.GetKeyDown(KeyCode.W))
+        //{
+        //    StartCoroutine(ShowSpellUI(abilityData));
+        //}
     }
 
-    [Client]
-    IEnumerator ShowSpellUI()
+    //[Client]
+    //IEnumerator ShowSpellUI(AbilityData abilityData)
+    //{
+    //    ShowIndicator();
+
+    //    while (true)
+    //    {
+    //        spellRangeInstance.SetPosition(transform.position);
+
+    //        if (Physics.Raycast(DotaPlayerController.GetMouseRay(), out RaycastHit hit, Mathf.Infinity, groundMask))
+    //        {
+    //            Vector3 direction = (hit.point - transform.position).normalized;
+    //            float range = (hit.point - transform.position).magnitude;
+
+    //            Vector3 castPosition = transform.position + direction * Mathf.Min(maxRange, range);
+
+    //            areaIndicator.SetPosition(castPosition);
+
+    //            if (Input.GetMouseButtonDown(0))
+    //            {
+    //                bool canDo = actionLocker.TryGetLock(this);
+    //                if (canDo)
+    //                {
+    //                    HideIndicator();
+
+    //                    networkAnimator.SetTrigger("abilityA");
+
+    //                    transform.LookAt(castPosition, Vector3.up);
+
+    //                    abilityData.mouseClickPos = castPosition;
+    //                    abilityData.delayTime = delayTime;
+
+    //                    CmdSpawnAbilityEffect(abilityData);
+    //                    break;
+    //                }
+    //            }
+    //        }
+
+    //        if (Input.GetMouseButtonDown(1))
+    //        {
+    //            HideIndicator();
+    //            break;
+    //        }
+    //        Debug.Log("Area Ability");
+    //        yield return null;
+    //    }
+    //}
+
+    public void Begin()
     {
-        areaIndicator.gameObject.SetActive(true);
-        spellRangeInstance.gameObject.SetActive(true);
-
-        while (true)
-        {
-            spellRangeInstance.SetPosition(transform.position);
-
-            if (Physics.Raycast(DotaPlayerController.GetMouseRay(), out RaycastHit hit, Mathf.Infinity, groundMask))
-            {
-                Vector3 direction = (hit.point - transform.position).normalized;
-                float range = (hit.point - transform.position).magnitude;
-
-                Vector3 castPosition = transform.position + direction * Mathf.Min(maxRange, range);
-
-                areaIndicator.SetPosition(castPosition);
-
-                if (Input.GetMouseButtonDown(0))
-                {
-                    bool canDo = actionLocker.TryGetLock(this);
-                    if (canDo)
-                    {
-                        areaIndicator.gameObject.SetActive(false);
-                        spellRangeInstance.gameObject.SetActive(false);
-
-                        networkAnimator.SetTrigger("abilityA");
-
-                        transform.LookAt(castPosition, Vector3.up);
-
-                        CmdSpawnAbilityEffect(castPosition, delayTime);
-                        break;
-                    }
-                }
-            }
-
-
-            if (Input.GetMouseButtonDown(1))
-            {
-                areaIndicator.gameObject.SetActive(false);
-                spellRangeInstance.gameObject.SetActive(false);
-                break;
-            }
-            yield return null;
-        }
+        
     }
-    public void Stop()
-    {
 
+    public void End()
+    {
+        
     }
 
     public int GetPriority()

@@ -35,7 +35,6 @@ namespace Dota.Controls
                     else
                     {
                         fighter.StopAttack();
-                        Debug.Log(hit.collider.name);
                         mover.MoveTo(hit.point);
                     }
                 }

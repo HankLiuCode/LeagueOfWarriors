@@ -136,9 +136,14 @@ namespace Dota.Abilities
             return 1;
         }
 
-        public void Stop()
+        public void End()
         {
 
+        }
+
+        public void Begin()
+        {
+            
         }
         #endregion
     }
