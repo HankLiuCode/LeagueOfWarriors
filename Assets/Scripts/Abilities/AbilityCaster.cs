@@ -21,10 +21,14 @@ public class AbilityCaster : NetworkBehaviour
     [SerializeField] Ability abilityE;
     [SerializeField] Ability abilityR;
     [SerializeField] LayerMask groundMask = new LayerMask();
-    [SerializeField] LayerMask playerMask = new LayerMask();
 
     Ability currentAbility = null;
-    AbilityData abilityData = new AbilityData();
+    AbilityData abilityData = null;
+
+    public override void OnStartAuthority()
+    {
+        abilityData = new AbilityData();
+    }
 
 
     [ClientCallback]
@@ -34,8 +38,7 @@ public class AbilityCaster : NetworkBehaviour
 
         if (health.IsDead()) { return; }
 
-
-
+        
         if (Input.GetKeyDown(KeyCode.Q))
         {
             currentAbility?.HideIndicator();

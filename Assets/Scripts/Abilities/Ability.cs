@@ -7,7 +7,8 @@ using Mirror;
 public abstract class Ability : NetworkBehaviour
 {
 
-
+    [SerializeField] float manaCost = 10f;
+    [SerializeField] float cooldownTime = 2f;
     #region Client
 
     public abstract void ShowIndicator();
