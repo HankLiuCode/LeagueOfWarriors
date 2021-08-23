@@ -49,9 +49,15 @@ namespace Dota.Movement
         }
 
         [Client]
-        public void Stop()
+        public void End()
         {
             pathFollower.isStopped = true;
+        }
+
+        [Client]
+        public void Begin()
+        {
+
         }
 
         public int GetPriority()

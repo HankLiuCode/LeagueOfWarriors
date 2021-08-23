@@ -5,7 +5,8 @@ using UnityEngine;
 using Dota.Controls;
 using Dota.Core;
 
-public class AreaAbility : NetworkBehaviour, IAction, IAbility
+
+public class AreaAbility : Ability, IAction
 {
     [SerializeField] GameObject indicatorPrefab = null;
     AreaIndicator areaIndicator = null;
@@ -20,34 +21,29 @@ public class AreaAbility : NetworkBehaviour, IAction, IAbility
 
     [SerializeField] ActionLocker actionLocker = null;
 
-    [SerializeField] LayerMask groundMask = new LayerMask();
-    [SerializeField] Health health = null;
-
     [SerializeField] float maxRange = 2f;
     [SerializeField] float damage = 50f;
 
     [SerializeField] float damageRadius = 1f;
     [SerializeField] float delayTime = 1f;
-
     [SerializeField] int priority = 1;
-
 
     #region Server
 
     [Server]
-    IEnumerator CastSpell(Vector3 position, float delayTime)
+    IEnumerator CastSpell(AbilityData abilityData)
     {
-        NetworkAreaIndicator damageRadiusInstance = Instantiate(damageRadiusPrefab, position, Quaternion.identity).GetComponent<NetworkAreaIndicator>();
+        NetworkAreaIndicator damageRadiusInstance = Instantiate(damageRadiusPrefab, abilityData.castPos, Quaternion.identity).GetComponent<NetworkAreaIndicator>();
         NetworkServer.Spawn(damageRadiusInstance.gameObject);
-        damageRadiusInstance.ServerSetPosition(position);
+        damageRadiusInstance.ServerSetPosition(abilityData.castPos);
         damageRadiusInstance.ServerSetRadius(damageRadius);
 
-        yield return new WaitForSeconds(delayTime);
+        yield return new WaitForSeconds(abilityData.delayTime);
 
-        GameObject effectInstance = Instantiate(spellPrefab, position, Quaternion.identity);
+        GameObject effectInstance = Instantiate(spellPrefab, abilityData.castPos, Quaternion.identity);
         NetworkServer.Spawn(effectInstance, connectionToClient);
 
-        Collider[] colliders = Physics.OverlapSphere(position, damageRadius);
+        Collider[] colliders = Physics.OverlapSphere(abilityData.castPos, damageRadius);
         foreach (Collider c in colliders)
         {
             GameObject go = c.gameObject;
@@ -63,17 +59,16 @@ public class AreaAbility : NetworkBehaviour, IAction, IAbility
     }
 
     [Server]
-    public void ServerSpawnAbilityEffect(Vector3 position, float delayTime)
+    public void ServerSpawnAbilityEffect(AbilityData abilityData)
     {
-        StartCoroutine(CastSpell(position, delayTime));
+        StartCoroutine(CastSpell(abilityData));
     }
 
     [Command]
-    public void CmdSpawnAbilityEffect(Vector3 position, float delayTime)
+    public void CmdSpawnAbilityEffect(AbilityData abilityData)
     {
-        ServerSpawnAbilityEffect(position, delayTime);
+        ServerSpawnAbilityEffect(abilityData);
     }
-
     #endregion
 
     #region Client
@@ -81,75 +76,63 @@ public class AreaAbility : NetworkBehaviour, IAction, IAbility
     {
         areaIndicator = Instantiate(indicatorPrefab).GetComponent<AreaIndicator>();
         spellRangeInstance = Instantiate(spellRangePrefab).GetComponent<AreaIndicator>();
+
         areaIndicator.SetRadius(damageRadius);
         spellRangeInstance.SetRadius(maxRange);
+        HideIndicator();
+    }
+
+    [Client]
+    public override void ShowIndicator()
+    {
+        areaIndicator.gameObject.SetActive(true);
+        spellRangeInstance.gameObject.SetActive(true);
+    }
+
+    [Client]
+    public override void UpdateIndicator(AbilityData abilityData)
+    {
+        spellRangeInstance.SetPosition(abilityData.casterPos);
+        Vector3 direction = (abilityData.mouseClickPos - abilityData.casterPos).normalized;
+        float range = (abilityData.mouseClickPos - abilityData.casterPos).magnitude;
+        Vector3 castPosition = transform.position + direction * Mathf.Min(maxRange, range);
+        
+        abilityData.castPos = castPosition;
+
+        areaIndicator.SetPosition(castPosition);
+    }
+
+    [Client]
+    public override void HideIndicator()
+    {
         areaIndicator.gameObject.SetActive(false);
         spellRangeInstance.gameObject.SetActive(false);
     }
 
-    [ClientCallback]
-    private void Update()
-    {
-        if (!hasAuthority) { return; }
-
-        if (health.IsDead()) { return; }
-
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            StartCoroutine(ShowSpellUI());
-        }
-    }
-
     [Client]
-    IEnumerator ShowSpellUI()
+    public override void Cast(AbilityData abilityData)
     {
-        areaIndicator.gameObject.SetActive(true);
-        spellRangeInstance.gameObject.SetActive(true);
-
-        while (true)
+        bool canDo = actionLocker.TryGetLock(this);
+        if (canDo)
         {
-            spellRangeInstance.SetPosition(transform.position);
+            networkAnimator.SetTrigger("abilityA");
 
-            if (Physics.Raycast(DotaPlayerController.GetMouseRay(), out RaycastHit hit, Mathf.Infinity, groundMask))
-            {
-                Vector3 direction = (hit.point - transform.position).normalized;
-                float range = (hit.point - transform.position).magnitude;
+            transform.LookAt(abilityData.castPos, Vector3.up);
 
-                Vector3 castPosition = transform.position + direction * Mathf.Min(maxRange, range);
+            abilityData.delayTime = delayTime;
 
-                areaIndicator.SetPosition(castPosition);
-
-                if (Input.GetMouseButtonDown(0))
-                {
-                    bool canDo = actionLocker.TryGetLock(this);
-                    if (canDo)
-                    {
-                        areaIndicator.gameObject.SetActive(false);
-                        spellRangeInstance.gameObject.SetActive(false);
-
-                        networkAnimator.SetTrigger("abilityA");
-
-                        transform.LookAt(castPosition, Vector3.up);
-
-                        CmdSpawnAbilityEffect(castPosition, delayTime);
-                        break;
-                    }
-                }
-            }
-
-
-            if (Input.GetMouseButtonDown(1))
-            {
-                areaIndicator.gameObject.SetActive(false);
-                spellRangeInstance.gameObject.SetActive(false);
-                break;
-            }
-            yield return null;
+            CmdSpawnAbilityEffect(abilityData);
         }
     }
-    public void Stop()
-    {
 
+    public void Begin()
+    {
+        
+    }
+
+    public void End()
+    {
+        
     }
 
     public int GetPriority()

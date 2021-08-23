@@ -7,6 +7,7 @@ namespace Dota.Core
     public interface IAction
     {
         public int GetPriority();
-        public void Stop();
+        public void Begin();
+        public void End();
     }
 }

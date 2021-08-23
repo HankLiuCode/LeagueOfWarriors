@@ -8,13 +8,10 @@ using UnityEngine;
 
 namespace Dota.Abilities
 {
-    public class SkillShotAbility : NetworkBehaviour, IAction, IAbility
+    public class SkillShotAbility : Ability, IAction
     {
         [SerializeField] GameObject indicatorPrefab = null;
         DirectionIndicator directionIndicator = null;
-
-        [SerializeField] LayerMask groundMask = new LayerMask();
-        [SerializeField] Health health = null;
 
         [SerializeField] GameObject skillShotPrefab = null;
         [SerializeField] Vector3 castOffset = Vector3.up * 0.5f;
@@ -24,7 +21,6 @@ namespace Dota.Abilities
 
         [SerializeField] float damage = 50f;
         [SerializeField] float travelDist = 10f;
-
         [SerializeField] float delayTime = 1f;
         [SerializeField] float skillShotSpeed = 15f;
 
@@ -67,56 +63,6 @@ namespace Dota.Abilities
             directionIndicator.gameObject.SetActive(false);
         }
 
-        [ClientCallback]
-        private void Update()
-        {
-            if (!hasAuthority) { return; }
-
-            if (health.IsDead()) { return; }
-
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                StartCoroutine(ShowSpellUI());
-            }
-        }
-
-        [Client]
-        IEnumerator ShowSpellUI()
-        {
-            directionIndicator.gameObject.SetActive(true);
-
-            while (true)
-            {
-                if (Physics.Raycast(DotaPlayerController.GetMouseRay(), out RaycastHit hit, Mathf.Infinity, groundMask))
-                {
-                    directionIndicator.SetPosition(transform.position);
-                    directionIndicator.SetDirection(hit.point - transform.position);
-
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        bool canDo = actionLocker.TryGetLock(this);
-                        if (canDo)
-                        {
-                            directionIndicator.gameObject.SetActive(false);
-
-                            networkAnimator.SetTrigger("abilityD");
-                            transform.LookAt(hit.point, Vector3.up);
-
-                            CmdSpawnAbilityEffect(directionIndicator.GetDirection());
-                            break;
-                        }
-                    }
-                }
-
-                if (Input.GetMouseButtonDown(1))
-                {
-                    directionIndicator.gameObject.SetActive(false);
-                    break;
-                }
-                yield return null;
-            }
-        }
-
         // TODO: Make These Two Animation Events a requirement via interface or abstract class
 
         // Animation Event
@@ -136,9 +82,46 @@ namespace Dota.Abilities
             return 1;
         }
 
-        public void Stop()
+        public void End()
         {
 
+        }
+
+        public void Begin()
+        {
+            
+        }
+
+        public override void ShowIndicator()
+        {
+            directionIndicator.gameObject.SetActive(true);
+        }
+
+        public override void UpdateIndicator(AbilityData abilityData)
+        {
+            directionIndicator.SetPosition(abilityData.casterPos);
+            directionIndicator.SetDirection(abilityData.mouseClickPos - abilityData.casterPos);
+        }
+
+        public override void HideIndicator()
+        {
+            directionIndicator.gameObject.SetActive(false);
+        }
+
+        public override void Cast(AbilityData abilityData)
+        {
+            bool canDo = actionLocker.TryGetLock(this);
+            if (canDo)
+            {
+                networkAnimator.SetTrigger("abilityD");
+
+                transform.LookAt(abilityData.mouseClickPos, Vector3.up);
+
+                abilityData.delayTime = delayTime;
+
+                Vector3 direction = (abilityData.mouseClickPos - abilityData.casterPos).normalized;
+                CmdSpawnAbilityEffect(direction);
+            }
         }
         #endregion
     }
