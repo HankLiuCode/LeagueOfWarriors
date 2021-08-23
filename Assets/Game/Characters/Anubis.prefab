@@ -18,10 +18,39 @@ MonoBehaviour:
   abilityQ: {fileID: 1040239189}
   abilityW: {fileID: 6807771561974058203}
   abilityE: {fileID: 4414856001966157371}
-  abilityR: {fileID: 6807771561974058203}
+  abilityR: {fileID: -1157513170861685403}
   groundMask:
     serializedVersion: 2
     m_Bits: 256
+--- !u!114 &-1157513170861685403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7430938237228223883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52bf61089dc9acc49ae19af364fc2971, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  indicatorPrefab: {fileID: 7509079907997610509, guid: f7e58577928620441a8e147c3a9eaf13,
+    type: 3}
+  spellRangePrefab: {fileID: 3863486996862453941, guid: bf00ad13d1f143542a75c4b4b93f9805,
+    type: 3}
+  damageRadiusPrefab: {fileID: 7449486549517724255, guid: 39273ae671b38d5429ffc87492fe8995,
+    type: 3}
+  spellPrefab: {fileID: 8923537797170648196, guid: 17d6c18f40275e44d85b854524d93385,
+    type: 3}
+  networkAnimator: {fileID: 8686479566483180542}
+  actionLocker: {fileID: 5012432853328544335}
+  maxRange: 20
+  damage: 50
+  damageRadius: 5
+  delayTime: 0.8
+  priority: 1
 --- !u!114 &186942723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55,10 +84,6 @@ MonoBehaviour:
   syncInterval: 0.1
   indicatorPrefab: {fileID: 2726156333138317243, guid: e49fdf0fe03ad394880183322ea11d43,
     type: 3}
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 256
-  health: {fileID: 8151994728667568271}
   skillShotPrefab: {fileID: 1188273620969034097, guid: 917adf8708dd37e42b8abe900bfe6c6a,
     type: 3}
   castOffset: {x: 0, y: 0.5, z: 0}
@@ -84,10 +109,6 @@ MonoBehaviour:
   syncInterval: 0.1
   spellRangePrefab: {fileID: 3863486996862453941, guid: bf00ad13d1f143542a75c4b4b93f9805,
     type: 3}
-  playerMask:
-    serializedVersion: 2
-    m_Bits: 512
-  health: {fileID: 8151994728667568271}
   targetProjectilePrefab: {fileID: 5878615099803058345, guid: 6594a4f3586615e4491bcd87b1180798,
     type: 3}
   castOffset: {x: 0, y: 0.5, z: 0}
@@ -130,14 +151,10 @@ MonoBehaviour:
     type: 3}
   damageRadiusPrefab: {fileID: 7449486549517724255, guid: 39273ae671b38d5429ffc87492fe8995,
     type: 3}
-  spellPrefab: {fileID: 7987796186782911869, guid: c1ade20b1ef4d6e4690055d87994696d,
+  spellPrefab: {fileID: 8923537797170648196, guid: 17d6c18f40275e44d85b854524d93385,
     type: 3}
   networkAnimator: {fileID: 8686479566483180542}
   actionLocker: {fileID: 5012432853328544335}
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 256
-  health: {fileID: 8151994728667568271}
   maxRange: 5
   damage: 50
   damageRadius: 2
