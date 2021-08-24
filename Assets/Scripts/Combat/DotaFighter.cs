@@ -17,6 +17,8 @@ namespace Dota.Combat
         [SerializeField] float attackDamage = 20f;
 
         [SerializeField] NetworkAnimator netAnimator = null;
+        [SerializeField] AnimationEventHandler animationEventHandler = null;
+        [SerializeField] DotaMover mover = null;
 
         [SerializeField] Transform rightHand = null;
         [SerializeField] Transform leftHand = null;
@@ -57,6 +59,12 @@ namespace Dota.Combat
         #endregion
 
         #region Client
+
+        public override void OnStartAuthority()
+        {
+            animationEventHandler.OnAttackBackswing += AttackBackSwing;
+            animationEventHandler.OnAttackPoint += AttackPoint;
+        }
 
         public bool CanAttack(GameObject combatTarget)
         {
@@ -137,7 +145,7 @@ namespace Dota.Combat
             {
                 if (hasFinishedBackswing)
                 {
-                    GetComponent<DotaMover>().MoveTo(target.transform.position);
+                    mover.MoveTo(target.transform.position);
                 }
             }
             else

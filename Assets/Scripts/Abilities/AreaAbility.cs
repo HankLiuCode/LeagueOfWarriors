@@ -18,6 +18,8 @@ public class AreaAbility : Ability, IAction
     [SerializeField] GameObject spellPrefab = null;
     
     [SerializeField] NetworkAnimator networkAnimator = null;
+    [SerializeField] AnimationEventHandler animationEventHandler = null;
+    [SerializeField] string animationTrigger = "abilityW";
 
     [SerializeField] ActionLocker actionLocker = null;
 
@@ -80,6 +82,9 @@ public class AreaAbility : Ability, IAction
         areaIndicator.SetRadius(damageRadius);
         spellRangeInstance.SetRadius(maxRange);
         HideIndicator();
+        
+        animationEventHandler.OnAttackBackswing += AnimationEventHandler_OnAttackBackswing;
+        animationEventHandler.OnAttackPoint += AnimationEventHandler_OnAttackPoint;
     }
 
     [Client]
@@ -115,7 +120,7 @@ public class AreaAbility : Ability, IAction
         bool canDo = actionLocker.TryGetLock(this);
         if (canDo)
         {
-            networkAnimator.SetTrigger("abilityA");
+            networkAnimator.SetTrigger(animationTrigger);
 
             transform.LookAt(abilityData.castPos, Vector3.up);
 
@@ -140,16 +145,14 @@ public class AreaAbility : Ability, IAction
         return priority;
     }
 
-    // Animation Event
-    private void AttackPoint()
+    private void AnimationEventHandler_OnAttackBackswing()
     {
-
-    }
-
-    // Animation Event
-    private void AttackBackSwing()
-    {
+        Debug.Log("OnAttackBackswing In AreaAbility");
         actionLocker.ReleaseLock(this);
+    }
+    private void AnimationEventHandler_OnAttackPoint()
+    {
+        Debug.Log("OnAttackPoint In AreaAbility");
     }
 
     #endregion

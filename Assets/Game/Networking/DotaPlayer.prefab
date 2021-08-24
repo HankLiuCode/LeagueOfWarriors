@@ -65,7 +65,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  characterPrefab: {fileID: 7430938237228223883, guid: f8df72860c3aa584c9b9eaae6cdc6848,
+  characterPrefab: {fileID: 452546937840963528, guid: 3dbc6cd5f5aa16d48baca7aa12e1cef9,
     type: 3}
   healthDisplay: {fileID: 4437477732593420874}
   manaDisplay: {fileID: 750437418862066625}
