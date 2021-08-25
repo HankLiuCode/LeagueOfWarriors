@@ -10,13 +10,11 @@ public class AnimationEventHandler : MonoBehaviour
 
     public void AttackPoint()
     {
-        Debug.Log("AttackPoint Animation Event On Animator");
         OnAttackPoint?.Invoke();
     }
 
     public void AttackBackswing()
     {
-        Debug.Log("AttackBackswing Animation Event On Animator");
         OnAttackBackswing?.Invoke();
     }
 }

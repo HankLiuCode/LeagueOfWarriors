@@ -79,7 +79,8 @@ namespace Dota.Movement
 
 
             float forwardSpeed = localVelocity.normalized.z;
-            animationVelocity = Mathf.MoveTowards(animationVelocity, forwardSpeed, 0.1f);
+
+            animationVelocity = Mathf.MoveTowards(animationVelocity, forwardSpeed, 0.05f);
 
             animator.SetFloat("forwardSpeed", animationVelocity);
         }

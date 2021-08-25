@@ -107,7 +107,7 @@ NavMeshSettings:
   m_BuildSettings:
     serializedVersion: 2
     agentTypeID: 0
-    agentRadius: 0.3
+    agentRadius: 0.4
     agentHeight: 2
     agentSlope: 10
     agentClimb: 0.05
@@ -305,14 +305,17 @@ MonoBehaviour:
   playerSpawnMethod: 1
   spawnPrefabs:
   - {fileID: 7430938237228223883, guid: f8df72860c3aa584c9b9eaae6cdc6848, type: 3}
-  - {fileID: 5226263815430675489, guid: ca1a1afa46275a3449c048c9537ef45a, type: 3}
   - {fileID: 1758179270434475576, guid: 64374d58a690bf442b61cf8643a67ba8, type: 3}
   - {fileID: 8923537797170648196, guid: 17d6c18f40275e44d85b854524d93385, type: 3}
-  - {fileID: 7449486549517724255, guid: 39273ae671b38d5429ffc87492fe8995, type: 3}
-  - {fileID: 1188273620969034097, guid: 917adf8708dd37e42b8abe900bfe6c6a, type: 3}
   - {fileID: 5878615099803058345, guid: 6594a4f3586615e4491bcd87b1180798, type: 3}
+  - {fileID: 1188273620969034097, guid: 917adf8708dd37e42b8abe900bfe6c6a, type: 3}
   - {fileID: 1456116392418787683, guid: 7d3f9e49132169a4abdbb0b65d121efe, type: 3}
-  testingDummyPrefab: {fileID: 5226263815430675489, guid: ca1a1afa46275a3449c048c9537ef45a,
+  - {fileID: 452546937840963528, guid: 3dbc6cd5f5aa16d48baca7aa12e1cef9, type: 3}
+  - {fileID: 9165540034895490147, guid: e0b13fbed652d5e4599cd9be41701618, type: 3}
+  - {fileID: 7449486549517724255, guid: 39273ae671b38d5429ffc87492fe8995, type: 3}
+  - {fileID: 2726156333138317243, guid: fc7f15d385167fb4da78c58e3435cb54, type: 3}
+  - {fileID: 115730, guid: 0a73296bdf0db3a4ebcc1d70cf756dce, type: 3}
+  testingDummyPrefab: {fileID: 9165540034895490147, guid: e0b13fbed652d5e4599cd9be41701618,
     type: 3}
   DotaPlayers: []
 --- !u!114 &467400355

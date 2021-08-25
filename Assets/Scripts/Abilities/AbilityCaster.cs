@@ -38,38 +38,9 @@ public class AbilityCaster : NetworkBehaviour
 
         if (health.IsDead()) { return; }
 
-        
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            currentAbility?.HideIndicator();
-            currentAbility = abilityQ;
-            currentAbility.ShowIndicator();
-        }
-
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            currentAbility?.HideIndicator();
-            currentAbility = abilityW;
-            currentAbility.ShowIndicator();
-        }
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            currentAbility?.HideIndicator();
-            currentAbility = abilityE;
-            currentAbility.ShowIndicator();
-        }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            currentAbility?.HideIndicator();
-            currentAbility = abilityR;
-            currentAbility.ShowIndicator();
-        }
-
         if (Physics.Raycast(DotaPlayerController.GetMouseRay(), out RaycastHit groundHit, Mathf.Infinity, groundMask))
         {
-            Vector3 castPosition = groundHit.point;
+            Vector3 castPosition = new Vector3(groundHit.point.x, 0, groundHit.point.z);
             abilityData.casterPos = transform.position;
             abilityData.mouseClickPos = castPosition;
         }
@@ -87,21 +58,58 @@ public class AbilityCaster : NetworkBehaviour
             }
         }
 
-        if (currentAbility == null) { return; }
-
-        currentAbility.UpdateIndicator(abilityData);
-
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
+            ChangeAbility(abilityQ);
+        }
+
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            ChangeAbility(abilityW);
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            ChangeAbility(abilityE);
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ChangeAbility(abilityR);
+        }
+
+        if(currentAbility != null)
+        {
+            currentAbility.UpdateIndicator(abilityData);
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (!currentAbility.SmartCast)
+                {
+                    currentAbility.HideIndicator();
+                    currentAbility.Cast(abilityData);
+                    currentAbility = null;
+                }
+            }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                currentAbility.HideIndicator();
+                currentAbility = null;
+            }
+        }
+    }
+
+    private void ChangeAbility(Ability ability)
+    {
+        if (currentAbility != null)
             currentAbility.HideIndicator();
+
+        currentAbility = ability;
+
+        if (currentAbility.SmartCast)
             currentAbility.Cast(abilityData);
-            currentAbility = null;
-        }
-
-        if (Input.GetMouseButtonDown(1))
-        {
-            currentAbility.HideIndicator();
-            currentAbility = null;
-        }
+        else
+            currentAbility.ShowIndicator();
     }
 }

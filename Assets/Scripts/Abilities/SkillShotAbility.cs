@@ -11,7 +11,7 @@ namespace Dota.Abilities
     public class SkillShotAbility : Ability, IAction
     {
         [SerializeField] GameObject indicatorPrefab = null;
-        DirectionIndicator directionIndicator = null;
+        RectIndicator directionIndicator = null;
 
         [SerializeField] GameObject skillShotPrefab = null;
         [SerializeField] Vector3 castOffset = Vector3.up * 0.5f;
@@ -58,7 +58,7 @@ namespace Dota.Abilities
         #region Client
         public override void OnStartAuthority()
         {
-            directionIndicator = Instantiate(indicatorPrefab).GetComponent<DirectionIndicator>();
+            directionIndicator = Instantiate(indicatorPrefab).GetComponent<RectIndicator>();
             directionIndicator.SetLength(travelDist);
             directionIndicator.gameObject.SetActive(false);
         }

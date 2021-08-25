@@ -12,7 +12,7 @@ namespace Dota.Abilities
     public class TargetAbility : Ability, IAction
     {
         [SerializeField] GameObject spellRangePrefab = null;
-        AreaIndicator spellRangeInstance = null;
+        CircleIndicator spellRangeInstance = null;
 
         [SerializeField] GameObject targetProjectilePrefab = null;
         [SerializeField] Vector3 castOffset = Vector3.up * 0.5f;
@@ -59,7 +59,7 @@ namespace Dota.Abilities
 
         public override void OnStartAuthority()
         {
-            spellRangeInstance = Instantiate(spellRangePrefab).GetComponent<AreaIndicator>();
+            spellRangeInstance = Instantiate(spellRangePrefab).GetComponent<CircleIndicator>();
             spellRangeInstance.SetRadius(maxRange);
             spellRangeInstance.gameObject.SetActive(false);
         }

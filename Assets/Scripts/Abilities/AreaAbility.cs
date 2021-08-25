@@ -9,10 +9,10 @@ using Dota.Core;
 public class AreaAbility : Ability, IAction
 {
     [SerializeField] GameObject indicatorPrefab = null;
-    AreaIndicator areaIndicator = null;
+    CircleIndicator areaIndicator = null;
 
     [SerializeField] GameObject spellRangePrefab = null;
-    AreaIndicator spellRangeInstance = null;
+    CircleIndicator spellRangeInstance = null;
 
     [SerializeField] GameObject damageRadiusPrefab = null;
     [SerializeField] GameObject spellPrefab = null;
@@ -28,6 +28,7 @@ public class AreaAbility : Ability, IAction
 
     [SerializeField] float damageRadius = 1f;
     [SerializeField] float delayTime = 1f;
+    [SerializeField] float destroyTime = 3f;
     [SerializeField] int priority = 1;
 
     #region Server
@@ -35,13 +36,13 @@ public class AreaAbility : Ability, IAction
     [Server]
     IEnumerator CastSpell(AbilityData abilityData)
     {
-        NetworkAreaIndicator damageRadiusInstance = Instantiate(damageRadiusPrefab, abilityData.castPos, Quaternion.identity).GetComponent<NetworkAreaIndicator>();
+        NetworkCircleIndicator damageRadiusInstance = Instantiate(damageRadiusPrefab, abilityData.castPos, Quaternion.identity).GetComponent<NetworkCircleIndicator>();
         NetworkServer.Spawn(damageRadiusInstance.gameObject);
         damageRadiusInstance.ServerSetPosition(abilityData.castPos);
         damageRadiusInstance.ServerSetRadius(damageRadius);
 
         yield return new WaitForSeconds(abilityData.delayTime);
-
+        Debug.Log(abilityData.castPos);
         GameObject effectInstance = Instantiate(spellPrefab, abilityData.castPos, Quaternion.identity);
         NetworkServer.Spawn(effectInstance, connectionToClient);
 
@@ -55,7 +56,7 @@ public class AreaAbility : Ability, IAction
                 health.ServerTakeDamage(damage);
             }
         }
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(destroyTime);
         NetworkServer.Destroy(effectInstance);
         NetworkServer.Destroy(damageRadiusInstance.gameObject);
     }
@@ -76,8 +77,8 @@ public class AreaAbility : Ability, IAction
     #region Client
     public override void OnStartAuthority()
     {
-        areaIndicator = Instantiate(indicatorPrefab).GetComponent<AreaIndicator>();
-        spellRangeInstance = Instantiate(spellRangePrefab).GetComponent<AreaIndicator>();
+        areaIndicator = Instantiate(indicatorPrefab).GetComponent<CircleIndicator>();
+        spellRangeInstance = Instantiate(spellRangePrefab).GetComponent<CircleIndicator>();
 
         areaIndicator.SetRadius(damageRadius);
         spellRangeInstance.SetRadius(maxRange);
@@ -147,12 +148,11 @@ public class AreaAbility : Ability, IAction
 
     private void AnimationEventHandler_OnAttackBackswing()
     {
-        Debug.Log("OnAttackBackswing In AreaAbility");
         actionLocker.ReleaseLock(this);
     }
     private void AnimationEventHandler_OnAttackPoint()
     {
-        Debug.Log("OnAttackPoint In AreaAbility");
+        
     }
 
     #endregion

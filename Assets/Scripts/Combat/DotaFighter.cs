@@ -126,9 +126,13 @@ namespace Dota.Combat
 
         private bool GetIsInRange()
         {
+
+
+
             return Vector3.Distance(transform.position, target.transform.position) < attackRange;
         }
 
+        [ClientCallback]
         private void Update()
         {
             if (!hasAuthority) { return; }
@@ -145,7 +149,8 @@ namespace Dota.Combat
             {
                 if (hasFinishedBackswing)
                 {
-                    mover.MoveTo(target.transform.position);
+                    Vector3 targetDir = (target.transform.position - transform.position).normalized;
+                    mover.MoveTo(target.transform.position - targetDir);
                 }
             }
             else

@@ -27,6 +27,8 @@ public class CameraController : MonoBehaviour
         {
             FollowTarget();
         }
+
+
         UpdateCameraPosition();
     }
 

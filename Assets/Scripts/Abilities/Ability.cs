@@ -9,6 +9,11 @@ public abstract class Ability : NetworkBehaviour
 
     [SerializeField] float manaCost = 10f;
     [SerializeField] float cooldownTime = 2f;
+    [SerializeField] private bool smartCast;
+
+    public bool SmartCast { get { return smartCast; } set { smartCast = value; } }
+
+
     #region Client
 
     public abstract void ShowIndicator();
