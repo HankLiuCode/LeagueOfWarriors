@@ -42,6 +42,7 @@ public class AreaAbility : Ability, IAction
         damageRadiusInstance.ServerSetRadius(damageRadius);
 
         yield return new WaitForSeconds(abilityData.delayTime);
+
         Debug.Log(abilityData.castPos);
         GameObject effectInstance = Instantiate(spellPrefab, abilityData.castPos, Quaternion.identity);
         NetworkServer.Spawn(effectInstance, connectionToClient);

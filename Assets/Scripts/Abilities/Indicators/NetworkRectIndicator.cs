@@ -9,7 +9,7 @@ public class NetworkRectIndicator : NetworkBehaviour
     [SerializeField] GameObject wrapper = null;
 
     [SyncVar(hook = nameof(OnDirectionUpdated))]
-    [SerializeField] Vector2 direction = Vector2.one;
+    [SerializeField] Vector2 direction = Vector2.zero;
 
     [SyncVar(hook = nameof(OnLengthUpdated))]
     [SerializeField] float length = 1f;

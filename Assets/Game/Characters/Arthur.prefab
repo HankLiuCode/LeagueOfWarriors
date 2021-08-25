@@ -1,5 +1,17 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &2928662850204982764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 620882805556932230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96ec5fe4c00163f499f1bf840990a0e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &-3679921401897041321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71,7 +83,7 @@ MonoBehaviour:
   animationEventHandler: {fileID: 2928662850204982764}
   animationTrigger: abilityW
   actionLocker: {fileID: 2654738810189758476}
-  maxRange: 10
+  maxRange: 6
   damage: 50
   damageRadius: 2
   delayTime: 1
@@ -98,6 +110,7 @@ MonoBehaviour:
     type: 3}
   damageRectPrefab: {fileID: 2726156333138317243, guid: fc7f15d385167fb4da78c58e3435cb54,
     type: 3}
+  damageRectInstance: {fileID: 0}
   spellPrefab: {fileID: 195142, guid: f2e388aa3b923c841b408eb1e5dd22c4, type: 3}
   spellEffectOffset: 3
   networkAnimator: {fileID: 1861298204142979517}
@@ -105,7 +118,7 @@ MonoBehaviour:
   animationTrigger: abilityQ
   actionLocker: {fileID: 2654738810189758476}
   damage: 50
-  length: 10
+  length: 5
   width: 2
   delayTime: 0.3
   destroyTime: 0.8
@@ -127,18 +140,6 @@ MonoBehaviour:
   mover: {fileID: 452546937840963535}
   fighter: {fileID: 4873311908163361665}
   health: {fileID: 1187138297185360588}
---- !u!114 &2928662850204982764
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 620882805556932230}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96ec5fe4c00163f499f1bf840990a0e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &6543793052980821921
 PrefabInstance:
   m_ObjectHideFlags: 0

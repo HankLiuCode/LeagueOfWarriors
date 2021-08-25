@@ -10,6 +10,7 @@ public class DirectionalAbility : Ability, IAction
     RectIndicator directionIndicator = null;
 
     [SerializeField] GameObject damageRectPrefab = null;
+    [SerializeField] GameObject damageRectInstance = null;
 
     [SerializeField] GameObject spellPrefab = null;
     [SerializeField] float spellEffectOffset = 2.0f;
@@ -35,14 +36,14 @@ public class DirectionalAbility : Ability, IAction
     {
         Vector3 direction = (abilityData.mouseClickPos - abilityData.casterPos).normalized;
 
-        NetworkRectIndicator damageRectInstance = Instantiate(damageRectPrefab, abilityData.castPos, Quaternion.identity).GetComponent<NetworkRectIndicator>();
-
-        NetworkServer.Spawn(damageRectInstance.gameObject);
-
+        NetworkRectIndicator damageRectInstance = Instantiate(damageRectPrefab, abilityData.casterPos, Quaternion.identity).GetComponent<NetworkRectIndicator>();
+        
         damageRectInstance.ServerSetPosition(abilityData.casterPos);
         damageRectInstance.ServerSetDirection(direction);
         damageRectInstance.ServerSetLength(length);
         damageRectInstance.ServerSetWidth(width);
+
+        NetworkServer.Spawn(damageRectInstance.gameObject);
 
         yield return new WaitForSeconds(abilityData.delayTime);
 
