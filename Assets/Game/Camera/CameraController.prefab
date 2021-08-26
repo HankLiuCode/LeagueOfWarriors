@@ -48,8 +48,8 @@ MonoBehaviour:
   screenBorderThickness: 30
   speed: 15
   viewAngle: 65
-  fov: 50
-  viewDist: 12
+  fov: 40
+  viewDist: 20
 --- !u!1 &4529496318378339247
 GameObject:
   m_ObjectHideFlags: 0

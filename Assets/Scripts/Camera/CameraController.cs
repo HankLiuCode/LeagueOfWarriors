@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public const float MIN_VIEW_DISTANCE = 5;
-    public const float MAX_VIEW_DISTANCE = 30;
+    public const float MAX_VIEW_DISTANCE = 20;
 
     [SerializeField] Camera playerCam = null;
     [SerializeField] float screenBorderThickness = 30f;
