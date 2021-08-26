@@ -4,18 +4,47 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    public const float MIN_VIEW_DISTANCE = 7;
+    public const float MAX_VIEW_DISTANCE = 12;
+
     [SerializeField] Camera playerCam = null;
     [SerializeField] float screenBorderThickness = 30f;
     [SerializeField] float speed = 15f;
-    [SerializeField] Vector3 offset = new Vector3(0, 0, 9);
+    [SerializeField] float viewAngle = 65f;
 
-    Transform target = null;
-    float defaultHeight = 10;
+    [Range(MIN_VIEW_DISTANCE, MAX_VIEW_DISTANCE)]
+    [SerializeField] 
+    float viewDist = MAX_VIEW_DISTANCE;
 
+    Vector3 lookAtPoint;
+    Transform followTarget = null;
 
-    private void OnEnable()
+    public void Initialize(Transform target)
     {
-        transform.position = new Vector3(transform.position.x, defaultHeight, transform.position.z);
+        followTarget = target;
+        UpdateCameraPosition(viewAngle, viewDist, target.position);
+    }
+    
+    /// <summary>
+    /// Updates the playerCam position & rotation given the angle, distance and target
+    /// </summary>
+    /// <param name="angle"></param>
+    /// <param name="distance"></param>
+    /// <param name="target"></param>
+    /// 
+    public void UpdateCameraPosition(float angle, float distance, Vector3 target)
+    {
+        angle = Mathf.Clamp(angle, 0, 90);
+
+        float angleFromUp = 90 - angle;
+
+        Vector3 targetToCamDir = Quaternion.AngleAxis(-angleFromUp, Vector3.right) * Vector3.up;
+
+        Vector3 camPos = target + targetToCamDir * distance;
+
+        playerCam.transform.rotation = Quaternion.AngleAxis(angle, Vector3.right) * Quaternion.identity;
+
+        playerCam.transform.position = camPos;
     }
 
 
@@ -25,29 +54,20 @@ public class CameraController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Space))
         {
-            FollowTarget();
+            lookAtPoint = followTarget.position;
+            UpdateCameraPosition(viewAngle, viewDist, lookAtPoint);
+        }
+        else
+        {
+            lookAtPoint += GetMouseMovement() * speed * Time.deltaTime;
+            UpdateCameraPosition(viewAngle, viewDist, lookAtPoint);
         }
 
-
-        UpdateCameraPosition();
+        viewDist = Mathf.Clamp(viewDist- Input.mouseScrollDelta.y, MIN_VIEW_DISTANCE, MAX_VIEW_DISTANCE);
     }
 
-    public void SetFollowTarget(Transform target)
+    private Vector3 GetMouseMovement()
     {
-        this.target = target;
-    }
-
-    private void FollowTarget()
-    {
-        Vector3 camPos = new Vector3(target.position.x, transform.position.y, target.position.z);
-        camPos += offset;
-        transform.position = camPos;
-    }
-
-    private void UpdateCameraPosition()
-    {
-        Vector3 pos = transform.position;
-
         Vector3 cursorMovement = Vector3.zero;
 
         Vector2 cursorPosition = Input.mousePosition;
@@ -69,8 +89,7 @@ public class CameraController : MonoBehaviour
         {
             cursorMovement.x -= 1;
         }
-        pos += cursorMovement.normalized * speed * Time.deltaTime;
 
-        transform.position = pos;
+        return cursorMovement.normalized;
     }
 }

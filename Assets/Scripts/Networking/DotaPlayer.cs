@@ -33,7 +33,7 @@ namespace Dota.Networking
         {
             DotaPlayerController localPlayerController = FindLocalPlayerController();
             cameraController.gameObject.SetActive(true);
-            cameraController.SetFollowTarget(localPlayerController.transform);
+            cameraController.Initialize(localPlayerController.transform);
 
             healthDisplay.gameObject.SetActive(true);
             healthDisplay.SetHealth(localPlayerController.GetComponent<Health>());
@@ -42,9 +42,20 @@ namespace Dota.Networking
             manaDisplay.SetMana(localPlayerController.GetComponent<Mana>());
         }
 
+        public override void OnStartClient()
+        {
+            if (NetworkServer.active) { return; } //if is running as server
+
+            ((DotaNetworkManager) NetworkManager.singleton).DotaPlayers.Add(this);
+        }
+
         public override void OnStopClient()
         {
+            // Removes DotaPlayer On the NetworkManager on the client side
+            ((DotaNetworkManager) NetworkManager.singleton).DotaPlayers.Remove(this);
+
             if (!hasAuthority) { return; }
+
             cameraController.gameObject.SetActive(false);
             healthDisplay.gameObject.SetActive(false);
         }
