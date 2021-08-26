@@ -6,8 +6,7 @@ using UnityEngine.AI;
 
 public class PathFollower : MonoBehaviour
 {
-    // change to private when done
-    public NavMeshAgent agent = null;
+    [SerializeField] NavMeshAgent agent = null;
     public bool isStopped { get { return agent.isStopped; } set { agent.isStopped = value;  } }
     public Vector3 velocity { get { return agent.velocity; } set { agent.velocity = value; } }
 
