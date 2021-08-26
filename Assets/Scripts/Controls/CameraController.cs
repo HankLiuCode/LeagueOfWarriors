@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public const float MIN_VIEW_DISTANCE = 7;
-    public const float MAX_VIEW_DISTANCE = 12;
+    public const float MIN_VIEW_DISTANCE = 5;
+    public const float MAX_VIEW_DISTANCE = 30;
 
     [SerializeField] Camera playerCam = null;
     [SerializeField] float screenBorderThickness = 30f;
     [SerializeField] float speed = 15f;
     [SerializeField] float viewAngle = 65f;
+    [SerializeField] float fov = 30f;
 
     [Range(MIN_VIEW_DISTANCE, MAX_VIEW_DISTANCE)]
     [SerializeField] 
@@ -63,6 +64,7 @@ public class CameraController : MonoBehaviour
             UpdateCameraPosition(viewAngle, viewDist, lookAtPoint);
         }
 
+        playerCam.fieldOfView = fov;
         viewDist = Mathf.Clamp(viewDist- Input.mouseScrollDelta.y, MIN_VIEW_DISTANCE, MAX_VIEW_DISTANCE);
     }
 
