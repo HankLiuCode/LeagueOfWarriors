@@ -75,9 +75,9 @@ namespace Dota.Movement
             pathFollower.SetEnabled(!health.IsDead());
 
             Vector3 velocity = pathFollower.velocity;
+
             Vector3 localVelocity = transform.InverseTransformDirection(velocity);
-
-
+            
             float forwardSpeed = localVelocity.normalized.z;
 
             animationVelocity = Mathf.MoveTowards(animationVelocity, forwardSpeed, 0.05f);

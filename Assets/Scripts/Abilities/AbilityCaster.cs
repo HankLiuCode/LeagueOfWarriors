@@ -39,14 +39,14 @@ public class AbilityCaster : NetworkBehaviour
 
         if (health.IsDead()) { return; }
 
-        if (Physics.Raycast(DotaPlayerController.GetMouseRay(), out RaycastHit groundHit, Mathf.Infinity, groundMask))
+        if (Physics.Raycast(CameraController.GetMouseRay(), out RaycastHit groundHit, Mathf.Infinity, groundMask))
         {
             Vector3 castPosition = new Vector3(groundHit.point.x, 0, groundHit.point.z);
             abilityData.casterPos = transform.position;
             abilityData.mouseClickPos = castPosition;
         }
 
-        if (Physics.Raycast(DotaPlayerController.GetMouseRay(), out RaycastHit playerHit, Mathf.Infinity))
+        if (Physics.Raycast(CameraController.GetMouseRay(), out RaycastHit playerHit, Mathf.Infinity))
         {
             Health target = playerHit.collider.gameObject.GetComponent<Health>();
             if (target && !target.IsDead())

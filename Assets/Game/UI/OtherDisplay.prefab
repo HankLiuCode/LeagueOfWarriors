@@ -740,7 +740,7 @@ GameObject:
   - component: {fileID: 3762241872082090868}
   - component: {fileID: 3762241872082090871}
   m_Layer: 0
-  m_Name: AllStatsDisplay
+  m_Name: OtherDisplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

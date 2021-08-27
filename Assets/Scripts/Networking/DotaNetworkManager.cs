@@ -12,7 +12,7 @@ namespace Dota.Networking
         
         public List<DotaPlayer> DotaPlayers = new List<DotaPlayer>();
 
-        public static event Action OnPlayerChanged;
+        public event Action OnPlayerChanged;
 
         #region Server
         public override void OnServerAddPlayer(NetworkConnection conn)
@@ -21,9 +21,9 @@ namespace Dota.Networking
 
             DotaPlayer player = conn.identity.GetComponent<DotaPlayer>();
 
-            OnPlayerChanged?.Invoke();
-
             DotaPlayers.Add(player);
+
+            OnPlayerChanged?.Invoke();
         }
 
         public override void OnServerConnect(NetworkConnection conn)
@@ -37,9 +37,9 @@ namespace Dota.Networking
             // Removes DotaPlayer On the NetworkManager on the server side
             DotaPlayer player = conn.identity.GetComponent<DotaPlayer>();
 
-            OnPlayerChanged?.Invoke();
-
             DotaPlayers.Remove(player);
+
+            OnPlayerChanged?.Invoke();
 
             base.OnServerDisconnect(conn);
         }

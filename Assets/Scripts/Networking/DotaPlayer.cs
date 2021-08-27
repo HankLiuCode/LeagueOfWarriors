@@ -45,7 +45,6 @@ namespace Dota.Networking
                 playerUIInstance = Instantiate(playerUISetupPrefab.gameObject).GetComponent<PlayerUISetup>();
                 playerUIInstance.SetUpSelfUI(dotaPlayerController);
             }
-            
 
             // Add player to DotaPlayers List on Client, Does not run on host, since it will cause duplicate DotaPlayers
             if (!NetworkServer.active)
@@ -61,7 +60,7 @@ namespace Dota.Networking
 
             if (dotaPlayerController.hasAuthority)
             {
-                playerUIInstance.DestroySelfUI();
+                playerUIInstance.DestroyAll();
             }
         }
 

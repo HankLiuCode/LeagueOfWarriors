@@ -6,10 +6,12 @@ using Dota.Controls;
 using Dota.UI;
 using Dota.Core;
 
-public class AllStatsDisplay : MonoBehaviour
+public class OtherStatsDisplay : MonoBehaviour
 {
     public List<GameObject> playerDisplays;
     public List<DotaPlayerController> players;
+
+
 
     public void AddPlayer(DotaPlayerController dotaPlayerController)
     {

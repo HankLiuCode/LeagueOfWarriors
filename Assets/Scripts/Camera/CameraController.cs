@@ -94,4 +94,9 @@ public class CameraController : MonoBehaviour
 
         return cursorMovement.normalized;
     }
+
+    public static Ray GetMouseRay()
+    {
+        return Camera.main.ScreenPointToRay(Input.mousePosition);
+    }
 }

@@ -973,6 +973,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: FogOfWarCam
       objectReference: {fileID: 0}
+    - target: {fileID: 8654889149544410717, guid: 1a8d5398c8d8cca4db3c8bc8b4c9e2a9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1a8d5398c8d8cca4db3c8bc8b4c9e2a9, type: 3}
 --- !u!1 &1440632849
@@ -1052,6 +1057,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FogProjector
+      objectReference: {fileID: 0}
+    - target: {fileID: 8480971519362439465, guid: 7b8058377a11043489266d94dae567e0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8480971519362439466, guid: 7b8058377a11043489266d94dae567e0,
         type: 3}

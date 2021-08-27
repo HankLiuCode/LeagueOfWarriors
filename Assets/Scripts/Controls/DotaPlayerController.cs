@@ -23,7 +23,7 @@ namespace Dota.Controls
 
             if (Input.GetMouseButtonDown(1))
             {
-                if (Physics.Raycast(GetMouseRay(), out RaycastHit hit, Mathf.Infinity))
+                if (Physics.Raycast(CameraController.GetMouseRay(), out RaycastHit hit, Mathf.Infinity))
                 {
                     GameObject go = hit.collider.gameObject;
                     if (go == gameObject) { return; }
@@ -41,13 +41,6 @@ namespace Dota.Controls
                 }
             }
 
-        }
-
-
-
-        public static Ray GetMouseRay()
-        {
-            return Camera.main.ScreenPointToRay(Input.mousePosition);
         }
     }
 
