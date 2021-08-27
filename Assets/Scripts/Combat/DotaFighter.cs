@@ -26,7 +26,7 @@ namespace Dota.Combat
         // if basic attack is melee then its null
         [SerializeField] DotaProjectile projectilePrefab = null;
 
-        bool hasFinishedBackswing = true;
+        [SerializeField] bool hasFinishedBackswing = true;
 
         #region Server
 
@@ -62,8 +62,27 @@ namespace Dota.Combat
 
         public override void OnStartAuthority()
         {
-            animationEventHandler.OnAttackBackswing += AttackBackSwing;
-            animationEventHandler.OnAttackPoint += AttackPoint;
+            animationEventHandler.OnAttackBackswing += AnimationEventHandler_OnAttackBackswing;
+            animationEventHandler.OnAttackPoint += AnimationEventHandler_OnAttackPoint;
+        }
+
+        private void AnimationEventHandler_OnAttackPoint()
+        {
+            if (target == null) { return; }
+
+            if (projectilePrefab == null)
+            {
+                MeleeAttack();
+            }
+            else
+            {
+                RangedAttack();
+            }
+        }
+
+        private void AnimationEventHandler_OnAttackBackswing()
+        {
+            hasFinishedBackswing = true;
         }
 
         public bool CanAttack(GameObject combatTarget)
@@ -102,33 +121,9 @@ namespace Dota.Combat
         {
             CmdSpawnProjectile(target, gameObject, attackDamage);
         }
-        
-        // Animation Event
-        void AttackPoint()
-        {
-            if (target == null) { return; }
-
-            if (projectilePrefab == null)
-            {
-                MeleeAttack();
-            }
-            else
-            {
-                RangedAttack();
-            }
-        }
-
-        // Animation Event
-        void AttackBackSwing()
-        {
-            hasFinishedBackswing = true;
-        }
 
         private bool GetIsInRange()
         {
-
-
-
             return Vector3.Distance(transform.position, target.transform.position) < attackRange;
         }
 
@@ -142,8 +137,6 @@ namespace Dota.Combat
             if (target == null) { return; }
 
             if (target.IsDead()) { return; }
-
-
 
             if (!GetIsInRange())
             {

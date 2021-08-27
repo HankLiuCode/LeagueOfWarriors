@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StatsModifyAbility : Ability, IAction
+public class StatsModifyAbility : Ability
 {
     [SerializeField] NetworkAnimator networkAnimator = null;
     [SerializeField] AnimationEventHandler animationEventHandler = null;
@@ -50,21 +50,5 @@ public class StatsModifyAbility : Ability, IAction
     {
         
     }
-
-    public int GetPriority()
-    {
-        return 1;
-    }
-
-    public void Begin()
-    {
-        
-    }
-
-    public void End()
-    {
-        
-    }
-
     #endregion
 }

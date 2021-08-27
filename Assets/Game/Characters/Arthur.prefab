@@ -77,7 +77,6 @@ MonoBehaviour:
   damageRadius: 2
   delayTime: 1
   destroyTime: 0.8
-  priority: 1
 --- !u!114 &228051818702057190
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,7 +124,6 @@ MonoBehaviour:
   width: 2
   delayTime: 0.3
   destroyTime: 0.8
-  priority: 1
 --- !u!114 &4968188805439103641
 MonoBehaviour:
   m_ObjectHideFlags: 0

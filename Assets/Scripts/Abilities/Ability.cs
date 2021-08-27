@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using Dota.Core;
 
-
-public abstract class Ability : NetworkBehaviour
+public abstract class Ability : NetworkBehaviour, IAction
 {
+    public const int ABILITY_ACTION_PRIORITY = 1;
 
     [SyncVar]
     [SerializeField] 
@@ -26,7 +27,6 @@ public abstract class Ability : NetworkBehaviour
     }
 
 
-
     #region Client
 
     public abstract void ShowIndicator();
@@ -37,5 +37,19 @@ public abstract class Ability : NetworkBehaviour
 
     public abstract void Cast(AbilityData abilityData);
 
+    public int GetPriority()
+    {
+        return ABILITY_ACTION_PRIORITY;
+    }
+
+    public void Begin()
+    {
+        
+    }
+
+    public void End()
+    {
+        
+    }
     #endregion
 }

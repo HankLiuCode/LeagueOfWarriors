@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Dota.Abilities
 {
-    public class SkillShotAbility : Ability, IAction
+    public class SkillShotAbility : Ability
     {
         [SerializeField] GameObject indicatorPrefab = null;
         RectIndicator directionIndicator = null;
@@ -75,21 +75,6 @@ namespace Dota.Abilities
         private void AttackBackSwing()
         {
             actionLocker.ReleaseLock(this);
-        }
-
-        public int GetPriority()
-        {
-            return 1;
-        }
-
-        public void End()
-        {
-
-        }
-
-        public void Begin()
-        {
-            
         }
 
         public override void ShowIndicator()

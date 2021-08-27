@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Dota.Abilities
 {
     // TODO: Need to add who is the caster
-    public class TargetAbility : Ability, IAction
+    public class TargetAbility : Ability
     {
         [SerializeField] GameObject spellRangePrefab = null;
         CircleIndicator spellRangeInstance = null;
@@ -74,21 +74,6 @@ namespace Dota.Abilities
         private void AttackBackSwing()
         {
             actionLocker.ReleaseLock(this);
-        }
-
-        public int GetPriority()
-        {
-            return 1;
-        }
-
-        public void End()
-        {
-
-        }
-
-        public void Begin()
-        {
-
         }
 
         public override void ShowIndicator()

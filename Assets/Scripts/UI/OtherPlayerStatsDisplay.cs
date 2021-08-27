@@ -6,21 +6,16 @@ using Dota.Controls;
 using Dota.UI;
 using Dota.Core;
 
-public class OtherStatsDisplay : MonoBehaviour
+public class OtherPlayerStatsDisplay : MonoBehaviour
 {
     public List<GameObject> playerDisplays;
-    public List<DotaPlayerController> players;
-
-
-
-    public void AddPlayer(DotaPlayerController dotaPlayerController)
+    
+    public void BindPlayersToDisplays(List<DotaPlayerController> dotaPlayerControllers)
     {
-        players.Add(dotaPlayerController);
-
-        for(int i=0; i<players.Count; i++)
+        for(int i=0; i<dotaPlayerControllers.Count; i++)
         {
-            Health health = players[i].GetComponent<Health>();
-            Mana mana = players[i].GetComponent<Mana>();
+            Health health = dotaPlayerControllers[i].GetComponent<Health>();
+            Mana mana = dotaPlayerControllers[i].GetComponent<Mana>();
 
             playerDisplays[i].GetComponent<HealthDisplay>().SetHealth(health);
             playerDisplays[i].GetComponent<ManaDisplay>().SetMana(mana);

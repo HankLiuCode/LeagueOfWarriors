@@ -15,19 +15,38 @@ public class PlayerUISetup : MonoBehaviour
 
     HealthDisplay healthDisplayInstance = null;
     ManaDisplay manaDisplayInstance = null;
-    OtherStatsDisplay otherStatsDisplayInstance = null;
+    OtherPlayerStatsDisplay otherStatsDisplayInstance = null;
     CameraController cameraControllerInstance = null;
 
-    //private void Start()
-    //{
-    //    List<DotaPlayer> players = ((DotaNetworkManager)NetworkManager.singleton).DotaPlayers;
-    //    ((DotaNetworkManager)NetworkManager.singleton).OnPlayerChanged += PlayerUISetup_OnPlayerChanged;
-    //}
+    private void Start()
+    {
+        ((DotaNetworkManager)NetworkManager.singleton).OnPlayerChanged += PlayerUISetup_OnPlayerChanged;
 
-    //private void PlayerUISetup_OnPlayerChanged()
-    //{
-    //    List<DotaPlayer> players = ((DotaNetworkManager)NetworkManager.singleton).DotaPlayers;
-    //}
+        otherStatsDisplayInstance = Instantiate(otherDisplayPrefab).GetComponent<OtherPlayerStatsDisplay>();
+
+        RebindOtherPlayersUI();
+    }
+
+    private void PlayerUISetup_OnPlayerChanged()
+    {
+        RebindOtherPlayersUI();
+    }
+
+    public void RebindOtherPlayersUI()
+    {
+        List<DotaPlayer> players = ((DotaNetworkManager)NetworkManager.singleton).DotaPlayers;
+        List<DotaPlayerController> playerControllers = new List<DotaPlayerController>();
+        foreach (DotaPlayer dp in players)
+        {
+            playerControllers.Add(dp.GetDotaPlayerController());
+        }
+        otherStatsDisplayInstance.BindPlayersToDisplays(playerControllers);
+    }
+
+    public void DestroyOtherUI()
+    {
+        Destroy(otherStatsDisplayInstance);
+    }
 
     public void SetUpSelfUI(DotaPlayerController localPlayerController)
     {
@@ -45,16 +64,6 @@ public class PlayerUISetup : MonoBehaviour
     {
         Destroy(healthDisplayInstance.gameObject);
         Destroy(cameraControllerInstance.gameObject);
-    }
-
-    public void SetUpOtherUI()
-    {
-        otherStatsDisplayInstance = Instantiate(otherDisplayPrefab).GetComponent<OtherStatsDisplay>();
-    }
-
-    public void DestroyOtherUI()
-    {
-        Destroy(otherStatsDisplayInstance);
     }
 
     public void DestroyAll()

@@ -6,7 +6,7 @@ using Dota.Controls;
 using Dota.Core;
 
 
-public class AreaAbility : Ability, IAction
+public class AreaAbility : Ability
 {
     [SerializeField] GameObject indicatorPrefab = null;
     CircleIndicator areaIndicatorInstance = null;
@@ -29,7 +29,6 @@ public class AreaAbility : Ability, IAction
     [SerializeField] float damageRadius = 1f;
     [SerializeField] float delayTime = 1f;
     [SerializeField] float destroyTime = 3f;
-    [SerializeField] int priority = 1;
 
     #region Server
 
@@ -140,21 +139,6 @@ public class AreaAbility : Ability, IAction
 
             CmdSpawnAbilityEffect(abilityData);
         }
-    }
-
-    public void Begin()
-    {
-        
-    }
-
-    public void End()
-    {
-        
-    }
-
-    public int GetPriority()
-    {
-        return priority;
     }
 
     private void AnimationEventHandler_OnAttackBackswing()

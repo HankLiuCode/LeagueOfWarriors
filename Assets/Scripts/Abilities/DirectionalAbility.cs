@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DirectionalAbility : Ability, IAction
+public class DirectionalAbility : Ability
 {
     [SerializeField] GameObject indicatorPrefab = null;
     RectIndicator directionIndicatorInstance = null;
@@ -27,7 +27,6 @@ public class DirectionalAbility : Ability, IAction
 
     [SerializeField] float delayTime = 1f;
     [SerializeField] float destroyTime = 1f;
-    [SerializeField] int priority = 1;
 
     #region Server
 
@@ -136,21 +135,6 @@ public class DirectionalAbility : Ability, IAction
 
             CmdSpawnAbilityEffect(abilityData);
         }
-    }
-
-    public void Begin()
-    {
-
-    }
-
-    public void End()
-    {
-
-    }
-
-    public int GetPriority()
-    {
-        return priority;
     }
 
     private void AnimationEventHandler_OnAttackBackswing()
