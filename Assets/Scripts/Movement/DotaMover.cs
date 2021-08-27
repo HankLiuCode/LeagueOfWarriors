@@ -17,14 +17,13 @@ namespace Dota.Movement
 
         [SerializeField] int priority = 0;
 
-        float animationVelocity = 0f;
+        [SerializeField] float forwardSpeed;
 
 
         #region Client
         public override void OnStartAuthority()
         {
             pathFollower.SetSpeed(maxSpeed);
-            
         }
 
         [Client]
@@ -80,9 +79,9 @@ namespace Dota.Movement
             
             float forwardSpeed = localVelocity.normalized.z;
 
-            animationVelocity = Mathf.MoveTowards(animationVelocity, forwardSpeed, 0.05f);
+            this.forwardSpeed = forwardSpeed;
 
-            animator.SetFloat("forwardSpeed", animationVelocity);
+            animator.SetBool("running", forwardSpeed > 0.1);
         }
         #endregion
     }
