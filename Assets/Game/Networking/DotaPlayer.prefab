@@ -67,9 +67,9 @@ MonoBehaviour:
   syncInterval: 0.1
   characterPrefab: {fileID: 452546937840963528, guid: 3dbc6cd5f5aa16d48baca7aa12e1cef9,
     type: 3}
-  healthDisplay: {fileID: 4437477732593420874}
-  manaDisplay: {fileID: 750437418862066625}
-  cameraController: {fileID: 4355003777937264744}
+  playerUISetupPrefab: {fileID: 418879522122324838, guid: ed7ed0fdd7bff19429febe014af2876b,
+    type: 3}
+  dotaPlayerController: {fileID: 0}
 --- !u!1001 &192551130748390928
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -150,18 +150,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 192551130748390928}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4355003777937264744 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4529496317603667576, guid: 82788ef1cc327794eb22f5dce58eda77,
-    type: 3}
-  m_PrefabInstance: {fileID: 192551130748390928}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd9946dce4c5c1f41b9b316d39694402, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &463743082136131475
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -242,27 +230,3 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 463743082136131475}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4437477732593420874 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4321940089516793305, guid: e6ce1f28d01eaee479a42f42d4e2a518,
-    type: 3}
-  m_PrefabInstance: {fileID: 463743082136131475}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7925fa430e3a9f4cbc04f1661b8d56d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &750437418862066625 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 866271380279913554, guid: e6ce1f28d01eaee479a42f42d4e2a518,
-    type: 3}
-  m_PrefabInstance: {fileID: 463743082136131475}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b2fc409c9fe9e844a5658c8382eeeeb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

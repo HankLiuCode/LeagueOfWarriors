@@ -8,6 +8,35 @@ public class Mana : NetworkBehaviour
     [SyncVar]
     float manaPoint = 100f;
 
+    [SyncVar]
+    float maxManaPoint = 100f;
+
+    [SyncVar]
+    float regenRate = 1f;
+
+
+    #region Both
+    public float GetMaxMana()
+    {
+        return maxManaPoint;
+    }
+
+    public float GetMana()
+    {
+        return manaPoint;
+    }
+
+    public float GetManaPercent()
+    {
+        return manaPoint / GetMaxMana();
+    }
+
+    public float GetRegenRate()
+    {
+        return regenRate;
+    }
+    #endregion
+
 
     #region Server
     [ServerCallback]
@@ -23,38 +52,41 @@ public class Mana : NetworkBehaviour
         }
     }
 
-    #endregion
-
-    public float GetMana()
-    {
-        return manaPoint;
-    }
-
-    public bool UseMana(float manaToUse)
+    [Server]
+    public bool ServerUseMana(float manaToUse)
     {
         if (manaToUse > manaPoint)
         {
             return false;
         }
-
         manaPoint -= manaToUse;
         return true;
     }
 
-    public float GetMaxMana()
+    [Command]
+    public void CmdUseMana(float manaToUse)
     {
-        // return from stats
-        return 100;
+        ServerUseMana(manaToUse);
     }
 
-    public float GetManaPercent()
+    #endregion
+
+    #region Client
+
+    [Client]
+    public bool IsManaEnough(float manaToUse)
     {
-        return manaPoint / GetMaxMana();
+        if (manaToUse > manaPoint)
+        {
+            return false;
+        }
+        return true;
     }
 
-    public float GetRegenRate()
+    [Client]
+    public void ClientUseMana(float manaToUse)
     {
-        // return from stats
-        return 1;
+        CmdUseMana(manaToUse);
     }
+    #endregion
 }

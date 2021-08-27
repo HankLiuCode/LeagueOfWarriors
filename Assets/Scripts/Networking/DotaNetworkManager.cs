@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
-using Dota.UI;
-using Dota.Core;
+using System;
 
 namespace Dota.Networking
 {
@@ -13,12 +12,16 @@ namespace Dota.Networking
         
         public List<DotaPlayer> DotaPlayers = new List<DotaPlayer>();
 
+        public static event Action OnPlayerChanged;
+
         #region Server
         public override void OnServerAddPlayer(NetworkConnection conn)
         {
             base.OnServerAddPlayer(conn);
 
             DotaPlayer player = conn.identity.GetComponent<DotaPlayer>();
+
+            OnPlayerChanged?.Invoke();
 
             DotaPlayers.Add(player);
         }
@@ -33,10 +36,29 @@ namespace Dota.Networking
         {
             // Removes DotaPlayer On the NetworkManager on the server side
             DotaPlayer player = conn.identity.GetComponent<DotaPlayer>();
+
+            OnPlayerChanged?.Invoke();
+
             DotaPlayers.Remove(player);
 
             base.OnServerDisconnect(conn);
         }
         #endregion
+
+        #region Client
+
+        public DotaPlayer GetLocalPlayer()
+        {
+            foreach (DotaPlayer player in DotaPlayers)
+            {
+                if (player.isLocalPlayer)
+                {
+                    return player;
+                }
+            }
+            return null;
+        }
+        #endregion
+
     }
 }

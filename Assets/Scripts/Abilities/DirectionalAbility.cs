@@ -7,7 +7,7 @@ using UnityEngine;
 public class DirectionalAbility : Ability, IAction
 {
     [SerializeField] GameObject indicatorPrefab = null;
-    RectIndicator directionIndicator = null;
+    RectIndicator directionIndicatorInstance = null;
 
     [SerializeField] GameObject damageRectPrefab = null;
     [SerializeField] GameObject damageRectInstance = null;
@@ -55,10 +55,7 @@ public class DirectionalAbility : Ability, IAction
 
         yield return new WaitForSeconds(destroyTime);
 
-
-        NetworkServer.Destroy(effectInstance);
-        NetworkServer.Destroy(damageRectInstance.gameObject);
-
+        // Deal Damage to health in rect
         //Collider[] colliders = Physics.OverlapSphere(abilityData.castPos, damageRadius);
         //foreach (Collider c in colliders)
         //{
@@ -69,6 +66,9 @@ public class DirectionalAbility : Ability, IAction
         //        health.ServerTakeDamage(damage);
         //    }
         //}
+
+        NetworkServer.Destroy(effectInstance);
+        NetworkServer.Destroy(damageRectInstance.gameObject);
     }
 
     [Server]
@@ -87,30 +87,39 @@ public class DirectionalAbility : Ability, IAction
     #region Client
     public override void OnStartAuthority()
     {
-        directionIndicator = Instantiate(indicatorPrefab).GetComponent<RectIndicator>();
-        directionIndicator.SetLength(length);
-        directionIndicator.gameObject.SetActive(false);
+        directionIndicatorInstance = Instantiate(indicatorPrefab).GetComponent<RectIndicator>();
+        directionIndicatorInstance.SetLength(length);
+        directionIndicatorInstance.gameObject.SetActive(false);
 
         animationEventHandler.OnAttackBackswing += AnimationEventHandler_OnAttackBackswing;
         animationEventHandler.OnAttackPoint += AnimationEventHandler_OnAttackPoint;
     }
 
+    public override void OnStopClient()
+    {
+        if (!hasAuthority) { return; }
+        Debug.Log("Directional Ability OnStopAuthority");
+        Destroy(directionIndicatorInstance.gameObject);
+        animationEventHandler.OnAttackBackswing -= AnimationEventHandler_OnAttackBackswing;
+        animationEventHandler.OnAttackPoint -= AnimationEventHandler_OnAttackPoint;
+    }
+
     [Client]
     public override void ShowIndicator()
     {
-        directionIndicator.gameObject.SetActive(true);
+        directionIndicatorInstance.gameObject.SetActive(true);
     }
     [Client]
     public override void UpdateIndicator(AbilityData abilityData)
     {
-        directionIndicator.SetPosition(abilityData.casterPos);
-        directionIndicator.SetDirection(abilityData.mouseClickPos - abilityData.casterPos);
+        directionIndicatorInstance.SetPosition(abilityData.casterPos);
+        directionIndicatorInstance.SetDirection(abilityData.mouseClickPos - abilityData.casterPos);
     }
 
     [Client]
     public override void HideIndicator()
     {
-        directionIndicator.gameObject.SetActive(false);
+        directionIndicatorInstance.gameObject.SetActive(false);
     }
 
     [Client]

@@ -7,11 +7,24 @@ using Mirror;
 public abstract class Ability : NetworkBehaviour
 {
 
-    [SerializeField] float manaCost = 10f;
-    [SerializeField] float cooldownTime = 2f;
-    [SerializeField] private bool smartCast;
+    [SyncVar]
+    [SerializeField] 
+    float manaCost = 10f;
+
+    [SyncVar]
+    [SerializeField] 
+    float cooldownTime = 2f;
+
+    [SerializeField] 
+    private bool smartCast;
 
     public bool SmartCast { get { return smartCast; } set { smartCast = value; } }
+
+    public float GetManaCost()
+    {
+        return manaCost;
+    }
+
 
 
     #region Client

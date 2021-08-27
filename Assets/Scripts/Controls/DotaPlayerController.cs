@@ -14,6 +14,7 @@ namespace Dota.Controls
         [SerializeField] DotaFighter fighter = null;
         [SerializeField] Health health = null;
 
+        [ClientCallback]
         private void Update()
         {
             if (!hasAuthority) { return; }
@@ -25,7 +26,7 @@ namespace Dota.Controls
                 if (Physics.Raycast(GetMouseRay(), out RaycastHit hit, Mathf.Infinity))
                 {
                     GameObject go = hit.collider.gameObject;
-                    if(go == gameObject) { return; }
+                    if (go == gameObject) { return; }
 
                     if (fighter.CanAttack(go))
                     {

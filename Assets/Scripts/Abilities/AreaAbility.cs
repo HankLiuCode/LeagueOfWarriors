@@ -9,7 +9,7 @@ using Dota.Core;
 public class AreaAbility : Ability, IAction
 {
     [SerializeField] GameObject indicatorPrefab = null;
-    CircleIndicator areaIndicator = null;
+    CircleIndicator areaIndicatorInstance = null;
 
     [SerializeField] GameObject spellRangePrefab = null;
     CircleIndicator spellRangeInstance = null;
@@ -42,8 +42,7 @@ public class AreaAbility : Ability, IAction
         damageRadiusInstance.ServerSetRadius(damageRadius);
 
         yield return new WaitForSeconds(abilityData.delayTime);
-
-        Debug.Log(abilityData.castPos);
+        
         GameObject effectInstance = Instantiate(spellPrefab, abilityData.castPos, Quaternion.identity);
         NetworkServer.Spawn(effectInstance, connectionToClient);
 
@@ -78,10 +77,10 @@ public class AreaAbility : Ability, IAction
     #region Client
     public override void OnStartAuthority()
     {
-        areaIndicator = Instantiate(indicatorPrefab).GetComponent<CircleIndicator>();
+        areaIndicatorInstance = Instantiate(indicatorPrefab).GetComponent<CircleIndicator>();
         spellRangeInstance = Instantiate(spellRangePrefab).GetComponent<CircleIndicator>();
 
-        areaIndicator.SetRadius(damageRadius);
+        areaIndicatorInstance.SetRadius(damageRadius);
         spellRangeInstance.SetRadius(maxRange);
         HideIndicator();
         
@@ -89,10 +88,21 @@ public class AreaAbility : Ability, IAction
         animationEventHandler.OnAttackPoint += AnimationEventHandler_OnAttackPoint;
     }
 
+    public override void OnStopClient()
+    {
+        if (!hasAuthority) { return; }
+
+        Destroy(areaIndicatorInstance.gameObject);
+        Destroy(spellRangeInstance.gameObject);
+
+        animationEventHandler.OnAttackBackswing -= AnimationEventHandler_OnAttackBackswing;
+        animationEventHandler.OnAttackPoint -= AnimationEventHandler_OnAttackPoint;
+    }
+
     [Client]
     public override void ShowIndicator()
     {
-        areaIndicator.gameObject.SetActive(true);
+        areaIndicatorInstance.gameObject.SetActive(true);
         spellRangeInstance.gameObject.SetActive(true);
     }
 
@@ -106,13 +116,13 @@ public class AreaAbility : Ability, IAction
         
         abilityData.castPos = castPosition;
 
-        areaIndicator.SetPosition(castPosition);
+        areaIndicatorInstance.SetPosition(castPosition);
     }
 
     [Client]
     public override void HideIndicator()
     {
-        areaIndicator.gameObject.SetActive(false);
+        areaIndicatorInstance.gameObject.SetActive(false);
         spellRangeInstance.gameObject.SetActive(false);
     }
 

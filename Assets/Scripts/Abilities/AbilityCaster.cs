@@ -16,6 +16,7 @@ public class AbilityData
 public class AbilityCaster : NetworkBehaviour
 {
     [SerializeField] Health health = null;
+    [SerializeField] Mana mana = null;
     [SerializeField] Ability abilityQ;
     [SerializeField] Ability abilityW;
     [SerializeField] Ability abilityE;
@@ -60,22 +61,22 @@ public class AbilityCaster : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            ChangeAbility(abilityQ);
+            ChangeOrCastAbility(abilityQ);
         }
 
         if (Input.GetKeyDown(KeyCode.W))
         {
-            ChangeAbility(abilityW);
+            ChangeOrCastAbility(abilityW);
         }
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            ChangeAbility(abilityE);
+            ChangeOrCastAbility(abilityE);
         }
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            ChangeAbility(abilityR);
+            ChangeOrCastAbility(abilityR);
         }
 
         if(currentAbility != null)
@@ -87,6 +88,7 @@ public class AbilityCaster : NetworkBehaviour
                 if (!currentAbility.SmartCast)
                 {
                     currentAbility.HideIndicator();
+                    mana.ClientUseMana(currentAbility.GetManaCost());
                     currentAbility.Cast(abilityData);
                     currentAbility = null;
                 }
@@ -100,16 +102,23 @@ public class AbilityCaster : NetworkBehaviour
         }
     }
 
-    private void ChangeAbility(Ability ability)
+    private void ChangeOrCastAbility(Ability ability)
     {
         if (currentAbility != null)
             currentAbility.HideIndicator();
 
+        if (!mana.IsManaEnough(ability.GetManaCost())) return;
+
         currentAbility = ability;
 
         if (currentAbility.SmartCast)
+        {
+            mana.ClientUseMana(currentAbility.GetManaCost());
             currentAbility.Cast(abilityData);
+        }
         else
+        {
             currentAbility.ShowIndicator();
+        }
     }
 }
