@@ -28,7 +28,6 @@ public abstract class Ability : NetworkBehaviour, IAction
 
 
     #region Client
-
     public abstract void ShowIndicator();
 
     public abstract void UpdateIndicator(AbilityData abilityData);

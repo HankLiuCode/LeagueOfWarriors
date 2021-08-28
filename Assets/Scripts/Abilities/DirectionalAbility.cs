@@ -54,17 +54,7 @@ public class DirectionalAbility : Ability
 
         yield return new WaitForSeconds(destroyTime);
 
-        // Deal Damage to health in rect
-        //Collider[] colliders = Physics.OverlapSphere(abilityData.castPos, damageRadius);
-        //foreach (Collider c in colliders)
-        //{
-        //    GameObject go = c.gameObject;
-        //    Health health = go.GetComponent<Health>();
-        //    if (health)
-        //    {
-        //        health.ServerTakeDamage(damage);
-        //    }
-        //}
+        // TODO: Deal Damage to health in rect
 
         NetworkServer.Destroy(effectInstance);
         NetworkServer.Destroy(damageRectInstance.gameObject);
@@ -97,7 +87,6 @@ public class DirectionalAbility : Ability
     public override void OnStopClient()
     {
         if (!hasAuthority) { return; }
-        Debug.Log("Directional Ability OnStopAuthority");
         Destroy(directionIndicatorInstance.gameObject);
         animationEventHandler.OnAttackBackswing -= AnimationEventHandler_OnAttackBackswing;
         animationEventHandler.OnAttackPoint -= AnimationEventHandler_OnAttackPoint;

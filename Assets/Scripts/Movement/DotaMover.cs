@@ -9,15 +9,13 @@ namespace Dota.Movement
 {
     public class DotaMover : NetworkBehaviour, IAction
     {
+        public const int MOVE_ACTION_PRIORITY = 0;
+
         [SerializeField] Animator animator = null;
         [SerializeField] Health health = null;
         [SerializeField] PathFollower pathFollower = null;
-        [SerializeField] float maxSpeed = 5;
         [SerializeField] ActionLocker actionScheduler = null;
-
-        [SerializeField] int priority = 0;
-
-        [SerializeField] float forwardSpeed;
+        [SerializeField] float maxSpeed = 5;
 
 
         #region Client
@@ -63,7 +61,7 @@ namespace Dota.Movement
 
         public int GetPriority()
         {
-            return priority;
+            return MOVE_ACTION_PRIORITY;
         }
 
         [ClientCallback]
@@ -78,8 +76,6 @@ namespace Dota.Movement
             Vector3 localVelocity = transform.InverseTransformDirection(velocity);
             
             float forwardSpeed = localVelocity.normalized.z;
-
-            this.forwardSpeed = forwardSpeed;
 
             animator.SetBool("running", forwardSpeed > 0.1);
         }
