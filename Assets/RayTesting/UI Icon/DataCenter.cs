@@ -22,6 +22,5 @@ public class DataCenter : MonoBehaviour
         {
             fNewHp = 0;
         }
-       
     }
 }

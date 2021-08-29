@@ -5,7 +5,6 @@ using Mirror;
 
 public class CooldownStore : NetworkBehaviour
 {
-    // this syncList is used as an array, !!! DO NOT ADD new elements into this !!!
     SyncDictionary<int, float> cooldownTimers = new SyncDictionary<int, float>();
     SyncDictionary<int, float> initialCooldownTimes = new SyncDictionary<int, float>();
 
@@ -27,16 +26,37 @@ public class CooldownStore : NetworkBehaviour
         }
     }
 
-    #endregion
-
-    public void StartCooldown(Ability ability, float cooldownTime)
+    [Server]
+    public void ServerStartCooldown(Ability ability, float cooldownTime)
     {
-        if (cooldownTimers.ContainsKey(ability.GetInstanceID())) { return; }
-
-        cooldownTimers.Add(ability.GetInstanceID(), cooldownTime);
-        initialCooldownTimes.Add(ability.GetInstanceID(), cooldownTime);
+        ServerStartCooldown(ability.GetInstanceID(), cooldownTime);
     }
 
+    [Server]
+    public void ServerStartCooldown(int abilityID, float cooldownTime)
+    {
+        if (cooldownTimers.ContainsKey(abilityID)) { return; }
+
+        cooldownTimers.Add(abilityID, cooldownTime);
+
+        initialCooldownTimes.Add(abilityID, cooldownTime);
+    }
+
+
+    [Command]
+    private void CmdStartCooldown(int abilityID, float cooldownTime)
+    {
+        ServerStartCooldown(abilityID, cooldownTime);
+    }
+    #endregion
+
+
+    [Client]
+    public void ClientStartCooldown(Ability ability, float cooldownTime)
+    {
+        CmdStartCooldown(ability.GetInstanceID(), cooldownTime);
+    }
+    
     public float GetTimeRemaining(Ability ability)
     {
         if (!cooldownTimers.ContainsKey(ability.GetInstanceID()))
@@ -55,6 +75,4 @@ public class CooldownStore : NetworkBehaviour
 
         return cooldownTimers[ability.GetInstanceID()] / initialCooldownTimes[ability.GetInstanceID()];
     }
-
-
 }

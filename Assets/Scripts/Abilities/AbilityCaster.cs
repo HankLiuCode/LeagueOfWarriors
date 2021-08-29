@@ -88,8 +88,7 @@ public class AbilityCaster : NetworkBehaviour
                 if (!currentAbility.SmartCast)
                 {
                     currentAbility.HideIndicator();
-                    mana.ClientUseMana(currentAbility.GetManaCost());
-                    currentAbility.Cast(abilityData);
+                    CastAbility(currentAbility);
                     currentAbility = null;
                 }
             }
@@ -105,7 +104,9 @@ public class AbilityCaster : NetworkBehaviour
     private void ChangeOrCastAbility(Ability ability)
     {
         if (currentAbility != null)
+        {
             currentAbility.HideIndicator();
+        }
 
         if (!mana.IsManaEnough(ability.GetManaCost())) return;
 
@@ -113,12 +114,18 @@ public class AbilityCaster : NetworkBehaviour
 
         if (currentAbility.SmartCast)
         {
-            mana.ClientUseMana(currentAbility.GetManaCost());
-            currentAbility.Cast(abilityData);
+            CastAbility(currentAbility);
+            currentAbility = null;
         }
         else
         {
             currentAbility.ShowIndicator();
         }
+    }
+
+    private void CastAbility(Ability ability)
+    {
+        mana.ClientUseMana(ability.GetManaCost());
+        ability.Cast(abilityData);
     }
 }

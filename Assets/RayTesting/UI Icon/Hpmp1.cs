@@ -25,8 +25,5 @@ public class Hpmp1 : MonoBehaviour
         {
             this.mpbar.GetComponent<Image>().fillAmount -= 0.1f;
         }
-
-
-
     }
 }
