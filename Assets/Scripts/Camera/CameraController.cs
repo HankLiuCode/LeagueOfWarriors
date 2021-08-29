@@ -8,6 +8,9 @@ public class CameraController : MonoBehaviour
     public const float MAX_VIEW_DISTANCE = 20;
 
     [SerializeField] Camera playerCam = null;
+
+    [SerializeField] Vector2 xMinMax = new Vector2(-45, 45);
+    [SerializeField] Vector2 zMinMax = new Vector2(-40, 50);
     [SerializeField] float screenBorderThickness = 30f;
     [SerializeField] float speed = 15f;
     [SerializeField] float viewAngle = 65f;
@@ -61,6 +64,13 @@ public class CameraController : MonoBehaviour
         else
         {
             lookAtPoint += GetMouseMovement() * speed * Time.deltaTime;
+            
+            float lookAtPointX = Mathf.Clamp(lookAtPoint.x, xMinMax.x, xMinMax.y);
+
+            float lookAtPointZ = Mathf.Clamp(lookAtPoint.z, zMinMax.x, zMinMax.y);
+
+            lookAtPoint = new Vector3(lookAtPointX, 0, lookAtPointZ);
+
             UpdateCameraPosition(viewAngle, viewDist, lookAtPoint);
         }
 

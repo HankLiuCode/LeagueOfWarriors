@@ -45,12 +45,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCam: {fileID: 4529496318378339241}
+  xMinMax: {x: -45, y: 45}
+  zMinMax: {x: -40, y: 50}
   screenBorderThickness: 30
   speed: 15
   viewAngle: 65
   fov: 40
   viewDist: 20
-  followTarget: {fileID: 0}
 --- !u!1 &4529496318378339247
 GameObject:
   m_ObjectHideFlags: 0

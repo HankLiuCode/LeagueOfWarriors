@@ -28,8 +28,8 @@ namespace Dota.Networking
 
         public override void OnServerConnect(NetworkConnection conn)
         {
-            GameObject testingDummy = Instantiate(testingDummyPrefab, Vector3.zero, Quaternion.identity);
-            NetworkServer.Spawn(testingDummy);
+            //GameObject testingDummy = Instantiate(testingDummyPrefab, Vector3.zero, Quaternion.identity);
+            //NetworkServer.Spawn(testingDummy);
         }
 
         public override void OnServerDisconnect(NetworkConnection conn)
