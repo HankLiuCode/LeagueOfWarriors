@@ -5,13 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/RayTesting/Scene/Menu.unity
     guid: f66661721d476dd42bd773d412f22185
-  - enabled: 1
+  - enabled: 0
     path: Assets/RayTesting/Scene/GameView.unity
     guid: f3deb547f0524864a89c7c07319c15ae
-  - enabled: 0
+  - enabled: 1
     path: Assets/Game/Scene/NetworkSandbox.unity
     guid: b3b0cb9813ef0e04b8701c4a9861b8b3
   m_configObjects: {}

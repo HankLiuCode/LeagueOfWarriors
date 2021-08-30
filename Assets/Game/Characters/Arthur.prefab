@@ -1,17 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &2928662850204982764
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 620882805556932230}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96ec5fe4c00163f499f1bf840990a0e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-3679921401897041321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49,6 +37,7 @@ MonoBehaviour:
   syncInterval: 0.1
   health: {fileID: 1187138297185360588}
   mana: {fileID: 228051818702057190}
+  cooldownStore: {fileID: 4583548578950598173}
   abilityQ: {fileID: 538770581797919719}
   abilityW: {fileID: -396314808053693547}
   abilityE: {fileID: -3679921401897041321}
@@ -70,8 +59,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  manaCost: 10
-  cooldownTime: 2
+  manaCost: 5
+  cooldownTime: 5
   smartCast: 0
   indicatorPrefab: {fileID: 7509079907997610509, guid: f7e58577928620441a8e147c3a9eaf13,
     type: 3}
@@ -119,7 +108,7 @@ MonoBehaviour:
   syncInterval: 0.1
   manaCost: 20
   cooldownTime: 2
-  smartCast: 0
+  smartCast: 1
   indicatorPrefab: {fileID: 2726156333138317243, guid: e49fdf0fe03ad394880183322ea11d43,
     type: 3}
   damageRectPrefab: {fileID: 2726156333138317243, guid: fc7f15d385167fb4da78c58e3435cb54,
@@ -136,6 +125,20 @@ MonoBehaviour:
   width: 2
   delayTime: 0.3
   destroyTime: 0.8
+--- !u!114 &4583548578950598173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 452546937840963528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb05060cf5f748747bd3570711739dc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
 --- !u!114 &4968188805439103641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,6 +171,18 @@ MonoBehaviour:
   temporaryMeshPrefab: {fileID: 8457411613495852972, guid: 0573e6e0b1120ed458bb06c9993c8c86,
     type: 3}
   radius: 25
+--- !u!114 &2928662850204982764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 620882805556932230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96ec5fe4c00163f499f1bf840990a0e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6543793052980821921
 PrefabInstance:
   m_ObjectHideFlags: 0

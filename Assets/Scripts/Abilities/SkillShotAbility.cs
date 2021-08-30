@@ -85,7 +85,7 @@ namespace Dota.Abilities
         public override void UpdateIndicator(AbilityData abilityData)
         {
             directionIndicator.SetPosition(abilityData.casterPos);
-            directionIndicator.SetDirection(abilityData.mouseClickPos - abilityData.casterPos);
+            directionIndicator.SetDirection(abilityData.mousePos - abilityData.casterPos);
         }
 
         public override void HideIndicator()
@@ -100,11 +100,11 @@ namespace Dota.Abilities
             {
                 networkAnimator.SetTrigger("abilityD");
 
-                transform.LookAt(abilityData.mouseClickPos, Vector3.up);
+                transform.LookAt(abilityData.mousePos, Vector3.up);
 
                 abilityData.delayTime = delayTime;
 
-                Vector3 direction = (abilityData.mouseClickPos - abilityData.casterPos).normalized;
+                Vector3 direction = (abilityData.mousePos - abilityData.casterPos).normalized;
                 CmdSpawnAbilityEffect(direction);
             }
         }

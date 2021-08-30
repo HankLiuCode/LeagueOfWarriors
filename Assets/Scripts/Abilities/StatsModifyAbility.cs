@@ -22,7 +22,7 @@ public class StatsModifyAbility : Ability
         {
             networkAnimator.SetTrigger(animationTrigger);
 
-            transform.LookAt(abilityData.mouseClickPos, Vector3.up);
+            transform.LookAt(abilityData.mousePos, Vector3.up);
         }
     }
 

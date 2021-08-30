@@ -33,7 +33,7 @@ public class DirectionalAbility : Ability
     [Server]
     IEnumerator CastSpell(AbilityData abilityData)
     {
-        Vector3 direction = (abilityData.mouseClickPos - abilityData.casterPos).normalized;
+        Vector3 direction = (abilityData.mousePos - abilityData.casterPos).normalized;
 
         NetworkRectIndicator damageRectInstance = Instantiate(damageRectPrefab, abilityData.casterPos, Quaternion.identity).GetComponent<NetworkRectIndicator>();
         
@@ -101,7 +101,7 @@ public class DirectionalAbility : Ability
     public override void UpdateIndicator(AbilityData abilityData)
     {
         directionIndicatorInstance.SetPosition(abilityData.casterPos);
-        directionIndicatorInstance.SetDirection(abilityData.mouseClickPos - abilityData.casterPos);
+        directionIndicatorInstance.SetDirection(abilityData.mousePos - abilityData.casterPos);
     }
 
     [Client]
@@ -118,7 +118,7 @@ public class DirectionalAbility : Ability
         {
             networkAnimator.SetTrigger(animationTrigger);
 
-            transform.LookAt(abilityData.mouseClickPos, Vector3.up);
+            transform.LookAt(abilityData.mousePos, Vector3.up);
 
             abilityData.delayTime = delayTime;
 
