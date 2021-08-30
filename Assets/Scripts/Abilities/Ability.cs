@@ -21,6 +21,11 @@ public abstract class Ability : NetworkBehaviour, IAction
 
     public bool SmartCast { get { return smartCast; } set { smartCast = value; } }
 
+    public float GetCooldownTime()
+    {
+        return cooldownTime;
+    }
+
     public float GetManaCost()
     {
         return manaCost;

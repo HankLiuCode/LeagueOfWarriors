@@ -107,7 +107,7 @@ namespace Dota.Abilities
             {
                 networkAnimator.SetTrigger("abilityD");
 
-                transform.LookAt(abilityData.mouseClickPos, Vector3.up);
+                transform.LookAt(abilityData.mousePos, Vector3.up);
 
                 abilityData.delayTime = delayTime;
 

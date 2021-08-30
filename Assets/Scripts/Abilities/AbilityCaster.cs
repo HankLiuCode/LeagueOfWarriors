@@ -7,7 +7,7 @@ using Dota.Core;
 public class AbilityData
 {
     public Vector3 casterPos;
-    public Vector3 mouseClickPos;
+    public Vector3 mousePos;
     public Vector3 castPos;
     public Transform target;
     public float delayTime;
@@ -17,6 +17,7 @@ public class AbilityCaster : NetworkBehaviour
 {
     [SerializeField] Health health = null;
     [SerializeField] Mana mana = null;
+    [SerializeField] CooldownStore cooldownStore = null;
     [SerializeField] Ability abilityQ;
     [SerializeField] Ability abilityW;
     [SerializeField] Ability abilityE;
@@ -43,7 +44,7 @@ public class AbilityCaster : NetworkBehaviour
         {
             Vector3 castPosition = new Vector3(groundHit.point.x, 0, groundHit.point.z);
             abilityData.casterPos = transform.position;
-            abilityData.mouseClickPos = castPosition;
+            abilityData.mousePos = castPosition;
         }
 
         if (Physics.Raycast(CameraController.GetMouseRay(), out RaycastHit playerHit, Mathf.Infinity))
@@ -110,6 +111,8 @@ public class AbilityCaster : NetworkBehaviour
 
         if (!mana.IsManaEnough(ability.GetManaCost())) return;
 
+        if(cooldownStore.GetTimeRemaining(ability) > 0) { return; }
+
         currentAbility = ability;
 
         if (currentAbility.SmartCast)
@@ -127,5 +130,6 @@ public class AbilityCaster : NetworkBehaviour
     {
         mana.ClientUseMana(ability.GetManaCost());
         ability.Cast(abilityData);
+        cooldownStore.ClientStartCooldown(ability, ability.GetCooldownTime());
     }
 }

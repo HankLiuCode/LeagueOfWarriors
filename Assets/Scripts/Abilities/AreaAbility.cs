@@ -109,13 +109,8 @@ public class AreaAbility : Ability
     public override void UpdateIndicator(AbilityData abilityData)
     {
         spellRangeInstance.SetPosition(abilityData.casterPos);
-        Vector3 direction = (abilityData.mouseClickPos - abilityData.casterPos).normalized;
-        float range = (abilityData.mouseClickPos - abilityData.casterPos).magnitude;
-        Vector3 castPosition = transform.position + direction * Mathf.Min(maxRange, range);
         
-        abilityData.castPos = castPosition;
-
-        areaIndicatorInstance.SetPosition(castPosition);
+        areaIndicatorInstance.SetPosition(abilityData.mousePos);
     }
 
     [Client]
@@ -131,6 +126,14 @@ public class AreaAbility : Ability
         bool canDo = actionLocker.TryGetLock(this);
         if (canDo)
         {
+            Vector3 direction = (abilityData.mousePos - abilityData.casterPos).normalized;
+
+            float range = (abilityData.mousePos - abilityData.casterPos).magnitude;
+
+            Vector3 castPosition = transform.position + direction * Mathf.Min(maxRange, range);
+
+            abilityData.castPos = castPosition;
+
             networkAnimator.SetTrigger(animationTrigger);
 
             transform.LookAt(abilityData.castPos, Vector3.up);

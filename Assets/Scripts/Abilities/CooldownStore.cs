@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
+
+// using GetInstanceID as Key might cause potential bug, check first if bug occurs
+
 public class CooldownStore : NetworkBehaviour
 {
     SyncDictionary<int, float> cooldownTimers = new SyncDictionary<int, float>();
@@ -42,14 +45,12 @@ public class CooldownStore : NetworkBehaviour
         initialCooldownTimes.Add(abilityID, cooldownTime);
     }
 
-
     [Command]
     private void CmdStartCooldown(int abilityID, float cooldownTime)
     {
         ServerStartCooldown(abilityID, cooldownTime);
     }
     #endregion
-
 
     [Client]
     public void ClientStartCooldown(Ability ability, float cooldownTime)
