@@ -15,14 +15,17 @@ public class UISetup : MonoBehaviour
 
     HealthDisplay healthDisplayInstance = null;
     ManaDisplay manaDisplayInstance = null;
+    AbilityUI[] abilityDisplayInstances = null;
+
+
     OtherPlayerStatsDisplay otherStatsDisplayInstance = null;
     CameraController cameraControllerInstance = null;
 
-    private void Start()
+    public void SetUpUI(DotaGamePlayer dotaGamePlayer)
     {
+        DotaPlayerController dpc = dotaGamePlayer.GetDotaPlayerController();
+        SetUpSelfUI(dpc);
         SetUpOtherUI();
-
-        // SetupSelfUI is called in DotaGamePlayer
     }
 
     public void SetUpOtherUI()
@@ -43,11 +46,17 @@ public class UISetup : MonoBehaviour
         GameObject displayInstance = Instantiate(selfDisplayPrefab);
         healthDisplayInstance = displayInstance.GetComponent<HealthDisplay>();
         manaDisplayInstance = displayInstance.GetComponent<ManaDisplay>();
+        abilityDisplayInstances = displayInstance.GetComponentsInChildren<AbilityUI>();
+        
         cameraControllerInstance = Instantiate(cameraControllerPrefab);
-
         cameraControllerInstance.Initialize(localPlayerController.transform);
         healthDisplayInstance.SetHealth(localPlayerController.GetComponent<Health>());
         manaDisplayInstance.SetMana(localPlayerController.GetComponent<Mana>());
+
+        foreach(AbilityUI aInstance in abilityDisplayInstances)
+        {
+            aInstance.SetUp(localPlayerController);
+        }
     }
 
 

@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StatsModifyAbility : Ability
+public class EnhanceAbility : Ability
 {
     [SerializeField] NetworkAnimator networkAnimator = null;
     [SerializeField] AnimationEventHandler animationEventHandler = null;

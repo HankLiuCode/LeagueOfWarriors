@@ -32,10 +32,10 @@ namespace Dota.Networking
         {
             dotaPlayerController = GetPlayerControllerByConnection(connectionToServer);
 
-            if (dotaPlayerController.hasAuthority)
+            if (hasAuthority)
             {
                 UISetupInstance = Instantiate(UISetupPrefab.gameObject).GetComponent<UISetup>();
-                UISetupInstance.SetUpSelfUI(dotaPlayerController);
+                UISetupInstance.SetUpUI(this);
             }
 
             // Add player to DotaPlayers List on Client

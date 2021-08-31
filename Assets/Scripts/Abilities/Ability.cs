@@ -31,7 +31,6 @@ public abstract class Ability : NetworkBehaviour, IAction
         return manaCost;
     }
 
-
     #region Client
     public abstract void ShowIndicator();
 

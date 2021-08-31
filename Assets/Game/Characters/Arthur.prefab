@@ -1,5 +1,38 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-4533690763673579477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 452546937840963528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52bf61089dc9acc49ae19af364fc2971, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  manaCost: 5
+  cooldownTime: 5
+  smartCast: 0
+  indicatorPrefab: {fileID: 7509079907997610509, guid: f7e58577928620441a8e147c3a9eaf13,
+    type: 3}
+  spellRangePrefab: {fileID: 3863486996862453941, guid: bf00ad13d1f143542a75c4b4b93f9805,
+    type: 3}
+  damageRadiusPrefab: {fileID: 7449486549517724255, guid: 39273ae671b38d5429ffc87492fe8995,
+    type: 3}
+  spellPrefab: {fileID: 115730, guid: 0a73296bdf0db3a4ebcc1d70cf756dce, type: 3}
+  networkAnimator: {fileID: 1861298204142979517}
+  animationEventHandler: {fileID: 2928662850204982764}
+  animationTrigger: abilityW
+  actionLocker: {fileID: 2654738810189758476}
+  maxRange: 6
+  damage: 50
+  damageRadius: 2
+  delayTime: 1
+  destroyTime: 0.8
 --- !u!114 &-3679921401897041321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38,10 +71,11 @@ MonoBehaviour:
   health: {fileID: 1187138297185360588}
   mana: {fileID: 228051818702057190}
   cooldownStore: {fileID: 4583548578950598173}
-  abilityQ: {fileID: 538770581797919719}
-  abilityW: {fileID: -396314808053693547}
-  abilityE: {fileID: -3679921401897041321}
-  abilityR: {fileID: -396314808053693547}
+  abilities:
+  - {fileID: 538770581797919719}
+  - {fileID: -4533690763673579477}
+  - {fileID: -3679921401897041321}
+  - {fileID: -396314808053693547}
   groundMask:
     serializedVersion: 2
     m_Bits: 256

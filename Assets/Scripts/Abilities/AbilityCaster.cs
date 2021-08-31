@@ -18,10 +18,7 @@ public class AbilityCaster : NetworkBehaviour
     [SerializeField] Health health = null;
     [SerializeField] Mana mana = null;
     [SerializeField] CooldownStore cooldownStore = null;
-    [SerializeField] Ability abilityQ;
-    [SerializeField] Ability abilityW;
-    [SerializeField] Ability abilityE;
-    [SerializeField] Ability abilityR;
+    [SerializeField] Ability[] abilities = new Ability[4];
     [SerializeField] LayerMask groundMask = new LayerMask();
 
     Ability currentAbility = null;
@@ -62,22 +59,22 @@ public class AbilityCaster : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            ChangeOrCastAbility(abilityQ);
+            ChangeOrCastAbility(abilities[0]);
         }
 
         if (Input.GetKeyDown(KeyCode.W))
         {
-            ChangeOrCastAbility(abilityW);
+            ChangeOrCastAbility(abilities[1]);
         }
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            ChangeOrCastAbility(abilityE);
+            ChangeOrCastAbility(abilities[2]);
         }
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            ChangeOrCastAbility(abilityR);
+            ChangeOrCastAbility(abilities[3]);
         }
 
         if(currentAbility != null)
@@ -131,5 +128,10 @@ public class AbilityCaster : NetworkBehaviour
         mana.ClientUseMana(ability.GetManaCost());
         ability.Cast(abilityData);
         cooldownStore.ClientStartCooldown(ability, ability.GetCooldownTime());
+    }
+
+    public Ability GetAbility(int index)
+    {
+        return abilities[index];
     }
 }
