@@ -10,7 +10,7 @@ namespace Dota.Networking
     {
         [SerializeField] GameObject testingDummyPrefab = null;
         
-        public List<DotaPlayer> DotaPlayers = new List<DotaPlayer>();
+        public List<DotaGamePlayer> DotaPlayers = new List<DotaGamePlayer>();
 
         public event Action OnPlayerChanged;
 
@@ -19,23 +19,19 @@ namespace Dota.Networking
         {
             base.OnServerAddPlayer(conn);
 
-            DotaPlayer player = conn.identity.GetComponent<DotaPlayer>();
+            DotaGamePlayer player = conn.identity.GetComponent<DotaGamePlayer>();
 
             DotaPlayers.Add(player);
 
             OnPlayerChanged?.Invoke();
-        }
 
-        public override void OnServerConnect(NetworkConnection conn)
-        {
-            //GameObject testingDummy = Instantiate(testingDummyPrefab, Vector3.zero, Quaternion.identity);
-            //NetworkServer.Spawn(testingDummy);
+            Debug.Log("Server Add Player");
         }
 
         public override void OnServerDisconnect(NetworkConnection conn)
         {
             // Removes DotaPlayer On the NetworkManager on the server side
-            DotaPlayer player = conn.identity.GetComponent<DotaPlayer>();
+            DotaGamePlayer player = conn.identity.GetComponent<DotaGamePlayer>();
 
             DotaPlayers.Remove(player);
 
@@ -44,21 +40,5 @@ namespace Dota.Networking
             base.OnServerDisconnect(conn);
         }
         #endregion
-
-        #region Client
-
-        public DotaPlayer GetLocalPlayer()
-        {
-            foreach (DotaPlayer player in DotaPlayers)
-            {
-                if (player.isLocalPlayer)
-                {
-                    return player;
-                }
-            }
-            return null;
-        }
-        #endregion
-
     }
 }
