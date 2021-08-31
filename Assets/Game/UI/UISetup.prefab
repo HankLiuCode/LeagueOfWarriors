@@ -43,9 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63299623bb00a8541a8986e0ed6093b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selfDisplayPrefab: {fileID: 8209945595831315057, guid: e6ce1f28d01eaee479a42f42d4e2a518,
+  selfDisplayPrefab: {fileID: 4474400182334341505, guid: 052a21bd3e4cff94789be480ce8c336d,
     type: 3}
-  otherDisplayPrefab: {fileID: 3762241872082090869, guid: 4779ca7e2eddeff47ae040cf7486bd1b,
+  otherDisplayPrefab: {fileID: 2582657522235516319, guid: 9ea46c22f44c6314d89e859a03b87369,
     type: 3}
   cameraControllerPrefab: {fileID: 4529496317603667576, guid: 82788ef1cc327794eb22f5dce58eda77,
     type: 3}
