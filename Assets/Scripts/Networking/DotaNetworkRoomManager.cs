@@ -22,7 +22,7 @@ public class DotaNetworkRoomManager : NetworkRoomManager
 {
     #region Server Callbacks
 
-    public List<DotaGamePlayer> DotaGamePlayers = new List<DotaGamePlayer>();
+    public List<DotaGamePlayer> DotaGamePlayers { get; } = new List<DotaGamePlayer>();
 
     /// <summary>
     /// This is called on the server when the server is started - including when a host is started.
@@ -108,6 +108,7 @@ public class DotaNetworkRoomManager : NetworkRoomManager
     {
         DotaGamePlayer dotaGamePlayer = gamePlayer.GetComponent<DotaGamePlayer>();
         DotaGamePlayers.Add(dotaGamePlayer);
+        Debug.Log("Server Add Player" + DotaGamePlayers.Count);
         return base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
     }
 

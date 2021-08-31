@@ -51,10 +51,10 @@ namespace Dota.Networking
             // Removes DotaPlayer On the NetworkManager on the client side
             ((DotaNetworkRoomManager) NetworkRoomManager.singleton).DotaGamePlayers.Remove(this);
 
-            if (dotaPlayerController.hasAuthority)
-            {
-                UISetupInstance.DestroyAll();
-            }
+            //if (dotaPlayerController.hasAuthority)
+            //{
+            //    UISetupInstance.DestroyAll();
+            //}
         }
 
         public DotaPlayerController GetPlayerControllerByConnection(NetworkConnection conn)

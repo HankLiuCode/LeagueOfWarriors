@@ -8,7 +8,6 @@ public class ShowAgentPath : MonoBehaviour
     [SerializeField] NavMeshAgent agent = null;
     NavMeshPath path = null;
 
-
     private void OnDrawGizmos()
     {
         if (agent.hasPath)

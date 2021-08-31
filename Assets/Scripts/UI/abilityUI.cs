@@ -10,6 +10,7 @@ public class AbilityUI : MonoBehaviour
     // Cache
     AbilityCaster abilityCaster = null;
     CooldownStore cooldownStore = null;
+    float currentFillAmount = 0;
 
     public void SetUp(DotaPlayerController dotaPlayerController)
     {
@@ -19,6 +20,8 @@ public class AbilityUI : MonoBehaviour
 
     private void Update()
     {
-        cdOverlay.fillAmount = cooldownStore.GetFractionRemaining(abilityCaster.GetAbility(index));
+        float targetFillAmount = cooldownStore.GetFractionRemaining(abilityCaster.GetAbility(index));
+        currentFillAmount = targetFillAmount;
+        cdOverlay.fillAmount = Mathf.MoveTowards(currentFillAmount, targetFillAmount, 0.1f);
     }
 }
