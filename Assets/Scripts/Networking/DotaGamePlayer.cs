@@ -7,10 +7,7 @@ namespace Dota.Networking
     public class DotaGamePlayer : NetworkBehaviour
     {
         [SerializeField] GameObject characterPrefab = null;
-        [SerializeField] UISetup UISetupPrefab = null;
-
         DotaPlayerController dotaPlayerController = null;
-        UISetup UISetupInstance = null; // this is only not null on localPlayer
 
         public DotaPlayerController GetDotaPlayerController()
         {
@@ -20,7 +17,6 @@ namespace Dota.Networking
         #region Server
         public override void OnStartServer()
         {
-            Debug.Log("Dota Game Player OnStartServer");
             GameObject characterInstance = Instantiate(characterPrefab, Vector3.zero, Quaternion.identity);
             dotaPlayerController = characterInstance.GetComponent<DotaPlayerController>();
             NetworkServer.Spawn(characterInstance, connectionToClient);
@@ -31,32 +27,20 @@ namespace Dota.Networking
         #region Client
         public override void OnStartClient()
         {
-
             dotaPlayerController = GetPlayerControllerByConnection(connectionToServer);
+            ((DotaNetworkRoomManager) NetworkRoomManager.singleton).OnAllPlayersAdded += DotaGamePlayer_OnAllPlayersAdded;
+            ((DotaNetworkRoomManager)NetworkRoomManager.singleton).AddDotaGamePlayer(this);
+        }
 
-            if (hasAuthority)
-            {
-                UISetupInstance = Instantiate(UISetupPrefab.gameObject).GetComponent<UISetup>();
-                UISetupInstance.SetUpUI(this);
-            }
-
-            // Add player to DotaPlayers List on Client
-            // Players are already added to List on server by server side networkManager
-            if (!NetworkServer.active)
-            {
-                ((DotaNetworkRoomManager)NetworkRoomManager.singleton).DotaGamePlayers.Add(this);
-            }
+        private void DotaGamePlayer_OnAllPlayersAdded()
+        {
+            
         }
 
         public override void OnStopClient()
         {
             // Removes DotaPlayer On the NetworkManager on the client side
-            ((DotaNetworkRoomManager) NetworkRoomManager.singleton).DotaGamePlayers.Remove(this);
-
-            //if (dotaPlayerController.hasAuthority)
-            //{
-            //    UISetupInstance.DestroyAll();
-            //}
+            ((DotaNetworkRoomManager)NetworkRoomManager.singleton).RemoveDotaGamePlayer(this);
         }
 
         public DotaPlayerController GetPlayerControllerByConnection(NetworkConnection conn)
@@ -74,5 +58,4 @@ namespace Dota.Networking
         }
         #endregion
     }
-
 }

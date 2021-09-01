@@ -17,7 +17,7 @@ public class FOVEntity : NetworkBehaviour
 
     private void PopulateFOVEntities()
     {
-        dotaGamePlayers = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).DotaGamePlayers;
+        dotaGamePlayers = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).GetDotaGamePlayers();
         fovEntities = new List<FOVEntity>();
         foreach (DotaGamePlayer dp in dotaGamePlayers)
         {

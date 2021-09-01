@@ -15,25 +15,15 @@ public class Minimap : MonoBehaviour
 
     [SerializeField] private RectTransform testUI = null;
 
-    private void Awake()
-    {
-        Debug.Log("Minimap Awake");
-    }
-
     private void Start()
     {
-        Debug.Log("Minimap Start");
+        ((DotaNetworkRoomManager)NetworkRoomManager.singleton).OnAllPlayersAdded += Minimap_OnAllPlayersAdded;
     }
 
-    //public override void OnStartAuthority()
-    //{
-    //    Debug.Log("Minimap OnStartAuthority");
-    //}
-
-    //public override void OnStartClient()
-    //{
-    //    Debug.Log("Minimap OnStartClient");
-    //}
+    private void Minimap_OnAllPlayersAdded()
+    {
+        
+    }
 
     private void Update()
     {

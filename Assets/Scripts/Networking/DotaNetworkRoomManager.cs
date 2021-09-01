@@ -22,8 +22,7 @@ using System;
 public class DotaNetworkRoomManager : NetworkRoomManager
 {
     #region Server Callbacks
-
-    public List<DotaGamePlayer> DotaGamePlayers { get; } = new List<DotaGamePlayer>();
+    [SerializeField] private List<DotaGamePlayer> dotaGamePlayers = new List<DotaGamePlayer>();
 
     public event Action OnAllPlayersAdded;
 
@@ -85,7 +84,6 @@ public class DotaNetworkRoomManager : NetworkRoomManager
     /// <returns>A new GamePlayer object.</returns>
     public override GameObject OnRoomServerCreateGamePlayer(NetworkConnection conn, GameObject roomPlayer)
     {
-        Debug.Log("DotaNetworkRoomManager OnRoomServerCreateGamePlayer");
         return base.OnRoomServerCreateGamePlayer(conn, roomPlayer);
     }
 
@@ -110,12 +108,26 @@ public class DotaNetworkRoomManager : NetworkRoomManager
     /// <returns>False to not allow this player to replace the room player.</returns>
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject roomPlayer, GameObject gamePlayer)
     {
-        Debug.Log("DotaNetworkRoomManager OnRoomServerSceneLoadedForPlayer");
-
-        DotaGamePlayer dotaGamePlayer = gamePlayer.GetComponent<DotaGamePlayer>();
-        DotaGamePlayers.Add(dotaGamePlayer);
-        Debug.Log("Server Add Player" + DotaGamePlayers.Count);
         return base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
+    }
+
+    public List<DotaGamePlayer> GetDotaGamePlayers()
+    {
+        return dotaGamePlayers;
+    }
+
+    public void AddDotaGamePlayer(DotaGamePlayer dotaGamePlayer)
+    {
+        dotaGamePlayers.Add(dotaGamePlayer);
+        if (dotaGamePlayers.Count == roomSlots.Count)
+        {
+            OnAllPlayersAdded?.Invoke();
+        }
+    }
+
+    public void RemoveDotaGamePlayer(DotaGamePlayer dotaGamePlayer)
+    {
+        dotaGamePlayers.Remove(dotaGamePlayer);
     }
 
     /// <summary>

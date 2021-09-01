@@ -17,24 +17,36 @@ public class UISetup : MonoBehaviour
     ManaDisplay manaDisplayInstance = null;
     AbilityUI[] abilityDisplayInstances = null;
 
-
     OtherPlayerStatsDisplay otherPlayerCanvasInstance = null;
     CameraController cameraControllerInstance = null;
+
+    private void Start()
+    {
+        ((DotaNetworkRoomManager)NetworkRoomManager.singleton).OnAllPlayersAdded += UISetup_OnAllPlayersAdded;
+    }
+
+    private void UISetup_OnAllPlayersAdded()
+    {
+        List<DotaGamePlayer> players = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).GetDotaGamePlayers();
+        foreach(DotaGamePlayer player in players)
+        {
+            if (player.isLocalPlayer)
+            {
+                SetUpUI(player);
+            }
+        }
+        SetUpOtherUI(players);
+    }
 
     public void SetUpUI(DotaGamePlayer dotaGamePlayer)
     {
         DotaPlayerController dpc = dotaGamePlayer.GetDotaPlayerController();
         SetUpSelfUI(dpc);
-        SetUpOtherUI();
     }
 
-    public void SetUpOtherUI()
+    public void SetUpOtherUI(List<DotaGamePlayer> players)
     {
         otherPlayerCanvasInstance = Instantiate(otherPlayerCanvasPrefab).GetComponent<OtherPlayerStatsDisplay>();
-
-        List<DotaGamePlayer> players = ((DotaNetworkRoomManager) NetworkRoomManager.singleton).DotaGamePlayers;
-
-        Debug.Log(players.Count);
 
         List<DotaPlayerController> playerControllers = new List<DotaPlayerController>();
         foreach (DotaGamePlayer dp in players)
@@ -60,24 +72,5 @@ public class UISetup : MonoBehaviour
         {
             aInstance.SetUp(localPlayerController);
         }
-    }
-
-
-    public void DestroyOtherUI()
-    {
-        Destroy(otherPlayerCanvasInstance);
-    }
-
-    public void DestroySelfUI()
-    {
-        Destroy(healthDisplayInstance.gameObject);
-        Destroy(cameraControllerInstance.gameObject);
-    }
-
-    public void DestroyAll()
-    {
-        DestroySelfUI();
-        DestroyOtherUI();
-        Destroy(gameObject);
     }
 }
