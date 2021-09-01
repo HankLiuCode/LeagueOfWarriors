@@ -2,6 +2,7 @@ using UnityEngine;
 using Mirror;
 using Dota.Networking;
 using System.Collections.Generic;
+using System;
 
 /*
 	Documentation: https://mirror-networking.gitbook.io/docs/components/network-room-manager
@@ -23,6 +24,8 @@ public class DotaNetworkRoomManager : NetworkRoomManager
     #region Server Callbacks
 
     public List<DotaGamePlayer> DotaGamePlayers { get; } = new List<DotaGamePlayer>();
+
+    public event Action OnAllPlayersAdded;
 
     /// <summary>
     /// This is called on the server when the server is started - including when a host is started.
@@ -82,6 +85,7 @@ public class DotaNetworkRoomManager : NetworkRoomManager
     /// <returns>A new GamePlayer object.</returns>
     public override GameObject OnRoomServerCreateGamePlayer(NetworkConnection conn, GameObject roomPlayer)
     {
+        Debug.Log("DotaNetworkRoomManager OnRoomServerCreateGamePlayer");
         return base.OnRoomServerCreateGamePlayer(conn, roomPlayer);
     }
 
@@ -106,6 +110,8 @@ public class DotaNetworkRoomManager : NetworkRoomManager
     /// <returns>False to not allow this player to replace the room player.</returns>
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject roomPlayer, GameObject gamePlayer)
     {
+        Debug.Log("DotaNetworkRoomManager OnRoomServerSceneLoadedForPlayer");
+
         DotaGamePlayer dotaGamePlayer = gamePlayer.GetComponent<DotaGamePlayer>();
         DotaGamePlayers.Add(dotaGamePlayer);
         Debug.Log("Server Add Player" + DotaGamePlayers.Count);

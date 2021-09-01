@@ -20,6 +20,7 @@ namespace Dota.Networking
         #region Server
         public override void OnStartServer()
         {
+            Debug.Log("Dota Game Player OnStartServer");
             GameObject characterInstance = Instantiate(characterPrefab, Vector3.zero, Quaternion.identity);
             dotaPlayerController = characterInstance.GetComponent<DotaPlayerController>();
             NetworkServer.Spawn(characterInstance, connectionToClient);
@@ -30,6 +31,7 @@ namespace Dota.Networking
         #region Client
         public override void OnStartClient()
         {
+
             dotaPlayerController = GetPlayerControllerByConnection(connectionToServer);
 
             if (hasAuthority)

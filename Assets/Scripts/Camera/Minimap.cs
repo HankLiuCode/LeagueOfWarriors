@@ -1,8 +1,11 @@
 using Dota.Controls;
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+// Change back to MonoBehaviour When finish testing
 public class Minimap : MonoBehaviour
 {
     [SerializeField] private RectTransform minimapRect = null;
@@ -11,6 +14,26 @@ public class Minimap : MonoBehaviour
     [SerializeField] private Transform worldObj = null;
 
     [SerializeField] private RectTransform testUI = null;
+
+    private void Awake()
+    {
+        Debug.Log("Minimap Awake");
+    }
+
+    private void Start()
+    {
+        Debug.Log("Minimap Start");
+    }
+
+    //public override void OnStartAuthority()
+    //{
+    //    Debug.Log("Minimap OnStartAuthority");
+    //}
+
+    //public override void OnStartClient()
+    //{
+    //    Debug.Log("Minimap OnStartClient");
+    //}
 
     private void Update()
     {

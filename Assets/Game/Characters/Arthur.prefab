@@ -174,7 +174,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   skinnedMeshRenderer: {fileID: 620882805560107910}
-  viewRadius: 10
+  viewRadius: 15
   isVisible: 1
 --- !u!114 &4583548578950598173
 MonoBehaviour:
@@ -204,7 +204,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  viewRadius: 10
+  viewRadius: 15
   degreePerCast: 5
   obstacleMask:
     serializedVersion: 2

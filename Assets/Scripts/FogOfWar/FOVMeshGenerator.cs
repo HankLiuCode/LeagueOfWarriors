@@ -13,7 +13,6 @@ public class FOVMeshGenerator : NetworkBehaviour
 
     Mesh viewMesh;
 
-
     public override void OnStartClient()
     {
         if (hasAuthority)
