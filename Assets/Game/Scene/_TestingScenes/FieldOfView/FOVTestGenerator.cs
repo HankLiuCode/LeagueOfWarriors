@@ -1,8 +1,8 @@
-using System.Collections;
+using Mirror;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FOVGenerator : MonoBehaviour
+public class FOVTestGenerator : MonoBehaviour
 {
     [SerializeField] float viewRadius = 20f;
     [SerializeField] int degreePerCast = 10;

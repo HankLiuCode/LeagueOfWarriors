@@ -8,8 +8,8 @@ public class Minimap : MonoBehaviour
     [SerializeField] private RectTransform minimapRect = null;
     [SerializeField] private CameraController cameraController = null;
 
-
     [SerializeField] private Transform worldObj = null;
+
     [SerializeField] private RectTransform testUI = null;
 
     private void Update()

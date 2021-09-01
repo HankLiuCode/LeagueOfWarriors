@@ -9,8 +9,8 @@ using Dota.Controls;
 
 public class UISetup : MonoBehaviour
 {
-    [SerializeField] GameObject selfDisplayPrefab = null;
-    [SerializeField] GameObject otherDisplayPrefab = null;
+    [SerializeField] GameObject midHUDCanvasPrefab = null;
+    [SerializeField] GameObject otherPlayerCanvasPrefab = null;
     [SerializeField] CameraController cameraControllerPrefab = null;
 
     HealthDisplay healthDisplayInstance = null;
@@ -18,7 +18,7 @@ public class UISetup : MonoBehaviour
     AbilityUI[] abilityDisplayInstances = null;
 
 
-    OtherPlayerStatsDisplay otherStatsDisplayInstance = null;
+    OtherPlayerStatsDisplay otherPlayerCanvasInstance = null;
     CameraController cameraControllerInstance = null;
 
     public void SetUpUI(DotaGamePlayer dotaGamePlayer)
@@ -30,20 +30,23 @@ public class UISetup : MonoBehaviour
 
     public void SetUpOtherUI()
     {
-        otherStatsDisplayInstance = Instantiate(otherDisplayPrefab).GetComponent<OtherPlayerStatsDisplay>();
+        otherPlayerCanvasInstance = Instantiate(otherPlayerCanvasPrefab).GetComponent<OtherPlayerStatsDisplay>();
 
-        List<DotaGamePlayer> players = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).DotaGamePlayers;
+        List<DotaGamePlayer> players = ((DotaNetworkRoomManager) NetworkRoomManager.singleton).DotaGamePlayers;
+
+        Debug.Log(players.Count);
+
         List<DotaPlayerController> playerControllers = new List<DotaPlayerController>();
         foreach (DotaGamePlayer dp in players)
         {
             playerControllers.Add(dp.GetDotaPlayerController());
         }
-        otherStatsDisplayInstance.BindPlayersToDisplays(playerControllers);
+        otherPlayerCanvasInstance.BindPlayersToDisplays(playerControllers);
     }
 
     public void SetUpSelfUI(DotaPlayerController localPlayerController)
     {
-        GameObject displayInstance = Instantiate(selfDisplayPrefab);
+        GameObject displayInstance = Instantiate(midHUDCanvasPrefab);
         healthDisplayInstance = displayInstance.GetComponent<HealthDisplay>();
         manaDisplayInstance = displayInstance.GetComponent<ManaDisplay>();
         abilityDisplayInstances = displayInstance.GetComponentsInChildren<AbilityUI>();
@@ -62,7 +65,7 @@ public class UISetup : MonoBehaviour
 
     public void DestroyOtherUI()
     {
-        Destroy(otherStatsDisplayInstance);
+        Destroy(otherPlayerCanvasInstance);
     }
 
     public void DestroySelfUI()

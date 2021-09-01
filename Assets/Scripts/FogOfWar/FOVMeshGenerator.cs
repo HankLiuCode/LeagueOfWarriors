@@ -13,11 +13,20 @@ public class FOVMeshGenerator : NetworkBehaviour
 
     Mesh viewMesh;
 
-    private void Start()
+
+    public override void OnStartClient()
     {
-        viewMesh = new Mesh();
-        viewMesh.name = "ViewMesh";
-        viewMeshFilter.mesh = viewMesh;
+        if (hasAuthority)
+        {
+            viewMesh = new Mesh();
+            viewMesh.name = "ViewMesh";
+            viewMeshFilter.mesh = viewMesh;
+        }
+        else
+        {
+            viewMeshFilter.gameObject.SetActive(false);
+            enabled = false;
+        }
     }
 
     private void Update()

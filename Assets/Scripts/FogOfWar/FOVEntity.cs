@@ -28,7 +28,8 @@ public class FOVEntity : NetworkBehaviour
     private void Update()
     {
         if (!hasAuthority) { return; }
-
+        
+        // this is a hack need to get from roomnetworkManager
         if(fovEntities == null)
         {
             PopulateFOVEntities();
