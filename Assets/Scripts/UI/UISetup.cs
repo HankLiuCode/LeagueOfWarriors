@@ -15,7 +15,7 @@ public class UISetup : MonoBehaviour
 
     HealthDisplay healthDisplayInstance = null;
     ManaDisplay manaDisplayInstance = null;
-    AbilityUI[] abilityDisplayInstances = null;
+    //AbilityUI[] abilityDisplayInstances = null;
 
 
     OtherPlayerStatsDisplay otherPlayerCanvasInstance = null;
@@ -49,17 +49,17 @@ public class UISetup : MonoBehaviour
         GameObject displayInstance = Instantiate(midHUDCanvasPrefab);
         healthDisplayInstance = displayInstance.GetComponent<HealthDisplay>();
         manaDisplayInstance = displayInstance.GetComponent<ManaDisplay>();
-        abilityDisplayInstances = displayInstance.GetComponentsInChildren<AbilityUI>();
+        //abilityDisplayInstances = displayInstance.GetComponentsInChildren<AbilityUI>();
         
         cameraControllerInstance = Instantiate(cameraControllerPrefab);
         cameraControllerInstance.Initialize(localPlayerController.transform);
         healthDisplayInstance.SetHealth(localPlayerController.GetComponent<Health>());
         manaDisplayInstance.SetMana(localPlayerController.GetComponent<Mana>());
 
-        foreach(AbilityUI aInstance in abilityDisplayInstances)
-        {
-            aInstance.SetUp(localPlayerController);
-        }
+        //foreach(AbilityUI aInstance in abilityDisplayInstances)
+        //{
+        //    aInstance.SetUp(localPlayerController);
+        //}
     }
 
 
