@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class CameraController : MonoBehaviour
 {
     public const float MIN_VIEW_DISTANCE = 10;
@@ -23,20 +24,28 @@ public class CameraController : MonoBehaviour
     Vector3 lookAtPoint;
     Transform followTarget = null;
 
+    public Camera GetCamera()
+    {
+        return playerCam;
+    }
+
+    public Vector2 GetXMinMax()
+    {
+        return xMinMax;
+    }
+
+    public Vector2 GetZMinMax()
+    {
+        return zMinMax;
+    }
+
     public void Initialize(Transform target)
     {
         followTarget = target;
         UpdateCameraPosition(viewAngle, viewDist, target.position);
     }
     
-    /// <summary>
-    /// Updates the playerCam position & rotation given the angle, distance and target
-    /// </summary>
-    /// <param name="angle"></param>
-    /// <param name="distance"></param>
-    /// <param name="target"></param>
-    /// 
-    public void UpdateCameraPosition(float angle, float distance, Vector3 target)
+    private void UpdateCameraPosition(float angle, float distance, Vector3 target)
     {
         angle = Mathf.Clamp(angle, 0, 90);
 
@@ -51,20 +60,25 @@ public class CameraController : MonoBehaviour
         playerCam.transform.position = camPos;
     }
 
+    public void UpdateCameraPosition(Vector3 target)
+    {
+        lookAtPoint = target;
+    }
 
     void Update()
     {
         if (!Application.isFocused) { return; }
-
+        
         if (Input.GetKey(KeyCode.Space))
         {
             lookAtPoint = followTarget.position;
+
             UpdateCameraPosition(viewAngle, viewDist, lookAtPoint);
         }
         else
         {
-            lookAtPoint += GetMouseMovement() * speed * Time.deltaTime;
-            
+            lookAtPoint = lookAtPoint + GetMouseMovement() * speed * Time.deltaTime;
+
             float lookAtPointX = Mathf.Clamp(lookAtPoint.x, xMinMax.x, xMinMax.y);
 
             float lookAtPointZ = Mathf.Clamp(lookAtPoint.z, zMinMax.x, zMinMax.y);
@@ -75,7 +89,7 @@ public class CameraController : MonoBehaviour
         }
 
         playerCam.fieldOfView = fov;
-        viewDist = Mathf.Clamp(viewDist- Input.mouseScrollDelta.y, MIN_VIEW_DISTANCE, MAX_VIEW_DISTANCE);
+        viewDist = Mathf.Clamp(viewDist - Input.mouseScrollDelta.y, MIN_VIEW_DISTANCE, MAX_VIEW_DISTANCE);
     }
 
     private Vector3 GetMouseMovement()
