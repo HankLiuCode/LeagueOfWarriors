@@ -704,7 +704,7 @@ GameObject:
   - component: {fileID: 7691984120821231189}
   - component: {fileID: 6990469799597058578}
   - component: {fileID: 5795314526674547072}
-  - component: {fileID: 4857445971832049978}
+  - component: {fileID: 1063686114352667494}
   m_Layer: 5
   m_Name: AbilityBox
   m_TagString: Untagged
@@ -771,7 +771,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4857445971832049978
+--- !u!114 &1063686114352667494
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -862,7 +862,7 @@ GameObject:
   - component: {fileID: 7194564826780358952}
   - component: {fileID: 4357725773853192347}
   - component: {fileID: 5384666504716931531}
-  - component: {fileID: 9162240430991819706}
+  - component: {fileID: 4086624999782645010}
   m_Layer: 5
   m_Name: AbilityBox (2)
   m_TagString: Untagged
@@ -929,7 +929,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &9162240430991819706
+--- !u!114 &4086624999782645010
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -942,7 +942,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 2
-  cdOverlay: {fileID: 6680204398539462790}
+  cdOverlay: {fileID: 4986669477363736956}
 --- !u!1 &6229847093154160091
 GameObject:
   m_ObjectHideFlags: 0
@@ -954,7 +954,7 @@ GameObject:
   - component: {fileID: 5327608559726085652}
   - component: {fileID: 5417584170137981031}
   - component: {fileID: 8086319498441524173}
-  - component: {fileID: 4838667072764620659}
+  - component: {fileID: 3669254320846845476}
   m_Layer: 5
   m_Name: AbilityBox (3)
   m_TagString: Untagged
@@ -1021,7 +1021,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4838667072764620659
+--- !u!114 &3669254320846845476
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1034,7 +1034,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 3
-  cdOverlay: {fileID: 4986669477363736956}
+  cdOverlay: {fileID: 0}
 --- !u!1 &7064695600628905016
 GameObject:
   m_ObjectHideFlags: 0
@@ -1046,7 +1046,7 @@ GameObject:
   - component: {fileID: 2216997864564115980}
   - component: {fileID: 6819229613667167529}
   - component: {fileID: 3734428637178852822}
-  - component: {fileID: 5930455126839824108}
+  - component: {fileID: 2549158037435343606}
   m_Layer: 5
   m_Name: AbilityBox (1)
   m_TagString: Untagged
@@ -1113,7 +1113,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5930455126839824108
+--- !u!114 &2549158037435343606
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
