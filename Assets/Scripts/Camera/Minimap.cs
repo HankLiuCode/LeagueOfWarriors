@@ -11,8 +11,7 @@ public class Minimap : MonoBehaviour
     [SerializeField] private RectTransform minimapRect = null;
     [SerializeField] private CameraController cameraController = null;
 
-    [SerializeField] private Transform worldObj = null;
-
+    [SerializeField] private Transform testObj = null;
     [SerializeField] private RectTransform testUI = null;
 
     private void Start()
@@ -27,14 +26,14 @@ public class Minimap : MonoBehaviour
 
     private void Update()
     {
-        if(cameraController == null)
+        if(testObj == null)
         {
-            cameraController = FindObjectOfType<CameraController>();
-        }
-
-        if(worldObj == null)
-        {
-            worldObj = FindObjectOfType<DotaPlayerController>().transform;
+            DotaPlayerController testController = FindObjectOfType<DotaPlayerController>();
+            if (testController != null)
+            {
+                testObj = testController.transform;
+            }
+            return;
         }
 
         Vector2 xMinMax = cameraController.GetXMinMax();
@@ -46,8 +45,8 @@ public class Minimap : MonoBehaviour
         //);
 
         Vector2 normPos = new Vector2(
-            (worldObj.position.x - -50) / 100,
-            (worldObj.position.z - -50) / 100
+            (testObj.position.x - -50) / 100,
+            (testObj.position.z - -50) / 100
         );
 
         Vector2 minimapPos = new Vector2(

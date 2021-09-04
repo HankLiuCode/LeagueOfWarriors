@@ -11,30 +11,38 @@ public class FOVEntity : NetworkBehaviour
 
     [SerializeField] bool isVisible = true;
 
-    // Cache
-    List<DotaGamePlayer> dotaGamePlayers;
-    List<FOVEntity> fovEntities;
+    List<FOVEntity> fovEntities = new List<FOVEntity>();
 
-    private void PopulateFOVEntities()
+    private void Start()
     {
-        dotaGamePlayers = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).GetDotaGamePlayers();
-        fovEntities = new List<FOVEntity>();
+        ((DotaNetworkRoomManager) NetworkRoomManager.singleton).OnAllPlayersAdded += FOVEntity_OnAllPlayersAdded;
+
+        List<DotaGamePlayer> dotaGamePlayers = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientGetDotaGamePlayers();
         foreach (DotaGamePlayer dp in dotaGamePlayers)
         {
-            fovEntities.Add(dp.GetDotaPlayerController().GetComponent<FOVEntity>());
+            if (!dp.isLocalPlayer)
+            {
+                fovEntities.Add(dp.GetDotaPlayerController().GetComponent<FOVEntity>());
+            }
+        }
+    }
+
+    private void FOVEntity_OnAllPlayersAdded()
+    {
+        List<DotaGamePlayer> dotaGamePlayers = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientGetDotaGamePlayers();
+        Debug.Log("ALL Players Added" + dotaGamePlayers.Count);
+        foreach (DotaGamePlayer dp in dotaGamePlayers)
+        {
+            if (!dp.isLocalPlayer)
+            {
+                fovEntities.Add(dp.GetDotaPlayerController().GetComponent<FOVEntity>());
+            }
         }
     }
 
     private void Update()
     {
         if (!hasAuthority) { return; }
-        
-        // this is a hack need to get from roomnetworkManager
-        if(fovEntities == null)
-        {
-            PopulateFOVEntities();
-        }
-
         CheckVisibility();
     }
 
@@ -48,8 +56,6 @@ public class FOVEntity : NetworkBehaviour
     {
         foreach(FOVEntity fovEntity in fovEntities)
         {
-            if(fovEntity == this) { continue; }
-
             if(Vector3.Distance(fovEntity.transform.position, transform.position) > viewRadius)
             {
                 fovEntity.SetVisible(false);

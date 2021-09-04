@@ -22,7 +22,14 @@ using System;
 public class DotaNetworkRoomManager : NetworkRoomManager
 {
     #region Server Callbacks
-    [SerializeField] private List<DotaGamePlayer> dotaGamePlayers = new List<DotaGamePlayer>();
+
+    // dotaGamePlayers List on Server
+    [SerializeField] private List<DotaGamePlayer> serverDotaGamePlayers = new List<DotaGamePlayer>();
+
+    // dotaGamePlayers List on Client
+    [SerializeField] private List<DotaGamePlayer> clientDotaGamePlayers = new List<DotaGamePlayer>();
+    [SerializeField] private List<DotaGamePlayer> blueTeamGamePlayers = new List<DotaGamePlayer>();
+    [SerializeField] private List<DotaGamePlayer> redTeamGamePlayers = new List<DotaGamePlayer>();
 
     public event Action OnAllPlayersAdded;
 
@@ -108,26 +115,104 @@ public class DotaNetworkRoomManager : NetworkRoomManager
     /// <returns>False to not allow this player to replace the room player.</returns>
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject roomPlayer, GameObject gamePlayer)
     {
+        DotaRoomPlayer dotaRoomPlayer = roomPlayer.GetComponent<DotaRoomPlayer>();
+        DotaGamePlayer dotaGamePlayer = gamePlayer.GetComponent<DotaGamePlayer>();
+
+        dotaGamePlayer.ServerSetPlayerName(dotaRoomPlayer.GetPlayerName());
+        dotaGamePlayer.ServerSetTeam(dotaRoomPlayer.GetTeam());
+
+        serverDotaGamePlayers.Add(dotaGamePlayer);
+
         return base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
     }
 
-    public List<DotaGamePlayer> GetDotaGamePlayers()
+    public List<DotaGamePlayer> ClientGetDotaGamePlayers()
     {
-        return dotaGamePlayers;
+        return clientDotaGamePlayers;
     }
 
-    public void AddDotaGamePlayer(DotaGamePlayer dotaGamePlayer)
+    public List<DotaGamePlayer> ClientGetBlueTeamGamePlayers()
     {
-        dotaGamePlayers.Add(dotaGamePlayer);
-        if (dotaGamePlayers.Count == roomSlots.Count)
+        return blueTeamGamePlayers;
+    }
+
+    public List<DotaGamePlayer> ClientGetRedTeamGamePlayers()
+    {
+        return redTeamGamePlayers;
+    }
+
+    public List<DotaRoomPlayer> GetDotaRoomPlayers()
+    {
+        List<DotaRoomPlayer> roomPlayers = new List<DotaRoomPlayer>();
+        foreach(NetworkRoomPlayer networkRoomPlayer in roomSlots)
+        {
+            roomPlayers.Add((DotaRoomPlayer)networkRoomPlayer);
+        }
+        return roomPlayers;
+    }
+
+    public DotaRoomPlayer GetLocalRoomPlayer()
+    {
+        foreach (NetworkRoomPlayer networkRoomPlayer in roomSlots)
+        {
+            if (networkRoomPlayer.isLocalPlayer)
+            {
+                return (DotaRoomPlayer) networkRoomPlayer;
+            }
+        }
+        return null;
+    }
+    
+    public DotaGamePlayer GetLocalGamePlayer()
+    {
+        List<DotaGamePlayer> localGamePlayers = new List<DotaGamePlayer>();
+        foreach(DotaGamePlayer dotaGamePlayer in clientDotaGamePlayers)
+        {
+            if (dotaGamePlayer.isLocalPlayer)
+            {
+                localGamePlayers.Add(dotaGamePlayer);
+            }
+        }
+
+        Debug.Log(localGamePlayers.Count);
+
+        if (localGamePlayers.Count == 1)
+        {
+            return localGamePlayers[0];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public void ClientAddDotaGamePlayer(DotaGamePlayer dotaGamePlayer)
+    {
+        clientDotaGamePlayers.Add(dotaGamePlayer);
+
+        switch (dotaGamePlayer.GetTeam())
+        {
+            case Team.Red:
+                redTeamGamePlayers.Add(dotaGamePlayer);
+                break;
+
+            case Team.Blue:
+                blueTeamGamePlayers.Add(dotaGamePlayer);
+                break;
+
+            default:
+                throw new Exception("Team doesn't exist");
+        }
+
+        if (clientDotaGamePlayers.Count == roomSlots.Count)
         {
             OnAllPlayersAdded?.Invoke();
         }
     }
 
-    public void RemoveDotaGamePlayer(DotaGamePlayer dotaGamePlayer)
+    public void ClientRemoveDotaGamePlayer(DotaGamePlayer dotaGamePlayer)
     {
-        dotaGamePlayers.Remove(dotaGamePlayer);
+        clientDotaGamePlayers.Remove(dotaGamePlayer);
     }
 
     /// <summary>

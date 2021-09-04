@@ -71,6 +71,8 @@ public class CameraController : MonoBehaviour
         
         if (Input.GetKey(KeyCode.Space))
         {
+            if(followTarget == null) { return; }
+
             lookAtPoint = followTarget.position;
 
             UpdateCameraPosition(viewAngle, viewDist, lookAtPoint);

@@ -199,6 +199,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: BlueMinion
       objectReference: {fileID: 0}
+    - target: {fileID: 7214919029000824495, guid: b31cb8edadf36634680f82045f41209b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 8223221447003321259, guid: b31cb8edadf36634680f82045f41209b,
         type: 3}
       propertyPath: animator

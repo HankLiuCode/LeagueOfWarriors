@@ -7,7 +7,37 @@ namespace Dota.Networking
     public class DotaGamePlayer : NetworkBehaviour
     {
         [SerializeField] GameObject characterPrefab = null;
+
+        [SyncVar]
+        [SerializeField] 
+        Team team;
+
+        [SyncVar]
+        [SerializeField] 
+        string playerName;
+
+        [SyncVar]
+        [SerializeField] 
+        int championId;
+
         DotaPlayerController dotaPlayerController = null;
+
+        [Server]
+        public void ServerSetPlayerName(string playerName)
+        {
+            this.playerName = playerName;
+        }
+
+        [Server]
+        public void ServerSetTeam(Team team)
+        {
+            this.team = team;
+        }
+
+        public Team GetTeam()
+        {
+            return team;
+        }
 
         public DotaPlayerController GetDotaPlayerController()
         {
@@ -15,6 +45,9 @@ namespace Dota.Networking
         }
 
         #region Server
+
+
+
         public override void OnStartServer()
         {
             GameObject characterInstance = Instantiate(characterPrefab, Vector3.zero, Quaternion.identity);
@@ -27,9 +60,16 @@ namespace Dota.Networking
         #region Client
         public override void OnStartClient()
         {
+            //if (hasAuthority)
+            //{
+            //    gameObject.name = "LocalPlayer";
+            //    dotaPlayerController.name = "LocalController";
+            //}
             dotaPlayerController = GetPlayerControllerByConnection(connectionToServer);
-            ((DotaNetworkRoomManager) NetworkRoomManager.singleton).OnAllPlayersAdded += DotaGamePlayer_OnAllPlayersAdded;
-            ((DotaNetworkRoomManager)NetworkRoomManager.singleton).AddDotaGamePlayer(this);
+            Debug.Log(connectionToServer);
+            dotaPlayerController.SetTeam(team);
+            ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientAddDotaGamePlayer(this);
+            ((DotaNetworkRoomManager)NetworkRoomManager.singleton).OnAllPlayersAdded += DotaGamePlayer_OnAllPlayersAdded;
         }
 
         private void DotaGamePlayer_OnAllPlayersAdded()
@@ -40,10 +80,10 @@ namespace Dota.Networking
         public override void OnStopClient()
         {
             // Removes DotaPlayer On the NetworkManager on the client side
-            ((DotaNetworkRoomManager)NetworkRoomManager.singleton).RemoveDotaGamePlayer(this);
+            ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientRemoveDotaGamePlayer(this);
         }
 
-        public DotaPlayerController GetPlayerControllerByConnection(NetworkConnection conn)
+        private DotaPlayerController GetPlayerControllerByConnection(NetworkConnection conn)
         {
             DotaPlayerController[] controllers = FindObjectsOfType<DotaPlayerController>();
             foreach (DotaPlayerController player in controllers)

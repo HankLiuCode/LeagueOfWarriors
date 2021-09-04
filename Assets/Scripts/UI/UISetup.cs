@@ -11,23 +11,24 @@ public class UISetup : MonoBehaviour
 {
     [SerializeField] GameObject midHUDCanvasPrefab = null;
     [SerializeField] GameObject otherPlayerCanvasPrefab = null;
-    [SerializeField] CameraController cameraControllerPrefab = null;
+    [SerializeField] CameraController cameraControllerInstance = null;
+
 
     HealthDisplay healthDisplayInstance = null;
     ManaDisplay manaDisplayInstance = null;
     AbilityUI[] abilityDisplayInstances = null;
 
     OtherPlayerStatsDisplay otherPlayerCanvasInstance = null;
-    CameraController cameraControllerInstance = null;
+    
 
     private void Start()
     {
-        ((DotaNetworkRoomManager)NetworkRoomManager.singleton).OnAllPlayersAdded += UISetup_OnAllPlayersAdded;
+        ((DotaNetworkRoomManager) NetworkRoomManager.singleton).OnAllPlayersAdded += UISetup_OnAllPlayersAdded;
     }
 
     private void UISetup_OnAllPlayersAdded()
     {
-        List<DotaGamePlayer> players = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).GetDotaGamePlayers();
+        List<DotaGamePlayer> players = ((DotaNetworkRoomManager) NetworkRoomManager.singleton).ClientGetDotaGamePlayers();
         foreach(DotaGamePlayer player in players)
         {
             if (player.isLocalPlayer)
@@ -63,7 +64,6 @@ public class UISetup : MonoBehaviour
         manaDisplayInstance = displayInstance.GetComponent<ManaDisplay>();
         abilityDisplayInstances = displayInstance.GetComponentsInChildren<AbilityUI>();
         
-        cameraControllerInstance = Instantiate(cameraControllerPrefab);
         cameraControllerInstance.Initialize(localPlayerController.transform);
         healthDisplayInstance.SetHealth(localPlayerController.GetComponent<Health>());
         manaDisplayInstance.SetMana(localPlayerController.GetComponent<Mana>());

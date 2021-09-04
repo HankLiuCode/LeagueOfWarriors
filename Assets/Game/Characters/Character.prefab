@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 8223221447003321259}
   - component: {fileID: 8913722561556947162}
   - component: {fileID: 5093792499633400171}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -146,9 +146,8 @@ MonoBehaviour:
   animator: {fileID: 0}
   health: {fileID: 8223221447003321259}
   pathFollower: {fileID: 689752517582656974}
-  maxSpeed: 5
   actionScheduler: {fileID: 5093792499633400171}
-  priority: 0
+  maxSpeed: 5
 --- !u!114 &2433690888149234406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,10 +166,12 @@ MonoBehaviour:
   timeBetweenAttacks: 0.5
   attackDamage: 20
   netAnimator: {fileID: 8913722561556947162}
+  animationEventHandler: {fileID: 0}
   mover: {fileID: 7214919029000824488}
   rightHand: {fileID: 0}
   leftHand: {fileID: 0}
   projectilePrefab: {fileID: 0}
+  hasFinishedBackswing: 1
 --- !u!114 &8223221447003321259
 MonoBehaviour:
   m_ObjectHideFlags: 0
