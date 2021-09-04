@@ -22,7 +22,7 @@ public class FOVEntity : NetworkBehaviour
         {
             if (!dp.isLocalPlayer)
             {
-                fovEntities.Add(dp.GetDotaPlayerController().GetComponent<FOVEntity>());
+                fovEntities.Add(dp.GetComponent<FOVEntity>());
             }
         }
     }
@@ -35,7 +35,7 @@ public class FOVEntity : NetworkBehaviour
         {
             if (!dp.isLocalPlayer)
             {
-                fovEntities.Add(dp.GetDotaPlayerController().GetComponent<FOVEntity>());
+                fovEntities.Add(dp.GetComponent<FOVEntity>());
             }
         }
     }

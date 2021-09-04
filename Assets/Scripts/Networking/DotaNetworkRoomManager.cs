@@ -165,25 +165,14 @@ public class DotaNetworkRoomManager : NetworkRoomManager
     
     public DotaGamePlayer GetLocalGamePlayer()
     {
-        List<DotaGamePlayer> localGamePlayers = new List<DotaGamePlayer>();
         foreach(DotaGamePlayer dotaGamePlayer in clientDotaGamePlayers)
         {
             if (dotaGamePlayer.isLocalPlayer)
             {
-                localGamePlayers.Add(dotaGamePlayer);
+                return dotaGamePlayer;
             }
         }
-
-        Debug.Log(localGamePlayers.Count);
-
-        if (localGamePlayers.Count == 1)
-        {
-            return localGamePlayers[0];
-        }
-        else
-        {
-            return null;
-        }
+        return null;
     }
 
     public void ClientAddDotaGamePlayer(DotaGamePlayer dotaGamePlayer)

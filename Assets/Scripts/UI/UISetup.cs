@@ -41,7 +41,7 @@ public class UISetup : MonoBehaviour
 
     public void SetUpUI(DotaGamePlayer dotaGamePlayer)
     {
-        DotaPlayerController dpc = dotaGamePlayer.GetDotaPlayerController();
+        DotaPlayerController dpc = dotaGamePlayer.GetComponent<DotaPlayerController>();
         SetUpSelfUI(dpc);
     }
 
@@ -52,7 +52,7 @@ public class UISetup : MonoBehaviour
         List<DotaPlayerController> playerControllers = new List<DotaPlayerController>();
         foreach (DotaGamePlayer dp in players)
         {
-            playerControllers.Add(dp.GetDotaPlayerController());
+            playerControllers.Add(dp.GetComponent<DotaPlayerController>());
         }
         otherPlayerCanvasInstance.BindPlayersToDisplays(playerControllers);
     }

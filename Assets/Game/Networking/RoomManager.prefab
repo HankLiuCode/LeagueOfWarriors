@@ -59,12 +59,11 @@ MonoBehaviour:
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 1733577146257814026, guid: c58fd42f1d8e0f4499070dd48c898ff7,
+  playerPrefab: {fileID: 452546937840963528, guid: 3dbc6cd5f5aa16d48baca7aa12e1cef9,
     type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs:
-  - {fileID: 452546937840963528, guid: 3dbc6cd5f5aa16d48baca7aa12e1cef9, type: 3}
   - {fileID: 7449486549517724255, guid: 39273ae671b38d5429ffc87492fe8995, type: 3}
   - {fileID: 2726156333138317243, guid: fc7f15d385167fb4da78c58e3435cb54, type: 3}
   - {fileID: 115730, guid: 0a73296bdf0db3a4ebcc1d70cf756dce, type: 3}
@@ -78,6 +77,10 @@ MonoBehaviour:
   _allPlayersReady: 0
   roomSlots: []
   clientIndex: 0
+  serverDotaGamePlayers: []
+  clientDotaGamePlayers: []
+  blueTeamGamePlayers: []
+  redTeamGamePlayers: []
 --- !u!114 &8468138675378180724
 MonoBehaviour:
   m_ObjectHideFlags: 0
