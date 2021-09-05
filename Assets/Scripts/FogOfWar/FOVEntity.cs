@@ -30,7 +30,6 @@ public class FOVEntity : NetworkBehaviour
     private void FOVEntity_OnAllPlayersAdded()
     {
         List<DotaGamePlayer> dotaGamePlayers = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientGetDotaGamePlayers();
-        Debug.Log("ALL Players Added" + dotaGamePlayers.Count);
         foreach (DotaGamePlayer dp in dotaGamePlayers)
         {
             if (!dp.isLocalPlayer)

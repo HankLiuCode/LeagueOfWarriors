@@ -176,10 +176,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 739003642ff60cd4fac046b6de0ee513, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  visibilityChecker: {fileID: 0}
   minimapRect: {fileID: 2115596557484498961}
   cameraController: {fileID: 0}
-  worldObj: {fileID: 0}
-  testUI: {fileID: 0}
+  UIPrefab: {fileID: 2352056197094357992, guid: 843f6fc95a6483847874722a294126ab,
+    type: 3}
 --- !u!1 &4161741860786938150
 GameObject:
   m_ObjectHideFlags: 0

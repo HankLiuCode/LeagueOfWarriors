@@ -10,12 +10,23 @@ public class VisibilityChecker : MonoBehaviour
     [SerializeField] float checkRadius = 10f;
     [SerializeField] List<GameObject> allies = new List<GameObject>();
     [SerializeField] List<GameObject> enemies = new List<GameObject>();
-    [SerializeField] List<GameObject> enemiesInViewRadius = new List<GameObject>();
+    [SerializeField] List<GameObject> enemiesInSight = new List<GameObject>();
+    [SerializeField] LayerMask obstacleLayer = new LayerMask();
     [SerializeField] LayerMask visionCheckLayer = new LayerMask();
     
     private void Start()
     {
         ((DotaNetworkRoomManager)NetworkRoomManager.singleton).OnAllPlayersAdded += VisibilityChecker_OnAllPlayersAdded;
+    }
+
+    public List<GameObject> GetVisibleEnemies()
+    {
+        return enemiesInSight;
+    }
+
+    public List<GameObject> GetAllies()
+    {
+        return allies;
     }
 
     private void VisibilityChecker_OnAllPlayersAdded()
@@ -59,11 +70,11 @@ public class VisibilityChecker : MonoBehaviour
 
     private void Update()
     {
-        //UpdateVisibleEnemyList();
-        //AdjustEnemyVisibility();
+        UpdateVisibleEnemyList();
+        AdjustEnemyVisibility();
     }
 
-    public void AdjustEnemyVisibility()
+    private void AdjustEnemyVisibility()
     {
         foreach(GameObject enemy in enemies)
         {
@@ -71,25 +82,27 @@ public class VisibilityChecker : MonoBehaviour
             renderer.enabled = false;
         }
 
-        foreach(GameObject visibleEnemy in enemiesInViewRadius)
+        foreach(GameObject visibleEnemy in enemiesInSight)
         {
             SkinnedMeshRenderer renderer = visibleEnemy.GetComponentInChildren<SkinnedMeshRenderer>();
             renderer.enabled = true;
         }
     }
 
-
-    public void UpdateVisibleEnemyList()
+    private void UpdateVisibleEnemyList()
     {
-        enemies.Clear();
+        enemiesInSight.Clear();
         foreach(GameObject ally in allies)
         {
             Collider[] colliders = Physics.OverlapSphere(ally.transform.position, checkRadius, visionCheckLayer);
             foreach(Collider c in colliders)
             {
-                if(c.tag != localPlayerTeam.ToString())
+                Vector3 direction = c.transform.position - ally.transform.position;
+                bool hasObstacle = Physics.Raycast(ally.transform.position, direction, direction.magnitude, obstacleLayer);
+
+                if(c.tag != localPlayerTeam.ToString() && !hasObstacle)
                 {
-                    enemiesInViewRadius.Add(c.gameObject);
+                    enemiesInSight.Add(c.gameObject);
                 }
             }
         }

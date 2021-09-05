@@ -22,12 +22,13 @@ public class FogOfWarVisual : MonoBehaviour
         this.localPlayerTeam = localPlayerTeam;
 
         List<DotaGamePlayer> dotaGamePlayers = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientGetDotaGamePlayers();
-
-        Debug.Log("DotaGamePlayersCount" + dotaGamePlayers.Count);
-
+        
         foreach(DotaGamePlayer dotaGamePlayer in dotaGamePlayers)
         {
-            AttachViewMesh(dotaGamePlayer.gameObject);
+            if(dotaGamePlayer.GetTeam() == this.localPlayerTeam)
+            {
+                AttachViewMesh(dotaGamePlayer.gameObject);
+            }
         }
     }
 

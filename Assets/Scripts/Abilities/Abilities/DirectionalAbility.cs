@@ -54,6 +54,7 @@ public class DirectionalAbility : Ability
 
         yield return new WaitForSeconds(destroyTime);
 
+        
         // TODO: Deal Damage to health in rect
 
         NetworkServer.Destroy(effectInstance);

@@ -7,7 +7,7 @@ namespace Dota.Networking
 {
     public class DotaGamePlayer : NetworkBehaviour
     {
-        [SyncVar]
+        [SyncVar(hook = nameof(OnTeamValueChanged))]
         [SerializeField] 
         Team team;
 
@@ -37,6 +37,11 @@ namespace Dota.Networking
         }
 
         #region Client
+
+        private void OnTeamValueChanged(Team oldTeam, Team newTeam)
+        {
+            gameObject.tag = newTeam.ToString();
+        }
 
         public override void OnStartClient()
         {

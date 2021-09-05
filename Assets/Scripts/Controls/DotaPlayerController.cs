@@ -10,16 +10,9 @@ namespace Dota.Controls
 {
     public class DotaPlayerController : NetworkBehaviour
     {
-        [SerializeField] Team team;
         [SerializeField] DotaMover mover = null;
         [SerializeField] DotaFighter fighter = null;
         [SerializeField] Health health = null;
-
-        public void SetTeam(Team team)
-        {
-            this.team = team;
-            gameObject.tag = team.ToString();
-        }
 
         [ClientCallback]
         private void Update()
