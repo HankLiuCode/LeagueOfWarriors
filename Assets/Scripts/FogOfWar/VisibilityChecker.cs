@@ -10,6 +10,7 @@ public class VisibilityChecker : MonoBehaviour
     [SerializeField] float checkRadius = 10f;
     [SerializeField] List<GameObject> allies = new List<GameObject>();
     [SerializeField] List<GameObject> enemies = new List<GameObject>();
+
     [SerializeField] List<GameObject> enemiesInSight = new List<GameObject>();
     [SerializeField] LayerMask obstacleLayer = new LayerMask();
     [SerializeField] LayerMask visionCheckLayer = new LayerMask();
@@ -17,6 +18,12 @@ public class VisibilityChecker : MonoBehaviour
     private void Start()
     {
         ((DotaNetworkRoomManager)NetworkRoomManager.singleton).OnAllPlayersAdded += VisibilityChecker_OnAllPlayersAdded;
+        DotaGamePlayer.OnDotaGamePlayerStop += DotaGamePlayer_OnDotaGamePlayerStop;
+    }
+
+    private void DotaGamePlayer_OnDotaGamePlayerStop()
+    {
+        
     }
 
     public List<GameObject> GetVisibleEnemies()

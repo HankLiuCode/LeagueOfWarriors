@@ -1,5 +1,6 @@
 ﻿using Dota.Controls;
 using Mirror;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -18,6 +19,9 @@ namespace Dota.Networking
         [SyncVar]
         [SerializeField] 
         int championId;
+
+        public static event Action OnDotaGamePlayerStart;
+        public static event Action OnDotaGamePlayerStop;
 
         [Server]
         public void ServerSetPlayerName(string playerName)
@@ -46,11 +50,13 @@ namespace Dota.Networking
         public override void OnStartClient()
         {
             ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientAddDotaGamePlayer(this);
+            OnDotaGamePlayerStart?.Invoke();
         }
 
         public override void OnStopClient()
         {
             ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientRemoveDotaGamePlayer(this);
+            OnDotaGamePlayerStop?.Invoke();
         }
         #endregion
     }
