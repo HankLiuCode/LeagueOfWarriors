@@ -114,7 +114,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  viewRadius: 10
+  viewRadius: 15
   degreePerCast: 10
   obstacleMask:
     serializedVersion: 2

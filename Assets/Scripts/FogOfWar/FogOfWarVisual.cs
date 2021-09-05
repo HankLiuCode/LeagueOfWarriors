@@ -34,7 +34,12 @@ public class FogOfWarVisual : MonoBehaviour
 
     public void AttachViewMesh(GameObject go)
     {
-        FOVGraphics fovGraphicsInstance = Instantiate(FOVGraphicsPrefab, Vector3.zero, Quaternion.identity, go.transform).GetComponent<FOVGraphics>();
+        GameObject fovGraphicsGameObject = Instantiate(FOVGraphicsPrefab);
+        fovGraphicsGameObject.transform.parent = go.transform;
+        fovGraphicsGameObject.transform.localPosition = Vector3.zero;
+
+        FOVGraphics fovGraphicsInstance = fovGraphicsGameObject.GetComponent<FOVGraphics>();
+
         fovGraphicsList.Add(fovGraphicsInstance);
     }
 
