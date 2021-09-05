@@ -150,6 +150,7 @@ namespace Dota.Combat
             {
                 if (timeSinceLastAttack > timeBetweenAttacks)
                 {
+                    transform.LookAt(target.transform);
                     netAnimator.ResetTrigger("stopAttack");
                     netAnimator.SetTrigger("attack");
                     timeSinceLastAttack = 0;
