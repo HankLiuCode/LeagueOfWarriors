@@ -12,7 +12,7 @@ public class FogOfWarVisual : MonoBehaviour
 
     private void Start()
     {
-        ((DotaNetworkRoomManager)NetworkRoomManager.singleton).OnAllPlayersAdded += VisionManager_OnAllPlayersAdded;
+        ((DotaNetworkRoomManager)NetworkRoomManager.singleton).OnAllGamePlayersAdded += VisionManager_OnAllPlayersAdded;
     }
 
     private void VisionManager_OnAllPlayersAdded()

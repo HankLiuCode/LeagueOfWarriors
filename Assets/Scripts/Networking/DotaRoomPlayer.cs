@@ -8,9 +8,9 @@ using Mirror;
 
 public enum Team
 {
-    None,
     Red,
-    Blue
+    Blue,
+    None
 }
 
 /// <summary>

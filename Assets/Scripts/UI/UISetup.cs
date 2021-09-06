@@ -23,7 +23,7 @@ public class UISetup : MonoBehaviour
 
     private void Start()
     {
-        ((DotaNetworkRoomManager) NetworkRoomManager.singleton).OnAllPlayersAdded += UISetup_OnAllPlayersAdded;
+        ((DotaNetworkRoomManager) NetworkRoomManager.singleton).OnAllGamePlayersAdded += UISetup_OnAllPlayersAdded;
     }
 
     private void UISetup_OnAllPlayersAdded()

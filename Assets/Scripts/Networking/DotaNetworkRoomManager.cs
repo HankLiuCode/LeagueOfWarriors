@@ -31,7 +31,7 @@ public class DotaNetworkRoomManager : NetworkRoomManager
     [SerializeField] private List<DotaGamePlayer> blueTeamGamePlayers = new List<DotaGamePlayer>();
     [SerializeField] private List<DotaGamePlayer> redTeamGamePlayers = new List<DotaGamePlayer>();
 
-    public event Action OnAllPlayersAdded;
+    public event Action OnAllGamePlayersAdded;
 
     /// <summary>
     /// This is called on the server when the server is started - including when a host is started.
@@ -195,7 +195,7 @@ public class DotaNetworkRoomManager : NetworkRoomManager
 
         if (clientDotaGamePlayers.Count == roomSlots.Count)
         {
-            OnAllPlayersAdded?.Invoke();
+            OnAllGamePlayersAdded?.Invoke();
         }
     }
 

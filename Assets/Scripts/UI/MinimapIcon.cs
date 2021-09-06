@@ -5,18 +5,34 @@ using UnityEngine.UI;
 
 public class MinimapIcon : MonoBehaviour
 {
-    [SerializeField] Image image;
+    [SerializeField] GameObject playerIcon = null;
+    [SerializeField] Image teamBorder = null;
+    [SerializeField] Image playerFace = null;
+
     [SerializeField] bool isVisible;
-
-
+    
     public void SetVisible(bool isVisible)
     {
         this.isVisible = isVisible;
-        gameObject.SetActive(isVisible);
+        playerIcon.SetActive(isVisible);
     }
 
-    public void SetIcon(Sprite sprite)
+    public void SetTeam(Team team)
     {
-        image.sprite = sprite;
+        switch (team)
+        {
+            case Team.Red:
+                teamBorder.color = Color.red;
+                break;
+
+            case Team.Blue:
+                teamBorder.color = Color.blue;
+                break;
+        }
+    }
+
+    public void SetPlayerIcon(Sprite sprite)
+    {
+        playerFace.sprite = sprite;
     }
 }

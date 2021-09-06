@@ -6,19 +6,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-// Change back to MonoBehaviour When finish testing
 public class Minimap : MonoBehaviour
 {
     [SerializeField] private VisibilityChecker visibilityChecker = null;
-    [SerializeField] private RectTransform minimapRect = null;
     [SerializeField] private CameraController cameraController = null;
 
-    [SerializeField] private MinimapIcon UIPrefab = null;
-    private Dictionary<Transform, MinimapIcon> UIInstances = new Dictionary<Transform, MinimapIcon>();
+    [SerializeField] private Vector2 xMinMax = new Vector2(-50, 50);
+    [SerializeField] private Vector2 zMinMax = new Vector2(-50, 50);
+
+    [SerializeField] private RectTransform minimapRect = null;
+    [SerializeField] private RectTransform iconParent = null;
+
+    [SerializeField] private MinimapIcon minimapIconPrefab = null;
+    private Dictionary<Transform, MinimapIcon> minimapIconInstances = new Dictionary<Transform, MinimapIcon>();
 
     private void Start()
     {
-        ((DotaNetworkRoomManager)NetworkRoomManager.singleton).OnAllPlayersAdded += Minimap_OnAllPlayersAdded;
+        ((DotaNetworkRoomManager)NetworkRoomManager.singleton).OnAllGamePlayersAdded += Minimap_OnAllPlayersAdded;
     }
 
     private void Minimap_OnAllPlayersAdded()
@@ -26,24 +30,18 @@ public class Minimap : MonoBehaviour
         List<DotaGamePlayer> dotaGamePlayers = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientGetDotaGamePlayers();
         foreach(DotaGamePlayer gamePlayer in dotaGamePlayers)
         {
-            MinimapIcon uiInstance = Instantiate(UIPrefab, transform);
-            UIInstances.Add(gamePlayer.transform, uiInstance);
+            MinimapIcon minimapIconInstance = Instantiate(minimapIconPrefab, iconParent.transform);
+            minimapIconInstance.SetTeam(gamePlayer.GetTeam());
+            minimapIconInstance.SetPlayerIcon(gamePlayer.GetPlayerSprite());
+            minimapIconInstances.Add(gamePlayer.transform, minimapIconInstance);
         }
     }
 
     private void UpdateIcon(Transform worldObject, Transform uiInstance)
     {
-        Vector2 xMinMax = cameraController.GetXMinMax();
-        Vector2 zMinMax = cameraController.GetZMinMax();
-
-        //Vector2 normPos = new Vector2(
-        //    (worldObject.position.x - xMinMax.x) / (xMinMax.y - xMinMax.x),
-        //    (worldObject.position.z - zMinMax.x) / (zMinMax.y - zMinMax.x)
-        //);
-
         Vector2 normPos = new Vector2(
-            (worldObject.position.x - (-50)) / 100,
-            (worldObject.position.z - (-50)) / 100
+            (worldObject.position.x - xMinMax.x) / (xMinMax.y - xMinMax.x),
+            (worldObject.position.z - zMinMax.x) / (zMinMax.y - zMinMax.x)
         );
 
         Vector2 minimapPos = new Vector2(
@@ -55,23 +53,23 @@ public class Minimap : MonoBehaviour
 
     private void Update()
     {
-        List<Transform> worldPositions = new List<Transform>(UIInstances.Keys);
+        List<Transform> worldPositions = new List<Transform>(minimapIconInstances.Keys);
 
-        foreach(Transform worldPos in worldPositions)
+        foreach (Transform worldPos in worldPositions)
         {
-            UIInstances[worldPos].SetVisible(false);
+            minimapIconInstances[worldPos].SetVisible(false);
         }
 
-        foreach(GameObject visibleEnemy in visibilityChecker.GetVisibleEnemies())
+        foreach(VisionEntity enemy in visibilityChecker.GetEnemies())
         {
-            UIInstances[visibleEnemy.transform].SetVisible(true);
-            UpdateIcon(visibleEnemy.transform, UIInstances[visibleEnemy.transform].transform);
+            minimapIconInstances[enemy.transform].SetVisible(enemy.GetVisible());
+            UpdateIcon(enemy.transform, minimapIconInstances[enemy.transform].transform);
         }
 
-        foreach(GameObject ally in visibilityChecker.GetAllies())
+        foreach (VisionEntity ally in visibilityChecker.GetAllies())
         {
-            UIInstances[ally.transform].SetVisible(true);
-            UpdateIcon(ally.transform, UIInstances[ally.transform].transform);
+            minimapIconInstances[ally.transform].SetVisible(true);
+            UpdateIcon(ally.transform, minimapIconInstances[ally.transform].transform);
         }
 
         if (Input.GetMouseButton(0))
@@ -94,8 +92,6 @@ public class Minimap : MonoBehaviour
             (localPoint.x - minimapRect.rect.x) / minimapRect.rect.width,
             (localPoint.y - minimapRect.rect.y) / minimapRect.rect.height
         );
-
-        //Debug.Log(mousePos + "->" + localPoint + "," + normMinimapPos);
 
         Vector2 xMinMax = cameraController.GetXMinMax();
         Vector2 zMinMax = cameraController.GetZMinMax();

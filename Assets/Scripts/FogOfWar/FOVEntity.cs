@@ -15,7 +15,7 @@ public class FOVEntity : NetworkBehaviour
 
     private void Start()
     {
-        ((DotaNetworkRoomManager) NetworkRoomManager.singleton).OnAllPlayersAdded += FOVEntity_OnAllPlayersAdded;
+        ((DotaNetworkRoomManager) NetworkRoomManager.singleton).OnAllGamePlayersAdded += FOVEntity_OnAllPlayersAdded;
 
         List<DotaGamePlayer> dotaGamePlayers = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientGetDotaGamePlayers();
         foreach (DotaGamePlayer dp in dotaGamePlayers)

@@ -8,16 +8,15 @@ public class VisibilityChecker : MonoBehaviour
 {
     [SerializeField] Team localPlayerTeam;
     [SerializeField] float checkRadius = 10f;
-    [SerializeField] List<GameObject> allies = new List<GameObject>();
-    [SerializeField] List<GameObject> enemies = new List<GameObject>();
-
-    [SerializeField] List<GameObject> enemiesInSight = new List<GameObject>();
+    [SerializeField] List<VisionEntity> allies = new List<VisionEntity>();
+    [SerializeField] List<VisionEntity> enemies = new List<VisionEntity>();
+    
     [SerializeField] LayerMask obstacleLayer = new LayerMask();
     [SerializeField] LayerMask visionCheckLayer = new LayerMask();
     
     private void Start()
     {
-        ((DotaNetworkRoomManager)NetworkRoomManager.singleton).OnAllPlayersAdded += VisibilityChecker_OnAllPlayersAdded;
+        ((DotaNetworkRoomManager)NetworkRoomManager.singleton).OnAllGamePlayersAdded += VisibilityChecker_OnAllPlayersAdded;
         DotaGamePlayer.OnDotaGamePlayerStop += DotaGamePlayer_OnDotaGamePlayerStop;
     }
 
@@ -26,12 +25,12 @@ public class VisibilityChecker : MonoBehaviour
         
     }
 
-    public List<GameObject> GetVisibleEnemies()
+    public List<VisionEntity> GetEnemies()
     {
-        return enemiesInSight;
+        return enemies;
     }
 
-    public List<GameObject> GetAllies()
+    public List<VisionEntity> GetAllies()
     {
         return allies;
     }
@@ -49,13 +48,13 @@ public class VisibilityChecker : MonoBehaviour
                 sameTeamGamePlayers = ((DotaNetworkRoomManager) NetworkRoomManager.singleton).ClientGetRedTeamGamePlayers();
                 foreach (DotaGamePlayer sameTeamGamePlayer in sameTeamGamePlayers)
                 {
-                    allies.Add(sameTeamGamePlayer.gameObject);
+                    allies.Add(sameTeamGamePlayer.GetComponent<VisionEntity>());
                 }
 
                 otherTeamGamePlayers = ((DotaNetworkRoomManager) NetworkRoomManager.singleton).ClientGetBlueTeamGamePlayers();
                 foreach (DotaGamePlayer otherTeamGamePlayer in otherTeamGamePlayers)
                 {
-                    enemies.Add(otherTeamGamePlayer.gameObject);
+                    enemies.Add(otherTeamGamePlayer.GetComponent<VisionEntity>());
                 }
                 break;
 
@@ -63,13 +62,13 @@ public class VisibilityChecker : MonoBehaviour
                 sameTeamGamePlayers = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientGetBlueTeamGamePlayers();
                 foreach (DotaGamePlayer gamePlayer in sameTeamGamePlayers)
                 {
-                    allies.Add(gamePlayer.gameObject);
+                    allies.Add(gamePlayer.GetComponent<VisionEntity>());
                 }
 
                 otherTeamGamePlayers = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientGetRedTeamGamePlayers();
                 foreach (DotaGamePlayer otherTeamGamePlayer in otherTeamGamePlayers)
                 {
-                    enemies.Add(otherTeamGamePlayer.gameObject);
+                    enemies.Add(otherTeamGamePlayer.GetComponent<VisionEntity>());
                 }
                 break;
         }
@@ -77,41 +76,37 @@ public class VisibilityChecker : MonoBehaviour
 
     private void Update()
     {
-        UpdateVisibleEnemyList();
-        AdjustEnemyVisibility();
+        UpdateVisibleEnemy();
     }
 
-    private void AdjustEnemyVisibility()
+    private void UpdateVisibleEnemy()
     {
-        foreach(GameObject enemy in enemies)
+        foreach(VisionEntity enemy in enemies)
         {
-            SkinnedMeshRenderer renderer = enemy.GetComponentInChildren<SkinnedMeshRenderer>();
-            renderer.enabled = false;
-        }
-
-        foreach(GameObject visibleEnemy in enemiesInSight)
-        {
-            SkinnedMeshRenderer renderer = visibleEnemy.GetComponentInChildren<SkinnedMeshRenderer>();
-            renderer.enabled = true;
-        }
-    }
-
-    private void UpdateVisibleEnemyList()
-    {
-        enemiesInSight.Clear();
-        foreach(GameObject ally in allies)
-        {
-            Collider[] colliders = Physics.OverlapSphere(ally.transform.position, checkRadius, visionCheckLayer);
-            foreach(Collider c in colliders)
+            bool isEnemyVisible = false;
+            foreach (VisionEntity ally in allies)
             {
-                Vector3 direction = c.transform.position - ally.transform.position;
-                bool hasObstacle = Physics.Raycast(ally.transform.position, direction, direction.magnitude, obstacleLayer);
-
-                if(c.tag != localPlayerTeam.ToString() && !hasObstacle)
+                float distance = Vector3.Distance(ally.transform.position, enemy.transform.position);
+                if (distance > checkRadius)
                 {
-                    enemiesInSight.Add(c.gameObject);
+                    isEnemyVisible = false;
+                    continue;
+                }
+
+                Vector3 direction = enemy.transform.position - ally.transform.position;
+                bool hasObstacle = Physics.Raycast(ally.transform.position, direction, distance, obstacleLayer);
+
+                if (hasObstacle)
+                {
+                    isEnemyVisible = false;
+                }
+                else
+                {
+                    isEnemyVisible = true;
+                    break;
                 }
             }
+            enemy.SetVisible(isEnemyVisible);
         }
     }
 }

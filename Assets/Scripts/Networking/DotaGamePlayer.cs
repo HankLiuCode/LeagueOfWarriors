@@ -8,44 +8,60 @@ namespace Dota.Networking
 {
     public class DotaGamePlayer : NetworkBehaviour
     {
-        [SyncVar(hook = nameof(OnTeamValueChanged))]
         [SerializeField] 
         Team team;
 
-        [SyncVar]
         [SerializeField] 
         string playerName;
 
-        [SyncVar]
-        [SerializeField] 
-        int championId;
+        [SerializeField]
+        Sprite playerSprite;
 
         public static event Action OnDotaGamePlayerStart;
         public static event Action OnDotaGamePlayerStop;
+
+        #region Server
 
         [Server]
         public void ServerSetPlayerName(string playerName)
         {
             this.playerName = playerName;
+            RpcSetPlayerName(playerName);
         }
 
         [Server]
         public void ServerSetTeam(Team team)
         {
             this.team = team;
+            RpcSetTeam(team);
         }
+
+        [ClientRpc]
+        public void RpcSetPlayerName(string playerName)
+        {
+            this.playerName = playerName;
+        }
+
+        [ClientRpc]
+        public void RpcSetTeam(Team team)
+        {
+            this.team = team;
+            gameObject.tag = team.ToString();
+        }
+
+        #endregion
 
         public Team GetTeam()
         {
             return team;
         }
 
-        #region Client
-
-        private void OnTeamValueChanged(Team oldTeam, Team newTeam)
+        public Sprite GetPlayerSprite()
         {
-            gameObject.tag = newTeam.ToString();
+            return playerSprite;
         }
+
+        #region Client
 
         public override void OnStartClient()
         {
