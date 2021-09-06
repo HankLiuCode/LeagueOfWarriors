@@ -62,7 +62,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  syncInterval: 0.1
+  syncInterval: 1
   minionPrefab: {fileID: 9165540034895490147, guid: e0b13fbed652d5e4599cd9be41701618,
     type: 3}
   spawnInterval: 3

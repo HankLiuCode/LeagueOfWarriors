@@ -5,22 +5,22 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Game/Scene/Offline.unity
     guid: 0d61374dbf4880a41ac4f3f5cf0af478
-  - enabled: 0
+  - enabled: 1
     path: Assets/Game/Scene/Room.unity
     guid: 49a129513a1e0274fb9842b3bb5b8aa6
-  - enabled: 0
+  - enabled: 1
     path: Assets/Game/Scene/Game.unity
     guid: b3b0cb9813ef0e04b8701c4a9861b8b3
-  - enabled: 1
+  - enabled: 0
     path: Assets/RayTesting/Copy/Game 1.unity
     guid: e3352c158cdeca74d84d6df3ebe48967
-  - enabled: 1
+  - enabled: 0
     path: Assets/RayTesting/Copy/Offline 1.unity
     guid: 6227afc828d44e0408a5d3668f3d58f5
-  - enabled: 1
+  - enabled: 0
     path: Assets/RayTesting/Copy/Room 1.unity
     guid: ecb8ae3bb6b78f14390ae8915f6d5c70
   m_configObjects: {}

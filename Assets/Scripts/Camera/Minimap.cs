@@ -15,29 +15,56 @@ public class Minimap : MonoBehaviour
     [SerializeField] private Vector2 zMinMax = new Vector2(-50, 50);
 
     [SerializeField] private RectTransform minimapRect = null;
-    [SerializeField] private RectTransform iconParent = null;
 
-    [SerializeField] private MinimapPlayerIcon minimapIconPrefab = null;
+    [SerializeField] private RectTransform minionIconLayer = null;
+    [SerializeField] private RectTransform playerIconLayer = null;
+
+    [SerializeField] private MinimapIcon minimapMinionIconPrefab = null;
+    [SerializeField] private MinimapPlayerIcon minimapPlayerIconPrefab = null;
+    
+
     private Dictionary<Transform, MinimapIcon> minimapIconInstances = new Dictionary<Transform, MinimapIcon>();
 
     private void Start()
     {
-        ((DotaNetworkRoomManager) NetworkRoomManager.singleton).OnAllGamePlayersAdded += Minimap_OnAllPlayersAdded;
+        visibilityChecker.OnVisionEntityAdded += VisibilityChecker_OnVisionEntityAdded;
+        visibilityChecker.OnVisionEntityRemoved += VisibilityChecker_OnVisionEntityRemoved;
+        visibilityChecker.OnAllPlayersAdded += VisibilityChecker_OnAllPlayersAdded;
     }
 
-    private void Minimap_OnAllPlayersAdded()
+    private void VisibilityChecker_OnAllPlayersAdded()
     {
-        List<DotaGamePlayer> dotaGamePlayers = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientGetDotaGamePlayers();
-        foreach(DotaGamePlayer gamePlayer in dotaGamePlayers)
+        foreach (VisionEntity enemy in visibilityChecker.GetEnemies())
         {
-            MinimapPlayerIcon minimapIconInstance = Instantiate(minimapIconPrefab, iconParent.transform);
-            minimapIconInstance.SetTeam(gamePlayer.GetTeam());
-            minimapIconInstance.SetPlayerIcon(gamePlayer.GetPlayerSprite());
-            minimapIconInstances.Add(gamePlayer.transform, minimapIconInstance);
+            MinimapPlayerIcon minimapIconInstance = Instantiate(minimapPlayerIconPrefab, playerIconLayer.transform);
+            minimapIconInstance.SetTeam(enemy.GetComponent<DotaGamePlayer>().GetTeam());
+            minimapIconInstance.SetPlayerIcon(enemy.GetComponent<DotaGamePlayer>().GetPlayerSprite());
+            minimapIconInstances.Add(enemy.GetComponent<DotaGamePlayer>().transform, minimapIconInstance);
+        }
+
+        foreach (VisionEntity ally in visibilityChecker.GetAllies())
+        {
+            MinimapPlayerIcon minimapIconInstance = Instantiate(minimapPlayerIconPrefab, playerIconLayer.transform);
+            minimapIconInstance.SetTeam(ally.GetComponent<DotaGamePlayer>().GetTeam());
+            minimapIconInstance.SetPlayerIcon(ally.GetComponent<DotaGamePlayer>().GetPlayerSprite());
+            minimapIconInstances.Add(ally.GetComponent<DotaGamePlayer>().transform, minimapIconInstance);
         }
     }
 
-    private void UpdateIcon(Transform worldObject, Transform uiInstance)
+    private void VisibilityChecker_OnVisionEntityRemoved(VisionEntity obj)
+    {
+        minimapIconInstances.Remove(obj.transform);
+    }
+
+    private void VisibilityChecker_OnVisionEntityAdded(VisionEntity obj)
+    {
+        Minion minion = obj.GetComponent<Minion>();
+        MinimapIcon minimapIconInstance = Instantiate(minimapMinionIconPrefab, minionIconLayer.transform).GetComponent<MinimapIcon>();
+        minimapIconInstance.SetTeam(minion.GetTeam());
+        minimapIconInstances.Add(obj.transform, minimapIconInstance);
+    }
+
+    private void UpdateIconPosition(Transform worldObject, Transform uiInstance)
     {
         Vector2 normPos = new Vector2(
             (worldObject.position.x - xMinMax.x) / (xMinMax.y - xMinMax.x),
@@ -53,24 +80,18 @@ public class Minimap : MonoBehaviour
 
     private void Update()
     {
-        List<Transform> worldPositions = new List<Transform>(minimapIconInstances.Keys);
+        foreach (VisionEntity enemy in visibilityChecker.GetEnemies())
+        {
+            minimapIconInstances[enemy.transform].SetVisible(enemy.GetVisible());
+            UpdateIconPosition(enemy.transform, minimapIconInstances[enemy.transform].transform);
+        }
 
-        //foreach (Transform worldPos in worldPositions)
-        //{
-        //    minimapIconInstances[worldPos].SetVisible(false);
-        //}
+        foreach (VisionEntity ally in visibilityChecker.GetAllies())
+        {
+            minimapIconInstances[ally.transform].SetVisible(true);
+            UpdateIconPosition(ally.transform, minimapIconInstances[ally.transform].transform);
+        }
 
-        //foreach(VisionEntity enemy in visibilityChecker.GetEnemies())
-        //{
-        //    minimapIconInstances[enemy.transform].SetVisible(enemy.GetVisible());
-        //    UpdateIcon(enemy.transform, minimapIconInstances[enemy.transform].transform);
-        //}
-
-        //foreach (VisionEntity ally in visibilityChecker.GetAllies())
-        //{
-        //    minimapIconInstances[ally.transform].SetVisible(true);
-        //    UpdateIcon(ally.transform, minimapIconInstances[ally.transform].transform);
-        //}
 
         if (Input.GetMouseButton(0))
         {

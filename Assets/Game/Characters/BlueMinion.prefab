@@ -27,6 +27,8 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   team: 0
+  miniMapPrefab: {fileID: 495618344135852268, guid: 72345f921fd2bd44086cb1ddbb5e7023,
+    type: 3}
 --- !u!114 &1636235118245536626
 MonoBehaviour:
   m_ObjectHideFlags: 0

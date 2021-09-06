@@ -6,6 +6,7 @@ using UnityEngine;
 public class Minion : NetworkBehaviour
 {
     [SerializeField] 
+    [SyncVar]
     Team team;
 
     #region Server
