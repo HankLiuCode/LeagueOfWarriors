@@ -8,21 +8,35 @@ public class VisibilityChecker : MonoBehaviour
 {
     [SerializeField] Team localPlayerTeam;
     [SerializeField] float checkRadius = 10f;
+    [SerializeField] MinionManager minionManager = null;
+
     [SerializeField] List<VisionEntity> allies = new List<VisionEntity>();
     [SerializeField] List<VisionEntity> enemies = new List<VisionEntity>();
     
     [SerializeField] LayerMask obstacleLayer = new LayerMask();
-    [SerializeField] LayerMask visionCheckLayer = new LayerMask();
     
     private void Start()
     {
         ((DotaNetworkRoomManager)NetworkRoomManager.singleton).OnAllGamePlayersAdded += VisibilityChecker_OnAllPlayersAdded;
+        minionManager.OnMinionAdded += MinionManager_OnMinionAdded;
+        minionManager.OnMinionRemoved += MinionManager_OnMinionRemoved;
+
         DotaGamePlayer.OnDotaGamePlayerStop += DotaGamePlayer_OnDotaGamePlayerStop;
     }
 
-    private void DotaGamePlayer_OnDotaGamePlayerStop()
+    private void MinionManager_OnMinionAdded(NetworkIdentity obj)
     {
-        
+        allies.Add(obj.GetComponent<VisionEntity>());
+    }
+
+    private void MinionManager_OnMinionRemoved(NetworkIdentity obj)
+    {
+        allies.Remove(obj.GetComponent<VisionEntity>());
+    }
+
+    private void DotaGamePlayer_OnDotaGamePlayerStop(DotaGamePlayer dotaGamePlayer)
+    {
+        // Remove DotaPlayer From allies ?
     }
 
     public List<VisionEntity> GetEnemies()
@@ -39,36 +53,30 @@ public class VisibilityChecker : MonoBehaviour
     {
         localPlayerTeam = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).GetLocalGamePlayer().GetTeam();
 
-        List<DotaGamePlayer> sameTeamGamePlayers;
-        List<DotaGamePlayer> otherTeamGamePlayers;
+        List<DotaGamePlayer> blueTeamPlayers = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientGetBlueTeamGamePlayers();
+        List<DotaGamePlayer> redTeamPlayers = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientGetRedTeamGamePlayers();
 
         switch (localPlayerTeam)
         {
             case Team.Red:
-                sameTeamGamePlayers = ((DotaNetworkRoomManager) NetworkRoomManager.singleton).ClientGetRedTeamGamePlayers();
-                foreach (DotaGamePlayer sameTeamGamePlayer in sameTeamGamePlayers)
+                foreach (DotaGamePlayer redPlayer in redTeamPlayers)
                 {
-                    allies.Add(sameTeamGamePlayer.GetComponent<VisionEntity>());
+                    allies.Add(redPlayer.GetComponent<VisionEntity>());
                 }
-
-                otherTeamGamePlayers = ((DotaNetworkRoomManager) NetworkRoomManager.singleton).ClientGetBlueTeamGamePlayers();
-                foreach (DotaGamePlayer otherTeamGamePlayer in otherTeamGamePlayers)
+                foreach (DotaGamePlayer bluePlayer in blueTeamPlayers)
                 {
-                    enemies.Add(otherTeamGamePlayer.GetComponent<VisionEntity>());
+                    enemies.Add(bluePlayer.GetComponent<VisionEntity>());
                 }
                 break;
 
             case Team.Blue:
-                sameTeamGamePlayers = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientGetBlueTeamGamePlayers();
-                foreach (DotaGamePlayer gamePlayer in sameTeamGamePlayers)
+                foreach (DotaGamePlayer bluePlayer in blueTeamPlayers)
                 {
-                    allies.Add(gamePlayer.GetComponent<VisionEntity>());
+                    allies.Add(bluePlayer.GetComponent<VisionEntity>());
                 }
-
-                otherTeamGamePlayers = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientGetRedTeamGamePlayers();
-                foreach (DotaGamePlayer otherTeamGamePlayer in otherTeamGamePlayers)
+                foreach (DotaGamePlayer redPlayer in redTeamPlayers)
                 {
-                    enemies.Add(otherTeamGamePlayer.GetComponent<VisionEntity>());
+                    enemies.Add(redPlayer.GetComponent<VisionEntity>());
                 }
                 break;
         }

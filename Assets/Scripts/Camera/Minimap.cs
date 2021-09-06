@@ -17,12 +17,12 @@ public class Minimap : MonoBehaviour
     [SerializeField] private RectTransform minimapRect = null;
     [SerializeField] private RectTransform iconParent = null;
 
-    [SerializeField] private MinimapIcon minimapIconPrefab = null;
+    [SerializeField] private MinimapPlayerIcon minimapIconPrefab = null;
     private Dictionary<Transform, MinimapIcon> minimapIconInstances = new Dictionary<Transform, MinimapIcon>();
 
     private void Start()
     {
-        ((DotaNetworkRoomManager)NetworkRoomManager.singleton).OnAllGamePlayersAdded += Minimap_OnAllPlayersAdded;
+        ((DotaNetworkRoomManager) NetworkRoomManager.singleton).OnAllGamePlayersAdded += Minimap_OnAllPlayersAdded;
     }
 
     private void Minimap_OnAllPlayersAdded()
@@ -30,7 +30,7 @@ public class Minimap : MonoBehaviour
         List<DotaGamePlayer> dotaGamePlayers = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientGetDotaGamePlayers();
         foreach(DotaGamePlayer gamePlayer in dotaGamePlayers)
         {
-            MinimapIcon minimapIconInstance = Instantiate(minimapIconPrefab, iconParent.transform);
+            MinimapPlayerIcon minimapIconInstance = Instantiate(minimapIconPrefab, iconParent.transform);
             minimapIconInstance.SetTeam(gamePlayer.GetTeam());
             minimapIconInstance.SetPlayerIcon(gamePlayer.GetPlayerSprite());
             minimapIconInstances.Add(gamePlayer.transform, minimapIconInstance);
@@ -55,22 +55,22 @@ public class Minimap : MonoBehaviour
     {
         List<Transform> worldPositions = new List<Transform>(minimapIconInstances.Keys);
 
-        foreach (Transform worldPos in worldPositions)
-        {
-            minimapIconInstances[worldPos].SetVisible(false);
-        }
+        //foreach (Transform worldPos in worldPositions)
+        //{
+        //    minimapIconInstances[worldPos].SetVisible(false);
+        //}
 
-        foreach(VisionEntity enemy in visibilityChecker.GetEnemies())
-        {
-            minimapIconInstances[enemy.transform].SetVisible(enemy.GetVisible());
-            UpdateIcon(enemy.transform, minimapIconInstances[enemy.transform].transform);
-        }
+        //foreach(VisionEntity enemy in visibilityChecker.GetEnemies())
+        //{
+        //    minimapIconInstances[enemy.transform].SetVisible(enemy.GetVisible());
+        //    UpdateIcon(enemy.transform, minimapIconInstances[enemy.transform].transform);
+        //}
 
-        foreach (VisionEntity ally in visibilityChecker.GetAllies())
-        {
-            minimapIconInstances[ally.transform].SetVisible(true);
-            UpdateIcon(ally.transform, minimapIconInstances[ally.transform].transform);
-        }
+        //foreach (VisionEntity ally in visibilityChecker.GetAllies())
+        //{
+        //    minimapIconInstances[ally.transform].SetVisible(true);
+        //    UpdateIcon(ally.transform, minimapIconInstances[ally.transform].transform);
+        //}
 
         if (Input.GetMouseButton(0))
         {

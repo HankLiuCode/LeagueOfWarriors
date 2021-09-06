@@ -8,7 +8,10 @@ namespace Dota.Networking
 {
     public class DotaGamePlayer : NetworkBehaviour
     {
+
+        // Change to RPC Later
         [SerializeField] 
+        [SyncVar]
         Team team;
 
         [SerializeField] 
@@ -17,8 +20,8 @@ namespace Dota.Networking
         [SerializeField]
         Sprite playerSprite;
 
-        public static event Action OnDotaGamePlayerStart;
-        public static event Action OnDotaGamePlayerStop;
+        public static event Action<DotaGamePlayer> OnDotaGamePlayerStart;
+        public static event Action<DotaGamePlayer> OnDotaGamePlayerStop;
 
         #region Server
 
@@ -26,24 +29,10 @@ namespace Dota.Networking
         public void ServerSetPlayerName(string playerName)
         {
             this.playerName = playerName;
-            RpcSetPlayerName(playerName);
         }
 
         [Server]
         public void ServerSetTeam(Team team)
-        {
-            this.team = team;
-            RpcSetTeam(team);
-        }
-
-        [ClientRpc]
-        public void RpcSetPlayerName(string playerName)
-        {
-            this.playerName = playerName;
-        }
-
-        [ClientRpc]
-        public void RpcSetTeam(Team team)
         {
             this.team = team;
             gameObject.tag = team.ToString();
@@ -66,13 +55,13 @@ namespace Dota.Networking
         public override void OnStartClient()
         {
             ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientAddDotaGamePlayer(this);
-            OnDotaGamePlayerStart?.Invoke();
+            OnDotaGamePlayerStart?.Invoke(this);
         }
 
         public override void OnStopClient()
         {
             ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientRemoveDotaGamePlayer(this);
-            OnDotaGamePlayerStop?.Invoke();
+            OnDotaGamePlayerStop?.Invoke(this);
         }
         #endregion
     }

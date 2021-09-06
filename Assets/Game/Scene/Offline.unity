@@ -123,6 +123,72 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &443244267
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 443244270}
+  - component: {fileID: 443244269}
+  - component: {fileID: 443244268}
+  m_Layer: 0
+  m_Name: EventSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &443244268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 443244267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalAxis: Horizontal
+  m_VerticalAxis: Vertical
+  m_SubmitButton: Submit
+  m_CancelButton: Cancel
+  m_InputActionsPerSecond: 10
+  m_RepeatDelay: 0.5
+  m_ForceModuleActive: 0
+--- !u!114 &443244269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 443244267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+--- !u!4 &443244270
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 443244267}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1491762766
 GameObject:
   m_ObjectHideFlags: 0
@@ -213,39 +279,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 8468138675378180723, guid: 2e056d4bd44f3fe4b8fe2a3b4129dfb1,
-        type: 3}
-      propertyPath: spawnPrefabs.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8468138675378180723, guid: 2e056d4bd44f3fe4b8fe2a3b4129dfb1,
-        type: 3}
-      propertyPath: spawnPrefabs.Array.data[0]
-      value: 
-      objectReference: {fileID: 7449486549517724255, guid: 39273ae671b38d5429ffc87492fe8995,
-        type: 3}
-    - target: {fileID: 8468138675378180723, guid: 2e056d4bd44f3fe4b8fe2a3b4129dfb1,
-        type: 3}
-      propertyPath: spawnPrefabs.Array.data[1]
-      value: 
-      objectReference: {fileID: 2726156333138317243, guid: fc7f15d385167fb4da78c58e3435cb54,
-        type: 3}
-    - target: {fileID: 8468138675378180723, guid: 2e056d4bd44f3fe4b8fe2a3b4129dfb1,
-        type: 3}
-      propertyPath: spawnPrefabs.Array.data[2]
-      value: 
-      objectReference: {fileID: 115730, guid: 0a73296bdf0db3a4ebcc1d70cf756dce, type: 3}
-    - target: {fileID: 8468138675378180723, guid: 2e056d4bd44f3fe4b8fe2a3b4129dfb1,
-        type: 3}
-      propertyPath: spawnPrefabs.Array.data[3]
-      value: 
-      objectReference: {fileID: 195142, guid: f2e388aa3b923c841b408eb1e5dd22c4, type: 3}
-    - target: {fileID: 8468138675378180723, guid: 2e056d4bd44f3fe4b8fe2a3b4129dfb1,
-        type: 3}
-      propertyPath: spawnPrefabs.Array.data[4]
-      value: 
-      objectReference: {fileID: 9165540034895490147, guid: e0b13fbed652d5e4599cd9be41701618,
-        type: 3}
     - target: {fileID: 8468138675378180725, guid: 2e056d4bd44f3fe4b8fe2a3b4129dfb1,
         type: 3}
       propertyPath: m_RootOrder
