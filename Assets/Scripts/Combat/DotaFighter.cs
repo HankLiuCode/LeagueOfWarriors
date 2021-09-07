@@ -10,7 +10,7 @@ namespace Dota.Combat
     public class DotaFighter : NetworkBehaviour
     {
         Health target;
-        float timeSinceLastAttack = Mathf.Infinity;
+        [SerializeField] float attackCooldownTimer;
 
         [SerializeField] float attackRange = 2f;
         [SerializeField] float timeBetweenAttacks = 1f;
@@ -19,12 +19,6 @@ namespace Dota.Combat
         [SerializeField] NetworkAnimator netAnimator = null;
         [SerializeField] AnimationEventHandler animationEventHandler = null;
         [SerializeField] DotaMover mover = null;
-
-        [SerializeField] Transform rightHand = null;
-        [SerializeField] Transform leftHand = null;
-
-        // if basic attack is melee then its null
-        [SerializeField] DotaProjectile projectilePrefab = null;
 
         [SerializeField] bool hasFinishedBackswing = true;
 
@@ -42,20 +36,6 @@ namespace Dota.Combat
             ServerDealDamageTo(health, damage);
         }
 
-        [Server]
-        public void ServerSpawnProjectile(Health target, GameObject owner, float attackDamage)
-        {
-            DotaProjectile projectile = Instantiate(projectilePrefab, rightHand.transform.position, Quaternion.identity);
-            NetworkServer.Spawn(projectile.gameObject, owner.GetComponent<NetworkIdentity>().connectionToClient);
-            projectile.SetTarget(target, attackDamage);
-        }
-
-        [Command]
-        public void CmdSpawnProjectile(Health target, GameObject owner, float attackDamage)
-        {
-            ServerSpawnProjectile(target, owner, attackDamage);
-        }
-
         #endregion
 
         #region Client
@@ -69,15 +49,7 @@ namespace Dota.Combat
         private void AnimationEventHandler_OnAttackPoint()
         {
             if (target == null) { return; }
-
-            if (projectilePrefab == null)
-            {
-                MeleeAttack();
-            }
-            else
-            {
-                RangedAttack();
-            }
+            MeleeAttack();
         }
 
         private void AnimationEventHandler_OnAttackBackswing()
@@ -85,7 +57,7 @@ namespace Dota.Combat
             hasFinishedBackswing = true;
         }
 
-        public bool CanAttack(GameObject combatTarget)
+        public bool IsAttackable(GameObject combatTarget)
         {
             if (combatTarget == gameObject) return false;
             Health health = combatTarget.GetComponent<Health>();
@@ -103,6 +75,7 @@ namespace Dota.Combat
         public void StopAttack()
         {
             target = null;
+            hasFinishedBackswing = true;
             TriggerStopAttackAnimation();
         }
 
@@ -117,13 +90,10 @@ namespace Dota.Combat
             CmdDealDamageTo(target, attackDamage);
         }
 
-        void RangedAttack()
-        {
-            CmdSpawnProjectile(target, gameObject, attackDamage);
-        }
-
         private bool GetIsInRange()
         {
+            Debug.Log(transform.position);
+            Debug.Log(target.transform.position);
             return Vector3.Distance(transform.position, target.transform.position) < attackRange;
         }
 
@@ -132,7 +102,7 @@ namespace Dota.Combat
         {
             if (!hasAuthority) { return; }
 
-            timeSinceLastAttack += Time.deltaTime;
+            attackCooldownTimer -= Time.deltaTime;
 
             if (target == null) { return; }
 
@@ -148,12 +118,12 @@ namespace Dota.Combat
             }
             else
             {
-                if (timeSinceLastAttack > timeBetweenAttacks)
+                if (attackCooldownTimer <= 0 && hasFinishedBackswing)
                 {
+                    attackCooldownTimer = timeBetweenAttacks;
                     transform.LookAt(target.transform);
                     netAnimator.ResetTrigger("stopAttack");
                     netAnimator.SetTrigger("attack");
-                    timeSinceLastAttack = 0;
                     hasFinishedBackswing = false;
                 }
             }

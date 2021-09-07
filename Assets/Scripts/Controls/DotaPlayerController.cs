@@ -28,7 +28,7 @@ namespace Dota.Controls
                     GameObject go = hit.collider.gameObject;
                     if (go == gameObject) { return; }
 
-                    if (fighter.CanAttack(go))
+                    if (fighter.IsAttackable(go))
                     {
                         fighter.StartAttack(go);
                         return;

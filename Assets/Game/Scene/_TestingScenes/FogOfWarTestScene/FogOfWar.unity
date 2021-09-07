@@ -599,6 +599,7 @@ GameObject:
   - component: {fileID: 1389213372}
   - component: {fileID: 1389213376}
   - component: {fileID: 1389213377}
+  - component: {fileID: 1389213378}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -707,8 +708,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c8a7ae38ddf840449e372d769fdc574, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  temporaryMeshPrefab: {fileID: 0}
-  radius: 20
+  syncMode: 0
+  syncInterval: 0.1
+  viewRadius: 20
+  degreePerCast: 10
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
+  viewMeshFilter: {fileID: 0}
+--- !u!114 &1389213378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1389213371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 2647573448
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 
+  hasSpawned: 0
 --- !u!1 &1563971620
 GameObject:
   m_ObjectHideFlags: 0
