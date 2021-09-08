@@ -62,6 +62,7 @@ public class Minimap : MonoBehaviour
     {
         Minion minion = obj.GetComponent<Minion>();
         MinimapIcon minimapIconInstance = Instantiate(minimapMinionIconPrefab, minionIconLayer.transform).GetComponent<MinimapIcon>();
+        minimapIconInstance.SetVisible(false);
         minimapIconInstance.SetTeam(minion.GetTeam());
         minimapIconInstances.Add(obj.transform, minimapIconInstance);
     }

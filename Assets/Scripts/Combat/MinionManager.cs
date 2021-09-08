@@ -51,7 +51,7 @@ public class MinionManager : NetworkBehaviour
             spawnTimer -= Time.deltaTime;
             if (spawnTimer <= 0)
             {
-                //SpawnBlueMinion();
+                SpawnBlueMinion();
                 //SpawnRedMinion();
                 spawnTimer = spawnInterval;
             }

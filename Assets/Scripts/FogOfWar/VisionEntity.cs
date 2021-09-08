@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class VisionEntity : MonoBehaviour
 {
-    [SerializeField] SkinnedMeshRenderer meshRenderer;
+    [SerializeField] List<GameObject> renderers;
     bool isVisible;
 
     public void SetVisible(bool isVisible)
     {
         this.isVisible = isVisible;
-        meshRenderer.enabled = isVisible;
+        foreach(GameObject renderer in renderers)
+        {
+            renderer.SetActive(isVisible);
+        }
     }
 
     public bool GetVisible()

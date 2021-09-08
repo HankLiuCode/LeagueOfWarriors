@@ -39,7 +39,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa08996a36889d248b1049e6ee73d2b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 1950622381671680401}
+  renderers:
+  - {fileID: 1950622381674853023}
+  - {fileID: 1950622381674852947}
 --- !u!1001 &1950622381674662375
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -47,6 +49,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9165540034895490146}
     m_Modifications:
+    - target: {fileID: 195448, guid: 8a4a0878068573c4ca13bdeaeb706bb6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 195512, guid: 8a4a0878068573c4ca13bdeaeb706bb6, type: 3}
       propertyPath: m_Name
       value: Creep_Melee_Blue
@@ -121,9 +127,15 @@ Animator:
     type: 3}
   m_PrefabInstance: {fileID: 1950622381674662375}
   m_PrefabAsset: {fileID: 0}
---- !u!137 &1950622381671680401 stripped
-SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 13795446, guid: 8a4a0878068573c4ca13bdeaeb706bb6,
+--- !u!1 &1950622381674853023 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 195448, guid: 8a4a0878068573c4ca13bdeaeb706bb6,
+    type: 3}
+  m_PrefabInstance: {fileID: 1950622381674662375}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1950622381674852947 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 195508, guid: 8a4a0878068573c4ca13bdeaeb706bb6,
     type: 3}
   m_PrefabInstance: {fileID: 1950622381674662375}
   m_PrefabAsset: {fileID: 0}
