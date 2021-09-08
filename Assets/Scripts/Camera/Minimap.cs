@@ -15,14 +15,16 @@ public class Minimap : MonoBehaviour
     [SerializeField] private Vector2 zMinMax = new Vector2(-50, 50);
 
     [SerializeField] private RectTransform minimapRect = null;
+    [SerializeField] private RectTransform cameraRect = null;
 
     [SerializeField] private RectTransform minionIconLayer = null;
     [SerializeField] private RectTransform playerIconLayer = null;
 
     [SerializeField] private MinimapIcon minimapMinionIconPrefab = null;
     [SerializeField] private MinimapPlayerIcon minimapPlayerIconPrefab = null;
-    
 
+
+    private Vector2 defaultCameraRectSize = new Vector2(80, 45);
     private Dictionary<Transform, MinimapIcon> minimapIconInstances = new Dictionary<Transform, MinimapIcon>();
 
     private void Start()
@@ -64,11 +66,11 @@ public class Minimap : MonoBehaviour
         minimapIconInstances.Add(obj.transform, minimapIconInstance);
     }
 
-    private void UpdateIconPosition(Transform worldObject, Transform uiInstance)
+    private void UpdatePosition(Vector3 worldObjectPos, Transform uiInstance)
     {
         Vector2 normPos = new Vector2(
-            (worldObject.position.x - xMinMax.x) / (xMinMax.y - xMinMax.x),
-            (worldObject.position.z - zMinMax.x) / (zMinMax.y - zMinMax.x)
+            (worldObjectPos.x - xMinMax.x) / (xMinMax.y - xMinMax.x),
+            (worldObjectPos.z - zMinMax.x) / (zMinMax.y - zMinMax.x)
         );
 
         Vector2 minimapPos = new Vector2(
@@ -78,20 +80,30 @@ public class Minimap : MonoBehaviour
         uiInstance.localPosition = minimapPos;
     }
 
+    private void UpdatePosition(Transform worldObject, Transform uiInstance)
+    {
+        UpdatePosition(worldObject.position, uiInstance);
+    }
+
     private void Update()
     {
         foreach (VisionEntity enemy in visibilityChecker.GetEnemies())
         {
             minimapIconInstances[enemy.transform].SetVisible(enemy.GetVisible());
-            UpdateIconPosition(enemy.transform, minimapIconInstances[enemy.transform].transform);
+            UpdatePosition(enemy.transform, minimapIconInstances[enemy.transform].transform);
         }
 
         foreach (VisionEntity ally in visibilityChecker.GetAllies())
         {
             minimapIconInstances[ally.transform].SetVisible(true);
-            UpdateIconPosition(ally.transform, minimapIconInstances[ally.transform].transform);
+            UpdatePosition(ally.transform, minimapIconInstances[ally.transform].transform);
         }
 
+        UpdatePosition(cameraController.GetLookAtPoint(), cameraRect.transform);
+
+        float width = defaultCameraRectSize.x * (cameraController.GetViewDist() / CameraController.MAX_VIEW_DISTANCE);
+        float height = defaultCameraRectSize.y * (cameraController.GetViewDist() / CameraController.MAX_VIEW_DISTANCE);
+        cameraRect.sizeDelta = new Vector2(width, height);
 
         if (Input.GetMouseButton(0))
         {

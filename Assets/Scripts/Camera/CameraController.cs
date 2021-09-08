@@ -29,6 +29,16 @@ public class CameraController : MonoBehaviour
         return playerCam;
     }
 
+    public Vector3 GetLookAtPoint()
+    {
+        return lookAtPoint;
+    }
+
+    public float GetViewDist()
+    {
+        return viewDist;
+    }
+
     public Vector2 GetXMinMax()
     {
         return xMinMax;
