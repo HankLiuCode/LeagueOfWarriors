@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Dota.Core;
-using Mirror;
+using TMPro;
 
 
 namespace Dota.UI
@@ -12,19 +12,31 @@ namespace Dota.UI
     {
         // for debugging
         [SerializeField] Health health;
-        [SerializeField] Image healthFill;
+
+        [SerializeField] Image healthFill = null;
+        [SerializeField] TextMeshProUGUI healthText = null;
         
         public void SetHealth(Health health)
         {
+            if(this.health != null)
+            {
+                this.health.OnHealthModified -= Health_OnHealthModified;
+            }
+
             this.health = health;
+            this.health.OnHealthModified += Health_OnHealthModified;
+            UpdateHealth();
         }
 
-        private void Update()
+        private void Health_OnHealthModified()
         {
-            if (health != null)
-            {
-                healthFill.fillAmount = health.GetHealthPercent();
-            }
+            UpdateHealth();
+        }
+
+        private void UpdateHealth()
+        {
+            healthFill.fillAmount = health.GetHealthPercent();
+            healthText.text = $"{(int) health.GetHealthPoint()} / {(int) health.GetMaxHealth()}";
         }
     }
 

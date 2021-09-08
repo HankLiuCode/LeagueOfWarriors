@@ -12,10 +12,10 @@ public class AbilityUI : MonoBehaviour
     CooldownStore cooldownStore = null;
     float currentFillAmount = 0;
 
-    public void SetUp(DotaPlayerController dotaPlayerController)
+    public void SetUp(AbilityCaster abilityCaster)
     {
-        abilityCaster = dotaPlayerController.GetComponent<AbilityCaster>();
-        cooldownStore = dotaPlayerController.GetComponent<CooldownStore>();
+        this.abilityCaster = abilityCaster;
+        cooldownStore = abilityCaster.GetComponent<CooldownStore>();
     }
 
     private void Update()

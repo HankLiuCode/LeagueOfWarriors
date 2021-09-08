@@ -24,7 +24,7 @@ public class AreaAbility : Ability
     [SerializeField] ActionLocker actionLocker = null;
 
     [SerializeField] float maxRange = 2f;
-    [SerializeField] float damage = 50f;
+    [SerializeField] float baseDamage = 10f;
 
     [SerializeField] float damageRadius = 1f;
     [SerializeField] float delayTime = 1f;
@@ -52,6 +52,7 @@ public class AreaAbility : Ability
             Health health = go.GetComponent<Health>();
             if (health)
             {
+                float damage = baseDamage + stats.GetDamage();
                 health.ServerTakeDamage(damage);
             }
         }

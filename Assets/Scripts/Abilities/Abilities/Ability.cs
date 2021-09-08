@@ -17,6 +17,9 @@ public abstract class Ability : NetworkBehaviour, IAction
     float cooldownTime = 2f;
 
     [SerializeField] 
+    protected Stats stats = null;
+
+    [SerializeField] 
     private bool smartCast;
 
     public bool SmartCast { get { return smartCast; } set { smartCast = value; } }

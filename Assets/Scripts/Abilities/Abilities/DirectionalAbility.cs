@@ -53,7 +53,6 @@ public class DirectionalAbility : Ability
         NetworkServer.Spawn(effectInstance, connectionToClient);
 
         yield return new WaitForSeconds(destroyTime);
-
         
         // TODO: Deal Damage to health in rect
 

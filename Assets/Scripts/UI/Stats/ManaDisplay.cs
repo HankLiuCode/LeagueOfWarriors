@@ -2,22 +2,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class ManaDisplay : MonoBehaviour
 {
     [SerializeField] Mana mana;
     [SerializeField] Image manaFill;
+    [SerializeField] TextMeshProUGUI manaText = null;
 
     public void SetMana(Mana mana)
     {
-        this.mana = mana;
+        if(this.mana != null)
+        {
+            this.mana.OnManaModified -= Mana_OnManaModified;
+        }
+
+        if (mana != null) 
+        {
+            this.mana = mana;
+            this.mana.OnManaModified += Mana_OnManaModified;
+            UpdateMana();
+        }
+        else
+        {
+            manaText.text = "0/0";
+            manaFill.fillAmount = 0;
+        }
     }
 
-    private void Update()
+    private void Mana_OnManaModified()
     {
-        if (mana != null)
-        {
-            manaFill.fillAmount = mana.GetManaPercent();
-        }
+        UpdateMana();
+    }
+
+    private void UpdateMana()
+    {
+        manaFill.fillAmount = mana.GetManaPercent();
+        manaText.text = $"{(int) mana.GetManaPoint() } / {(int) mana.GetMaxMana()}";
     }
 }

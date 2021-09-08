@@ -1,6 +1,7 @@
 ﻿using Dota.Core;
 using Mirror;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Dota.Movement
 {
@@ -10,27 +11,14 @@ namespace Dota.Movement
 
         [SerializeField] Animator animator = null;
         [SerializeField] Health health = null;
-        [SerializeField] PathFollower pathFollower = null;
+        [SerializeField] NavMeshAgent agent = null;
         [SerializeField] ActionLocker actionScheduler = null;
-        [SerializeField] float maxSpeed = 5;
-
+        [SerializeField] Stats stats = null;
 
         #region Client
         public override void OnStartAuthority()
         {
-            pathFollower.SetSpeed(maxSpeed);
-        }
-
-        [Client]
-        public void SetSpeed(float speed)
-        {
-            pathFollower.SetSpeed(speed);
-        }
-
-        [Client]
-        public void SetStopRange(float stopRange)
-        {
-            pathFollower.SetStopRange(stopRange);
+            agent.speed = stats.GetMovementSpeed();
         }
 
         [Client]
@@ -39,15 +27,16 @@ namespace Dota.Movement
             bool canMove = actionScheduler.TryGetLock(this);
             if (canMove)
             {
-                pathFollower.isStopped = false;
-                pathFollower.SetDestination(position);
+                agent.speed = stats.GetMovementSpeed();
+                agent.isStopped = false;
+                agent.SetDestination(position);
             }
         }
 
         [Client]
         public void End()
         {
-            pathFollower.isStopped = true;
+            agent.isStopped = true;
         }
 
         [Client]
@@ -61,20 +50,22 @@ namespace Dota.Movement
             return MOVE_ACTION_PRIORITY;
         }
 
-        [ClientCallback]
         private void Update()
         {
-            if (!hasAuthority) { return; }
+            agent.enabled = !health.IsDead();
 
-            pathFollower.SetEnabled(!health.IsDead());
+            if (isClient)
+            {
+                if (!hasAuthority) { return; }
 
-            Vector3 velocity = pathFollower.velocity;
+                Vector3 velocity = agent.velocity;
 
-            Vector3 localVelocity = transform.InverseTransformDirection(velocity);
-            
-            float forwardSpeed = localVelocity.normalized.z;
+                Vector3 localVelocity = transform.InverseTransformDirection(velocity);
 
-            animator.SetBool("running", forwardSpeed > 0.1);
+                float forwardSpeed = localVelocity.normalized.z;
+
+                animator.SetBool("running", forwardSpeed > 0.1);
+            }
         }
         #endregion
     }

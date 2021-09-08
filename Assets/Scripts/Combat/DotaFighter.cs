@@ -9,16 +9,21 @@ namespace Dota.Combat
 {
     public class DotaFighter : NetworkBehaviour
     {
-        Health target;
-        [SerializeField] float attackCooldownTimer;
+        public const float MOVE_EPSILON = 0.1f;
 
+        Health target;
+
+        [SerializeField] float attackCooldownTimer;
         [SerializeField] float attackRange = 2f;
-        [SerializeField] float timeBetweenAttacks = 1f;
-        [SerializeField] float attackDamage = 20f;
+
+        // this cannot be lower than 1f or animation will be strange
+        [SerializeField] 
+        float timeBetweenAttacks = 1f;
 
         [SerializeField] NetworkAnimator netAnimator = null;
         [SerializeField] AnimationEventHandler animationEventHandler = null;
         [SerializeField] DotaMover mover = null;
+        [SerializeField] Stats stats = null;
 
         [SerializeField] bool hasFinishedBackswing = true;
 
@@ -74,9 +79,12 @@ namespace Dota.Combat
 
         public void StopAttack()
         {
-            target = null;
-            hasFinishedBackswing = true;
-            TriggerStopAttackAnimation();
+            if(target != null)
+            {
+                target = null;
+                hasFinishedBackswing = true;
+                TriggerStopAttackAnimation();
+            }
         }
 
         private void TriggerStopAttackAnimation()
@@ -87,13 +95,11 @@ namespace Dota.Combat
 
         void MeleeAttack()
         {
-            CmdDealDamageTo(target, attackDamage);
+            CmdDealDamageTo(target, stats.GetDamage());
         }
 
         private bool GetIsInRange()
         {
-            Debug.Log(transform.position);
-            Debug.Log(target.transform.position);
             return Vector3.Distance(transform.position, target.transform.position) < attackRange;
         }
 
@@ -113,12 +119,12 @@ namespace Dota.Combat
                 if (hasFinishedBackswing)
                 {
                     Vector3 targetDir = (target.transform.position - transform.position).normalized;
-                    mover.MoveTo(target.transform.position - targetDir);
+                    mover.MoveTo(target.transform.position - targetDir * (attackRange - MOVE_EPSILON));
                 }
             }
             else
             {
-                if (attackCooldownTimer <= 0 && hasFinishedBackswing)
+                if (attackCooldownTimer <= 0)
                 {
                     attackCooldownTimer = timeBetweenAttacks;
                     transform.LookAt(target.transform);

@@ -2,25 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using Dota.Core;
 
 public class Mana : NetworkBehaviour
 {
-    [SyncVar]
-    float manaPoint = 100f;
+    [SerializeField]
+    [SyncVar(hook = nameof(OnManaChanged))]
+    float manaPoint;
 
-    [SyncVar]
-    float maxManaPoint = 100f;
+    [SerializeField] Stats stats = null;
 
-    [SyncVar]
-    float regenRate = 1f;
+    public event System.Action OnManaModified;
 
 
     #region Both
-    public float GetMaxMana()
-    {
-        return maxManaPoint;
-    }
-
     public float GetMana()
     {
         return manaPoint;
@@ -28,26 +23,31 @@ public class Mana : NetworkBehaviour
 
     public float GetManaPercent()
     {
-        return manaPoint / GetMaxMana();
+        return manaPoint / stats.GetMaxMana();
     }
 
-    public float GetRegenRate()
+    public float GetManaPoint()
     {
-        return regenRate;
+        return manaPoint;
     }
+
+    public float GetMaxMana()
+    {
+        return stats.GetMaxMana();
+    }
+
     #endregion
-
-
+    
     #region Server
     [ServerCallback]
     private void Update()
     {
-        if (manaPoint < GetMaxMana())
+        if (manaPoint < stats.GetMaxMana())
         {
-            manaPoint += GetRegenRate() * Time.deltaTime;
-            if (manaPoint > GetMaxMana())
+            manaPoint += stats.GetManaRegenRate() * Time.deltaTime;
+            if (manaPoint > stats.GetMaxMana())
             {
-                manaPoint = GetMaxMana();
+                manaPoint = stats.GetMaxMana();
             }
         }
     }
@@ -73,6 +73,11 @@ public class Mana : NetworkBehaviour
 
     #region Client
 
+    public override void OnStartClient()
+    {
+        manaPoint = stats.GetMaxMana();
+    } 
+
     [Client]
     public bool IsManaEnough(float manaToUse)
     {
@@ -87,6 +92,11 @@ public class Mana : NetworkBehaviour
     public void ClientUseMana(float manaToUse)
     {
         CmdUseMana(manaToUse);
+    }
+
+    private void OnManaChanged(float oldValue, float newValue)
+    {
+        OnManaModified?.Invoke();
     }
     #endregion
 }
