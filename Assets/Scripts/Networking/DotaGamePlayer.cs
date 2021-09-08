@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Dota.Networking
 {
-    public class DotaGamePlayer : NetworkBehaviour
+    public class DotaGamePlayer : NetworkBehaviour, ITeamMember
     {
 
         // Change to RPC Later
@@ -15,6 +15,7 @@ namespace Dota.Networking
         Team team;
 
         [SerializeField] 
+        [SyncVar]
         string playerName;
 
         [SerializeField]
@@ -26,13 +27,13 @@ namespace Dota.Networking
         #region Server
 
         [Server]
-        public void ServerSetPlayerName(string playerName)
+        public void SetPlayerName(string playerName)
         {
             this.playerName = playerName;
         }
 
         [Server]
-        public void ServerSetTeam(Team team)
+        public void SetTeam(Team team)
         {
             this.team = team;
             gameObject.tag = team.ToString();

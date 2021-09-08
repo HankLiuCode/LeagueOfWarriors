@@ -118,8 +118,8 @@ public class DotaNetworkRoomManager : NetworkRoomManager
         DotaRoomPlayer dotaRoomPlayer = roomPlayer.GetComponent<DotaRoomPlayer>();
         DotaGamePlayer dotaGamePlayer = gamePlayer.GetComponent<DotaGamePlayer>();
 
-        dotaGamePlayer.ServerSetPlayerName(dotaRoomPlayer.GetPlayerName());
-        dotaGamePlayer.ServerSetTeam(dotaRoomPlayer.GetTeam());
+        dotaGamePlayer.SetPlayerName(dotaRoomPlayer.GetPlayerName());
+        dotaGamePlayer.SetTeam(dotaRoomPlayer.GetTeam());
 
         serverDotaGamePlayers.Add(dotaGamePlayer);
 

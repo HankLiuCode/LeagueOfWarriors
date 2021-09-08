@@ -18,6 +18,7 @@ public class AbilityCaster : NetworkBehaviour
     [SerializeField] Health health = null;
     [SerializeField] Mana mana = null;
     [SerializeField] CooldownStore cooldownStore = null;
+    [SerializeField] ActionLocker actionLocker = null;
     [SerializeField] Ability[] abilities = new Ability[4];
     [SerializeField] LayerMask groundMask = new LayerMask();
 
@@ -125,9 +126,13 @@ public class AbilityCaster : NetworkBehaviour
 
     private void CastAbility(Ability ability)
     {
-        mana.ClientUseMana(ability.GetManaCost());
-        ability.Cast(abilityData);
-        cooldownStore.ClientStartCooldown(ability, ability.GetCooldownTime());
+        bool canCast = actionLocker.TryGetLock(ability);
+        if (canCast)
+        {
+            mana.ClientUseMana(ability.GetManaCost());
+            ability.Cast(abilityData);
+            cooldownStore.ClientStartCooldown(ability, ability.GetCooldownTime());
+        }
     }
 
     public Ability GetAbility(int index)

@@ -86,6 +86,7 @@ MonoBehaviour:
   health: {fileID: 1187138297185360588}
   mana: {fileID: 228051818702057190}
   cooldownStore: {fileID: 4583548578950598173}
+  actionLocker: {fileID: 2654738810189758476}
   abilities:
   - {fileID: 538770581797919719}
   - {fileID: -4533690763673579477}
@@ -110,7 +111,7 @@ MonoBehaviour:
   syncInterval: 0.1
   manaCost: 5
   cooldownTime: 5
-  stats: {fileID: 0}
+  stats: {fileID: 9134965200569341792}
   smartCast: 0
   indicatorPrefab: {fileID: 7509079907997610509, guid: f7e58577928620441a8e147c3a9eaf13,
     type: 3}
@@ -175,7 +176,7 @@ MonoBehaviour:
   actionLocker: {fileID: 2654738810189758476}
   damage: 50
   length: 5
-  width: 5
+  width: 1
   delayTime: 0.3
   destroyTime: 0.8
 --- !u!114 &4583548578950598173

@@ -1,5 +1,6 @@
 ﻿using Dota.Core;
 using Dota.Movement;
+using Dota.Utils;
 using Mirror;
 using System.Collections;
 using System.Collections.Generic;
@@ -65,8 +66,13 @@ namespace Dota.Combat
         public bool IsAttackable(GameObject combatTarget)
         {
             if (combatTarget == gameObject) return false;
+
+            if(TeamChecker.IsSameTeam(gameObject, combatTarget)) { return false; }
+
             Health health = combatTarget.GetComponent<Health>();
+
             if (health == null) return false;
+
             return true;
         }
 

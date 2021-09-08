@@ -20,7 +20,8 @@ public class AbilityUI : MonoBehaviour
 
     private void Update()
     {
-        float targetFillAmount = cooldownStore.GetFractionRemaining(abilityCaster.GetAbility(index));
+        Ability ability = abilityCaster.GetAbility(index);
+        float targetFillAmount = cooldownStore.GetFractionRemaining(ability);
         currentFillAmount = targetFillAmount;
         cdOverlay.fillAmount = Mathf.MoveTowards(currentFillAmount, targetFillAmount, 0.1f);
     }

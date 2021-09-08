@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Minion : NetworkBehaviour
+public class Minion : NetworkBehaviour, ITeamMember
 {
     [SerializeField] 
     [SyncVar]

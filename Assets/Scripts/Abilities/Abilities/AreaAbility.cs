@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Dota.Controls;
 using Dota.Core;
-
+using Dota.Utils;
 
 public class AreaAbility : Ability
 {
@@ -50,7 +50,7 @@ public class AreaAbility : Ability
         {
             GameObject go = c.gameObject;
             Health health = go.GetComponent<Health>();
-            if (health)
+            if (health && !TeamChecker.IsSameTeam(gameObject, health.gameObject))
             {
                 float damage = baseDamage + stats.GetDamage();
                 health.ServerTakeDamage(damage);
