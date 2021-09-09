@@ -49,7 +49,7 @@ MonoBehaviour:
   zMinMax: {x: -40, y: 50}
   screenBorderThickness: 30
   speed: 15
-  viewAngle: 65
+  viewAngle: 60
   fov: 40
   viewDist: 20
 --- !u!1 &4529496318378339247
@@ -78,7 +78,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4529496318378339247}
   m_LocalRotation: {x: 0.53729963, y: -0, z: -0, w: 0.8433914}
-  m_LocalPosition: {x: 0, y: 18.126156, z: -8.452366}
+  m_LocalPosition: {x: 0, y: 20, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4529496317603667577}

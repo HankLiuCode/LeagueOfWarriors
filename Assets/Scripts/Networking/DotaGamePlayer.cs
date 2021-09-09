@@ -8,8 +8,6 @@ namespace Dota.Networking
 {
     public class DotaGamePlayer : NetworkBehaviour, ITeamMember
     {
-
-        // Change to RPC Later
         [SerializeField] 
         [SyncVar]
         Team team;
@@ -40,7 +38,6 @@ namespace Dota.Networking
         }
 
         #endregion
-
         public Team GetTeam()
         {
             return team;

@@ -21,6 +21,7 @@ public class StatsDisplay : MonoBehaviour
             this.stats.OnStatsModified -= Stats_OnStatsModified;
         }
         this.stats.OnStatsModified += Stats_OnStatsModified;
+
         UpdateStats();
     }
 
@@ -31,9 +32,10 @@ public class StatsDisplay : MonoBehaviour
 
     private void UpdateStats()
     {
-        speed.SetRow("speed:", this.stats.GetMovementSpeed());
-        damage.SetRow("damage:", this.stats.GetDamage());
-        maxHealth.SetRow("maxhp:", this.stats.GetMaxHealth());
-        maxMana.SetRow("maxmp", this.stats.GetMaxMana()); 
+        Debug.Log("UpdateStats");
+        speed.SetRow("speed", this.stats.GetMovementSpeed());
+        damage.SetRow("damage", this.stats.GetDamage());
+        maxHealth.SetRow("maxHealth", this.stats.GetMaxHealth());
+        maxMana.SetRow("maxMana", this.stats.GetMaxMana()); 
     }
 }
