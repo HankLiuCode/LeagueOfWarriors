@@ -9,6 +9,7 @@ using Dota.Core;
 public class MidHUDSetup : MonoBehaviour
 {
     [SerializeField] PlayerManager playerManager = null;
+    [SerializeField] IconDisplay iconDisplay = null;
     [SerializeField] HealthDisplay healthDisplay = null;
     [SerializeField] ManaDisplay manaDisplay = null;
     [SerializeField] GameObject abilitiesContainer = null;
@@ -23,6 +24,8 @@ public class MidHUDSetup : MonoBehaviour
         Champion champion = playerManager.GetLocalChampion();
         Health health = champion.GetComponent<Health>();
         Mana mana = champion.GetComponent<Mana>();
+
+        iconDisplay.SetIcon(champion.GetIcon());
         healthDisplay.SetHealth(health);
         manaDisplay.SetMana(mana);
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class Champion : NetworkBehaviour, ITeamMember
+public class Champion : NetworkBehaviour, ITeamMember, IIconOwner
 {
     [SyncVar]
     [SerializeField] 

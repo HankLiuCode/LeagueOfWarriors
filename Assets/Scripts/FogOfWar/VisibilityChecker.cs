@@ -38,7 +38,7 @@ public class VisibilityChecker : MonoBehaviour
         Champion localPlayer = playerManager.GetLocalChampion();
         localPlayerTeam = localPlayer.GetTeam();
 
-        SyncList<Champion> players = playerManager.GetPlayers();
+        SyncList<Champion> players = playerManager.GetChampions();
 
         foreach(Champion player in players)
         {

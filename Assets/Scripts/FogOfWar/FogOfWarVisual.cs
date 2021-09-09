@@ -23,7 +23,7 @@ public class FogOfWarVisual : MonoBehaviour
 
         this.localPlayerTeam = localPlayerTeam;
 
-        SyncList<Champion> players = playerManager.GetPlayers();
+        SyncList<Champion> players = playerManager.GetChampions();
 
         foreach (Champion player in players)
         {

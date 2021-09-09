@@ -63,7 +63,17 @@ public class DotaNetworkRoomManager : NetworkRoomManager
     /// This is called on the server when a client disconnects.
     /// </summary>
     /// <param name="conn">The connection that disconnected.</param>
-    public override void OnRoomServerDisconnect(NetworkConnection conn) { }
+    public override void OnRoomServerDisconnect(NetworkConnection conn) 
+    {
+        Champion[] champions = FindObjectsOfType<Champion>();
+        foreach(Champion champion in champions)
+        {
+            if(champion.connectionToClient == conn)
+            {
+                champion.GetComponent<NetworkIdentity>().RemoveClientAuthority();
+            }
+        }
+    }
 
     /// <summary>
     /// This is called on the server when a networked scene finishes loading.
@@ -136,21 +146,6 @@ public class DotaNetworkRoomManager : NetworkRoomManager
         return serverDotaGamePlayers;
     }
 
-    public List<DotaGamePlayer> ClientGetDotaGamePlayers()
-    {
-        return clientDotaGamePlayers;
-    }
-
-    public List<DotaGamePlayer> ClientGetBlueTeamGamePlayers()
-    {
-        return blueTeamGamePlayers;
-    }
-
-    public List<DotaGamePlayer> ClientGetRedTeamGamePlayers()
-    {
-        return redTeamGamePlayers;
-    }
-
     public List<DotaRoomPlayer> GetDotaRoomPlayers()
     {
         List<DotaRoomPlayer> roomPlayers = new List<DotaRoomPlayer>();
@@ -159,30 +154,6 @@ public class DotaNetworkRoomManager : NetworkRoomManager
             roomPlayers.Add((DotaRoomPlayer)networkRoomPlayer);
         }
         return roomPlayers;
-    }
-
-    public DotaRoomPlayer GetLocalRoomPlayer()
-    {
-        foreach (NetworkRoomPlayer networkRoomPlayer in roomSlots)
-        {
-            if (networkRoomPlayer.isLocalPlayer)
-            {
-                return (DotaRoomPlayer) networkRoomPlayer;
-            }
-        }
-        return null;
-    }
-    
-    public DotaGamePlayer GetLocalGamePlayer()
-    {
-        foreach(DotaGamePlayer dotaGamePlayer in clientDotaGamePlayers)
-        {
-            if (dotaGamePlayer.isLocalPlayer)
-            {
-                return dotaGamePlayer;
-            }
-        }
-        return null;
     }
 
     /// <summary>

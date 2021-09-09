@@ -19,9 +19,6 @@ namespace Dota.Networking
         [SerializeField]
         Sprite playerSprite;
 
-        public static event Action<DotaGamePlayer> OnDotaGamePlayerStart;
-        public static event Action<DotaGamePlayer> OnDotaGamePlayerStop;
-
         #region Server
 
         [Server]
@@ -49,14 +46,9 @@ namespace Dota.Networking
 
         #region Client
 
-        public override void OnStartClient()
-        {
-            OnDotaGamePlayerStart?.Invoke(this);
-        }
-
         public override void OnStopClient()
         {
-            OnDotaGamePlayerStop?.Invoke(this);
+            
         }
         #endregion
     }

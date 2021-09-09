@@ -9,22 +9,14 @@ public class PlayerManager : NetworkBehaviour
     [SerializeField] GameObject championPrefab;
     [SerializeField] List<Champion> debugPlayers = new List<Champion>();
     SyncList<Champion> players = new SyncList<Champion>();
-
-    public event System.Action OnServerAllChampionSpawned;
     public event System.Action OnLocalChampionReady;
-
 
     private void Awake()
     {
         ((DotaNetworkRoomManager)NetworkRoomManager.singleton).OnAllGamePlayersAdded += PlayerManager_OnAllGamePlayersAdded;
     }
-    private void Start()
-    {
-        players.Callback += Players_Callback;
-    }
 
     #region Server
-
     [Server]
     public void SpawnChampion(DotaGamePlayer dotaGamePlayer)
     {
@@ -43,8 +35,6 @@ public class PlayerManager : NetworkBehaviour
         yield return new WaitUntil(() => dotaGamePlayer.connectionToClient != null);
 
         NetworkServer.Spawn(championInstance, dotaGamePlayer.connectionToClient);
-
-        //Debug.Log(dotaGamePlayer.connectionToClient == null ? "ConnectionToClient is Null" : "Not Null");
 
         players.Add(championInstance.GetComponent<Champion>());
 
@@ -80,7 +70,6 @@ public class PlayerManager : NetworkBehaviour
     [ClientRpc]
     private void RpcNotifyServerSpawnedAllChampion()
     {
-        Debug.Log("RpcNotifyServerConnectionReady");
         StartCoroutine(InvokeWhenChampionListSynced());
     }
 
@@ -107,43 +96,11 @@ public class PlayerManager : NetworkBehaviour
         return null;
     }
 
-    public SyncList<Champion> GetPlayers()
+    public SyncList<Champion> GetChampions()
     {
         return players;
     }
-    #endregion
 
-    private void Players_Callback(SyncList<Champion>.Operation op, int itemIndex, Champion oldItem, Champion newItem)
-    {
-        switch (op)
-        {
-            case SyncList<Champion>.Operation.OP_ADD:
-                // index is where it got added in the list
-                // newItem is the new item
-                break;
-
-            case SyncList<Champion>.Operation.OP_CLEAR:
-                // list got cleared
-                break;
-
-            case SyncList<Champion>.Operation.OP_INSERT:
-                // index is where it got added in the list
-                // newItem is the new item
-                break;
-
-            case SyncList<Champion>.Operation.OP_REMOVEAT:
-                // index is where it got removed in the list
-                // oldItem is the item that was removed
-                break;
-
-            case SyncList<Champion>.Operation.OP_SET:
-                // index is the index of the item that was updated
-                // oldItem is the previous value for the item at the index
-                // newItem is the new value for the item at the index
-                break;
-        }
-        SyncDebugList();
-    }
 
     [Client]
     private void SyncDebugList()
@@ -154,4 +111,6 @@ public class PlayerManager : NetworkBehaviour
             debugPlayers.Add(champion);
         }
     }
+    #endregion
+
 }

@@ -7,15 +7,18 @@ using UnityEngine;
 
 public class InfoDisplay : MonoBehaviour
 {
+    [SerializeField] IconDisplay iconDisplay = null;
     [SerializeField] HealthDisplay healthDisplay = null;
     [SerializeField] ManaDisplay manaDisplay = null;
     [SerializeField] StatsDisplay statsDisplay = null;
 
     public void SetInfo(Stats stats)
     {
+        IIconOwner iconOwner = stats.GetComponent<IIconOwner>();
         Health health = stats.GetComponent<Health>();
         Mana mana = stats.GetComponent<Mana>();
 
+        iconDisplay.SetIcon(iconOwner.GetIcon());
         healthDisplay.SetHealth(health);
         manaDisplay.SetMana(mana);
         statsDisplay.SetStats(stats);

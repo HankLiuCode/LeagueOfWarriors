@@ -27,6 +27,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   team: 0
+  icon: {fileID: 21300000, guid: b7e1fe03b9dc30b48bf7f004c5c12cca, type: 3}
 --- !u!114 &1636235118245536626
 MonoBehaviour:
   m_ObjectHideFlags: 0
