@@ -123,7 +123,17 @@ public class DotaNetworkRoomManager : NetworkRoomManager
 
         serverDotaGamePlayers.Add(dotaGamePlayer);
 
+        if (serverDotaGamePlayers.Count == roomSlots.Count)
+        {
+            OnAllGamePlayersAdded?.Invoke();
+        }
+
         return base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
+    }
+
+    public List<DotaGamePlayer> ServerGetDotaPlayers()
+    {
+        return serverDotaGamePlayers;
     }
 
     public List<DotaGamePlayer> ClientGetDotaGamePlayers()
@@ -173,35 +183,6 @@ public class DotaNetworkRoomManager : NetworkRoomManager
             }
         }
         return null;
-    }
-
-    public void ClientAddDotaGamePlayer(DotaGamePlayer dotaGamePlayer)
-    {
-        clientDotaGamePlayers.Add(dotaGamePlayer);
-
-        switch (dotaGamePlayer.GetTeam())
-        {
-            case Team.Red:
-                redTeamGamePlayers.Add(dotaGamePlayer);
-                break;
-
-            case Team.Blue:
-                blueTeamGamePlayers.Add(dotaGamePlayer);
-                break;
-
-            default:
-                throw new Exception("Team doesn't exist");
-        }
-
-        if (clientDotaGamePlayers.Count == roomSlots.Count)
-        {
-            OnAllGamePlayersAdded?.Invoke();
-        }
-    }
-
-    public void ClientRemoveDotaGamePlayer(DotaGamePlayer dotaGamePlayer)
-    {
-        clientDotaGamePlayers.Remove(dotaGamePlayer);
     }
 
     /// <summary>

@@ -30,7 +30,6 @@ public class InfoDisplay : MonoBehaviour
             {
                 GameObject go = hit.collider.gameObject;
                 Stats stats = go.GetComponent<Stats>();
-                Debug.Log(stats);
 
                 if (stats != null)
                 {

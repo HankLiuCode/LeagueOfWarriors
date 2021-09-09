@@ -284,6 +284,29 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8468138675378180723, guid: 2e056d4bd44f3fe4b8fe2a3b4129dfb1,
+        type: 3}
+      propertyPath: spawnPrefabs.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8468138675378180723, guid: 2e056d4bd44f3fe4b8fe2a3b4129dfb1,
+        type: 3}
+      propertyPath: spawnPrefabs.Array.data[4]
+      value: 
+      objectReference: {fileID: 452546937840963528, guid: 3dbc6cd5f5aa16d48baca7aa12e1cef9,
+        type: 3}
+    - target: {fileID: 8468138675378180723, guid: 2e056d4bd44f3fe4b8fe2a3b4129dfb1,
+        type: 3}
+      propertyPath: spawnPrefabs.Array.data[5]
+      value: 
+      objectReference: {fileID: 9165540034895490147, guid: e0b13fbed652d5e4599cd9be41701618,
+        type: 3}
+    - target: {fileID: 8468138675378180723, guid: 2e056d4bd44f3fe4b8fe2a3b4129dfb1,
+        type: 3}
+      propertyPath: spawnPrefabs.Array.data[6]
+      value: 
+      objectReference: {fileID: 4635110153950472394, guid: dd86cf3e2df7c7147b80f7c63d8630ef,
+        type: 3}
     - target: {fileID: 8468138675378180725, guid: 2e056d4bd44f3fe4b8fe2a3b4129dfb1,
         type: 3}
       propertyPath: m_RootOrder

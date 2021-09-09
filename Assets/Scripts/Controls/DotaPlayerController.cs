@@ -17,7 +17,10 @@ namespace Dota.Controls
         [ClientCallback]
         private void Update()
         {
-            if (!hasAuthority) { return; }
+            if (!hasAuthority) 
+            {
+                return; 
+            }
 
             if (health.IsDead()) { return; }
 
@@ -40,7 +43,6 @@ namespace Dota.Controls
                     }
                 }
             }
-
         }
     }
 

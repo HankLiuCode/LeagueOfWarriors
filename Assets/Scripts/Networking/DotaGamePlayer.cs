@@ -34,7 +34,6 @@ namespace Dota.Networking
         public void SetTeam(Team team)
         {
             this.team = team;
-            gameObject.tag = team.ToString();
         }
 
         #endregion
@@ -52,13 +51,11 @@ namespace Dota.Networking
 
         public override void OnStartClient()
         {
-            ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientAddDotaGamePlayer(this);
             OnDotaGamePlayerStart?.Invoke(this);
         }
 
         public override void OnStopClient()
         {
-            ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientRemoveDotaGamePlayer(this);
             OnDotaGamePlayerStop?.Invoke(this);
         }
         #endregion

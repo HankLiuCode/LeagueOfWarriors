@@ -11,6 +11,7 @@ public class VisibilityChecker : MonoBehaviour
     [SerializeField] float checkRadius = 10f;
     
     [SerializeField] MinionManager minionManager = null;
+    [SerializeField] PlayerManager playerManager = null;
 
     [SerializeField] List<VisionEntity> allies = new List<VisionEntity>();
     [SerializeField] List<VisionEntity> enemies = new List<VisionEntity>();
@@ -24,14 +25,33 @@ public class VisibilityChecker : MonoBehaviour
 
     private void Awake()
     {
-        ((DotaNetworkRoomManager)NetworkRoomManager.singleton).OnAllGamePlayersAdded += VisibilityChecker_OnAllPlayersAdded;
+        playerManager.OnLocalChampionReady += PlayerManager_OnLocalChampionReady;
 
         minionManager.OnRedMinionAdded += MinionManager_OnRedMinionAdded;
         minionManager.OnRedMinionRemoved += MinionManager_OnRedMinionRemoved;
         minionManager.OnBlueMinionAdded += MinionManager_OnBlueMinionAdded;
         minionManager.OnBlueMinionRemoved += MinionManager_OnBlueMinionRemoved;
+    }
 
-        DotaGamePlayer.OnDotaGamePlayerStop += DotaGamePlayer_OnDotaGamePlayerStop;
+    private void PlayerManager_OnLocalChampionReady()
+    {
+        Champion localPlayer = playerManager.GetLocalChampion();
+        localPlayerTeam = localPlayer.GetTeam();
+
+        SyncList<Champion> players = playerManager.GetPlayers();
+
+        foreach(Champion player in players)
+        {
+            if(player.GetTeam() == localPlayerTeam)
+            {
+                allies.Add(player.GetComponent<VisionEntity>());
+            }
+            else
+            {
+                enemies.Add(player.GetComponent<VisionEntity>());
+            }
+        }
+        OnAllPlayersAdded?.Invoke();
     }
 
     private void MinionManager_OnBlueMinionRemoved(NetworkIdentity obj)
@@ -94,11 +114,6 @@ public class VisibilityChecker : MonoBehaviour
         OnVisionEntityRemoved?.Invoke(obj.GetComponent<VisionEntity>());
     }
 
-    private void DotaGamePlayer_OnDotaGamePlayerStop(DotaGamePlayer dotaGamePlayer)
-    {
-        // Remove DotaPlayer From allies ?
-    }
-
     public List<VisionEntity> GetEnemies()
     {
         return enemies;
@@ -107,41 +122,6 @@ public class VisibilityChecker : MonoBehaviour
     public List<VisionEntity> GetAllies()
     {
         return allies;
-    }
-
-    private void VisibilityChecker_OnAllPlayersAdded()
-    {
-        localPlayerTeam = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).GetLocalGamePlayer().GetTeam();
-
-        List<DotaGamePlayer> blueTeamPlayers = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientGetBlueTeamGamePlayers();
-        List<DotaGamePlayer> redTeamPlayers = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientGetRedTeamGamePlayers();
-
-        switch (localPlayerTeam)
-        {
-            case Team.Red:
-                foreach (DotaGamePlayer redPlayer in redTeamPlayers)
-                {
-                    allies.Add(redPlayer.GetComponent<VisionEntity>());
-                }
-                foreach (DotaGamePlayer bluePlayer in blueTeamPlayers)
-                {
-                    enemies.Add(bluePlayer.GetComponent<VisionEntity>());
-                }
-                break;
-
-            case Team.Blue:
-                foreach (DotaGamePlayer bluePlayer in blueTeamPlayers)
-                {
-                    allies.Add(bluePlayer.GetComponent<VisionEntity>());
-                }
-                foreach (DotaGamePlayer redPlayer in redTeamPlayers)
-                {
-                    enemies.Add(redPlayer.GetComponent<VisionEntity>());
-                }
-                break;
-        }
-
-        OnAllPlayersAdded?.Invoke();
     }
 
     private void Update()

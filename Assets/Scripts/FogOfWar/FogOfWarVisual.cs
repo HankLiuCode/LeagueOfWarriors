@@ -8,37 +8,28 @@ public class FogOfWarVisual : MonoBehaviour
 {
     [SerializeField] GameObject FOVGraphicsPrefab = null;
     [SerializeField] MinionManager minionManager = null;
+    [SerializeField] PlayerManager playerManager = null;
     [SerializeField] Team localPlayerTeam;
     [SerializeField] List<FOVGraphics> fovGraphicsList = new List<FOVGraphics>();
 
-    private void Start()
+    private void Awake()
     {
-        ((DotaNetworkRoomManager)NetworkRoomManager.singleton).OnAllGamePlayersAdded += FogOfWarVisual_OnAllGamePlayersAdded;
+        playerManager.OnLocalChampionReady += PlayerManager_OnLocalPlayerConnectionReady;
     }
 
-    private void OnSelfMinionAdded(NetworkIdentity obj)
+    private void PlayerManager_OnLocalPlayerConnectionReady()
     {
-        AttachViewMesh(obj.gameObject);
-    }
-
-    private void OnSelfMinionRemoved(NetworkIdentity obj)
-    {
-        RemoveViewMesh(obj.gameObject);
-    }
-
-    private void FogOfWarVisual_OnAllGamePlayersAdded()
-    {
-        Team localPlayerTeam = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).GetLocalGamePlayer().GetTeam();
+        Team localPlayerTeam = playerManager.GetLocalChampion().GetTeam();
 
         this.localPlayerTeam = localPlayerTeam;
 
-        List<DotaGamePlayer> dotaGamePlayers = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ClientGetDotaGamePlayers();
+        SyncList<Champion> players = playerManager.GetPlayers();
 
-        foreach (DotaGamePlayer dotaGamePlayer in dotaGamePlayers)
+        foreach (Champion player in players)
         {
-            if (dotaGamePlayer.GetTeam() == this.localPlayerTeam)
+            if (player.GetTeam() == this.localPlayerTeam)
             {
-                AttachViewMesh(dotaGamePlayer.gameObject);
+                AttachViewMesh(player.gameObject);
             }
         }
 
@@ -54,6 +45,16 @@ public class FogOfWarVisual : MonoBehaviour
                 minionManager.OnBlueMinionRemoved += OnSelfMinionRemoved;
                 break;
         }
+    }
+
+    private void OnSelfMinionAdded(NetworkIdentity obj)
+    {
+        AttachViewMesh(obj.gameObject);
+    }
+
+    private void OnSelfMinionRemoved(NetworkIdentity obj)
+    {
+        RemoveViewMesh(obj.gameObject);
     }
 
     public void AttachViewMesh(GameObject go)

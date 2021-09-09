@@ -39,17 +39,17 @@ public class Minimap : MonoBehaviour
         foreach (VisionEntity enemy in visibilityChecker.GetEnemies())
         {
             MinimapPlayerIcon minimapIconInstance = Instantiate(minimapPlayerIconPrefab, playerIconLayer.transform);
-            minimapIconInstance.SetTeam(enemy.GetComponent<DotaGamePlayer>().GetTeam());
-            minimapIconInstance.SetPlayerIcon(enemy.GetComponent<DotaGamePlayer>().GetPlayerSprite());
-            minimapIconInstances.Add(enemy.GetComponent<DotaGamePlayer>().transform, minimapIconInstance);
+            minimapIconInstance.SetTeam(enemy.GetComponent<Champion>().GetTeam());
+            minimapIconInstance.SetPlayerIcon(enemy.GetComponent<Champion>().GetIcon());
+            minimapIconInstances.Add(enemy.GetComponent<Champion>().transform, minimapIconInstance);
         }
 
         foreach (VisionEntity ally in visibilityChecker.GetAllies())
         {
             MinimapPlayerIcon minimapIconInstance = Instantiate(minimapPlayerIconPrefab, playerIconLayer.transform);
-            minimapIconInstance.SetTeam(ally.GetComponent<DotaGamePlayer>().GetTeam());
-            minimapIconInstance.SetPlayerIcon(ally.GetComponent<DotaGamePlayer>().GetPlayerSprite());
-            minimapIconInstances.Add(ally.GetComponent<DotaGamePlayer>().transform, minimapIconInstance);
+            minimapIconInstance.SetTeam(ally.GetComponent<Champion>().GetTeam());
+            minimapIconInstance.SetPlayerIcon(ally.GetComponent<Champion>().GetIcon());
+            minimapIconInstances.Add(ally.GetComponent<Champion>().transform, minimapIconInstance);
         }
     }
 
