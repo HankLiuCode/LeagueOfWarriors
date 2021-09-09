@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class FloatingBarManager : MonoBehaviour
 {
-    List<FloatingBar> floatingBarPool = new List<FloatingBar>();
-
+    [SerializeField] VisionChecker visibilityChecker = null;
     private void Update()
     {
         

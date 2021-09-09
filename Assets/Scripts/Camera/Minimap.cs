@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class Minimap : MonoBehaviour
 {
-    [SerializeField] private VisibilityChecker visibilityChecker = null;
+    [SerializeField] private VisionChecker visibilityChecker = null;
     [SerializeField] private CameraController cameraController = null;
 
     [SerializeField] private Vector2 xMinMax = new Vector2(-50, 50);
@@ -36,20 +36,13 @@ public class Minimap : MonoBehaviour
 
     private void VisibilityChecker_OnAllPlayersAdded()
     {
-        foreach (VisionEntity enemy in visibilityChecker.GetEnemies())
+
+        foreach (VisionEntity enemy in visibilityChecker.GetAll())
         {
             MinimapPlayerIcon minimapIconInstance = Instantiate(minimapPlayerIconPrefab, playerIconLayer.transform);
             minimapIconInstance.SetTeam(enemy.GetComponent<Champion>().GetTeam());
             minimapIconInstance.SetPlayerIcon(enemy.GetComponent<Champion>().GetIcon());
             minimapIconInstances.Add(enemy.GetComponent<Champion>().transform, minimapIconInstance);
-        }
-
-        foreach (VisionEntity ally in visibilityChecker.GetAllies())
-        {
-            MinimapPlayerIcon minimapIconInstance = Instantiate(minimapPlayerIconPrefab, playerIconLayer.transform);
-            minimapIconInstance.SetTeam(ally.GetComponent<Champion>().GetTeam());
-            minimapIconInstance.SetPlayerIcon(ally.GetComponent<Champion>().GetIcon());
-            minimapIconInstances.Add(ally.GetComponent<Champion>().transform, minimapIconInstance);
         }
     }
 
@@ -88,16 +81,10 @@ public class Minimap : MonoBehaviour
 
     private void Update()
     {
-        foreach (VisionEntity enemy in visibilityChecker.GetEnemies())
+        foreach (VisionEntity visionEntity in visibilityChecker.GetAll())
         {
-            minimapIconInstances[enemy.transform].SetVisible(enemy.GetVisible());
-            UpdatePosition(enemy.transform, minimapIconInstances[enemy.transform].transform);
-        }
-
-        foreach (VisionEntity ally in visibilityChecker.GetAllies())
-        {
-            minimapIconInstances[ally.transform].SetVisible(true);
-            UpdatePosition(ally.transform, minimapIconInstances[ally.transform].transform);
+            minimapIconInstances[visionEntity.transform].SetVisible(visionEntity.GetVisible());
+            UpdatePosition(visionEntity.transform, minimapIconInstances[visionEntity.transform].transform);
         }
 
         UpdatePosition(cameraController.GetLookAtPoint(), cameraRect.transform);

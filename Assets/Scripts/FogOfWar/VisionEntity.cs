@@ -5,7 +5,7 @@ using UnityEngine;
 public class VisionEntity : MonoBehaviour
 {
     [SerializeField] List<GameObject> renderers;
-    bool isVisible;
+    bool isVisible = true;
 
     public void SetVisible(bool isVisible)
     {

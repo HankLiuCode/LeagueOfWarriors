@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VisibilityChecker : MonoBehaviour
+public class VisionChecker : MonoBehaviour
 {
     [SerializeField] Team localPlayerTeam;
     [SerializeField] float checkRadius = 10f;
@@ -15,9 +15,7 @@ public class VisibilityChecker : MonoBehaviour
 
     [SerializeField] List<VisionEntity> allies = new List<VisionEntity>();
     [SerializeField] List<VisionEntity> enemies = new List<VisionEntity>();
-    
     [SerializeField] LayerMask obstacleLayer = new LayerMask();
-
 
     public event Action OnAllPlayersAdded;
     public event Action<VisionEntity> OnVisionEntityAdded;
@@ -26,11 +24,8 @@ public class VisibilityChecker : MonoBehaviour
     private void Awake()
     {
         playerManager.OnLocalChampionReady += PlayerManager_OnLocalChampionReady;
-
-        minionManager.OnRedMinionAdded += MinionManager_OnRedMinionAdded;
-        minionManager.OnRedMinionRemoved += MinionManager_OnRedMinionRemoved;
-        minionManager.OnBlueMinionAdded += MinionManager_OnBlueMinionAdded;
-        minionManager.OnBlueMinionRemoved += MinionManager_OnBlueMinionRemoved;
+        minionManager.OnMinionAdded += MinionManager_OnMinionAdded;
+        minionManager.OnMinionRemoved += MinionManager_OnMinionRemoved;
     }
 
     private void PlayerManager_OnLocalChampionReady()
@@ -54,74 +49,54 @@ public class VisibilityChecker : MonoBehaviour
         OnAllPlayersAdded?.Invoke();
     }
 
-    private void MinionManager_OnBlueMinionRemoved(NetworkIdentity obj)
+    private void MinionManager_OnMinionAdded(Minion minion)
     {
-        switch (localPlayerTeam)
+        VisionEntity visionEntity = minion.GetComponent<VisionEntity>();
+        if(localPlayerTeam == minion.GetTeam())
         {
-            case Team.Red:
-                enemies.Remove(obj.GetComponent<VisionEntity>());
-                break;
-
-            case Team.Blue:
-                allies.Remove(obj.GetComponent<VisionEntity>());
-                break;
+            allies.Add(visionEntity);
         }
-        OnVisionEntityRemoved?.Invoke(obj.GetComponent<VisionEntity>());
-    }
-
-    private void MinionManager_OnBlueMinionAdded(NetworkIdentity obj)
-    {
-        switch (localPlayerTeam)
+        else
         {
-            case Team.Red:
-                enemies.Add(obj.GetComponent<VisionEntity>());
-                break;
-
-            case Team.Blue:
-                allies.Add(obj.GetComponent<VisionEntity>());
-                break;
+            enemies.Add(visionEntity);
         }
-        OnVisionEntityAdded?.Invoke(obj.GetComponent<VisionEntity>());
+
+        OnVisionEntityAdded?.Invoke(minion.GetComponent<VisionEntity>());
     }
 
-    private void MinionManager_OnRedMinionAdded(NetworkIdentity obj)
+    private void MinionManager_OnMinionRemoved(Minion minion)
     {
-        switch (localPlayerTeam)
+        VisionEntity visionEntity = minion.GetComponent<VisionEntity>();
+        if (localPlayerTeam == minion.GetTeam())
         {
-            case Team.Red:
-                allies.Add(obj.GetComponent<VisionEntity>());
-                break;
-
-            case Team.Blue:
-                enemies.Add(obj.GetComponent<VisionEntity>());
-                break;
+            allies.Remove(visionEntity);
         }
-        OnVisionEntityAdded?.Invoke(obj.GetComponent<VisionEntity>());
-    }
-
-    private void MinionManager_OnRedMinionRemoved(NetworkIdentity obj)
-    {
-        switch (localPlayerTeam)
+        else
         {
-            case Team.Red:
-                allies.Remove(obj.GetComponent<VisionEntity>());
-                break;
-
-            case Team.Blue:
-                enemies.Remove(obj.GetComponent<VisionEntity>());
-                break;
+            enemies.Remove(visionEntity);
         }
-        OnVisionEntityRemoved?.Invoke(obj.GetComponent<VisionEntity>());
+
+        OnVisionEntityRemoved?.Invoke(minion.GetComponent<VisionEntity>());
     }
 
-    public List<VisionEntity> GetEnemies()
+    public List<VisionEntity> GetVisible()
     {
-        return enemies;
+        List<VisionEntity> visible = new List<VisionEntity>(allies);
+        foreach (VisionEntity enemy in enemies)
+        {
+            if (enemy.GetVisible()) 
+            { 
+                visible.Add(enemy); 
+            }
+        }
+        return visible;
     }
 
-    public List<VisionEntity> GetAllies()
+    public List<VisionEntity> GetAll()
     {
-        return allies;
+        List<VisionEntity> all = new List<VisionEntity>(allies);
+        all.AddRange(enemies);
+        return all;
     }
 
     private void Update()

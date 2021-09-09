@@ -10,22 +10,17 @@ public class MinionManager : NetworkBehaviour
 
     [SerializeField] List<Transform> spawnPoints = new List<Transform>();
 
-    SyncList<NetworkIdentity> redMinionInstances = new SyncList<NetworkIdentity>();
-    SyncList<NetworkIdentity> blueMinionInstances = new SyncList<NetworkIdentity>();
+    SyncList<Minion> minions = new SyncList<Minion>();
 
-    public event System.Action<NetworkIdentity> OnRedMinionAdded;
-    public event System.Action<NetworkIdentity> OnRedMinionRemoved;
-
-    public event System.Action<NetworkIdentity> OnBlueMinionAdded;
-    public event System.Action<NetworkIdentity> OnBlueMinionRemoved;
+    public event System.Action<Minion> OnMinionAdded;
+    public event System.Action<Minion> OnMinionRemoved;
 
     float spawnTimer;
 
 
     private void Start()
     {
-        redMinionInstances.Callback += OnRedMinionInstancesUpdated;
-        blueMinionInstances.Callback += OnBlueMinionInstancesUpdated;
+        minions.Callback += OnMinionsUpdated;
     }
 
     public override void OnStartServer()
@@ -33,14 +28,9 @@ public class MinionManager : NetworkBehaviour
         spawnTimer = spawnInterval;
     }
 
-    public SyncList<NetworkIdentity> GetRedMinions()
+    public SyncList<Minion> GetMinions()
     {
-        return redMinionInstances;
-    }
-
-    public SyncList<NetworkIdentity> GetBlueMinions()
-    {
-        return blueMinionInstances;
+        return minions;
     }
 
     #region Server
@@ -51,39 +41,24 @@ public class MinionManager : NetworkBehaviour
             spawnTimer -= Time.deltaTime;
             if (spawnTimer <= 0)
             {
-                SpawnBlueMinion();
-                //SpawnRedMinion();
+                SpawnMinion(Team.Blue);
                 spawnTimer = spawnInterval;
             }
         }
     }
 
     [Server]
-    public void SpawnBlueMinion()
+    public void SpawnMinion(Team team)
     {
         GameObject minionInstance = Instantiate(minionPrefab, GetRandomSpawnPoint().position, Quaternion.identity);
 
         Minion minion = minionInstance.GetComponent<Minion>();
 
-        minion.SetTeam(Team.Blue);
+        minion.SetTeam(team);
 
         NetworkServer.Spawn(minionInstance);
 
-        blueMinionInstances.Add(minionInstance.GetComponent<NetworkIdentity>());
-    }
-
-    [Server]
-    public void SpawnRedMinion()
-    {
-        GameObject minionInstance = Instantiate(minionPrefab, GetRandomSpawnPoint().position, Quaternion.identity);
-
-        Minion minion = minionInstance.GetComponent<Minion>();
-
-        minion.SetTeam(Team.Red);
-
-        NetworkServer.Spawn(minionInstance);
-
-        redMinionInstances.Add(minionInstance.GetComponent<NetworkIdentity>());
+        minions.Add(minionInstance.GetComponent<Minion>());
     }
 
     [Server]
@@ -95,57 +70,28 @@ public class MinionManager : NetworkBehaviour
 
     #endregion
 
-    private void OnBlueMinionInstancesUpdated(SyncList<NetworkIdentity>.Operation op, int itemIndex, NetworkIdentity oldItem, NetworkIdentity newItem)
+    private void OnMinionsUpdated(SyncList<Minion>.Operation op, int itemIndex, Minion oldItem, Minion newItem)
     {
         switch (op)
         {
-            case SyncList<NetworkIdentity>.Operation.OP_ADD:
+            case SyncList<Minion>.Operation.OP_ADD:
                 // index is where it got added in the list
                 // newItem is the new item
-                OnBlueMinionAdded?.Invoke(newItem);
+                OnMinionAdded?.Invoke(newItem);
                 break;
-            case SyncList<NetworkIdentity>.Operation.OP_CLEAR:
+            case SyncList<Minion>.Operation.OP_CLEAR:
                 // list got cleared
                 break;
-            case SyncList<NetworkIdentity>.Operation.OP_INSERT:
+            case SyncList<Minion>.Operation.OP_INSERT:
                 // index is where it got added in the list
                 // newItem is the new item
                 break;
-            case SyncList<NetworkIdentity>.Operation.OP_REMOVEAT:
+            case SyncList<Minion>.Operation.OP_REMOVEAT:
                 // index is where it got removed in the list
                 // oldItem is the item that was removed
-                OnBlueMinionRemoved?.Invoke(oldItem);
+                OnMinionRemoved?.Invoke(oldItem);
                 break;
-            case SyncList<NetworkIdentity>.Operation.OP_SET:
-                // index is the index of the item that was updated
-                // oldItem is the previous value for the item at the index
-                // newItem is the new value for the item at the index
-                break;
-        }
-    }
-
-    private void OnRedMinionInstancesUpdated(SyncList<NetworkIdentity>.Operation op, int itemIndex, NetworkIdentity oldItem, NetworkIdentity newItem)
-    {
-        switch (op)
-        {
-            case SyncList<NetworkIdentity>.Operation.OP_ADD:
-                // index is where it got added in the list
-                // newItem is the new item
-                OnRedMinionAdded?.Invoke(newItem);
-                break;
-            case SyncList<NetworkIdentity>.Operation.OP_CLEAR:
-                // list got cleared
-                break;
-            case SyncList<NetworkIdentity>.Operation.OP_INSERT:
-                // index is where it got added in the list
-                // newItem is the new item
-                break;
-            case SyncList<NetworkIdentity>.Operation.OP_REMOVEAT:
-                // index is where it got removed in the list
-                // oldItem is the item that was removed
-                OnRedMinionRemoved?.Invoke(oldItem);
-                break;
-            case SyncList<NetworkIdentity>.Operation.OP_SET:
+            case SyncList<Minion>.Operation.OP_SET:
                 // index is the index of the item that was updated
                 // oldItem is the previous value for the item at the index
                 // newItem is the new value for the item at the index

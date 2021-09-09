@@ -15,6 +15,8 @@ public class FogOfWarVisual : MonoBehaviour
     private void Awake()
     {
         playerManager.OnLocalChampionReady += PlayerManager_OnLocalPlayerConnectionReady;
+        minionManager.OnMinionAdded += MinionManager_OnMinionAdded;
+        minionManager.OnMinionRemoved += MinionManager_OnMinionRemoved;
     }
 
     private void PlayerManager_OnLocalPlayerConnectionReady()
@@ -32,29 +34,22 @@ public class FogOfWarVisual : MonoBehaviour
                 AttachViewMesh(player.gameObject);
             }
         }
+    }
 
-        switch (localPlayerTeam)
+    private void MinionManager_OnMinionRemoved(Minion minion)
+    {
+        if(minion.GetTeam() == localPlayerTeam)
         {
-            case Team.Red:
-                minionManager.OnRedMinionAdded += OnSelfMinionAdded;
-                minionManager.OnRedMinionRemoved += OnSelfMinionRemoved;
-                break;
-
-            case Team.Blue:
-                minionManager.OnBlueMinionAdded += OnSelfMinionAdded;
-                minionManager.OnBlueMinionRemoved += OnSelfMinionRemoved;
-                break;
+            RemoveViewMesh(minion.gameObject);
         }
     }
 
-    private void OnSelfMinionAdded(NetworkIdentity obj)
+    private void MinionManager_OnMinionAdded(Minion minion)
     {
-        AttachViewMesh(obj.gameObject);
-    }
-
-    private void OnSelfMinionRemoved(NetworkIdentity obj)
-    {
-        RemoveViewMesh(obj.gameObject);
+        if (minion.GetTeam() == localPlayerTeam)
+        {
+            AttachViewMesh(minion.gameObject);
+        }
     }
 
     public void AttachViewMesh(GameObject go)
