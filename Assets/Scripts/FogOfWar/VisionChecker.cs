@@ -17,7 +17,7 @@ public class VisionChecker : MonoBehaviour
     [SerializeField] List<VisionEntity> enemies = new List<VisionEntity>();
     [SerializeField] LayerMask obstacleLayer = new LayerMask();
 
-    public event Action OnAllPlayersAdded;
+    public event Action<VisionEntity> OnVisionEntityVisionUpdated;
     public event Action<VisionEntity> OnVisionEntityAdded;
     public event Action<VisionEntity> OnVisionEntityRemoved;
 
@@ -32,42 +32,29 @@ public class VisionChecker : MonoBehaviour
     {
         Champion localPlayer = playerManager.GetLocalChampion();
         localPlayerTeam = localPlayer.GetTeam();
-
         SyncList<Champion> players = playerManager.GetChampions();
 
         foreach(Champion player in players)
         {
-            if(player.GetTeam() == localPlayerTeam)
-            {
-                allies.Add(player.GetComponent<VisionEntity>());
-            }
-            else
-            {
-                enemies.Add(player.GetComponent<VisionEntity>());
-            }
+            AddVisionEntity(player.GetComponent<VisionEntity>(), player.GetTeam());
         }
-        OnAllPlayersAdded?.Invoke();
     }
 
     private void MinionManager_OnMinionAdded(Minion minion)
     {
         VisionEntity visionEntity = minion.GetComponent<VisionEntity>();
-        if(localPlayerTeam == minion.GetTeam())
-        {
-            allies.Add(visionEntity);
-        }
-        else
-        {
-            enemies.Add(visionEntity);
-        }
-
-        OnVisionEntityAdded?.Invoke(minion.GetComponent<VisionEntity>());
+        AddVisionEntity(visionEntity, minion.GetTeam());
     }
 
     private void MinionManager_OnMinionRemoved(Minion minion)
     {
         VisionEntity visionEntity = minion.GetComponent<VisionEntity>();
-        if (localPlayerTeam == minion.GetTeam())
+        RemoveVisionEntity(visionEntity, minion.GetTeam());
+    }
+
+    private void RemoveVisionEntity(VisionEntity visionEntity, Team team)
+    {
+        if (localPlayerTeam == team)
         {
             allies.Remove(visionEntity);
         }
@@ -76,7 +63,21 @@ public class VisionChecker : MonoBehaviour
             enemies.Remove(visionEntity);
         }
 
-        OnVisionEntityRemoved?.Invoke(minion.GetComponent<VisionEntity>());
+        OnVisionEntityRemoved?.Invoke(visionEntity);
+    }
+
+    private void AddVisionEntity(VisionEntity visionEntity, Team team)
+    {
+        if (localPlayerTeam == team)
+        {
+            allies.Add(visionEntity);
+        }
+        else
+        {
+            enemies.Add(visionEntity);
+        }
+
+        OnVisionEntityAdded?.Invoke(visionEntity);
     }
 
     public List<VisionEntity> GetVisible()
@@ -108,13 +109,19 @@ public class VisionChecker : MonoBehaviour
     {
         foreach(VisionEntity enemy in enemies)
         {
-            bool isEnemyVisible = false;
+            bool wasVisible = enemy.GetVisible();
+
             foreach (VisionEntity ally in allies)
             {
                 float distance = Vector3.Distance(ally.transform.position, enemy.transform.position);
                 if (distance > checkRadius)
                 {
-                    isEnemyVisible = false;
+                    enemy.SetVisible(false);
+
+                    if (wasVisible)
+                    {
+                        OnVisionEntityVisionUpdated?.Invoke(enemy);
+                    }
                     continue;
                 }
 
@@ -123,15 +130,24 @@ public class VisionChecker : MonoBehaviour
 
                 if (hasObstacle)
                 {
-                    isEnemyVisible = false;
+                    enemy.SetVisible(false);
+
+                    if (wasVisible)
+                    {
+                        OnVisionEntityVisionUpdated?.Invoke(enemy);
+                    }
                 }
                 else
                 {
-                    isEnemyVisible = true;
+                    enemy.SetVisible(true);
+
+                    if (!wasVisible)
+                    {
+                        OnVisionEntityVisionUpdated?.Invoke(enemy);
+                    }
                     break;
                 }
             }
-            enemy.SetVisible(isEnemyVisible);
         }
     }
 }

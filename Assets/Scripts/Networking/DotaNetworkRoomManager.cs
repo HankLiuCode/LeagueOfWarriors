@@ -26,11 +26,6 @@ public class DotaNetworkRoomManager : NetworkRoomManager
     // dotaGamePlayers List on Server
     [SerializeField] private List<DotaGamePlayer> serverDotaGamePlayers = new List<DotaGamePlayer>();
 
-    // dotaGamePlayers List on Client
-    [SerializeField] private List<DotaGamePlayer> clientDotaGamePlayers = new List<DotaGamePlayer>();
-    [SerializeField] private List<DotaGamePlayer> blueTeamGamePlayers = new List<DotaGamePlayer>();
-    [SerializeField] private List<DotaGamePlayer> redTeamGamePlayers = new List<DotaGamePlayer>();
-
     public event Action OnAllGamePlayersAdded;
 
     /// <summary>

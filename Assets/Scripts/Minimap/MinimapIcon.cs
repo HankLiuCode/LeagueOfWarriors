@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class MinimapIcon : MonoBehaviour
 {
     [SerializeField] GameObject icon = null;
+
     [SerializeField] Image teamRepresentImage = null;
 
     [SerializeField] bool isVisible;

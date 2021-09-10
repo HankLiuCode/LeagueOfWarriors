@@ -1,3 +1,5 @@
+using Dota.Core;
+using Dota.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,10 +15,12 @@ public class FloatingBar : MonoBehaviour
     [SerializeField] Team team;
     [SerializeField] bool isAlly;
 
+    [SerializeField] HealthDisplay healthDisplay = null;
+    [SerializeField] ManaDisplay manaDisplay = null;
+
     [SerializeField] Image level = null;
     [SerializeField] Image healthBorder= null;
     [SerializeField] Image manaBorder = null;
-
     [SerializeField] Image healthFill = null;
 
     private void Update()
@@ -26,14 +30,20 @@ public class FloatingBar : MonoBehaviour
             Vector3 screenPos = Camera.main.WorldToScreenPoint(target.transform.position + offset);
             transform.position = screenPos;
         }
-
         SetBorder(team);
         SetFill(isAlly);
     }
 
     public void SetTarget(GameObject target, Vector3 offset)
     {
-        
+        Health health = target.GetComponent<Health>();
+        Mana mana = target.GetComponent<Mana>();
+
+        healthDisplay.SetHealth(health);
+        manaDisplay.SetMana(mana);
+
+        this.target = target;
+        this.offset = offset;
     }
 
     public void SetFill(bool isAlly)

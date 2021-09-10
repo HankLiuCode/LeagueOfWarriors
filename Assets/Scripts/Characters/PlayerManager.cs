@@ -7,6 +7,12 @@ using Dota.Networking;
 public class PlayerManager : NetworkBehaviour
 {
     [SerializeField] GameObject championPrefab;
+    [SerializeField] Transform[] blueStartPositions;
+    [SerializeField] Transform[] redStartPositions;
+    [SerializeField] Transform[] testPositions;
+
+    int startPositionIndex = 0;
+
     [SerializeField] List<Champion> debugPlayers = new List<Champion>();
     SyncList<Champion> players = new SyncList<Champion>();
     public event System.Action OnLocalChampionReady;
@@ -14,6 +20,19 @@ public class PlayerManager : NetworkBehaviour
     private void Awake()
     {
         ((DotaNetworkRoomManager)NetworkRoomManager.singleton).OnAllGamePlayersAdded += PlayerManager_OnAllGamePlayersAdded;
+    }
+
+    public SyncList<Champion> GetChampions()
+    {
+        return players;
+    }
+
+    [Server]
+    public Vector3 GetSpawnPosition()
+    {
+        Transform startPosition = blueStartPositions[startPositionIndex];
+        startPositionIndex = (startPositionIndex + 1) % blueStartPositions.Length;
+        return startPosition.position;
     }
 
     #region Server
@@ -26,7 +45,7 @@ public class PlayerManager : NetworkBehaviour
     [Server]
     IEnumerator SpawnChampionWhenConnectionReady(DotaGamePlayer dotaGamePlayer)
     {
-        GameObject championInstance = Instantiate(championPrefab);
+        GameObject championInstance = Instantiate(championPrefab, GetSpawnPosition(), Quaternion.identity);
 
         Champion champion = championInstance.GetComponent<Champion>();
 
@@ -73,6 +92,7 @@ public class PlayerManager : NetworkBehaviour
         StartCoroutine(InvokeWhenChampionListSynced());
     }
 
+    [Client]
     IEnumerator InvokeWhenChampionListSynced()
     {
         yield return new WaitForSeconds(1.0f);
@@ -95,12 +115,6 @@ public class PlayerManager : NetworkBehaviour
         }
         return null;
     }
-
-    public SyncList<Champion> GetChampions()
-    {
-        return players;
-    }
-
 
     [Client]
     private void SyncDebugList()

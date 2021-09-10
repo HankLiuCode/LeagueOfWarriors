@@ -17,6 +17,7 @@ namespace Dota.Core
         [SerializeField] CapsuleCollider capsuleCollider = null;
 
         public event System.Action OnHealthModified;
+        public event System.Action<Health> OnHealthDead;
 
         public override void OnStartClient()
         {
@@ -45,10 +46,11 @@ namespace Dota.Core
 
         #region Server
         [ClientRpc]
-        private void RpcTriggerDeathAnimation()
+        private void RpcNotifyHealthDead()
         {
             animator.SetTrigger("die");
             capsuleCollider.enabled = false;
+            OnHealthDead?.Invoke(this);
         }
 
         [Server]
@@ -57,7 +59,8 @@ namespace Dota.Core
             healthPoint = Mathf.Max(healthPoint - damage, 0);
             if (healthPoint == 0 && !isDead)
             {
-                RpcTriggerDeathAnimation();
+                RpcNotifyHealthDead();
+                OnHealthDead?.Invoke(this);
                 isDead = true;
             }
         }
@@ -79,6 +82,15 @@ namespace Dota.Core
             OnHealthModified?.Invoke();
         }
 
+        #endregion
+
+        #region Client
+
+        // Animation Trigger Event
+        public void DeathEvent()
+        {
+
+        }
         #endregion
     }
 

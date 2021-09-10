@@ -1,3 +1,4 @@
+using Dota.Core;
 using Mirror;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +9,9 @@ public class MinionManager : NetworkBehaviour
     [SerializeField] GameObject minionPrefab;
     [SerializeField] float spawnInterval = 3f;
 
-    [SerializeField] List<Transform> spawnPoints = new List<Transform>();
+    [SerializeField] Transform[] blueStartPositions;
+    [SerializeField] Transform[] redStartPositions;
+    [SerializeField] Transform[] testPositions;
 
     SyncList<Minion> minions = new SyncList<Minion>();
 
@@ -50,9 +53,13 @@ public class MinionManager : NetworkBehaviour
     [Server]
     public void SpawnMinion(Team team)
     {
-        GameObject minionInstance = Instantiate(minionPrefab, GetRandomSpawnPoint().position, Quaternion.identity);
+        GameObject minionInstance = Instantiate(minionPrefab, GetSpawnPosition(), Quaternion.identity);
 
         Minion minion = minionInstance.GetComponent<Minion>();
+
+        Health health = minionInstance.GetComponent<Health>();
+
+        health.OnHealthDead += Health_OnHealthDead;
 
         minion.SetTeam(team);
 
@@ -61,11 +68,16 @@ public class MinionManager : NetworkBehaviour
         minions.Add(minionInstance.GetComponent<Minion>());
     }
 
-    [Server]
-    public Transform GetRandomSpawnPoint()
+    private void Health_OnHealthDead(Health health)
     {
-        int index = Random.Range(0, spawnPoints.Count);
-        return spawnPoints[index];
+        Minion minion = health.GetComponent<Minion>();
+        OnMinionRemoved?.Invoke(minion);
+    }
+
+    [Server]
+    public Vector3 GetSpawnPosition()
+    {
+        return blueStartPositions[0].position;
     }
 
     #endregion

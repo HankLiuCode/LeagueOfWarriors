@@ -17,47 +17,48 @@ public class Minimap : MonoBehaviour
     [SerializeField] private RectTransform minimapRect = null;
     [SerializeField] private RectTransform cameraRect = null;
 
+    [SerializeField] private RectTransform defaultIconLayer = null;
     [SerializeField] private RectTransform minionIconLayer = null;
     [SerializeField] private RectTransform playerIconLayer = null;
-
-    [SerializeField] private MinimapIcon minimapMinionIconPrefab = null;
-    [SerializeField] private MinimapPlayerIcon minimapPlayerIconPrefab = null;
-
-
+    
     private Vector2 defaultCameraRectSize = new Vector2(80, 45);
     private Dictionary<Transform, MinimapIcon> minimapIconInstances = new Dictionary<Transform, MinimapIcon>();
 
-    private void Start()
+    private void Awake()
     {
         visibilityChecker.OnVisionEntityAdded += VisibilityChecker_OnVisionEntityAdded;
         visibilityChecker.OnVisionEntityRemoved += VisibilityChecker_OnVisionEntityRemoved;
-        visibilityChecker.OnAllPlayersAdded += VisibilityChecker_OnAllPlayersAdded;
     }
 
-    private void VisibilityChecker_OnAllPlayersAdded()
+    private void VisibilityChecker_OnVisionEntityRemoved(VisionEntity visionEntity)
     {
+        minimapIconInstances.Remove(visionEntity.transform);
+    }
 
-        foreach (VisionEntity enemy in visibilityChecker.GetAll())
+    private void VisibilityChecker_OnVisionEntityAdded(VisionEntity visionEntity)
+    {
+        IMinimapEntity minimapEntity = visionEntity.GetComponent<IMinimapEntity>();
+
+        MinimapIcon minimapIconInstance = minimapEntity.GetMinimapIconInstance();
+
+        minimapIconInstance.transform.parent = GetLayer(minimapEntity.GetLayerName());
+
+        minimapIconInstances.Add(visionEntity.transform, minimapIconInstance);
+    }
+
+    private Transform GetLayer(string layerName)
+    {
+        switch (layerName)
         {
-            MinimapPlayerIcon minimapIconInstance = Instantiate(minimapPlayerIconPrefab, playerIconLayer.transform);
-            minimapIconInstance.SetTeam(enemy.GetComponent<Champion>().GetTeam());
-            minimapIconInstance.SetPlayerIcon(enemy.GetComponent<Champion>().GetIcon());
-            minimapIconInstances.Add(enemy.GetComponent<Champion>().transform, minimapIconInstance);
+            case "Champion":
+                return playerIconLayer;
+
+            case "Minion":
+                return minionIconLayer;
+
+            default:
+                return defaultIconLayer;
         }
-    }
-
-    private void VisibilityChecker_OnVisionEntityRemoved(VisionEntity obj)
-    {
-        minimapIconInstances.Remove(obj.transform);
-    }
-
-    private void VisibilityChecker_OnVisionEntityAdded(VisionEntity obj)
-    {
-        Minion minion = obj.GetComponent<Minion>();
-        MinimapIcon minimapIconInstance = Instantiate(minimapMinionIconPrefab, minionIconLayer.transform).GetComponent<MinimapIcon>();
-        minimapIconInstance.SetVisible(false);
-        minimapIconInstance.SetTeam(minion.GetTeam());
-        minimapIconInstances.Add(obj.transform, minimapIconInstance);
     }
 
     private void UpdatePosition(Vector3 worldObjectPos, Transform uiInstance)

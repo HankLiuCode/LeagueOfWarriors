@@ -6,7 +6,18 @@ public class ScreenManager : MonoBehaviour
 {
     void Start()
     {
-        Screen.SetResolution(1920, 1080, true);
-        //Screen.SetResolution(960, 540, false);
+        Screen.SetResolution(960, 540, false);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            Screen.SetResolution(1920, 1080, true);
+        }
+        else if (Input.GetKeyDown(KeyCode.Keypad2))
+        {
+            Screen.SetResolution(960, 540, false);
+        }
     }
 }

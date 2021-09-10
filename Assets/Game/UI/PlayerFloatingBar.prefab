@@ -24,7 +24,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2830366321672223725}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -55,6 +55,8 @@ MonoBehaviour:
   offset: {x: 0, y: 3, z: 0}
   team: 0
   isAlly: 0
+  healthDisplay: {fileID: 426819144903554670}
+  manaDisplay: {fileID: 7332297539151967564}
   level: {fileID: 5052268747648085170}
   healthBorder: {fileID: 3546485755773224715}
   manaBorder: {fileID: 7048528427654648936}
