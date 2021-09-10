@@ -27,22 +27,30 @@ public class FloatingBar : MonoBehaviour
     {
         if(target != null)
         {
-            Vector3 screenPos = Camera.main.WorldToScreenPoint(target.transform.position + offset);
-            transform.position = screenPos;
+            UpdateFloatingBarPosition(target.transform.position);
         }
-        SetBorder(team);
-        SetFill(isAlly);
     }
 
-    public void SetTarget(GameObject target, Vector3 offset)
+    private void UpdateFloatingBarPosition(Vector3 followPoint)
     {
-        Health health = target.GetComponent<Health>();
-        Mana mana = target.GetComponent<Mana>();
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(followPoint + offset);
+        transform.position = screenPos;
+    }
 
+    public void Setup(Health health, Mana mana, Team localPlayerTeam, Team targetTeam, Vector3 offset)
+    {
         healthDisplay.SetHealth(health);
         manaDisplay.SetMana(mana);
+        bool isAlly = (localPlayerTeam == targetTeam);
 
-        this.target = target;
+        SetBorder(targetTeam);
+        SetFill(isAlly);
+
+        UpdateFloatingBarPosition(health.transform.position);
+
+        this.team = targetTeam;
+        this.isAlly = isAlly;
+        this.target = health.gameObject;
         this.offset = offset;
     }
 
@@ -64,7 +72,6 @@ public class FloatingBar : MonoBehaviour
                 color = Color.blue;
                 break;
         }
-
         level.color = color;
         healthBorder.color = color;
         manaBorder.color = color;

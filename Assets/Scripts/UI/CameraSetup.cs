@@ -22,16 +22,4 @@ public class CameraSetup : MonoBehaviour
         Champion champion = playerManager.GetLocalChampion();
         cameraControllerInstance.Initialize(champion.transform);
     }
-
-    //public void SetUpOtherUI(List<DotaGamePlayer> players)
-    //{
-    //    otherPlayerCanvasInstance = Instantiate(otherPlayerCanvasPrefab).GetComponent<OtherPlayerStatsDisplay>();
-
-    //    List<DotaPlayerController> playerControllers = new List<DotaPlayerController>();
-    //    foreach (DotaGamePlayer dp in players)
-    //    {
-    //        playerControllers.Add(dp.GetComponent<DotaPlayerController>());
-    //    }
-    //    otherPlayerCanvasInstance.BindPlayersToDisplays(playerControllers);
-    //}
 }

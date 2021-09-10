@@ -9,9 +9,11 @@ public class PlayerManager : NetworkBehaviour
     [SerializeField] GameObject championPrefab;
     [SerializeField] Transform[] blueStartPositions;
     [SerializeField] Transform[] redStartPositions;
-    [SerializeField] Transform[] testPositions;
+    [SerializeField] Transform[] testStartPositions;
 
-    int startPositionIndex = 0;
+    int blueStartPositionIndex = 0;
+    int redStartPositionIndex = 0;
+    int testStartPositionIndex = 0;
 
     [SerializeField] List<Champion> debugPlayers = new List<Champion>();
     SyncList<Champion> players = new SyncList<Champion>();
@@ -19,7 +21,7 @@ public class PlayerManager : NetworkBehaviour
 
     private void Awake()
     {
-        ((DotaNetworkRoomManager)NetworkRoomManager.singleton).OnAllGamePlayersAdded += PlayerManager_OnAllGamePlayersAdded;
+        ((DotaNetworkRoomManager) NetworkRoomManager.singleton).OnAllGamePlayersAdded += PlayerManager_OnAllGamePlayersAdded;
     }
 
     public SyncList<Champion> GetChampions()
@@ -28,11 +30,27 @@ public class PlayerManager : NetworkBehaviour
     }
 
     [Server]
-    public Vector3 GetSpawnPosition()
+    public Vector3 GetSpawnPosition(Team team)
     {
-        Transform startPosition = blueStartPositions[startPositionIndex];
-        startPositionIndex = (startPositionIndex + 1) % blueStartPositions.Length;
-        return startPosition.position;
+        switch (team)
+        {
+            case Team.Red:
+
+                Transform redStartPos = redStartPositions[redStartPositionIndex];
+                redStartPositionIndex = (redStartPositionIndex + 1) % redStartPositions.Length;
+                return redStartPos.position;
+
+            case Team.Blue:
+
+                Transform blueStartPos = blueStartPositions[blueStartPositionIndex];
+                blueStartPositionIndex = (blueStartPositionIndex + 1) % blueStartPositions.Length;
+                return blueStartPos.position;
+
+            default:
+                Transform testStartPos = testStartPositions[testStartPositionIndex];
+                testStartPositionIndex = (testStartPositionIndex + 1) % testStartPositions.Length;
+                return testStartPos.position;
+        }
     }
 
     #region Server
@@ -45,11 +63,15 @@ public class PlayerManager : NetworkBehaviour
     [Server]
     IEnumerator SpawnChampionWhenConnectionReady(DotaGamePlayer dotaGamePlayer)
     {
-        GameObject championInstance = Instantiate(championPrefab, GetSpawnPosition(), Quaternion.identity);
+        Team championTeam = dotaGamePlayer.GetTeam();
+
+        Vector3 spawnPosition = GetSpawnPosition(championTeam);
+
+        GameObject championInstance = Instantiate(championPrefab, spawnPosition, Quaternion.identity);
 
         Champion champion = championInstance.GetComponent<Champion>();
 
-        champion.SetTeam(dotaGamePlayer.GetTeam());
+        champion.SetTeam(championTeam);
 
         yield return new WaitUntil(() => dotaGamePlayer.connectionToClient != null);
 
@@ -67,7 +89,6 @@ public class PlayerManager : NetworkBehaviour
             // BUT 
             // 1. The champion list is on client not synced with the server yet
             // 2. The champion might not be spawned yet on the client 
-
             RpcNotifyServerSpawnedAllChampion();
         }
     }
@@ -113,7 +134,7 @@ public class PlayerManager : NetworkBehaviour
                 return player;
             }
         }
-        return null;
+        throw new System.Exception("LocalPlayer not Ready");
     }
 
     [Client]

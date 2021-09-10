@@ -322,3 +322,9 @@ MonoBehaviour:
   - {fileID: 1599501706}
   - {fileID: 1648889116}
   - {fileID: 431767171}
+  testPositions:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

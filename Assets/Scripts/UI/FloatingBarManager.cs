@@ -6,6 +6,7 @@ using UnityEngine;
 public class FloatingBarManager : MonoBehaviour
 {
     [SerializeField] VisionChecker visibilityChecker = null;
+    [SerializeField] PlayerManager playerManager = null;
 
     [SerializeField] Transform floatingBarParent = null;
     [SerializeField] GameObject floatingBarPrefab = null;
@@ -16,12 +17,26 @@ public class FloatingBarManager : MonoBehaviour
     {
         visibilityChecker.OnVisionEntityAdded += VisibilityChecker_OnVisionEntityAdded;
         visibilityChecker.OnVisionEntityRemoved += VisibilityChecker_OnVisionEntityRemoved;
-        visibilityChecker.OnVisionEntityVisionUpdated += VisibilityChecker_OnVisionEntityVisionUpdated;
+        visibilityChecker.OnVisionEntityEnter += VisibilityChecker_OnVisionEntityEnter;
+        visibilityChecker.OnVisionEntityExit += VisibilityChecker_OnVisionEntityExit;
     }
 
-    private void VisibilityChecker_OnVisionEntityVisionUpdated(VisionEntity obj)
+    private void VisibilityChecker_OnVisionEntityExit(VisionEntity obj)
     {
-        floatingBars[obj.GetComponent<Health>()].gameObject.SetActive(obj.GetVisible());
+        Health health = obj.GetComponent<Health>();
+        if (floatingBars.ContainsKey(health))
+        {
+            floatingBars[health].gameObject.SetActive(false);
+        }
+    }
+
+    private void VisibilityChecker_OnVisionEntityEnter(VisionEntity obj)
+    {
+        Health health = obj.GetComponent<Health>();
+        if (floatingBars.ContainsKey(health))
+        {
+            floatingBars[health].gameObject.SetActive(true);
+        }
     }
 
     private void VisibilityChecker_OnVisionEntityRemoved(VisionEntity obj)
@@ -31,8 +46,16 @@ public class FloatingBarManager : MonoBehaviour
 
     private void VisibilityChecker_OnVisionEntityAdded(VisionEntity obj)
     {
+        Team localPlayerTeam = playerManager.GetLocalChampion().GetTeam();
+
+        Health health = obj.GetComponent<Health>();
+        Mana mana = obj.GetComponent<Mana>();
+        ITeamMember teamMember = obj.GetComponent<ITeamMember>();
+
         FloatingBar floatingBarInstance = Instantiate(floatingBarPrefab, floatingBarParent).GetComponent<FloatingBar>();
-        floatingBarInstance.SetTarget(obj.gameObject, Vector3.up * 4);
+
+        floatingBarInstance.Setup(health, mana, localPlayerTeam, teamMember.GetTeam(), Vector3.up * 4);
+        
         floatingBars.Add(obj.GetComponent<Health>(), floatingBarInstance);
     }
 }

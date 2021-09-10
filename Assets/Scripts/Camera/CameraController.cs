@@ -52,6 +52,7 @@ public class CameraController : MonoBehaviour
     public void Initialize(Transform target)
     {
         followTarget = target;
+        lookAtPoint = target.position;
         UpdateCameraPosition(viewAngle, viewDist, target.position);
     }
     

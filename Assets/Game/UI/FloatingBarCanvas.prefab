@@ -113,6 +113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visibilityChecker: {fileID: 0}
+  playerManager: {fileID: 0}
   floatingBarParent: {fileID: 6194615987253482964}
   floatingBarPrefab: {fileID: 2830366321672223725, guid: c93a7a28a999249479c660d465428ed8,
     type: 3}

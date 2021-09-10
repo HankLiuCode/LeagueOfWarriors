@@ -19,5 +19,9 @@ public class ScreenManager : MonoBehaviour
         {
             Screen.SetResolution(960, 540, false);
         }
+        else if (Input.GetKeyDown(KeyCode.Keypad3))
+        {
+            Screen.SetResolution(640, 360, false);
+        }
     }
 }
