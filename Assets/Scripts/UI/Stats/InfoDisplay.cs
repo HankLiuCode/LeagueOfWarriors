@@ -1,8 +1,5 @@
-using Dota.Core;
-using Dota.Networking;
 using Dota.UI;
-using System.Collections;
-using System.Collections.Generic;
+using Dota.Attributes;
 using UnityEngine;
 
 public class InfoDisplay : MonoBehaviour
@@ -12,7 +9,7 @@ public class InfoDisplay : MonoBehaviour
     [SerializeField] ManaDisplay manaDisplay = null;
     [SerializeField] StatsDisplay statsDisplay = null;
 
-    public void SetInfo(Stats stats)
+    public void SetInfo(StatStore stats)
     {
         IIconOwner iconOwner = stats.GetComponent<IIconOwner>();
         Health health = stats.GetComponent<Health>();
@@ -32,7 +29,7 @@ public class InfoDisplay : MonoBehaviour
             if (Physics.Raycast(CameraController.GetMouseRay(), out RaycastHit hit, Mathf.Infinity))
             {
                 GameObject go = hit.collider.gameObject;
-                Stats stats = go.GetComponent<Stats>();
+                StatStore stats = go.GetComponent<StatStore>();
 
                 if (stats != null)
                 {

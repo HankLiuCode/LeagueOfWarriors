@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Dota.UI;
-using Mirror;
-using Dota.Networking;
-using Dota.Core;
+using Dota.Attributes;
 
 public class MidHUDSetup : MonoBehaviour
 {

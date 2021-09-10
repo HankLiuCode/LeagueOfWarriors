@@ -1,7 +1,7 @@
-using Dota.Core;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Dota.Attributes;
 
 public class FloatingBarManager : MonoBehaviour
 {

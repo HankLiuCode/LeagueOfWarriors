@@ -1,4 +1,5 @@
-﻿using Dota.Core;
+﻿using Dota.Attributes;
+using Dota.Core;
 using Mirror;
 using UnityEngine;
 using UnityEngine.AI;
@@ -13,7 +14,7 @@ namespace Dota.Movement
         [SerializeField] Health health = null;
         [SerializeField] NavMeshAgent agent = null;
         [SerializeField] ActionLocker actionScheduler = null;
-        [SerializeField] Stats stats = null;
+        [SerializeField] StatStore stats = null;
 
         #region Client
         public override void OnStartAuthority()

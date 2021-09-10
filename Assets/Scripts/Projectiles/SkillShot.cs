@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
-using Dota.Core;
+using Dota.Attributes;
 
 public class SkillShot : NetworkBehaviour
 {

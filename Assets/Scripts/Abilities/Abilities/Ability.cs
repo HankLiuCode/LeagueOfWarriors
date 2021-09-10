@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using Dota.Core;
+using Dota.Attributes;
 
 public abstract class Ability : NetworkBehaviour, IAction
 {
@@ -17,7 +16,7 @@ public abstract class Ability : NetworkBehaviour, IAction
     float cooldownTime = 2f;
 
     [SerializeField] 
-    protected Stats stats = null;
+    protected StatStore stats = null;
 
     [SerializeField] 
     private bool smartCast;

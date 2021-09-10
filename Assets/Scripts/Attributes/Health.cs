@@ -1,7 +1,7 @@
 ﻿using Mirror;
 using UnityEngine;
 
-namespace Dota.Core
+namespace Dota.Attributes
 {
     public class Health : NetworkBehaviour
     {
@@ -13,7 +13,7 @@ namespace Dota.Core
         bool isDead = false;
 
         [SerializeField] Animator animator = null;
-        [SerializeField] Stats stats = null;
+        [SerializeField] StatStore stats = null;
         [SerializeField] CapsuleCollider capsuleCollider = null;
 
         public event System.Action OnHealthModified;

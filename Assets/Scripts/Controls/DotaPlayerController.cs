@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
-using Dota.Core;
+using Dota.Attributes;
 using Dota.Combat;
 using Dota.Movement;
 

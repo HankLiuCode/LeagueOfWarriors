@@ -9,12 +9,10 @@ public class PlayerManager : NetworkBehaviour
     [SerializeField] GameObject championPrefab;
     [SerializeField] Transform[] blueStartPositions;
     [SerializeField] Transform[] redStartPositions;
-    [SerializeField] Transform[] testStartPositions;
 
     int blueStartPositionIndex = 0;
     int redStartPositionIndex = 0;
-    int testStartPositionIndex = 0;
-
+    
     [SerializeField] List<Champion> debugPlayers = new List<Champion>();
     SyncList<Champion> players = new SyncList<Champion>();
     public event System.Action OnLocalChampionReady;
@@ -47,9 +45,7 @@ public class PlayerManager : NetworkBehaviour
                 return blueStartPos.position;
 
             default:
-                Transform testStartPos = testStartPositions[testStartPositionIndex];
-                testStartPositionIndex = (testStartPositionIndex + 1) % testStartPositions.Length;
-                return testStartPos.position;
+                return Vector3.zero;
         }
     }
 

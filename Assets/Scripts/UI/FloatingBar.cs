@@ -1,4 +1,4 @@
-using Dota.Core;
+using Dota.Attributes;
 using Dota.UI;
 using System.Collections;
 using System.Collections.Generic;

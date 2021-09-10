@@ -1,4 +1,4 @@
-﻿using Dota.Core;
+﻿using Dota.Attributes;
 using Dota.Movement;
 using Dota.Utils;
 using Mirror;
@@ -24,7 +24,7 @@ namespace Dota.Combat
         [SerializeField] NetworkAnimator netAnimator = null;
         [SerializeField] AnimationEventHandler animationEventHandler = null;
         [SerializeField] DotaMover mover = null;
-        [SerializeField] Stats stats = null;
+        [SerializeField] StatStore stats = null;
 
         [SerializeField] bool hasFinishedBackswing = true;
 

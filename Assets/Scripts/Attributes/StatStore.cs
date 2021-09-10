@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Dota.Core
+namespace Dota.Attributes
 {
-    public class Stats : NetworkBehaviour
+    public class StatStore : NetworkBehaviour
     {
+
         [SyncVar(hook = nameof(OnStatsChanged))]
         [SerializeField] 
         float maxHealth;

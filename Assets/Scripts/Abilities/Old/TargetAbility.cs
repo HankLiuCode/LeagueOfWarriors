@@ -1,6 +1,6 @@
 using Dota.Combat;
-using Dota.Controls;
 using Dota.Core;
+using Dota.Attributes;
 using Mirror;
 using System.Collections;
 using System.Collections.Generic;

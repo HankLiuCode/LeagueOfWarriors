@@ -1,4 +1,4 @@
-using Dota.Core;
+using Dota.Attributes;
 using Mirror;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +11,9 @@ public class MinionManager : NetworkBehaviour
 
     [SerializeField] Transform[] blueStartPositions;
     [SerializeField] Transform[] redStartPositions;
-    [SerializeField] Transform[] testPositions;
+    
+    int blueStartPositionIndex = 0;
+    int redStartPositionIndex = 0;
 
     SyncList<Minion> minions = new SyncList<Minion>();
 
@@ -45,15 +47,38 @@ public class MinionManager : NetworkBehaviour
             if (spawnTimer <= 0)
             {
                 SpawnMinion(Team.Blue);
+                SpawnMinion(Team.Red);
                 spawnTimer = spawnInterval;
             }
         }
     }
 
     [Server]
+    public Vector3 GetSpawnPosition(Team team)
+    {
+        switch (team)
+        {
+            case Team.Red:
+
+                Transform redStartPos = redStartPositions[redStartPositionIndex];
+                redStartPositionIndex = (redStartPositionIndex + 1) % redStartPositions.Length;
+                return redStartPos.position;
+
+            case Team.Blue:
+
+                Transform blueStartPos = blueStartPositions[blueStartPositionIndex];
+                blueStartPositionIndex = (blueStartPositionIndex + 1) % blueStartPositions.Length;
+                return blueStartPos.position;
+
+            default:
+                return Vector3.zero;
+        }
+    }
+
+    [Server]
     public void SpawnMinion(Team team)
     {
-        GameObject minionInstance = Instantiate(minionPrefab, GetSpawnPosition(), Quaternion.identity);
+        GameObject minionInstance = Instantiate(minionPrefab, GetSpawnPosition(team), Quaternion.identity);
 
         Minion minion = minionInstance.GetComponent<Minion>();
 
@@ -72,12 +97,6 @@ public class MinionManager : NetworkBehaviour
     {
         Minion minion = health.GetComponent<Minion>();
         OnMinionRemoved?.Invoke(minion);
-    }
-
-    [Server]
-    public Vector3 GetSpawnPosition()
-    {
-        return blueStartPositions[0].position;
     }
 
     #endregion

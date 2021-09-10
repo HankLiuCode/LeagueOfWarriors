@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Dota.Controls;
+using Dota.Attributes;
 using Dota.Core;
 using Dota.Utils;
 

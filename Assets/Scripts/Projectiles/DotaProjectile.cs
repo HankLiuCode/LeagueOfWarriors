@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Dota.Core;
+using Dota.Attributes;
 using Mirror;
 
 namespace Dota.Combat

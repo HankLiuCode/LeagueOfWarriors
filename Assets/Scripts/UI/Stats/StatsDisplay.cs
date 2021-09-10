@@ -2,17 +2,18 @@ using Dota.Core;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Dota.Attributes;
 
 public class StatsDisplay : MonoBehaviour
 {
-    [SerializeField] Stats stats = null;
+    [SerializeField] StatStore stats = null;
 
     [SerializeField] StatsRow speed = null;
     [SerializeField] StatsRow damage = null;
     [SerializeField] StatsRow maxMana = null;
     [SerializeField] StatsRow maxHealth = null;
 
-    public void SetStats(Stats stats)
+    public void SetStats(StatStore stats)
     {
         this.stats = stats;
 
