@@ -7,71 +7,20 @@ namespace Dota.Attributes
 {
     public class StatStore : NetworkBehaviour
     {
-
-        [SyncVar(hook = nameof(OnStatsChanged))]
-        [SerializeField] 
-        float maxHealth;
-
         [SyncVar(hook = nameof(OnStatsChanged))]
         [SerializeField]
-        float maxMana;
+        Stats baseStats;
 
-        [SyncVar(hook = nameof(OnStatsChanged))]
-        [SerializeField] 
-        float movementSpeed;
-
-        [SyncVar(hook = nameof(OnStatsChanged))]
-        [SerializeField] 
-        float attackSpeed;
-
-        [SyncVar(hook = nameof(OnStatsChanged))]
-        [SerializeField] 
-        float damage;
-
-        [SyncVar(hook = nameof(OnStatsChanged))]
-        [SerializeField] 
-        float healthRegenRate;
-
-        [SyncVar(hook = nameof(OnStatsChanged))]
-        [SerializeField] 
-        float manaRegenRate;
-
-        [SyncVar(hook = nameof(OnStatsChanged))]
-        [SerializeField] 
-        float armor;
-
-        public event System.Action OnStatsModified;
-
-
-        private void OnStatsChanged(float oldValue, float newValue)
+        public event System.Action<Stats> OnStatsModified;
+        
+        private void OnStatsChanged(Stats oldValue, Stats newValue)
         {
-            OnStatsModified?.Invoke();
+            OnStatsModified?.Invoke(newValue);
         }
 
-        public float GetMaxHealth()
+        public Stats GetStats()
         {
-            return maxHealth;
-        }
-
-        public float GetMaxMana()
-        {
-            return maxMana;
-        }
-
-        public float GetManaRegenRate()
-        {
-            return manaRegenRate;
-        }
-
-        public float GetMovementSpeed()
-        {
-            return movementSpeed;
-        }
-
-        public float GetDamage()
-        {
-            return damage;
+            return baseStats;
         }
     }
-
 }

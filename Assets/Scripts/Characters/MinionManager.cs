@@ -22,6 +22,9 @@ public class MinionManager : NetworkBehaviour
 
     float spawnTimer;
 
+    [SerializeField] int maxSpawn = 3;
+    int currentSpawn = 0;
+
 
     private void Start()
     {
@@ -46,8 +49,12 @@ public class MinionManager : NetworkBehaviour
             spawnTimer -= Time.deltaTime;
             if (spawnTimer <= 0)
             {
-                SpawnMinion(Team.Blue);
-                SpawnMinion(Team.Red);
+                if(currentSpawn < maxSpawn)
+                {
+                    SpawnMinion(Team.Blue);
+                    SpawnMinion(Team.Red);
+                    currentSpawn++;
+                }
                 spawnTimer = spawnInterval;
             }
         }

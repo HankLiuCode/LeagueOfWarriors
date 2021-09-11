@@ -28,7 +28,8 @@ MonoBehaviour:
   syncInterval: 0.1
   manaCost: 5
   cooldownTime: 5
-  stats: {fileID: 9134965200569341792}
+  statStore: {fileID: 9134965200569341792}
+  icon: {fileID: 21300000, guid: 4637953d65a24364aab3372a525b9ed2, type: 3}
   smartCast: 0
   indicatorPrefab: {fileID: 7509079907997610509, guid: f7e58577928620441a8e147c3a9eaf13,
     type: 3}
@@ -76,7 +77,8 @@ MonoBehaviour:
   syncInterval: 0.1
   manaCost: 10
   cooldownTime: 2
-  stats: {fileID: 0}
+  statStore: {fileID: 9134965200569341792}
+  icon: {fileID: 21300000, guid: 2e350bcef09f70943ba03de78d8c063a, type: 3}
   smartCast: 1
   networkAnimator: {fileID: 1861298204142979517}
   animationEventHandler: {fileID: 2928662850204982764}
@@ -124,7 +126,8 @@ MonoBehaviour:
   syncInterval: 0.1
   manaCost: 5
   cooldownTime: 5
-  stats: {fileID: 9134965200569341792}
+  statStore: {fileID: 9134965200569341792}
+  icon: {fileID: 21300000, guid: 4637953d65a24364aab3372a525b9ed2, type: 3}
   smartCast: 0
   indicatorPrefab: {fileID: 7509079907997610509, guid: f7e58577928620441a8e147c3a9eaf13,
     type: 3}
@@ -140,7 +143,7 @@ MonoBehaviour:
   maxRange: 6
   baseDamage: 10
   damageRadius: 2
-  delayTime: 1
+  delayTime: 2
   destroyTime: 0.8
 --- !u!114 &228051818702057190
 MonoBehaviour:
@@ -157,7 +160,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   manaPoint: 100
-  stats: {fileID: 9134965200569341792}
+  statStore: {fileID: 9134965200569341792}
 --- !u!114 &538770581797919719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,7 +177,8 @@ MonoBehaviour:
   syncInterval: 0.1
   manaCost: 20
   cooldownTime: 2
-  stats: {fileID: 0}
+  statStore: {fileID: 9134965200569341792}
+  icon: {fileID: 21300000, guid: 2c04f4986ebc72e48a8b0c3eb2e42db2, type: 3}
   smartCast: 0
   indicatorPrefab: {fileID: 2726156333138317243, guid: e49fdf0fe03ad394880183322ea11d43,
     type: 3}
@@ -485,6 +489,56 @@ PrefabInstance:
       propertyPath: maxHealth
       value: 150
       objectReference: {fileID: 0}
+    - target: {fileID: -7159978106751353337, guid: b31cb8edadf36634680f82045f41209b,
+        type: 3}
+      propertyPath: baseStats.armor
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -7159978106751353337, guid: b31cb8edadf36634680f82045f41209b,
+        type: 3}
+      propertyPath: baseStats.maxMana
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: -7159978106751353337, guid: b31cb8edadf36634680f82045f41209b,
+        type: 3}
+      propertyPath: baseStats.manaRegen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7159978106751353337, guid: b31cb8edadf36634680f82045f41209b,
+        type: 3}
+      propertyPath: baseStats.maxHealth
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: -7159978106751353337, guid: b31cb8edadf36634680f82045f41209b,
+        type: 3}
+      propertyPath: baseStats.moveSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -7159978106751353337, guid: b31cb8edadf36634680f82045f41209b,
+        type: 3}
+      propertyPath: baseStats.attackSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7159978106751353337, guid: b31cb8edadf36634680f82045f41209b,
+        type: 3}
+      propertyPath: baseStats.healthRegen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7159978106751353337, guid: b31cb8edadf36634680f82045f41209b,
+        type: 3}
+      propertyPath: baseStats.magicDamage
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -7159978106751353337, guid: b31cb8edadf36634680f82045f41209b,
+        type: 3}
+      propertyPath: baseStats.magicResist
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -7159978106751353337, guid: b31cb8edadf36634680f82045f41209b,
+        type: 3}
+      propertyPath: baseStats.attackDamage
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 2433690888149234406, guid: b31cb8edadf36634680f82045f41209b,
         type: 3}
       propertyPath: stats
@@ -540,6 +594,11 @@ PrefabInstance:
       propertyPath: maxSpeed
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7214919029000824488, guid: b31cb8edadf36634680f82045f41209b,
+        type: 3}
+      propertyPath: statStore
+      value: 
+      objectReference: {fileID: 9134965200569341792}
     - target: {fileID: 7214919029000824491, guid: b31cb8edadf36634680f82045f41209b,
         type: 3}
       propertyPath: m_Speed

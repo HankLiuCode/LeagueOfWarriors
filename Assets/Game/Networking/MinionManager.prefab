@@ -114,7 +114,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1190159854}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 39.11, y: 0, z: 40.47}
+  m_LocalPosition: {x: 1.8, y: 0, z: 4.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1599501706}
@@ -177,7 +177,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1576384582}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -37.6, y: 0, z: -35.25}
+  m_LocalPosition: {x: -6.3, y: 0, z: -3.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 822654627}
@@ -313,7 +313,7 @@ MonoBehaviour:
   syncInterval: 1
   minionPrefab: {fileID: 9165540034895490147, guid: e0b13fbed652d5e4599cd9be41701618,
     type: 3}
-  spawnInterval: 10
+  spawnInterval: 5
   blueStartPositions:
   - {fileID: 822654627}
   - {fileID: 1097295595}
@@ -322,9 +322,4 @@ MonoBehaviour:
   - {fileID: 1599501706}
   - {fileID: 1648889116}
   - {fileID: 431767171}
-  testPositions:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  maxSpawn: 3

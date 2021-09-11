@@ -134,7 +134,7 @@ MonoBehaviour:
   health: {fileID: 8223221447003321259}
   agent: {fileID: 7214919029000824491}
   actionScheduler: {fileID: 5093792499633400171}
-  stats: {fileID: -7159978106751353337}
+  statStore: {fileID: -7159978106751353337}
 --- !u!114 &2433690888149234406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,7 +155,7 @@ MonoBehaviour:
   netAnimator: {fileID: 8913722561556947162}
   animationEventHandler: {fileID: 0}
   mover: {fileID: 7214919029000824488}
-  stats: {fileID: 0}
+  statStore: {fileID: -7159978106751353337}
   hasFinishedBackswing: 1
 --- !u!114 &8223221447003321259
 MonoBehaviour:
@@ -217,11 +217,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  maxHealth: 100
-  maxMana: 100
-  movementSpeed: 5
-  attackSpeed: 1
-  damage: 10
-  healthRegenRate: 1
-  manaRegenRate: 1
-  armor: 10
+  baseStats:
+    maxHealth: 100
+    maxMana: 100
+    manaRegen: 1
+    healthRegen: 1
+    attackSpeed: 1
+    moveSpeed: 5
+    attackDamage: 10
+    magicDamage: 10
+    armor: 10
+    magicResist: 10
+    attackRange: 0
+    cooldownReduction: 0
+    goldGeneration: 0

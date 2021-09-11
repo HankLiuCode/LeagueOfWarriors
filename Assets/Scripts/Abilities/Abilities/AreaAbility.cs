@@ -27,7 +27,7 @@ public class AreaAbility : Ability
     [SerializeField] float baseDamage = 10f;
 
     [SerializeField] float damageRadius = 1f;
-    [SerializeField] float delayTime = 1f;
+    [SerializeField] float delayTime = 2f;
     [SerializeField] float destroyTime = 3f;
 
     #region Server
@@ -52,7 +52,7 @@ public class AreaAbility : Ability
             Health health = go.GetComponent<Health>();
             if (health && !TeamChecker.IsSameTeam(gameObject, health.gameObject))
             {
-                float damage = baseDamage + stats.GetDamage();
+                float damage = baseDamage + statStore.GetStats().magicDamage;
                 health.ServerTakeDamage(damage);
             }
         }
@@ -110,7 +110,6 @@ public class AreaAbility : Ability
     public override void UpdateIndicator(AbilityData abilityData)
     {
         spellRangeInstance.SetPosition(abilityData.casterPos);
-        
         areaIndicatorInstance.SetPosition(abilityData.mousePos);
     }
 
@@ -122,7 +121,7 @@ public class AreaAbility : Ability
     }
 
     [Client]
-    public override void Cast(AbilityData abilityData)
+    public override void ClientCast(AbilityData abilityData)
     {
         bool canDo = actionLocker.TryGetLock(this);
         if (canDo)

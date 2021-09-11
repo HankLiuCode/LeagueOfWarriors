@@ -16,7 +16,10 @@ public abstract class Ability : NetworkBehaviour, IAction
     float cooldownTime = 2f;
 
     [SerializeField] 
-    protected StatStore stats = null;
+    protected StatStore statStore = null;
+
+    [SerializeField]
+    private Sprite icon = null;
 
     [SerializeField] 
     private bool smartCast;
@@ -33,6 +36,11 @@ public abstract class Ability : NetworkBehaviour, IAction
         return manaCost;
     }
 
+    public Sprite GetIcon()
+    {
+        return icon;
+    }
+
     #region Client
     public abstract void ShowIndicator();
 
@@ -40,7 +48,7 @@ public abstract class Ability : NetworkBehaviour, IAction
 
     public abstract void HideIndicator();
 
-    public abstract void Cast(AbilityData abilityData);
+    public abstract void ClientCast(AbilityData abilityData);
 
     public int GetPriority()
     {

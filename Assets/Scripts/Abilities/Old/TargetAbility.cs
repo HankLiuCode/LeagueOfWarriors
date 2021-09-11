@@ -91,7 +91,7 @@ namespace Dota.Abilities
             spellRangeInstance.gameObject.SetActive(false);
         }
 
-        public override void Cast(AbilityData abilityData)
+        public override void ClientCast(AbilityData abilityData)
         {
             if (abilityData.target == null) { return; }
 

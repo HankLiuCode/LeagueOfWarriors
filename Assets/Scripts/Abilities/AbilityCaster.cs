@@ -7,6 +7,7 @@ using Dota.Attributes;
 using Dota.Core;
 public class AbilityData
 {
+    public AbilityCaster caster;
     public Vector3 casterPos;
     public Vector3 mousePos;
     public Vector3 castPos;
@@ -29,8 +30,8 @@ public class AbilityCaster : NetworkBehaviour
     public override void OnStartAuthority()
     {
         abilityData = new AbilityData();
+        abilityData.caster = this;
     }
-
 
     [ClientCallback]
     private void Update()
@@ -131,7 +132,7 @@ public class AbilityCaster : NetworkBehaviour
         if (canCast)
         {
             mana.ClientUseMana(ability.GetManaCost());
-            ability.Cast(abilityData);
+            ability.ClientCast(abilityData);
             cooldownStore.ClientStartCooldown(ability, ability.GetCooldownTime());
         }
     }

@@ -6,37 +6,36 @@ using Dota.Attributes;
 
 public class StatsDisplay : MonoBehaviour
 {
-    [SerializeField] StatStore stats = null;
+    [SerializeField] StatStore statStore = null;
 
     [SerializeField] StatsRow speed = null;
     [SerializeField] StatsRow damage = null;
     [SerializeField] StatsRow maxMana = null;
     [SerializeField] StatsRow maxHealth = null;
 
-    public void SetStats(StatStore stats)
+    public void SetStats(StatStore statStore)
     {
-        this.stats = stats;
-
-        if(this.stats != null)
+        if(this.statStore != null)
         {
-            this.stats.OnStatsModified -= Stats_OnStatsModified;
+            this.statStore.OnStatsModified -= StatStore_OnStatsModified;
         }
-        this.stats.OnStatsModified += Stats_OnStatsModified;
+        this.statStore = statStore;
+        this.statStore.OnStatsModified += StatStore_OnStatsModified;
 
-        UpdateStats();
+        UpdateStats(this.statStore.GetStats());
     }
 
-    private void Stats_OnStatsModified()
+    private void StatStore_OnStatsModified(Stats stats)
     {
-        UpdateStats();
+        UpdateStats(stats);
     }
 
-    private void UpdateStats()
+    private void UpdateStats(Stats stats)
     {
         Debug.Log("UpdateStats");
-        speed.SetRow("speed", this.stats.GetMovementSpeed());
-        damage.SetRow("damage", this.stats.GetDamage());
-        maxHealth.SetRow("maxHealth", this.stats.GetMaxHealth());
-        maxMana.SetRow("maxMana", this.stats.GetMaxMana()); 
+        speed.SetRow("speed", stats.moveSpeed);
+        damage.SetRow("damage", stats.attackDamage);
+        maxHealth.SetRow("maxHealth", stats.maxHealth);
+        maxMana.SetRow("maxMana", stats.maxMana); 
     }
 }

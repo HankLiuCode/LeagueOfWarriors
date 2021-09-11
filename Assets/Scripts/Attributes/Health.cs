@@ -21,7 +21,7 @@ namespace Dota.Attributes
 
         public override void OnStartClient()
         {
-            healthPoint = stats.GetMaxHealth();
+            healthPoint = stats.GetStats().maxHealth;
         }
 
         public float GetHealthPoint()
@@ -31,12 +31,12 @@ namespace Dota.Attributes
 
         public float GetHealthPercent()
         {
-            return healthPoint / stats.GetMaxHealth();
+            return healthPoint / stats.GetStats().maxHealth;
         }
 
         public float GetMaxHealth()
         {
-            return stats.GetMaxHealth();
+            return stats.GetStats().maxHealth;
         }
         
         public bool IsDead()
@@ -68,7 +68,7 @@ namespace Dota.Attributes
         [Server]
         public void ServerHeal(float amount)
         {
-            healthPoint = Mathf.Min(healthPoint + amount, stats.GetMaxHealth());
+            healthPoint = Mathf.Min(healthPoint + amount, stats.GetStats().maxHealth);
         }
 
         [Command]

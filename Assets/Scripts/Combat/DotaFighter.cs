@@ -24,7 +24,7 @@ namespace Dota.Combat
         [SerializeField] NetworkAnimator netAnimator = null;
         [SerializeField] AnimationEventHandler animationEventHandler = null;
         [SerializeField] DotaMover mover = null;
-        [SerializeField] StatStore stats = null;
+        [SerializeField] StatStore statStore = null;
 
         [SerializeField] bool hasFinishedBackswing = true;
 
@@ -101,7 +101,7 @@ namespace Dota.Combat
 
         void MeleeAttack()
         {
-            CmdDealDamageTo(target, stats.GetDamage());
+            CmdDealDamageTo(target, statStore.GetStats().attackDamage);
         }
 
         private bool GetIsInRange()

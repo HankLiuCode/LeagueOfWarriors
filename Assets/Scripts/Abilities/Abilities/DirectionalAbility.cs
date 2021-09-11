@@ -113,7 +113,7 @@ public class DirectionalAbility : Ability
     }
 
     [Client]
-    public override void Cast(AbilityData abilityData)
+    public override void ClientCast(AbilityData abilityData)
     {
         bool canDo = actionLocker.TryGetLock(this);
         if (canDo)

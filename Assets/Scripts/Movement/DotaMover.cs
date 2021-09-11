@@ -14,12 +14,12 @@ namespace Dota.Movement
         [SerializeField] Health health = null;
         [SerializeField] NavMeshAgent agent = null;
         [SerializeField] ActionLocker actionScheduler = null;
-        [SerializeField] StatStore stats = null;
+        [SerializeField] StatStore statStore = null;
 
         #region Client
         public override void OnStartAuthority()
         {
-            agent.speed = stats.GetMovementSpeed();
+            agent.speed = statStore.GetStats().moveSpeed;
         }
 
         [Client]
@@ -28,7 +28,7 @@ namespace Dota.Movement
             bool canMove = actionScheduler.TryGetLock(this);
             if (canMove)
             {
-                agent.speed = stats.GetMovementSpeed();
+                agent.speed = statStore.GetStats().moveSpeed;
                 agent.isStopped = false;
                 agent.SetDestination(position);
             }

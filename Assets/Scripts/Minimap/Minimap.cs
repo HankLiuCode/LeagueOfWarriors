@@ -40,8 +40,8 @@ public class Minimap : MonoBehaviour
         IMinimapEntity minimapEntity = visionEntity.GetComponent<IMinimapEntity>();
 
         MinimapIcon minimapIconInstance = minimapEntity.GetMinimapIconInstance();
-
-        minimapIconInstance.transform.parent = GetLayer(minimapEntity.GetLayerName());
+        
+        minimapIconInstance.transform.SetParent(GetLayer(minimapEntity.GetLayerName()));
 
         minimapIconInstances.Add(visionEntity.transform, minimapIconInstance);
     }

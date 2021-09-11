@@ -10,7 +10,7 @@ public class Mana : NetworkBehaviour
     [SyncVar(hook = nameof(OnManaChanged))]
     float manaPoint;
 
-    [SerializeField] StatStore stats = null;
+    [SerializeField] StatStore statStore = null;
 
     public event System.Action OnManaModified;
 
@@ -23,7 +23,7 @@ public class Mana : NetworkBehaviour
 
     public float GetManaPercent()
     {
-        return manaPoint / stats.GetMaxMana();
+        return manaPoint / statStore.GetStats().maxMana;
     }
 
     public float GetManaPoint()
@@ -33,7 +33,7 @@ public class Mana : NetworkBehaviour
 
     public float GetMaxMana()
     {
-        return stats.GetMaxMana();
+        return statStore.GetStats().maxMana;
     }
 
     #endregion
@@ -42,12 +42,12 @@ public class Mana : NetworkBehaviour
     [ServerCallback]
     private void Update()
     {
-        if (manaPoint < stats.GetMaxMana())
+        if (manaPoint < statStore.GetStats().maxMana)
         {
-            manaPoint += stats.GetManaRegenRate() * Time.deltaTime;
-            if (manaPoint > stats.GetMaxMana())
+            manaPoint += statStore.GetStats().manaRegen * Time.deltaTime;
+            if (manaPoint > statStore.GetStats().maxMana)
             {
-                manaPoint = stats.GetMaxMana();
+                manaPoint = statStore.GetStats().maxMana;
             }
         }
     }
@@ -69,13 +69,19 @@ public class Mana : NetworkBehaviour
         ServerUseMana(manaToUse);
     }
 
+    [Client]
+    public void ClientUseMana(float manaToUse)
+    {
+        CmdUseMana(manaToUse);
+    }
+
     #endregion
 
     #region Client
 
     public override void OnStartClient()
     {
-        manaPoint = stats.GetMaxMana();
+        manaPoint = statStore.GetStats().maxMana;
     } 
 
     [Client]
@@ -86,12 +92,6 @@ public class Mana : NetworkBehaviour
             return false;
         }
         return true;
-    }
-
-    [Client]
-    public void ClientUseMana(float manaToUse)
-    {
-        CmdUseMana(manaToUse);
     }
 
     private void OnManaChanged(float oldValue, float newValue)
