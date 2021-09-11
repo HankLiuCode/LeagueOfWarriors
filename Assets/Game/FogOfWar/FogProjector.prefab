@@ -66,4 +66,4 @@ MonoBehaviour:
   projectorMaterial: {fileID: 2100000, guid: ff14a9b8deae5d44fa19dc1b9adf855f, type: 2}
   blendSpeed: 3
   textureScale: 4
-  fogTexture: {fileID: 8400000, guid: 80d8385a5e56b6d4da41fcb9e1237478, type: 2}
+  fogTexture: {fileID: 8400000, guid: 127bff35f1e803849ade80cace46538b, type: 2}
