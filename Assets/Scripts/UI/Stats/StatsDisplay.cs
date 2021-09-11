@@ -6,12 +6,11 @@ using Dota.Attributes;
 
 public class StatsDisplay : MonoBehaviour
 {
-    [SerializeField] StatStore statStore = null;
+    [SerializeField] StatsRow[] statRows = null;
 
-    [SerializeField] StatsRow speed = null;
-    [SerializeField] StatsRow damage = null;
-    [SerializeField] StatsRow maxMana = null;
-    [SerializeField] StatsRow maxHealth = null;
+    [SerializeField] StringIconMapping stringIconMapping = null;
+
+    StatStore statStore = null;
 
     public void SetStats(StatStore statStore)
     {
@@ -32,10 +31,13 @@ public class StatsDisplay : MonoBehaviour
 
     private void UpdateStats(Stats stats)
     {
-        Debug.Log("UpdateStats");
-        speed.SetRow("speed", stats.moveSpeed);
-        damage.SetRow("damage", stats.attackDamage);
-        maxHealth.SetRow("maxHealth", stats.maxHealth);
-        maxMana.SetRow("maxMana", stats.maxMana); 
+        statRows[0].SetRow(stringIconMapping.GetIcon("moveSpeed"), stats.moveSpeed);
+        statRows[1].SetRow(stringIconMapping.GetIcon("attackSpeed"), stats.attackSpeed);
+        statRows[2].SetRow(stringIconMapping.GetIcon("attackDamage"), stats.attackDamage);
+        statRows[3].SetRow(stringIconMapping.GetIcon("magicDamage"), stats.magicDamage);
+        statRows[4].SetRow(stringIconMapping.GetIcon("armor"), stats.armor);
+        statRows[5].SetRow(stringIconMapping.GetIcon("magicResist"), stats.magicResist);
+        statRows[6].SetRow(stringIconMapping.GetIcon("maxHealth"), stats.maxHealth);
+        statRows[7].SetRow(stringIconMapping.GetIcon("maxMana"), stats.maxMana); 
     }
 }

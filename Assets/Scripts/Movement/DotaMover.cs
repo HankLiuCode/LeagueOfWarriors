@@ -13,7 +13,7 @@ namespace Dota.Movement
         [SerializeField] Animator animator = null;
         [SerializeField] Health health = null;
         [SerializeField] NavMeshAgent agent = null;
-        [SerializeField] ActionLocker actionScheduler = null;
+        [SerializeField] ActionLocker actionLocker = null;
         [SerializeField] StatStore statStore = null;
 
         #region Client
@@ -25,7 +25,7 @@ namespace Dota.Movement
         [Client]
         public void MoveTo(Vector3 position)
         {
-            bool canMove = actionScheduler.TryGetLock(this);
+            bool canMove = actionLocker.TryGetLock(this);
             if (canMove)
             {
                 agent.speed = statStore.GetStats().moveSpeed;

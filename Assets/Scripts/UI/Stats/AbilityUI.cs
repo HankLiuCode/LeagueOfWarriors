@@ -23,6 +23,12 @@ public class AbilityUI : MonoBehaviour
         abilityIcon.sprite = abilityCaster.GetAbility(index).GetIcon();
     }
 
+    private void Start()
+    {
+        unreadyOverlay.gameObject.SetActive(false);
+        cdTime.gameObject.SetActive(false);
+    }
+
     private void Update()
     {
         if(abilityCaster != null)

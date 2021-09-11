@@ -12,32 +12,21 @@ public class FOVGraphics : NetworkBehaviour
     [SerializeField] MeshFilter viewMeshFilter = null;
 
     Mesh viewMesh;
+    int vertexCount;
+    Vector3[] vertices;
+    int[] triangles;
 
     private void Start()
     {
         viewMesh = new Mesh();
         viewMesh.name = "ViewMesh";
         viewMeshFilter.mesh = viewMesh;
-    }
 
-    private void Update()
-    {
-        List<Vector3> viewPoints = new List<Vector3>();
+        List<Vector3> viewPoints = GetViewPoints();
 
-        for (int i = 0; i < 360; i += degreePerCast)
-        {
-            Vector3 direction = DirectionFromAngle(i);
-
-            bool hasHit = Physics.Raycast(transform.position, direction, out RaycastHit hit, viewRadius, obstacleMask);
-
-            Vector3 vertexPoint = hasHit ? hit.point : transform.position + direction * viewRadius;
-
-            viewPoints.Add(vertexPoint);
-        }
-
-        int vertexCount = viewPoints.Count + 1;
-        Vector3[] vertices = new Vector3[vertexCount];
-        int[] triangles = new int[(vertexCount - 1) * 3];
+        vertexCount = viewPoints.Count + 1;
+        vertices = new Vector3[vertexCount];
+        triangles = new int[(vertexCount - 1) * 3];
 
         vertices[0] = Vector3.zero;
         for (int i = 0; i < vertexCount - 1; i++)
@@ -61,6 +50,45 @@ public class FOVGraphics : NetworkBehaviour
         viewMesh.vertices = vertices;
         viewMesh.triangles = triangles;
         viewMesh.RecalculateNormals();
+    }
+
+    private void Update()
+    {
+        UpdateMesh();
+    }
+
+    private void UpdateMesh()
+    {
+        List<Vector3> viewPoints = GetViewPoints();
+
+        vertices[0] = Vector3.zero;
+
+        for (int i = 0; i < vertexCount - 1; i++)
+        {
+            vertices[i + 1] = transform.InverseTransformPoint(viewPoints[i]);
+        }
+
+        viewMesh.Clear();
+        viewMesh.vertices = vertices;
+        viewMesh.triangles = triangles;
+        viewMesh.RecalculateNormals();
+    }
+
+    private List<Vector3> GetViewPoints()
+    {
+        List<Vector3> viewPoints = new List<Vector3>();
+
+        for (int i = 0; i < 360; i += degreePerCast)
+        {
+            Vector3 direction = DirectionFromAngle(i);
+
+            bool hasHit = Physics.Raycast(transform.position, direction, out RaycastHit hit, viewRadius, obstacleMask);
+
+            Vector3 vertexPoint = hasHit ? hit.point : transform.position + direction * viewRadius;
+
+            viewPoints.Add(vertexPoint);
+        }
+        return viewPoints;
     }
 
     public Vector3 DirectionFromAngle(float angleInDegrees)

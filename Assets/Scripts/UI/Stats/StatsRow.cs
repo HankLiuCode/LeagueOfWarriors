@@ -8,12 +8,10 @@ public class StatsRow : MonoBehaviour
 {
     [SerializeField] Image rowIcon;
     [SerializeField] TextMeshProUGUI rowValue;
-    [SerializeField] StringIconMapping stringIconMapping;
 
-    public void SetRow(string name, float value)
+    public void SetRow(Sprite icon, float value)
     {
-        Debug.Log("SetRow");
-        rowIcon.sprite = stringIconMapping.GetIcon(name);
+        rowIcon.sprite = icon;
         rowValue.text = value.ToString("F1");
     }
 }

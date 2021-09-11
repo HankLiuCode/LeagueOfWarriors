@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InfoDisplay : MonoBehaviour
 {
+    [SerializeField] GameObject infoPanel = null;
     [SerializeField] IconDisplay iconDisplay = null;
     [SerializeField] HealthDisplay healthDisplay = null;
     [SerializeField] ManaDisplay manaDisplay = null;
@@ -21,6 +22,10 @@ public class InfoDisplay : MonoBehaviour
         statsDisplay.SetStats(stats);
     }
 
+    private void Start()
+    {
+        infoPanel.SetActive(false);
+    }
 
     private void Update()
     {
@@ -33,7 +38,12 @@ public class InfoDisplay : MonoBehaviour
 
                 if (stats != null)
                 {
+                    infoPanel.SetActive(true);
                     SetInfo(stats);
+                }
+                else
+                {
+                    infoPanel.SetActive(false);
                 }
             }
         }
