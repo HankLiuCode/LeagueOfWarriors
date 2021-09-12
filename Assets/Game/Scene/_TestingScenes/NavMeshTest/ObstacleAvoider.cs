@@ -12,11 +12,10 @@ public class ObstacleAvoider : MonoBehaviour
     [SerializeField] float probeLength = 2f;
     [SerializeField] List<Transform> obstacles;
 
-    [SerializeField] Transform target;
-
     [SerializeField] float clearObstacleCacheInterval = 2f;
 
     [SerializeField] float moveStraightTime;
+    
     Dictionary<Transform, int> obstacleCache = new Dictionary<Transform, int>();
     float moveStraightTimer;
 
@@ -52,7 +51,7 @@ public class ObstacleAvoider : MonoBehaviour
         }
     }
 
-    public void Move(NavMeshAgent navMeshAgent, float speed)
+    public void Move(NavMeshAgent navMeshAgent, float speed, Vector3 target)
     {
         ObstacleInfo obstacleInfo = GetClosestObstacleInfo();
 
@@ -76,7 +75,7 @@ public class ObstacleAvoider : MonoBehaviour
         
         if(moveStraightTimer <= 0)
         {
-            Vector3 direction = target.position - transform.position;
+            Vector3 direction = target - transform.position;
             Vector3 forward = new Vector3(direction.x, 0, direction.z);
             transform.forward = forward;
             navMeshAgent.speed = speed;
@@ -85,7 +84,6 @@ public class ObstacleAvoider : MonoBehaviour
         else
         {
             moveStraightTimer -= Time.deltaTime;
-
             navMeshAgent.speed = speed;
             navMeshAgent.Move(transform.forward * speed * Time.deltaTime);
         }

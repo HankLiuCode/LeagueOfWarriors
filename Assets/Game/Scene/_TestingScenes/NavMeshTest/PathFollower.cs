@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class PathFollower : MonoBehaviour
 {
+    [SerializeField] ObstacleAvoider obstacleAvoider = null;
     [SerializeField] private Vector3[] wayPoints;
     [SerializeField] int nextIndex = -1;
     [SerializeField] bool reachedDest = true;
@@ -37,8 +38,15 @@ public class PathFollower : MonoBehaviour
             }
         }
         
-        transform.forward = (direction == Vector3.zero) ? transform.forward : direction;
-        navMeshAgent.Move(direction * speed * Time.deltaTime);
+        //transform.forward = (direction == Vector3.zero) ? transform.forward : direction;
+        //navMeshAgent.Move(direction * speed * Time.deltaTime);
+
+        obstacleAvoider.Move(navMeshAgent, speed, NextWayPoint());
+    }
+
+    public Vector3 NextWayPoint()
+    {
+        return wayPoints[nextIndex];
     }
 
     private Vector3 Vec2Direction(Vector3 pos1, Vector3 pos2)
