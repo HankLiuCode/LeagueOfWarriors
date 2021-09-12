@@ -51,8 +51,8 @@ MonoBehaviour:
   runInBackground: 1
   autoStartServerBuild: 1
   serverTickRate: 30
-  offlineScene: Assets/RayTesting/Copy/Offline 1.unity
-  onlineScene: Assets/RayTesting/Copy/Room 1.unity
+  offlineScene: 
+  onlineScene: 
   transport: {fileID: 8468138675378180724}
   networkAddress: localhost
   maxConnections: 100
@@ -74,8 +74,8 @@ MonoBehaviour:
   minPlayers: 1
   roomPlayerPrefab: {fileID: 8645935724997768616, guid: ea5ee26a955791d4687d7c7267ada4fb,
     type: 3}
-  RoomScene: Assets/RayTesting/Copy/Room 1.unity
-  GameplayScene: Assets/RayTesting/Copy/Game 1.unity
+  RoomScene: 
+  GameplayScene: 
   _allPlayersReady: 0
   roomSlots: []
   clientIndex: 0
