@@ -10,9 +10,10 @@ public class PathFollower : MonoBehaviour
     [SerializeField] bool reachedDest = true;
     public const float ARRIVE_EPSILON = 0.1f;
 
-
     public void SetPath(Vector3[] wayPoints)
     {
+        if(wayPoints.Length <= 0) { return; }
+
         this.wayPoints = wayPoints;
         reachedDest = false;
         nextIndex = 0;
@@ -25,8 +26,6 @@ public class PathFollower : MonoBehaviour
         Vector3 direction = Vec2Direction(transform.position, wayPoints[nextIndex]);
         float distance = Vec2Distance(wayPoints[nextIndex], transform.position);
 
-        Debug.Log(distance);
-
         if (distance < ARRIVE_EPSILON)
         {
             nextIndex++;
@@ -37,7 +36,8 @@ public class PathFollower : MonoBehaviour
                 nextIndex = wayPoints.Length - 1;
             }
         }
-
+        
+        transform.forward = (direction == Vector3.zero) ? transform.forward : direction;
         navMeshAgent.Move(direction * speed * Time.deltaTime);
     }
 
