@@ -919,6 +919,8 @@ GameObject:
   - component: {fileID: 1242839548}
   - component: {fileID: 1242839547}
   - component: {fileID: 1242839552}
+  - component: {fileID: 1242839551}
+  - component: {fileID: 1242839553}
   - component: {fileID: 1242839554}
   m_Layer: 0
   m_Name: Agent
@@ -998,13 +1000,28 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1242839546}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 6.8, y: 1, z: -8.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2075757383}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1242839551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1242839546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 181db5e3bd364154a9291e670daf22bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wayPoints: []
+  nextIndex: 0
+  reachedDest: 1
 --- !u!195 &1242839552
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1027,7 +1044,7 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &1242839554
+--- !u!114 &1242839553
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1041,7 +1058,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 1242839552}
   speed: 5
-  nextIndex: -1
+  pathFollower: {fileID: 1242839551}
+--- !u!114 &1242839554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1242839546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b7b2f9dbc86fcd418854c14a1a0d079, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 1
+  obstacleRadius: 2
+  probeLength: 2
+  obstacles:
+  - {fileID: 1135399565}
+  - {fileID: 1642942165}
+  - {fileID: 331186227}
+  - {fileID: 206568402}
+  - {fileID: 1212037463}
+  - {fileID: 1349837202}
 --- !u!1 &1349837201
 GameObject:
   m_ObjectHideFlags: 0
