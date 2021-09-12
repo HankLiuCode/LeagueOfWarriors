@@ -133,7 +133,7 @@ MonoBehaviour:
   animator: {fileID: 0}
   health: {fileID: 8223221447003321259}
   agent: {fileID: 7214919029000824491}
-  actionScheduler: {fileID: 5093792499633400171}
+  actionLocker: {fileID: 5093792499633400171}
   statStore: {fileID: -7159978106751353337}
 --- !u!114 &2433690888149234406
 MonoBehaviour:

@@ -54,7 +54,7 @@ public class FloatingBarManager : MonoBehaviour
 
         FloatingBar floatingBarInstance = Instantiate(floatingBarPrefab, floatingBarParent).GetComponent<FloatingBar>();
 
-        floatingBarInstance.Setup(health, mana, localPlayerTeam, teamMember.GetTeam(), Vector3.up * 4);
+        floatingBarInstance.Setup(health, mana, localPlayerTeam, teamMember.GetTeam(), Vector3.up * 3);
         
         floatingBars.Add(obj.GetComponent<Health>(), floatingBarInstance);
     }

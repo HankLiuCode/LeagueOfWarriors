@@ -108,7 +108,7 @@ namespace Dota.Combat
         {
             return Vector3.Distance(transform.position, target.transform.position) < attackRange;
         }
-
+        
         [ClientCallback]
         private void Update()
         {
@@ -119,7 +119,7 @@ namespace Dota.Combat
             if (target == null) { return; }
 
             if (target.IsDead()) { return; }
-
+            
             if (!GetIsInRange())
             {
                 if (hasFinishedBackswing)
