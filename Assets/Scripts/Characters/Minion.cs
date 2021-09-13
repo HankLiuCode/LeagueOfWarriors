@@ -2,12 +2,16 @@ using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
 {
     [SerializeField] 
     [SyncVar]
     Team team;
+
+    [SerializeField] NavMeshAgent agent = null;
+    [SerializeField] Transform tower = null;
 
     [SerializeField] Sprite icon = null;
     [SerializeField] Sprite minimapIcon = null;
@@ -19,6 +23,18 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
         this.team = team;
         gameObject.tag = team.ToString();
     }
+
+    public void SetTarget(Transform tower)
+    {
+        this.tower = tower;
+        agent.SetDestination(tower.position);
+    }
+
+    public void SetRoad(int road)
+    {
+        agent.areaMask = road;
+    }
+
     #endregion
 
     public Team GetTeam()

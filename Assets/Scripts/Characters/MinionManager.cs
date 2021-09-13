@@ -6,14 +6,24 @@ using UnityEngine;
 
 public class MinionManager : NetworkBehaviour
 {
-    [SerializeField] GameObject minionPrefab;
-    [SerializeField] float spawnInterval = 3f;
+    [SerializeField] GameObject blueMinionPrefab;
+    [SerializeField] GameObject redMinionPrefab;
+
+
+    [SerializeField] bool spawnMinion;
+    [SerializeField] float firstWaveSpawnAfter = 5f;
+    [SerializeField] int minionPerWave = 3;
+    [SerializeField] float spawnInterval = 10f;
 
     [SerializeField] Transform[] blueStartPositions;
+    [SerializeField] Transform[] topBlueTowers;
+    [SerializeField] Transform[] middleBlueTowers;
+    [SerializeField] Transform[] bottomBlueTowers;
+
     [SerializeField] Transform[] redStartPositions;
-    
-    int blueStartPositionIndex = 0;
-    int redStartPositionIndex = 0;
+    [SerializeField] Transform[] topRedTowers;
+    [SerializeField] Transform[] middleRedTowers;
+    [SerializeField] Transform[] bottomRedTowers;
 
     SyncList<Minion> minions = new SyncList<Minion>();
 
@@ -29,6 +39,12 @@ public class MinionManager : NetworkBehaviour
     private void Start()
     {
         minions.Callback += OnMinionsUpdated;
+
+        if (isServer)
+        {
+            StartCoroutine(SpawnWaveRoutine(Team.Red, firstWaveSpawnAfter, 1, spawnInterval));
+            StartCoroutine(SpawnWaveRoutine(Team.Blue, firstWaveSpawnAfter, 1, spawnInterval));
+        }
     }
 
     public override void OnStartServer()
@@ -42,50 +58,51 @@ public class MinionManager : NetworkBehaviour
     }
 
     #region Server
-    private void Update()
+
+    //協程生成一波一波小兵
+    /// <summary>
+    /// </summary>
+    /// <param name="time">遊戲開始後幾秒開始生成士兵</param>
+    /// <param name="delyTime">同一波內兩個小兵生成的間隔</param>
+    /// <param spwanTime="">下一波小兵生成的時間間隔</param>
+    /// <returns></returns>
+    IEnumerator SpawnWaveRoutine(Team team, float time, float delayTime, float spawnTime)
     {
-        if (isServer)
+        yield return new WaitForSeconds(time);
+
+        while (spawnMinion)
         {
-            spawnTimer -= Time.deltaTime;
-            if (spawnTimer <= 0)
+            //一個for循環代表一波小兵
+            for (int i = 0; i < minionPerWave; i++)
             {
-                if(currentSpawn < maxSpawn)
+                switch (team)
                 {
-                    SpawnMinion(Team.Blue);
-                    SpawnMinion(Team.Red);
-                    currentSpawn++;
+                    case Team.Red:
+                        SpawnMinion(Team.Red, redStartPositions[1].position, middleBlueTowers, 1 << 3); // Mid
+                        SpawnMinion(Team.Red, redStartPositions[0].position, topBlueTowers, 1 << 4);    // Top
+                        SpawnMinion(Team.Red, redStartPositions[2].position, bottomBlueTowers, 1 << 5); // Bottom
+                        break;
+
+                    case Team.Blue:
+                        SpawnMinion(Team.Blue, blueStartPositions[1].position, middleRedTowers, 1 << 3); // Mid
+                        SpawnMinion(Team.Blue, blueStartPositions[0].position, topRedTowers, 1 << 4);    // Top
+                        SpawnMinion(Team.Blue, blueStartPositions[2].position, bottomRedTowers, 1 << 5); // Bottom
+                        break;
                 }
-                spawnTimer = spawnInterval;
+
+                yield return new WaitForSeconds(delayTime);
             }
+            //等待下一波小兵生成的時間
+            yield return new WaitForSeconds(spawnTime);
         }
     }
 
     [Server]
-    public Vector3 GetSpawnPosition(Team team)
+    public void SpawnMinion(Team team, Vector3 spawnPosition, Transform[] towers, int road)
     {
-        switch (team)
-        {
-            case Team.Red:
+        GameObject minionPrefab = team == Team.Blue ? blueMinionPrefab : redMinionPrefab;
 
-                Transform redStartPos = redStartPositions[redStartPositionIndex];
-                redStartPositionIndex = (redStartPositionIndex + 1) % redStartPositions.Length;
-                return redStartPos.position;
-
-            case Team.Blue:
-
-                Transform blueStartPos = blueStartPositions[blueStartPositionIndex];
-                blueStartPositionIndex = (blueStartPositionIndex + 1) % blueStartPositions.Length;
-                return blueStartPos.position;
-
-            default:
-                return Vector3.zero;
-        }
-    }
-
-    [Server]
-    public void SpawnMinion(Team team)
-    {
-        GameObject minionInstance = Instantiate(minionPrefab, GetSpawnPosition(team), Quaternion.identity);
+        GameObject minionInstance = Instantiate(minionPrefab, spawnPosition, Quaternion.identity);
 
         Minion minion = minionInstance.GetComponent<Minion>();
 
@@ -94,6 +111,10 @@ public class MinionManager : NetworkBehaviour
         health.OnHealthDead += Health_OnHealthDead;
 
         minion.SetTeam(team);
+
+        minion.SetTarget(towers[2]);
+
+        minion.SetRoad(road);
 
         NetworkServer.Spawn(minionInstance);
 

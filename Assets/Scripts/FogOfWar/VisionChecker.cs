@@ -20,7 +20,6 @@ public class VisionChecker : MonoBehaviour
     public event Action<VisionEntity> OnVisionEntityExit;
     public event Action<VisionEntity> OnVisionEntityEnter;
 
-
     public event Action<VisionEntity> OnVisionEntityAdded;
     public event Action<VisionEntity> OnVisionEntityRemoved;
 

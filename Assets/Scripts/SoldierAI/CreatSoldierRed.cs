@@ -81,5 +81,4 @@ public class CreatSoldierRed : MonoBehaviour
         solider.SetRoad(road);
         solider.type = (int)soldierType;
     }
-
 }

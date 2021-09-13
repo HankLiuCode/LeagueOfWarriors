@@ -6,7 +6,6 @@ using Random = UnityEngine.Random;
 
 public class SmartSolider : MonoBehaviour
 {
-
     public Transform target;
     //private Animation ani;
     [SerializeField] Animator animator = null;
@@ -113,8 +112,6 @@ public class SmartSolider : MonoBehaviour
         {
             target = GetTarget();
         }
-
-
     }
 
 

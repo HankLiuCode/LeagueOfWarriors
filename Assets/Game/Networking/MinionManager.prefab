@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 431767170}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.91, y: 0, z: -2.31}
+  m_LocalPosition: {x: 3.8, y: 0, z: -2.57}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1190159855}
@@ -114,7 +114,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1190159854}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.8, y: 0, z: 4.9}
+  m_LocalPosition: {x: 38.35, y: 0, z: 39.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1599501706}
@@ -177,7 +177,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1576384582}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.3, y: 0, z: -3.2}
+  m_LocalPosition: {x: -37.76, y: 0, z: -34.95}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 822654627}
@@ -210,7 +210,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1599501705}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.46, y: 0, z: 3}
+  m_LocalPosition: {x: -3.03, y: 0, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1190159855}
@@ -240,7 +240,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1648889115}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.99, y: 0, z: -2.21}
+  m_LocalPosition: {x: -2.6, y: 0, z: -2.37}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1190159855}
@@ -311,15 +311,44 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 1
-  minionPrefab: {fileID: 9165540034895490147, guid: e0b13fbed652d5e4599cd9be41701618,
+  blueMinionPrefab: {fileID: 411657605277521728, guid: 9c09a4223c69d6c4086a3700624a8aad,
     type: 3}
+  redMinionPrefab: {fileID: 411657605277521728, guid: 9c09a4223c69d6c4086a3700624a8aad,
+    type: 3}
+  spawnMinion: 1
+  firstWaveSpawnAfter: 5
+  minionPerWave: 2
   spawnInterval: 5
   blueStartPositions:
   - {fileID: 822654627}
   - {fileID: 1097295595}
   - {fileID: 1391768095}
+  topBlueTowers:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  middleBlueTowers:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  bottomBlueTowers:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   redStartPositions:
   - {fileID: 1599501706}
   - {fileID: 1648889116}
   - {fileID: 431767171}
+  topRedTowers:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  middleRedTowers:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  bottomRedTowers:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   maxSpawn: 3

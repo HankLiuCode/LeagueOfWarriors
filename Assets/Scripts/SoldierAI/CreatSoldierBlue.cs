@@ -8,7 +8,6 @@ public class CreatSoldierBlue : MonoBehaviour
     //藍方小兵生成點有3個
     [SerializeField]
     Transform[] Start1;
-    
 
     [SerializeField]
     Transform soliderParent;
