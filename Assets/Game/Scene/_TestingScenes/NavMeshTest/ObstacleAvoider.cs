@@ -8,15 +8,20 @@ public class ObstacleAvoider : MonoBehaviour
     public const float DEFAULT_MOVE_STRAIGHT_TIME = 0.2f;
 
     [SerializeField] float radius = 1f;
-    [SerializeField] float obstacleRadius = 2f;
     [SerializeField] float probeLength = 2f;
-    [SerializeField] List<Transform> obstacles;
 
     [SerializeField] Vector3 target;
     [SerializeField] float moveStraightTime;
-    [SerializeField] float maxTurnSpeed = 0.05f;
-    float moveStraightTimer;
+    [SerializeField] float maxTurnSpeed = 0.2f;
 
+    [SerializeField] LayerMask obstacleLayer;
+    [SerializeField] float obstacleNoticeRadius = 5f;
+
+    [SerializeField] List<Obstacle> obstacles;
+
+    List<Obstacle> toDelete = new List<Obstacle>();
+    
+    float moveStraightTimer;
     
     public void SetTarget(Vector3 target)
     {
@@ -29,6 +34,7 @@ public class ObstacleAvoider : MonoBehaviour
 
         if (obstacleInfo.hasObstacle)
         {
+            float obstacleRadius = obstacleInfo.obstacle.GetRadius();
             Vector3 forward = transform.forward + obstacleInfo.avoidDirection * (obstacleRadius + radius);
             forward = new Vector3(forward.x, 0, forward.z);
             forward.Normalize();
@@ -71,8 +77,7 @@ public class ObstacleAvoider : MonoBehaviour
     {
         return Mathf.Atan2(direction.x, direction.z);
     }
-
-
+    
     public ObstacleInfo GetClosestObstacleInfo()
     {
         List<ObstacleInfo> avoidTargets = GetAvoidTargets();
@@ -104,19 +109,21 @@ public class ObstacleAvoider : MonoBehaviour
 
     public List<ObstacleInfo> GetAvoidTargets()
     {
+        UpdateObstacles();
+
         Vector3 probeVec = transform.forward * probeLength;
 
         List<ObstacleInfo> avoidObstacles = new List<ObstacleInfo>();
 
-        List<Transform> avoidTargets = new List<Transform>();
+        List<Obstacle> avoidTargets = new List<Obstacle>();
 
-        foreach (Transform obstacle in obstacles)
+        foreach (Obstacle obstacle in obstacles)
         {
-            Vector3 obstacleVec = obstacle.position - transform.position;
+            Vector3 obstacleVec = obstacle.transform.position - transform.position;
 
             float obstacleDist = obstacleVec.magnitude;
 
-            if (obstacleDist > probeLength + obstacleRadius)
+            if (obstacleDist > probeLength + obstacle.GetRadius())
             {
                 continue;
             }
@@ -135,7 +142,7 @@ public class ObstacleAvoider : MonoBehaviour
             float obstacleProjectionOnProbeDist = obstacleVec.magnitude * dot;
             float obstacleToProjectionDist = (obstacleDist * obstacleDist - obstacleProjectionOnProbeDist * obstacleProjectionOnProbeDist);
 
-            if (obstacleToProjectionDist < radius + obstacleRadius)
+            if (obstacleToProjectionDist < radius + obstacle.GetRadius())
             {
                 avoidTargets.Add(obstacle);
 
@@ -160,7 +167,7 @@ public class ObstacleAvoider : MonoBehaviour
     public struct ObstacleInfo
     {
         public bool hasObstacle;
-        public Transform obstacle;
+        public Obstacle obstacle;
         public Vector3 obstacleVec;
         public Vector3 avoidDirection;
     }
@@ -170,22 +177,54 @@ public class ObstacleAvoider : MonoBehaviour
         return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
     }
 
+    public void UpdateObstacles()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, obstacleNoticeRadius, obstacleLayer);
+        foreach (Collider c in colliders)
+        {
+            if(c.gameObject == gameObject) { continue; }
+
+            Obstacle obstacle = c.GetComponent<Obstacle>();
+            if (!obstacles.Contains(obstacle))
+            {
+                obstacles.Add(obstacle);
+            }
+        }
+
+        foreach(Obstacle obstacle in obstacles)
+        {
+            if(Vector3.Distance(obstacle.transform.position, transform.position) > obstacleNoticeRadius)
+            {
+                toDelete.Add(obstacle);
+            }
+        }
+
+        foreach(Obstacle obstacle in toDelete)
+        {
+            obstacles.Remove(obstacle);
+        }
+
+        toDelete.Clear();
+    }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         foreach (ObstacleInfo avoidTarget in GetAvoidTargets())
         {
-            Gizmos.DrawWireCube(avoidTarget.obstacle.position, Vector3.one);
+            Gizmos.DrawWireCube(avoidTarget.obstacle.transform.position, Vector3.one);
         }
 
         Gizmos.color = Color.green;
-        foreach (Transform obstacle in obstacles)
+        foreach (Obstacle obstacle in obstacles)
         {
-            Gizmos.DrawWireSphere(obstacle.position, obstacleRadius);
+            Gizmos.DrawWireSphere(obstacle.transform.position, obstacle.GetRadius());
         }
 
         Gizmos.DrawWireSphere(transform.position, radius);
         Gizmos.DrawLine(transform.position, transform.position + transform.forward * probeLength);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawCube(target, Vector3.one);
     }
 }
