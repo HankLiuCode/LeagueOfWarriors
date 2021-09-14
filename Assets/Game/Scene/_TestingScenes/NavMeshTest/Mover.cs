@@ -22,18 +22,16 @@ public class Mover : MonoBehaviour
 
     private void Update()
     {
-        //if (Input.GetMouseButtonDown(1))
-        //{
-        //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        //    if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
-        //    {
-        //        targetPoint = hit.point;
-        //        agent.CalculatePath(targetPoint, navMeshPath);
-        //        pathFollower.SetPath(navMeshPath.corners);
-        //    }
-        //}
-        //pathFollower.Move(agent, 5f);
-
-        obstacleAvoider.Move(agent, 5f);
+        if (Input.GetMouseButtonDown(1))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
+            {
+                targetPoint = hit.point;
+                agent.CalculatePath(targetPoint, navMeshPath);
+                pathFollower.SetPath(navMeshPath.corners);
+            }
+        }
+        pathFollower.Move(agent, 5f);
     }
 }

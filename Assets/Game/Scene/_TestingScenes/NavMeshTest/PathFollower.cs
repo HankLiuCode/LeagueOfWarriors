@@ -40,6 +40,9 @@ public class PathFollower : MonoBehaviour
             }
         }
 
+        obstacleAvoider.SetTarget(seekTarget);
+        obstacleAvoider.ObstacleAvoid(navMeshAgent, 5f);
+
         // if direction to seek target has obstacle do obstacle avoidance
         // if direction to seek target !has obstacle do seek to target
     }

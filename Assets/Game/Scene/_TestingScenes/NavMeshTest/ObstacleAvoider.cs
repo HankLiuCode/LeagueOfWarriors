@@ -12,41 +12,64 @@ public class ObstacleAvoider : MonoBehaviour
     [SerializeField] float probeLength = 2f;
     [SerializeField] List<Transform> obstacles;
 
-    [SerializeField] Transform target;
+    [SerializeField] Vector3 target;
     [SerializeField] float moveStraightTime;
+    [SerializeField] float maxTurnSpeed = 0.05f;
     float moveStraightTimer;
 
+    
+    public void SetTarget(Vector3 target)
+    {
+        this.target = target;
+    }
 
-    public void Move(NavMeshAgent navMeshAgent, float speed)
+    public bool ObstacleAvoid(NavMeshAgent navMeshAgent, float speed)
     {
         ObstacleInfo obstacleInfo = GetClosestObstacleInfo();
 
         if (obstacleInfo.hasObstacle)
         {
             Vector3 forward = transform.forward + obstacleInfo.avoidDirection * (obstacleRadius + radius);
+            forward = new Vector3(forward.x, 0, forward.z);
+            forward.Normalize();
+
+            transform.forward = Vector3.MoveTowards(transform.forward, forward, maxTurnSpeed);
+
             navMeshAgent.speed = speed;
-            transform.forward = forward;
             navMeshAgent.Move(transform.forward * speed * Time.deltaTime);
             moveStraightTimer = moveStraightTime;
-        }
 
-
-
-        if (moveStraightTimer <= 0)
-        {
-            Vector3 direction = target.position - transform.position;
-            Vector3 forward = new Vector3(direction.x, 0, direction.z);
-            transform.forward = forward;
-            navMeshAgent.speed = speed;
-            navMeshAgent.Move(transform.forward * speed * Time.deltaTime);
+            return true;
         }
         else
         {
-            moveStraightTimer -= Time.deltaTime;
+            if (moveStraightTimer <= 0)
+            {
+                Vector3 direction = target - transform.position;
+                Vector3 forward = new Vector3(direction.x, 0, direction.z);
+                forward = new Vector3(forward.x, 0, forward.z);
+                forward.Normalize();
 
-            navMeshAgent.speed = speed;
-            navMeshAgent.Move(transform.forward * speed * Time.deltaTime);
+                transform.forward = Vector3.MoveTowards(transform.forward, forward, maxTurnSpeed);
+
+                navMeshAgent.speed = speed;
+                navMeshAgent.Move(transform.forward * speed * Time.deltaTime);
+            }
+            else
+            {
+                navMeshAgent.speed = speed;
+                navMeshAgent.Move(transform.forward * speed * Time.deltaTime);
+
+                moveStraightTimer -= Time.deltaTime;
+            }
+
+            return false;
         }
+    }
+
+    public float DirectionToAngle(Vector3 direction)
+    {
+        return Mathf.Atan2(direction.x, direction.z);
     }
 
 
@@ -142,6 +165,10 @@ public class ObstacleAvoider : MonoBehaviour
         public Vector3 avoidDirection;
     }
 
+    public Vector3 DirectionFromAngle(float angleInDegrees)
+    {
+        return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
+    }
 
 
     private void OnDrawGizmos()
