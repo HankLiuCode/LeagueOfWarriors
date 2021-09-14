@@ -32,18 +32,36 @@ public class Minimap : MonoBehaviour
 
     private void VisibilityChecker_OnVisionEntityRemoved(VisionEntity visionEntity)
     {
-        minimapIconInstances.Remove(visionEntity.transform);
+        if (minimapIconInstances.ContainsKey(visionEntity.transform))
+        {
+            MinimapIcon icon = minimapIconInstances[visionEntity.transform];
+
+            minimapIconInstances.Remove(visionEntity.transform);
+
+            Destroy(icon.gameObject);
+        }
+        else
+        {
+            Debug.Log(visionEntity.name + "Doesn't Exist");
+        }
     }
 
     private void VisibilityChecker_OnVisionEntityAdded(VisionEntity visionEntity)
     {
-        IMinimapEntity minimapEntity = visionEntity.GetComponent<IMinimapEntity>();
+        if (!minimapIconInstances.ContainsKey(visionEntity.transform))
+        {
+            IMinimapEntity minimapEntity = visionEntity.GetComponent<IMinimapEntity>();
 
-        MinimapIcon minimapIconInstance = minimapEntity.GetMinimapIconInstance();
-        
-        minimapIconInstance.transform.SetParent(GetLayer(minimapEntity.GetLayerName()));
+            MinimapIcon minimapIconInstance = minimapEntity.GetMinimapIconInstance();
 
-        minimapIconInstances.Add(visionEntity.transform, minimapIconInstance);
+            minimapIconInstance.transform.SetParent(GetLayer(minimapEntity.GetLayerName()));
+
+            minimapIconInstances.Add(visionEntity.transform, minimapIconInstance);
+        }
+        else
+        {
+            Debug.Log(visionEntity.name + "Already Exist in miniMapIconInstances");
+        }
     }
 
     private Transform GetLayer(string layerName)

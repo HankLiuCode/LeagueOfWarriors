@@ -18,7 +18,10 @@ GameObject:
   - component: {fileID: 9022028439047737320}
   - component: {fileID: 8741716338738734724}
   - component: {fileID: -7900126121708989658}
-  m_Layer: 0
+  - component: {fileID: -7754430342046818133}
+  - component: {fileID: 3089244958819557603}
+  - component: {fileID: -5490791059147047452}
+  m_Layer: 12
   m_Name: BlueMinion
   m_TagString: solider
   m_Icon: {fileID: 0}
@@ -133,7 +136,8 @@ MonoBehaviour:
   healthPoint: 100
   animator: {fileID: 7031819723755084018}
   stats: {fileID: 9022028439047737320}
-  capsuleCollider: {fileID: 9052095073136874282}
+  healthCollider: {fileID: 9052095073136874282}
+  animationEventHandler: {fileID: 4355214977202413741}
 --- !u!114 &1884173398059766069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,7 +175,7 @@ MonoBehaviour:
     healthRegen: 1
     attackSpeed: 1
     moveSpeed: 5
-    attackDamage: 10
+    attackDamage: 100
     magicDamage: 10
     armor: 10
     magicResist: 10
@@ -193,12 +197,20 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   team: 0
-  agent: {fileID: 411657605277521732}
-  tower: {fileID: 0}
+  animator: {fileID: 7031819723755084018}
+  serverMover: {fileID: -7754430342046818133}
+  serverFighter: {fileID: -5490791059147047452}
+  health: {fileID: 1407597664436666948}
   icon: {fileID: 21300000, guid: 51d32f802cfabaf4a86ad058906b4c11, type: 3}
   minimapIcon: {fileID: 21300000, guid: 32af396b97f40974885d68231252bc29, type: 3}
   minimapIconPrefab: {fileID: 495618344135852268, guid: 72345f921fd2bd44086cb1ddbb5e7023,
     type: 3}
+  noticeRadius: 5
+  attackRadius: 3
+  enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 6144
+  enemyList: []
 --- !u!114 &-7900126121708989658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,6 +226,59 @@ MonoBehaviour:
   renderers:
   - {fileID: 7031819723764484466}
   - {fileID: 7031819723764484464}
+--- !u!114 &-7754430342046818133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 411657605277521728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55ce6b0470ae22b4a963c4597f0d85c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  animator: {fileID: 7031819723755084018}
+  health: {fileID: 1407597664436666948}
+  agent: {fileID: 411657605277521732}
+  actionLocker: {fileID: 3089244958819557603}
+  statStore: {fileID: 9022028439047737320}
+--- !u!114 &3089244958819557603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 411657605277521728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e483e3bb68b1ca458cb359957d4ea03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-5490791059147047452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 411657605277521728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2574357e2327b4747a9167513eca13a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  attackCooldownTimer: 0
+  attackRange: 3
+  timeBetweenAttacks: 1
+  netAnimator: {fileID: 1884173398059766069}
+  animationEventHandler: {fileID: 4355214977202413741}
+  mover: {fileID: -7754430342046818133}
+  statStore: {fileID: 9022028439047737320}
+  hasFinishedBackswing: 1
 --- !u!114 &4355214977202413741
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,7 +344,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 495512, guid: 8a4a0878068573c4ca13bdeaeb706bb6, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 495512, guid: 8a4a0878068573c4ca13bdeaeb706bb6, type: 3}
       propertyPath: m_LocalRotation.x
@@ -287,7 +352,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 495512, guid: 8a4a0878068573c4ca13bdeaeb706bb6, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 495512, guid: 8a4a0878068573c4ca13bdeaeb706bb6, type: 3}
       propertyPath: m_LocalRotation.z
@@ -299,7 +364,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 495512, guid: 8a4a0878068573c4ca13bdeaeb706bb6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 495512, guid: 8a4a0878068573c4ca13bdeaeb706bb6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z

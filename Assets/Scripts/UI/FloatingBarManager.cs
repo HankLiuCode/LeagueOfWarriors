@@ -41,7 +41,18 @@ public class FloatingBarManager : MonoBehaviour
 
     private void VisibilityChecker_OnVisionEntityRemoved(VisionEntity obj)
     {
-        floatingBars.Remove(obj.GetComponent<Health>());
+        Health health = obj.GetComponent<Health>();
+
+        if(health == null) { return; }
+
+        if (floatingBars.ContainsKey(health))
+        {
+            FloatingBar floatingBar = floatingBars[health];
+
+            floatingBars.Remove(health);
+
+            Destroy(floatingBar.gameObject);
+        }
     }
 
     private void VisibilityChecker_OnVisionEntityAdded(VisionEntity obj)
@@ -49,13 +60,21 @@ public class FloatingBarManager : MonoBehaviour
         Team localPlayerTeam = playerManager.GetLocalChampion().GetTeam();
 
         Health health = obj.GetComponent<Health>();
+
         Mana mana = obj.GetComponent<Mana>();
+
         ITeamMember teamMember = obj.GetComponent<ITeamMember>();
+
+        if (floatingBars.ContainsKey(health))
+        {
+            Debug.Log("Already Contains Key For: " + obj.name);
+            return;
+        }
 
         FloatingBar floatingBarInstance = Instantiate(floatingBarPrefab, floatingBarParent).GetComponent<FloatingBar>();
 
         floatingBarInstance.Setup(health, mana, localPlayerTeam, teamMember.GetTeam(), Vector3.up * 3);
         
-        floatingBars.Add(obj.GetComponent<Health>(), floatingBarInstance);
+        floatingBars.Add(health, floatingBarInstance);
     }
 }

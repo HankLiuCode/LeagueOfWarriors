@@ -16,8 +16,16 @@ public class FOVGraphics : NetworkBehaviour
     Vector3[] vertices;
     int[] triangles;
 
-    private void Start()
+    float updateInterval = 0.01f;
+    bool isUpdating = false;
+
+    float updateTimer;
+
+    public void GenerateMesh(float viewRadius, int degreePerCast)
     {
+        this.viewRadius = viewRadius;
+        this.degreePerCast = degreePerCast;
+
         viewMesh = new Mesh();
         viewMesh.name = "ViewMesh";
         viewMeshFilter.mesh = viewMesh;
@@ -52,9 +60,25 @@ public class FOVGraphics : NetworkBehaviour
         viewMesh.RecalculateNormals();
     }
 
+    public void StartUpdateMesh(float updateInterval)
+    {
+        this.updateInterval = updateInterval;
+        this.isUpdating = true;
+    }
+
     private void Update()
     {
         UpdateMesh();
+
+        //if (!isUpdating){ return; }
+
+        //if(updateTimer <= 0)
+        //{
+        //    UpdateMesh();
+        //    updateTimer = updateInterval;
+        //}
+
+        //updateTimer -= Time.deltaTime;
     }
 
     private void UpdateMesh()

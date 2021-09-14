@@ -7,22 +7,26 @@ public class MinimapTextureBlender : MonoBehaviour
     [SerializeField] RenderTexture preShroudRTex = null;
     [SerializeField] Texture2D minimapTex = null;
 
+    [SerializeField] RenderTexture shroudRTex = null;
+
     Texture2D preShroudTexture;
 
-    [SerializeField] RenderTexture shroudRTex = null;
-    
+    // Buffer
+    Color[] preShroudColors;
+    Color[] minimapColors;
+
     private void Update()
     {
         preShroudTexture = RenderTexToTexture2D(preShroudRTex);
 
-        Color[] colors = preShroudTexture.GetPixels();
-        Color[] colors2 = minimapTex.GetPixels(4);
+        preShroudColors = preShroudTexture.GetPixels();
+        minimapColors = minimapTex.GetPixels(4);
 
-        for(int i=0; i<colors.Length; i++)
+        for(int i=0; i< preShroudColors.Length; i++)
         {
-            colors[i] = colors[i] * colors2[i];
+            preShroudColors[i] = preShroudColors[i] * minimapColors[i];
         }
-        preShroudTexture.SetPixels(colors);
+        preShroudTexture.SetPixels(preShroudColors);
         preShroudTexture.Apply();
 
         Graphics.Blit(preShroudTexture, shroudRTex);

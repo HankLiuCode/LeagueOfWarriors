@@ -27,12 +27,13 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   team: 0
-  testAgent: {fileID: 9165540034895490151}
-  testTarget: {fileID: 0}
+  animator: {fileID: 0}
+  agent: {fileID: 0}
   icon: {fileID: 21300000, guid: b7e1fe03b9dc30b48bf7f004c5c12cca, type: 3}
   minimapIcon: {fileID: 21300000, guid: 32af396b97f40974885d68231252bc29, type: 3}
   minimapIconPrefab: {fileID: 495618344135852268, guid: 72345f921fd2bd44086cb1ddbb5e7023,
     type: 3}
+  attackRadius: 3
 --- !u!114 &1636235118245536626
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,7 +94,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 495512, guid: 8a4a0878068573c4ca13bdeaeb706bb6, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 495512, guid: 8a4a0878068573c4ca13bdeaeb706bb6, type: 3}
       propertyPath: m_LocalRotation.x
@@ -101,7 +102,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 495512, guid: 8a4a0878068573c4ca13bdeaeb706bb6, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 495512, guid: 8a4a0878068573c4ca13bdeaeb706bb6, type: 3}
       propertyPath: m_LocalRotation.z
@@ -113,7 +114,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 495512, guid: 8a4a0878068573c4ca13bdeaeb706bb6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 495512, guid: 8a4a0878068573c4ca13bdeaeb706bb6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -302,12 +303,6 @@ GameObject:
 --- !u!4 &9165540034895490146 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7214919029000824494, guid: b31cb8edadf36634680f82045f41209b,
-    type: 3}
-  m_PrefabInstance: {fileID: 1950622381770656460}
-  m_PrefabAsset: {fileID: 0}
---- !u!195 &9165540034895490151 stripped
-NavMeshAgent:
-  m_CorrespondingSourceObject: {fileID: 7214919029000824491, guid: b31cb8edadf36634680f82045f41209b,
     type: 3}
   m_PrefabInstance: {fileID: 1950622381770656460}
   m_PrefabAsset: {fileID: 0}

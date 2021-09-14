@@ -37,6 +37,13 @@ public class ManaDisplay : MonoBehaviour
 
     private void UpdateMana()
     {
+        // gameObject is disabled before this function is called
+        if (manaFill == null)
+        {
+            Debug.Log("Mana Fill is Null");
+            return;
+        }
+
         manaFill.fillAmount = mana.GetManaPercent();
         manaText.text = $"{(int) mana.GetManaPoint() } / {(int) mana.GetMaxMana()}";
     }

@@ -12,6 +12,14 @@ public class FogOfWarVisual : MonoBehaviour
     [SerializeField] Team localPlayerTeam;
     [SerializeField] List<FOVGraphics> fovGraphicsList = new List<FOVGraphics>();
 
+    [SerializeField] float minionUpdateMeshInterval = 0.1f;
+    [SerializeField] float minionVisualRadius = 5f;
+    [SerializeField] int minionDegreePercast = 30;
+
+    [SerializeField] float championUpdateMeshInterval = 0.05f;
+    [SerializeField] float championVisualRadius = 15f;
+    [SerializeField] int championDegreePercast = 10;
+
     private void Awake()
     {
         playerManager.OnLocalChampionReady += PlayerManager_OnLocalPlayerConnectionReady;
@@ -31,7 +39,7 @@ public class FogOfWarVisual : MonoBehaviour
         {
             if (player.GetTeam() == this.localPlayerTeam)
             {
-                AttachViewMesh(player.gameObject);
+                AttachViewMesh(player.gameObject, championVisualRadius, championDegreePercast, championUpdateMeshInterval);
             }
         }
     }
@@ -48,17 +56,19 @@ public class FogOfWarVisual : MonoBehaviour
     {
         if (minion.GetTeam() == localPlayerTeam)
         {
-            AttachViewMesh(minion.gameObject);
+            AttachViewMesh(minion.gameObject, minionVisualRadius, minionDegreePercast, minionUpdateMeshInterval);
         }
     }
 
-    public void AttachViewMesh(GameObject go)
+    public void AttachViewMesh(GameObject go, float viewRadius, int degreePerCast, float updateInterval)
     {
         GameObject fovGraphicsGameObject = Instantiate(FOVGraphicsPrefab);
         fovGraphicsGameObject.transform.parent = go.transform;
         fovGraphicsGameObject.transform.localPosition = Vector3.zero;
 
         FOVGraphics fovGraphicsInstance = fovGraphicsGameObject.GetComponent<FOVGraphics>();
+        fovGraphicsInstance.GenerateMesh(viewRadius, degreePerCast);
+        fovGraphicsInstance.StartUpdateMesh(updateInterval);
 
         fovGraphicsList.Add(fovGraphicsInstance);
     }

@@ -14,14 +14,18 @@ namespace Dota.Attributes
 
         [SerializeField] Animator animator = null;
         [SerializeField] StatStore stats = null;
-        [SerializeField] CapsuleCollider capsuleCollider = null;
+        [SerializeField] Collider healthCollider = null;
+        [SerializeField] AnimationEventHandler animationEventHandler = null;
 
+        public event System.Action OnHealthRevive;
         public event System.Action OnHealthModified;
         public event System.Action<Health> OnHealthDead;
+        public event System.Action OnHealthDeadEnd;
 
         public override void OnStartClient()
         {
             healthPoint = stats.GetStats().maxHealth;
+            animationEventHandler.OnDeathEnd += AnimationEventHandler_OnDeathEnd;
         }
 
         public float GetHealthPoint()
@@ -45,13 +49,6 @@ namespace Dota.Attributes
         }
 
         #region Server
-        [ClientRpc]
-        private void RpcNotifyHealthDead()
-        {
-            animator.SetTrigger("die");
-            capsuleCollider.enabled = false;
-            OnHealthDead?.Invoke(this);
-        }
 
         [Server]
         public void ServerTakeDamage(float damage)
@@ -66,9 +63,23 @@ namespace Dota.Attributes
         }
 
         [Server]
+        public void ServerRevive()
+        {
+            if (isDead)
+            {
+                isDead = false;
+                ServerHeal(GetMaxHealth());
+                RpcNotifyHealthRevive();
+                OnHealthRevive?.Invoke();
+            }
+        }
+
+        [Server]
         public void ServerHeal(float amount)
         {
-            healthPoint = Mathf.Min(healthPoint + amount, stats.GetStats().maxHealth);
+            if(isDead) { return; }
+
+            healthPoint = Mathf.Min(healthPoint + amount, GetMaxHealth());
         }
 
         [Command]
@@ -77,19 +88,43 @@ namespace Dota.Attributes
             ServerTakeDamage(damage);
         }
 
+        [Command]
+        public void CmdHeal(float amount)
+        {
+            ServerHeal(amount);
+        }
+
         private void OnHealthChanged(float oldValue, float newValue)
         {
             OnHealthModified?.Invoke();
         }
-
         #endregion
 
         #region Client
 
-        // Animation Trigger Event
-        public void DeathEvent()
+        [ClientRpc]
+        private void RpcNotifyHealthDead()
         {
+            Debug.Log("NotifyHealthDead");
+            animator.SetTrigger("die");
+            healthCollider.enabled = false;
+            OnHealthDead?.Invoke(this);
+        }
 
+        [ClientRpc]
+        private void RpcNotifyHealthRevive()
+        {
+            Debug.Log("NotifyHealthRevive");
+            animator.SetTrigger("revive");
+            healthCollider.enabled = true;
+            OnHealthRevive?.Invoke();
+        }
+        
+        // Animation Trigger Event
+        private void AnimationEventHandler_OnDeathEnd()
+        {
+            // do disappear shader
+            OnHealthDeadEnd?.Invoke();
         }
         #endregion
     }

@@ -34,6 +34,7 @@ public class FloatingBar : MonoBehaviour
     private void UpdateFloatingBarPosition(Vector3 followPoint)
     {
         Vector3 screenPos = Camera.main.WorldToScreenPoint(followPoint + offset);
+
         transform.position = screenPos;
     }
 

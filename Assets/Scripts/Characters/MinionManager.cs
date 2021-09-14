@@ -15,25 +15,27 @@ public class MinionManager : NetworkBehaviour
     [SerializeField] int minionPerWave = 3;
     [SerializeField] float spawnInterval = 10f;
 
+    [Header("Blue")]
+    [SerializeField] Transform blueBase;
     [SerializeField] Transform[] blueStartPositions;
     [SerializeField] Transform[] topBlueTowers;
     [SerializeField] Transform[] middleBlueTowers;
     [SerializeField] Transform[] bottomBlueTowers;
 
+    [Header("Red")]
+    [SerializeField] Transform redBase;
     [SerializeField] Transform[] redStartPositions;
     [SerializeField] Transform[] topRedTowers;
     [SerializeField] Transform[] middleRedTowers;
     [SerializeField] Transform[] bottomRedTowers;
 
     SyncList<Minion> minions = new SyncList<Minion>();
+    IEnumerator redSpawnRoutine;
+    IEnumerator blueSpawnRoutine;
+
 
     public event System.Action<Minion> OnMinionAdded;
     public event System.Action<Minion> OnMinionRemoved;
-
-    float spawnTimer;
-
-    [SerializeField] int maxSpawn = 3;
-    int currentSpawn = 0;
 
 
     private void Start()
@@ -42,14 +44,11 @@ public class MinionManager : NetworkBehaviour
 
         if (isServer)
         {
-            StartCoroutine(SpawnWaveRoutine(Team.Red, firstWaveSpawnAfter, 1, spawnInterval));
-            StartCoroutine(SpawnWaveRoutine(Team.Blue, firstWaveSpawnAfter, 1, spawnInterval));
+            redSpawnRoutine = SpawnWaveRoutine(Team.Red, firstWaveSpawnAfter, 1, spawnInterval);
+            blueSpawnRoutine = SpawnWaveRoutine(Team.Blue, firstWaveSpawnAfter, 1, spawnInterval);
+            StartCoroutine(redSpawnRoutine);
+            StartCoroutine(blueSpawnRoutine);
         }
-    }
-
-    public override void OnStartServer()
-    {
-        spawnTimer = spawnInterval;
     }
 
     public SyncList<Minion> GetMinions()
@@ -58,6 +57,22 @@ public class MinionManager : NetworkBehaviour
     }
 
     #region Server
+
+    public void StartSpawnWave()
+    {
+        if(redSpawnRoutine != null) { StopCoroutine(redSpawnRoutine); }
+        if (blueSpawnRoutine != null) { StopCoroutine(blueSpawnRoutine); }
+        redSpawnRoutine = SpawnWaveRoutine(Team.Red, firstWaveSpawnAfter, 1, spawnInterval);
+        blueSpawnRoutine = SpawnWaveRoutine(Team.Blue, firstWaveSpawnAfter, 1, spawnInterval);
+        StartCoroutine(redSpawnRoutine);
+        StartCoroutine(blueSpawnRoutine);
+    }
+
+    public void StopSpawnWave()
+    {
+        if (redSpawnRoutine != null) { StopCoroutine(redSpawnRoutine); }
+        if (blueSpawnRoutine != null) { StopCoroutine(blueSpawnRoutine); }
+    }
 
     //協程生成一波一波小兵
     /// <summary>
@@ -78,15 +93,15 @@ public class MinionManager : NetworkBehaviour
                 switch (team)
                 {
                     case Team.Red:
-                        SpawnMinion(Team.Red, redStartPositions[1].position, middleBlueTowers, 1 << 3); // Mid
-                        SpawnMinion(Team.Red, redStartPositions[0].position, topBlueTowers, 1 << 4);    // Top
-                        SpawnMinion(Team.Red, redStartPositions[2].position, bottomBlueTowers, 1 << 5); // Bottom
+                        SpawnMinion(Team.Red, redStartPositions[1].position,middleBlueTowers, blueBase, 1 << 3); // Mid
+                        SpawnMinion(Team.Red, redStartPositions[0].position, topBlueTowers, blueBase, 1 << 4);    // Top
+                        SpawnMinion(Team.Red, redStartPositions[2].position, bottomBlueTowers, blueBase, 1 << 5); // Bottom
                         break;
 
                     case Team.Blue:
-                        SpawnMinion(Team.Blue, blueStartPositions[1].position, middleRedTowers, 1 << 3); // Mid
-                        SpawnMinion(Team.Blue, blueStartPositions[0].position, topRedTowers, 1 << 4);    // Top
-                        SpawnMinion(Team.Blue, blueStartPositions[2].position, bottomRedTowers, 1 << 5); // Bottom
+                        SpawnMinion(Team.Blue, blueStartPositions[1].position, middleRedTowers, redBase, 1 << 3); // Mid
+                        SpawnMinion(Team.Blue, blueStartPositions[0].position, topRedTowers, redBase, 1 << 4);    // Top
+                        SpawnMinion(Team.Blue, blueStartPositions[2].position, bottomRedTowers, redBase, 1 << 5); // Bottom
                         break;
                 }
 
@@ -98,7 +113,7 @@ public class MinionManager : NetworkBehaviour
     }
 
     [Server]
-    public void SpawnMinion(Team team, Vector3 spawnPosition, Transform[] towers, int road)
+    public void SpawnMinion(Team team, Vector3 spawnPosition, Transform[] towers, Transform targetBase, int road)
     {
         GameObject minionPrefab = team == Team.Blue ? blueMinionPrefab : redMinionPrefab;
 
@@ -112,7 +127,7 @@ public class MinionManager : NetworkBehaviour
 
         minion.SetTeam(team);
 
-        minion.SetTarget(towers[2]);
+        minion.SetTowers(towers, targetBase);
 
         minion.SetRoad(road);
 

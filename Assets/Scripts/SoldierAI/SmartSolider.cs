@@ -28,7 +28,6 @@ public class SmartSolider : MonoBehaviour
     void Update()
     {
         SoliderMove();
-
     }
 
     void SoliderMove()
@@ -61,8 +60,6 @@ public class SmartSolider : MonoBehaviour
             animator.SetBool("running", false);
             animator.SetBool("attack", true);
         }
-
-
     }
 
 /// <summary>

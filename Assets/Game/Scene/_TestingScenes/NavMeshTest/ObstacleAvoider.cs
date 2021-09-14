@@ -12,44 +12,9 @@ public class ObstacleAvoider : MonoBehaviour
     [SerializeField] float probeLength = 2f;
     [SerializeField] List<Transform> obstacles;
 
-    [SerializeField] float clearObstacleCacheInterval = 2f;
-
     [SerializeField] float moveStraightTime;
-    
-    Dictionary<Transform, int> obstacleCache = new Dictionary<Transform, int>();
     float moveStraightTimer;
 
-    private void Start()
-    {
-        StartCoroutine(ClearObstacleCacheRoutine());
-    }
-
-    IEnumerator ClearObstacleCacheRoutine()
-    {
-        while (true)
-        {
-            bool isStuck = false;
-            foreach(var oCache in obstacleCache)
-            {
-                if(oCache.Value >= 3)
-                {
-                    isStuck = true;
-                }
-            }
-            obstacleCache.Clear();
-
-            if (isStuck)
-            {
-                moveStraightTime = moveStraightTime + 0.1f;
-            }
-            else
-            {
-                moveStraightTime = DEFAULT_MOVE_STRAIGHT_TIME;
-            }
-
-            yield return new WaitForSeconds(clearObstacleCacheInterval);
-        }
-    }
 
     public void Move(NavMeshAgent navMeshAgent, float speed, Vector3 target)
     {
@@ -62,15 +27,6 @@ public class ObstacleAvoider : MonoBehaviour
             transform.forward = forward;
             navMeshAgent.Move(transform.forward * speed * Time.deltaTime);
             moveStraightTimer = moveStraightTime;
-
-            if (obstacleCache.ContainsKey(obstacleInfo.obstacle))
-            {
-                obstacleCache[obstacleInfo.obstacle] += 1;
-            }
-            else
-            {
-                obstacleCache.Add(obstacleInfo.obstacle, 1);
-            }
         }
         
         if(moveStraightTimer <= 0)
