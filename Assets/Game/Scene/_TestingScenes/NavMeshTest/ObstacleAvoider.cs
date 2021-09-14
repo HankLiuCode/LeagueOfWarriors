@@ -12,11 +12,12 @@ public class ObstacleAvoider : MonoBehaviour
     [SerializeField] float probeLength = 2f;
     [SerializeField] List<Transform> obstacles;
 
+    [SerializeField] Transform target;
     [SerializeField] float moveStraightTime;
     float moveStraightTimer;
 
 
-    public void Move(NavMeshAgent navMeshAgent, float speed, Vector3 target)
+    public void Move(NavMeshAgent navMeshAgent, float speed)
     {
         ObstacleInfo obstacleInfo = GetClosestObstacleInfo();
 
@@ -28,10 +29,12 @@ public class ObstacleAvoider : MonoBehaviour
             navMeshAgent.Move(transform.forward * speed * Time.deltaTime);
             moveStraightTimer = moveStraightTime;
         }
-        
-        if(moveStraightTimer <= 0)
+
+
+
+        if (moveStraightTimer <= 0)
         {
-            Vector3 direction = target - transform.position;
+            Vector3 direction = target.position - transform.position;
             Vector3 forward = new Vector3(direction.x, 0, direction.z);
             transform.forward = forward;
             navMeshAgent.speed = speed;
@@ -40,6 +43,7 @@ public class ObstacleAvoider : MonoBehaviour
         else
         {
             moveStraightTimer -= Time.deltaTime;
+
             navMeshAgent.speed = speed;
             navMeshAgent.Move(transform.forward * speed * Time.deltaTime);
         }
@@ -89,7 +93,7 @@ public class ObstacleAvoider : MonoBehaviour
 
             float obstacleDist = obstacleVec.magnitude;
 
-            if(obstacleDist > probeLength + obstacleRadius)
+            if (obstacleDist > probeLength + obstacleRadius)
             {
                 continue;
             }
@@ -100,9 +104,9 @@ public class ObstacleAvoider : MonoBehaviour
 
             float dot = Vector3.Dot(probeDir, obstacleDir);
 
-            if (dot < 0) 
-            { 
-                continue; 
+            if (dot < 0)
+            {
+                continue;
             }
 
             float obstacleProjectionOnProbeDist = obstacleVec.magnitude * dot;
@@ -112,7 +116,12 @@ public class ObstacleAvoider : MonoBehaviour
             {
                 avoidTargets.Add(obstacle);
 
+
                 Vector3 avoidDirection = (obstacleProjectionOnProbeDist * transform.forward - obstacleDir);
+                if (Vector3.Angle(obstacleDir, transform.forward) < 30)
+                {
+                    avoidDirection = transform.right;
+                }
 
                 ObstacleInfo obstacleInfo = new ObstacleInfo();
                 obstacleInfo.hasObstacle = true;
@@ -124,7 +133,7 @@ public class ObstacleAvoider : MonoBehaviour
         }
         return avoidObstacles;
     }
-    
+
     public struct ObstacleInfo
     {
         public bool hasObstacle;
@@ -138,7 +147,7 @@ public class ObstacleAvoider : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        foreach(ObstacleInfo avoidTarget in GetAvoidTargets())
+        foreach (ObstacleInfo avoidTarget in GetAvoidTargets())
         {
             Gizmos.DrawWireCube(avoidTarget.obstacle.position, Vector3.one);
         }

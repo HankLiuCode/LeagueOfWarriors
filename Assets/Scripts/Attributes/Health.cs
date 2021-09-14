@@ -106,6 +106,7 @@ namespace Dota.Attributes
         private void RpcNotifyHealthDead()
         {
             Debug.Log("NotifyHealthDead");
+            animator.ResetTrigger("revive");
             animator.SetTrigger("die");
             healthCollider.enabled = false;
             OnHealthDead?.Invoke(this);

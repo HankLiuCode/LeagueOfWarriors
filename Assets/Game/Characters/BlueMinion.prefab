@@ -175,7 +175,7 @@ MonoBehaviour:
     healthRegen: 1
     attackSpeed: 1
     moveSpeed: 5
-    attackDamage: 100
+    attackDamage: 10
     magicDamage: 10
     armor: 10
     magicResist: 10

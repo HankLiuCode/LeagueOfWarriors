@@ -344,8 +344,6 @@ public class SteeringBehavior
         {
             data.m_fMoveForce = 100.0f;
         }
-
-
        
         data.m_bMove = true;
         return true;

@@ -5,10 +5,11 @@ using UnityEngine.AI;
 
 public class PathFollower : MonoBehaviour
 {
-    [SerializeField] ObstacleAvoider obstacleAvoider = null;
     [SerializeField] private Vector3[] wayPoints;
     [SerializeField] int nextIndex = -1;
     [SerializeField] bool reachedDest = true;
+    [SerializeField] ObstacleAvoider obstacleAvoider = null;
+    [SerializeField] NavMeshAgent agent = null;
     public const float ARRIVE_EPSILON = 0.1f;
 
     public void SetPath(Vector3[] wayPoints)
@@ -24,7 +25,8 @@ public class PathFollower : MonoBehaviour
     {
         if (reachedDest) { return; }
 
-        Vector3 direction = Vec2Direction(transform.position, wayPoints[nextIndex]);
+        Vector3 seekTarget = wayPoints[nextIndex];
+        Vector3 direction = Vec2Direction(transform.position, seekTarget);
         float distance = Vec2Distance(wayPoints[nextIndex], transform.position);
 
         if (distance < ARRIVE_EPSILON)
@@ -37,11 +39,9 @@ public class PathFollower : MonoBehaviour
                 nextIndex = wayPoints.Length - 1;
             }
         }
-        
-        //transform.forward = (direction == Vector3.zero) ? transform.forward : direction;
-        //navMeshAgent.Move(direction * speed * Time.deltaTime);
 
-        obstacleAvoider.Move(navMeshAgent, speed, NextWayPoint());
+        // if direction to seek target has obstacle do obstacle avoidance
+        // if direction to seek target !has obstacle do seek to target
     }
 
     public Vector3 NextWayPoint()

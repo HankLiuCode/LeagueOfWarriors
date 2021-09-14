@@ -108,6 +108,8 @@ public class PlayerManager : NetworkBehaviour
     {
         yield return new WaitForSeconds(seconds);
 
+        champion.transform.position = GetSpawnPosition(champion.GetTeam());
+
         champion.ServerRevive();
         
         OnChampionAdded?.Invoke(champion);

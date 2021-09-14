@@ -14,6 +14,7 @@ public class ObstacleAvoidAgent : MonoBehaviour {
         {
             SteeringBehavior.Seek(m_Data);
         }
+
         SteeringBehavior.Move(m_Data, obstacles);
     }
 
