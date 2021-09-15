@@ -16,6 +16,7 @@ namespace Dota.Attributes
         [SerializeField] StatStore stats = null;
         [SerializeField] Collider healthCollider = null;
         [SerializeField] AnimationEventHandler animationEventHandler = null;
+        [SerializeField] float healthDisplayOffset = 3f;
 
         public event System.Action OnHealthRevive;
         public event System.Action OnHealthModified;
@@ -26,6 +27,11 @@ namespace Dota.Attributes
         {
             healthPoint = stats.GetStats().maxHealth;
             animationEventHandler.OnDeathEnd += AnimationEventHandler_OnDeathEnd;
+        }
+
+        public float GetDisplayOffset()
+        {
+            return healthDisplayOffset;
         }
 
         public float GetHealthPoint()

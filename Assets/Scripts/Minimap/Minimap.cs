@@ -19,6 +19,7 @@ public class Minimap : MonoBehaviour
 
     [SerializeField] private RectTransform defaultIconLayer = null;
     [SerializeField] private RectTransform minionIconLayer = null;
+    [SerializeField] private RectTransform towerIconLayer = null;
     [SerializeField] private RectTransform playerIconLayer = null;
     
     private Vector2 defaultCameraRectSize = new Vector2(80, 45);
@@ -73,6 +74,9 @@ public class Minimap : MonoBehaviour
 
             case "Minion":
                 return minionIconLayer;
+
+            case "Tower":
+                return towerIconLayer;
 
             default:
                 return defaultIconLayer;

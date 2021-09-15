@@ -26,10 +26,13 @@ namespace Dota.Controls
                 if (Physics.Raycast(CameraController.GetMouseRay(), out RaycastHit hit, Mathf.Infinity))
                 {
                     GameObject go = hit.collider.gameObject;
-                    if (go == gameObject) { return; }
+
+                    Debug.Log(go.name);
 
                     if (fighter.IsAttackable(go))
                     {
+                        if (go == gameObject) { return; }
+
                         fighter.StartAttack(go);
                         return;
                     }

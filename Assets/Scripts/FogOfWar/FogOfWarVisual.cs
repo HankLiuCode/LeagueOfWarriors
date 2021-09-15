@@ -9,8 +9,11 @@ public class FogOfWarVisual : MonoBehaviour
     [SerializeField] GameObject FOVGraphicsPrefab = null;
     [SerializeField] MinionManager minionManager = null;
     [SerializeField] PlayerManager playerManager = null;
+    [SerializeField] BuildingManager buildingManager = null;
     [SerializeField] Team localPlayerTeam;
     [SerializeField] List<FOVGraphics> fovGraphicsList = new List<FOVGraphics>();
+
+    [SerializeField] float towerVisualRadius = 20f;
 
     [SerializeField] float minionUpdateMeshInterval = 0.1f;
     [SerializeField] float minionVisualRadius = 5f;
@@ -25,6 +28,24 @@ public class FogOfWarVisual : MonoBehaviour
         playerManager.OnLocalChampionReady += PlayerManager_OnLocalPlayerConnectionReady;
         minionManager.OnMinionAdded += MinionManager_OnMinionAdded;
         minionManager.OnMinionRemoved += MinionManager_OnMinionRemoved;
+        buildingManager.OnTowerAdded += BuildingManager_OnTowerAdded;
+        buildingManager.OnTowerRemoved += BuildingManager_OnTowerRemoved;
+    }
+
+    private void BuildingManager_OnTowerRemoved(Tower tower)
+    {
+        if (tower.GetTeam() == localPlayerTeam)
+        {
+            RemoveViewMesh(tower.gameObject);
+        }
+    }
+
+    private void BuildingManager_OnTowerAdded(Tower tower)
+    {
+        if (tower.GetTeam() == localPlayerTeam)
+        {
+            AttachViewMesh(tower.gameObject, towerVisualRadius, 20, 10);
+        }
     }
 
     private void PlayerManager_OnLocalPlayerConnectionReady()

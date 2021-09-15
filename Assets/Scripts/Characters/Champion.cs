@@ -56,11 +56,6 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
         return "Champion";
     }
 
-    public Sprite GetMinimapIcon()
-    {
-        return icon;
-    }
-
     public MinimapIcon GetMinimapIconInstance()
     {
         MinimapPlayerIcon minimapIconInstance = Instantiate(minimapIconPrefab).GetComponent<MinimapPlayerIcon>();

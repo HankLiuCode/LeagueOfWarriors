@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6131693119581513628}
   - component: {fileID: 6131693119581513629}
   - component: {fileID: 6131693119581513618}
+  - component: {fileID: 5903093996623051485}
   m_Layer: 0
   m_Name: Building
   m_TagString: Untagged
@@ -97,3 +98,16 @@ MonoBehaviour:
     attackRange: 0
     cooldownReduction: 0
     goldGeneration: 0
+--- !u!114 &5903093996623051485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6131693119581513631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa08996a36889d248b1049e6ee73d2b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderers: []

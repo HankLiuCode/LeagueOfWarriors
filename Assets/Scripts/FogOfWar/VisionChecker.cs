@@ -12,6 +12,7 @@ public class VisionChecker : MonoBehaviour
 
     [SerializeField] MinionManager minionManager = null;
     [SerializeField] PlayerManager playerManager = null;
+    [SerializeField] BuildingManager towerManager = null;
 
     [SerializeField] List<VisionEntity> allies = new List<VisionEntity>();
     [SerializeField] List<VisionEntity> enemies = new List<VisionEntity>();
@@ -32,6 +33,21 @@ public class VisionChecker : MonoBehaviour
 
         minionManager.OnMinionAdded += MinionManager_OnMinionAdded;
         minionManager.OnMinionRemoved += MinionManager_OnMinionRemoved;
+
+        towerManager.OnTowerAdded += TowerManager_OnTowerAdded;
+        towerManager.OnTowerRemoved += TowerManager_OnTowerRemoved;
+    }
+
+    private void TowerManager_OnTowerRemoved(Tower tower)
+    {
+        VisionEntity visionEntity = tower.GetComponent<VisionEntity>();
+        RemoveVisionEntity(visionEntity, tower.GetTeam());
+    }
+
+    private void TowerManager_OnTowerAdded(Tower tower)
+    {
+        VisionEntity visionEntity = tower.GetComponent<VisionEntity>();
+        AddVisionEntity(visionEntity, tower.GetTeam());
     }
 
     private void PlayerManager_OnLocalChampionReady()

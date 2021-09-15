@@ -347,41 +347,15 @@ MonoBehaviour:
   redMinionPrefab: {fileID: 411657605277521728, guid: 9c09a4223c69d6c4086a3700624a8aad,
     type: 3}
   spawnMinion: 1
-  firstWaveSpawnAfter: 5
+  firstWaveSpawnAfter: 3
   minionPerWave: 2
-  spawnInterval: 10
-  blueBase: {fileID: 0}
+  spawnInterval: 5
   blueStartPositions:
   - {fileID: 822654627}
   - {fileID: 1097295595}
   - {fileID: 1391768095}
-  topBlueTowers:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  middleBlueTowers:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  bottomBlueTowers:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  redBase: {fileID: 0}
   redStartPositions:
   - {fileID: 1599501706}
   - {fileID: 1648889116}
   - {fileID: 431767171}
-  topRedTowers:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  middleRedTowers:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  bottomRedTowers:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  maxSpawn: 3
+  buildingManager: {fileID: 0}

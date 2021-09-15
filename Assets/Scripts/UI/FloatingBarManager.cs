@@ -5,8 +5,9 @@ using Dota.Attributes;
 
 public class FloatingBarManager : MonoBehaviour
 {
-    [SerializeField] VisionChecker visibilityChecker = null;
+    // Need this for localPlayer Indentification
     [SerializeField] PlayerManager playerManager = null;
+    [SerializeField] VisionChecker visibilityChecker = null;
 
     [SerializeField] Transform floatingBarParent = null;
     [SerializeField] GameObject floatingBarPrefab = null;
@@ -73,7 +74,7 @@ public class FloatingBarManager : MonoBehaviour
 
         FloatingBar floatingBarInstance = Instantiate(floatingBarPrefab, floatingBarParent).GetComponent<FloatingBar>();
 
-        floatingBarInstance.Setup(health, mana, localPlayerTeam, teamMember.GetTeam(), Vector3.up * 3);
+        floatingBarInstance.Setup(health, mana, localPlayerTeam, teamMember.GetTeam(), Vector3.up * health.GetDisplayOffset());
         
         floatingBars.Add(health, floatingBarInstance);
     }

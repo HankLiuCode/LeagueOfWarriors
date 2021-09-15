@@ -1,5 +1,17 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &2928662850204982764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 620882805556932230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96ec5fe4c00163f499f1bf840990a0e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &-4533690763673579477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,18 +246,6 @@ MonoBehaviour:
   mover: {fileID: 452546937840963535}
   fighter: {fileID: 4873311908163361665}
   health: {fileID: 1187138297185360588}
---- !u!114 &2928662850204982764
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 620882805556932230}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96ec5fe4c00163f499f1bf840990a0e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &6543793052980821921
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -262,6 +262,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5930651934562835495, guid: 88c3cb8882347c647a97c08523c9dbd2,
+        type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5930651934574334247, guid: 88c3cb8882347c647a97c08523c9dbd2,
         type: 3}
@@ -539,6 +544,11 @@ PrefabInstance:
         type: 3}
       propertyPath: baseStats.attackDamage
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2020297958654239429, guid: b31cb8edadf36634680f82045f41209b,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 2433690888149234406, guid: b31cb8edadf36634680f82045f41209b,
         type: 3}

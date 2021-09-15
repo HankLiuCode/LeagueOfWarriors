@@ -24,24 +24,14 @@ public class MinionManager : NetworkBehaviour
     [SerializeField] int minionPerWave = 3;
     [SerializeField] float spawnInterval = 10f;
 
-    [Header("Blue")]
-    [SerializeField] Transform blueBase;
     [SerializeField] Transform[] blueStartPositions;
-    [SerializeField] Transform[] topBlueTowers;
-    [SerializeField] Transform[] middleBlueTowers;
-    [SerializeField] Transform[] bottomBlueTowers;
-
-    [Header("Red")]
-    [SerializeField] Transform redBase;
     [SerializeField] Transform[] redStartPositions;
-    [SerializeField] Transform[] topRedTowers;
-    [SerializeField] Transform[] middleRedTowers;
-    [SerializeField] Transform[] bottomRedTowers;
+    [SerializeField] BuildingManager buildingManager = null;
 
     SyncList<Minion> minions = new SyncList<Minion>();
+
     IEnumerator redSpawnRoutine;
     IEnumerator blueSpawnRoutine;
-
 
     public event System.Action<Minion> OnMinionAdded;
     public event System.Action<Minion> OnMinionRemoved;
@@ -102,15 +92,15 @@ public class MinionManager : NetworkBehaviour
                 switch (team)
                 {
                     case Team.Red:
-                        SpawnMinion(Team.Red, redStartPositions[1].position,middleBlueTowers, blueBase, Lane.Middle); // Mid
-                        SpawnMinion(Team.Red, redStartPositions[0].position, topBlueTowers, blueBase, Lane.Top);    // Top
-                        SpawnMinion(Team.Red, redStartPositions[2].position, bottomBlueTowers, blueBase, Lane.Bottom); // Bottom
+                        SpawnMinion(Team.Red, redStartPositions[1].position, buildingManager.GetTowers(Team.Blue, Lane.Middle), buildingManager.GetBase(Team.Blue), Lane.Middle); // Mid
+                        SpawnMinion(Team.Red, redStartPositions[0].position, buildingManager.GetTowers(Team.Blue, Lane.Top), buildingManager.GetBase(Team.Blue), Lane.Top);    // Top
+                        SpawnMinion(Team.Red, redStartPositions[2].position, buildingManager.GetTowers(Team.Blue, Lane.Bottom), buildingManager.GetBase(Team.Blue), Lane.Bottom); // Bottom
                         break;
 
                     case Team.Blue:
-                        SpawnMinion(Team.Blue, blueStartPositions[1].position, middleRedTowers, redBase, Lane.Middle); // Mid
-                        SpawnMinion(Team.Blue, blueStartPositions[0].position, topRedTowers, redBase, Lane.Top);    // Top
-                        SpawnMinion(Team.Blue, blueStartPositions[2].position, bottomRedTowers, redBase, Lane.Bottom); // Bottom
+                        SpawnMinion(Team.Blue, blueStartPositions[1].position, buildingManager.GetTowers(Team.Red, Lane.Middle), buildingManager.GetBase(Team.Red), Lane.Middle); // Mid
+                        SpawnMinion(Team.Blue, blueStartPositions[0].position, buildingManager.GetTowers(Team.Red, Lane.Top), buildingManager.GetBase(Team.Red), Lane.Top);    // Top
+                        SpawnMinion(Team.Blue, blueStartPositions[2].position, buildingManager.GetTowers(Team.Red, Lane.Bottom), buildingManager.GetBase(Team.Red), Lane.Bottom); // Bottom
                         break;
                 }
 
@@ -205,6 +195,17 @@ public class MinionManager : NetworkBehaviour
     private void Health_OnHealthDead(Health health)
     {
         Minion minion = health.GetComponent<Minion>();
+        OnMinionRemoved?.Invoke(minion);
+        RpcNotifyMinionRemoved(minion);
+    }
+
+    #endregion
+
+    #region Client
+
+    [ClientRpc]
+    public void RpcNotifyMinionRemoved(Minion minion)
+    {
         OnMinionRemoved?.Invoke(minion);
     }
 

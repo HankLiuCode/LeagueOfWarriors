@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Dota.Utils;
 
 public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
 {
@@ -16,8 +17,8 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
     [SerializeField] ServerMover serverMover = null;
     [SerializeField] ServerFighter serverFighter = null;
     [SerializeField] Health health = null;
+
     [SerializeField] Sprite icon = null;
-    [SerializeField] Sprite minimapIcon = null;
     [SerializeField] GameObject minimapIconPrefab = null;
 
     [SerializeField] float noticeRadius = 5f;
@@ -61,13 +62,14 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
         serverMover.SetAreaMask(road);
     }
 
-
     [ServerCallback]
     void Update()
     {
         currentTarget = GetTarget();
         serverFighter.StartAttack(currentTarget.gameObject);
     }
+
+
 
     Transform GetTarget()
     {
@@ -87,7 +89,7 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
 
         foreach (Health health in enemyList)
         {
-            if (health.IsDead())
+            if (health.IsDead() || VectorConvert.XZDistance(health.transform.position, transform.position) > noticeRadius)
             {
                 toRemove.Add(health);
             }
@@ -129,14 +131,9 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
         return icon;
     }
 
-    public Sprite GetMinimapIcon()
-    {
-        return minimapIcon;
-    }
-
     public MinimapIcon GetMinimapIconInstance()
     {
-        MinimapIcon minimapIconInstance = Instantiate(minimapIconPrefab).GetComponent<MinimapIcon>();
+        MinimapMinionIcon minimapIconInstance = Instantiate(minimapIconPrefab).GetComponent<MinimapMinionIcon>();
         minimapIconInstance.SetVisible(false);
         minimapIconInstance.SetTeam(team);
 

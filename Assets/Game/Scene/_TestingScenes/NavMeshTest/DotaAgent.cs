@@ -40,8 +40,6 @@ public class DotaAgent : MonoBehaviour
 
     private void Update()
     {
-        obstacle.IsEnabled = !IsMoving;
-
         if (CanMove)
         {
             pathFollower.Move(agent, Speed);

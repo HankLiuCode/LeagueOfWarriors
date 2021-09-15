@@ -251,10 +251,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b2880013da80dc429e3adc322bd4f43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerFace: {fileID: 8807761961005024697}
   icon: {fileID: 357021042664911451}
   teamRepresentImage: {fileID: 6530037424535165170}
   isVisible: 0
-  playerFace: {fileID: 8807761961005024697}
 --- !u!1 &8807761961005024703
 GameObject:
   m_ObjectHideFlags: 0
@@ -343,7 +343,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b2880013da80dc429e3adc322bd4f43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerFace: {fileID: 0}
   icon: {fileID: 0}
   teamRepresentImage: {fileID: 0}
   isVisible: 0
-  playerFace: {fileID: 0}
