@@ -5,6 +5,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+
+public enum Lane
+{
+    Top,
+    Middle,
+    Bottom
+}
+
 public class MinionManager : NetworkBehaviour
 {
     [SerializeField] GameObject blueMinionPrefab;
@@ -94,15 +102,15 @@ public class MinionManager : NetworkBehaviour
                 switch (team)
                 {
                     case Team.Red:
-                        SpawnMinion(Team.Red, redStartPositions[1].position,middleBlueTowers, blueBase, 1 << 3); // Mid
-                        SpawnMinion(Team.Red, redStartPositions[0].position, topBlueTowers, blueBase, 1 << 4);    // Top
-                        SpawnMinion(Team.Red, redStartPositions[2].position, bottomBlueTowers, blueBase, 1 << 5); // Bottom
+                        SpawnMinion(Team.Red, redStartPositions[1].position,middleBlueTowers, blueBase, Lane.Middle); // Mid
+                        SpawnMinion(Team.Red, redStartPositions[0].position, topBlueTowers, blueBase, Lane.Top);    // Top
+                        SpawnMinion(Team.Red, redStartPositions[2].position, bottomBlueTowers, blueBase, Lane.Bottom); // Bottom
                         break;
 
                     case Team.Blue:
-                        SpawnMinion(Team.Blue, blueStartPositions[1].position, middleRedTowers, redBase, 1 << 3); // Mid
-                        SpawnMinion(Team.Blue, blueStartPositions[0].position, topRedTowers, redBase, 1 << 4);    // Top
-                        SpawnMinion(Team.Blue, blueStartPositions[2].position, bottomRedTowers, redBase, 1 << 5); // Bottom
+                        SpawnMinion(Team.Blue, blueStartPositions[1].position, middleRedTowers, redBase, Lane.Middle); // Mid
+                        SpawnMinion(Team.Blue, blueStartPositions[0].position, topRedTowers, redBase, Lane.Top);    // Top
+                        SpawnMinion(Team.Blue, blueStartPositions[2].position, bottomRedTowers, redBase, Lane.Bottom); // Bottom
                         break;
                 }
 
@@ -114,11 +122,11 @@ public class MinionManager : NetworkBehaviour
     }
 
     [Server]
-    public void SpawnMinion(Team team, Vector3 spawnPosition, Transform[] towers, Transform targetBase, int road)
+    public void SpawnMinion(Team team, Vector3 spawnPosition, Transform[] towers, Transform targetBase, Lane lane)
     {
         GameObject minionPrefab = team == Team.Blue ? blueMinionPrefab : redMinionPrefab;
 
-        GameObject minionInstance = Instantiate(minionPrefab, spawnPosition, Quaternion.identity);
+        GameObject minionInstance = Instantiate(minionPrefab, spawnPosition, GetMinionOrientation(team, lane));
 
         Minion minion = minionInstance.GetComponent<Minion>();
 
@@ -130,11 +138,68 @@ public class MinionManager : NetworkBehaviour
 
         minion.SetTowers(towers, targetBase);
 
-        minion.SetRoad(road);
+        minion.SetRoad(GetMask(lane));
 
         NetworkServer.Spawn(minionInstance);
 
         minions.Add(minionInstance.GetComponent<Minion>());
+    }
+
+    private Quaternion GetMinionOrientation(Team team, Lane lane)
+    {
+        Quaternion orien = Quaternion.identity;
+
+        if(team == Team.Red)
+        {
+            switch (lane)
+            {
+                case Lane.Top:
+                    orien = Quaternion.Euler(0, -90, 0);
+                    break;
+                case Lane.Middle:
+                    orien = Quaternion.Euler(0, -135, 0);
+                    break;
+                case Lane.Bottom:
+                    orien = Quaternion.Euler(0, -180, 0);
+                    break;
+            }
+        }
+        else if(team == Team.Blue)
+        {
+            switch (lane)
+            {
+                case Lane.Top:
+                    orien = Quaternion.Euler(0, 0, 0);
+                    break;
+                case Lane.Middle:
+                    orien = Quaternion.Euler(0, 45, 0);
+                    break;
+                case Lane.Bottom:
+                    orien = Quaternion.Euler(0, 90, 0);
+                    break;
+            }
+        }
+
+        return orien;
+    }
+
+    private int GetMask(Lane lane)
+    {
+        int mask = -1;
+
+        switch (lane)
+        {
+            case Lane.Top:
+                mask = 1 << 4;
+                break;
+            case Lane.Middle:
+                mask = 1 << 3;
+                break;
+            case Lane.Bottom:
+                mask = 1 << 5;
+                break;
+        }
+        return mask;
     }
 
     private void Health_OnHealthDead(Health health)

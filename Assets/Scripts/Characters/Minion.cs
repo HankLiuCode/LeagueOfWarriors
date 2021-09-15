@@ -51,6 +51,7 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
 
     public void SetTowers(Transform[] towers, Transform targetBase)
     {
+        transform.forward = towers[2].position - transform.position;
         this.towers = towers;
         this.targetBase = targetBase;
     }
@@ -67,7 +68,6 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
         currentTarget = GetTarget();
         serverFighter.StartAttack(currentTarget.gameObject);
     }
-    
 
     Transform GetTarget()
     {

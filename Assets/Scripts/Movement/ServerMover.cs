@@ -24,20 +24,20 @@ public class ServerMover : NetworkBehaviour, IAction
         if (canMove)
         {
             agent.Speed = statStore.GetStats().moveSpeed;
-            agent.IsStopped = false;
+            agent.CanMove = true;
             agent.SetDestination(position);
         }
     }
 
     public void SetAreaMask(int mask)
     {
-        //agent.areaMask = mask;
+        agent.SetMask(mask);
     }
 
     [Client]
     public void End()
     {
-        agent.IsStopped = true;
+        agent.CanMove = false;
     }
 
     [Client]
@@ -55,7 +55,7 @@ public class ServerMover : NetworkBehaviour, IAction
     {
         if (isServer)
         {
-            animator.SetBool("running", false);
+            animator.SetBool("running", agent.IsMoving);
         }
     }
 

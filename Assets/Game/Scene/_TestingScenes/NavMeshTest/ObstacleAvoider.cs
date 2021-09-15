@@ -2,33 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Dota.Utils;
 
 public class ObstacleAvoider : MonoBehaviour
 {
     public const float DEFAULT_MOVE_STRAIGHT_TIME = 0.2f;
 
-    [SerializeField] float radius = 1f;
-    [SerializeField] float probeLength = 2f;
+    [SerializeField] float radius = 0.5f;
+    [SerializeField] float probeLength = 0.5f;
 
-    [SerializeField] Vector3 target;
-    [SerializeField] float moveStraightTime;
+    [SerializeField] float moveStraightTime = DEFAULT_MOVE_STRAIGHT_TIME;
     [SerializeField] float maxTurnSpeed = 0.2f;
 
+    [SerializeField] Obstacle obstacle = null;
     [SerializeField] LayerMask obstacleLayer;
-    [SerializeField] float obstacleNoticeRadius = 5f;
 
-    [SerializeField] List<Obstacle> obstacles;
+    [SerializeField] float useDefaultAvoidThreashHold = 10f;
+    [SerializeField] bool rightAvoid;
 
-    List<Obstacle> toDelete = new List<Obstacle>();
-    
+    // for debugging
+    Vector3 target;
+
     float moveStraightTimer;
-    
-    public void SetTarget(Vector3 target)
+
+    private void Start()
     {
-        this.target = target;
+        rightAvoid = Random.Range(0, 1) > 0.5f;
     }
 
-    public bool ObstacleAvoid(NavMeshAgent navMeshAgent, float speed)
+    public bool Seek(NavMeshAgent navMeshAgent, float speed, Vector3 target)
     {
         ObstacleInfo obstacleInfo = GetClosestObstacleInfo();
 
@@ -65,17 +67,11 @@ public class ObstacleAvoider : MonoBehaviour
             {
                 navMeshAgent.speed = speed;
                 navMeshAgent.Move(transform.forward * speed * Time.deltaTime);
-
                 moveStraightTimer -= Time.deltaTime;
             }
 
             return false;
         }
-    }
-
-    public float DirectionToAngle(Vector3 direction)
-    {
-        return Mathf.Atan2(direction.x, direction.z);
     }
     
     public ObstacleInfo GetClosestObstacleInfo()
@@ -109,21 +105,19 @@ public class ObstacleAvoider : MonoBehaviour
 
     public List<ObstacleInfo> GetAvoidTargets()
     {
-        UpdateObstacles();
-
         Vector3 probeVec = transform.forward * probeLength;
 
         List<ObstacleInfo> avoidObstacles = new List<ObstacleInfo>();
 
         List<Obstacle> avoidTargets = new List<Obstacle>();
 
-        foreach (Obstacle obstacle in obstacles)
+        foreach (Obstacle obstacle in ObstacleManager.GetInstance().GetObstaclesExcept(obstacle))
         {
-            Vector3 obstacleVec = obstacle.transform.position - transform.position;
+            Vector3 obstacleVec = VectorConvert.XZVector(transform.position, obstacle.transform.position); 
 
             float obstacleDist = obstacleVec.magnitude;
 
-            if (obstacleDist > probeLength + obstacle.GetRadius())
+            if (obstacleDist > probeLength + obstacle.GetRadius() || !obstacle.IsEnabled)
             {
                 continue;
             }
@@ -147,8 +141,8 @@ public class ObstacleAvoider : MonoBehaviour
                 avoidTargets.Add(obstacle);
 
 
-                Vector3 avoidDirection = (obstacleProjectionOnProbeDist * transform.forward - obstacleDir);
-                if (Vector3.Angle(obstacleDir, transform.forward) < 30)
+                Vector3 avoidDirection = transform.right; // (obstacleProjectionOnProbeDist * transform.forward - obstacleDir);
+                if (Vector3.Angle(obstacleDir, transform.forward) < useDefaultAvoidThreashHold)
                 {
                     avoidDirection = transform.right;
                 }
@@ -176,38 +170,8 @@ public class ObstacleAvoider : MonoBehaviour
     {
         return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
     }
-
-    public void UpdateObstacles()
-    {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, obstacleNoticeRadius, obstacleLayer);
-        foreach (Collider c in colliders)
-        {
-            if(c.gameObject == gameObject) { continue; }
-
-            Obstacle obstacle = c.GetComponent<Obstacle>();
-            if (!obstacles.Contains(obstacle))
-            {
-                obstacles.Add(obstacle);
-            }
-        }
-
-        foreach(Obstacle obstacle in obstacles)
-        {
-            if(Vector3.Distance(obstacle.transform.position, transform.position) > obstacleNoticeRadius)
-            {
-                toDelete.Add(obstacle);
-            }
-        }
-
-        foreach(Obstacle obstacle in toDelete)
-        {
-            obstacles.Remove(obstacle);
-        }
-
-        toDelete.Clear();
-    }
-
-    private void OnDrawGizmos()
+    
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         foreach (ObstacleInfo avoidTarget in GetAvoidTargets())
@@ -216,7 +180,7 @@ public class ObstacleAvoider : MonoBehaviour
         }
 
         Gizmos.color = Color.green;
-        foreach (Obstacle obstacle in obstacles)
+        foreach (Obstacle obstacle in ObstacleManager.GetInstance().GetObstaclesExcept(obstacle))
         {
             Gizmos.DrawWireSphere(obstacle.transform.position, obstacle.GetRadius());
         }

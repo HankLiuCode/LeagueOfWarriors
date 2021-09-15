@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Dota.Utils;
 
 [RequireComponent(typeof(ObstacleAvoider))]
 public class PathFollower : MonoBehaviour
@@ -9,27 +10,59 @@ public class PathFollower : MonoBehaviour
     [SerializeField] private Vector3[] wayPoints;
     [SerializeField] int nextIndex = -1;
     [SerializeField] bool reachedDest = true;
+    [SerializeField] bool enableObstacleAvoid;
     [SerializeField] ObstacleAvoider obstacleAvoider = null;
-    public const float ARRIVE_EPSILON = 0.5f;
+    public const float ARRIVE_EPSILON = 0.1f;
 
     public bool ReachedDestination { get { return reachedDest; } }
 
     public void SetPath(Vector3[] wayPoints)
     {
-        if(wayPoints.Length <= 0) { return; }
+        if(wayPoints.Length <= 1) { return; }
 
         this.wayPoints = wayPoints;
+
         reachedDest = false;
+
         nextIndex = 0;
+
+        //StartCoroutine(SetWayPointAfterTurn(wayPoints));
+    }
+
+    IEnumerator SetWayPointAfterTurn(Vector3[] wayPoints)
+    {
+        Vector3 targetForward = (wayPoints[1] - transform.position).normalized;
+
+        while(true)
+        {
+            if(Vector3.Distance(transform.forward, targetForward) > ARRIVE_EPSILON)
+            {
+                transform.forward = Vector3.MoveTowards(transform.forward, targetForward, 0.2f);
+                yield return null;
+            }
+            else
+            {
+                this.wayPoints = wayPoints;
+
+                reachedDest = false;
+
+                nextIndex = 0;
+
+                break;
+            }
+        }
+
+        yield return null;
     }
 
     public void Move(NavMeshAgent navMeshAgent, float speed)
     {
-        if (reachedDest) { return; }
+        if (reachedDest) 
+        { 
+            return; 
+        }
 
-        Vector3 seekTarget = wayPoints[nextIndex];
-        float distance = Vec2Distance(wayPoints[nextIndex], transform.position);
-        Vector3 direction = Vec2Direction(transform.position, wayPoints[nextIndex]);
+        float distance = VectorConvert.XZDistance(wayPoints[nextIndex], transform.position);
 
         if (distance < ARRIVE_EPSILON)
         {
@@ -42,11 +75,22 @@ public class PathFollower : MonoBehaviour
             }
         }
 
-        //transform.forward = direction;
-        //navMeshAgent.Move(direction * speed * Time.deltaTime);
+        Vector3 direction = VectorConvert.XZDirection(transform.position, wayPoints[nextIndex]);
+        transform.forward = direction;
+        navMeshAgent.Move(direction * speed * Time.deltaTime);
 
-        obstacleAvoider.SetTarget(seekTarget);
-        obstacleAvoider.ObstacleAvoid(navMeshAgent, speed);
+        //Vector3 seekTarget = wayPoints[nextIndex];
+
+        //if (enableObstacleAvoid)
+        //{
+        //    obstacleAvoider.Seek(navMeshAgent, speed, seekTarget);
+        //}
+        //else
+        //{
+        //    Vector3 direction = VectorConvert.XZDirection(transform.position, wayPoints[nextIndex]);
+        //    transform.forward = direction;
+        //    navMeshAgent.Move(direction * speed * Time.deltaTime);
+        //}
     }
 
     public Vector3 NextWayPoint()
@@ -54,21 +98,7 @@ public class PathFollower : MonoBehaviour
         return wayPoints[nextIndex];
     }
 
-    private Vector3 Vec2Direction(Vector3 pos1, Vector3 pos2)
-    {
-        Vector3 pos12D = new Vector3(pos1.x, 0, pos1.z);
-        Vector3 pos22D = new Vector3(pos2.x, 0, pos2.z);
-        return (pos22D - pos12D).normalized;
-    }
-
-    private float Vec2Distance(Vector3 pos1, Vector3 pos2)
-    {
-        Vector3 pos12D = new Vector3(pos1.x, 0, pos1.z);
-        Vector3 pos22D = new Vector3(pos2.x, 0, pos2.z);
-        return Vector3.Distance(pos12D, pos22D);
-    }
-
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
 
@@ -77,6 +107,12 @@ public class PathFollower : MonoBehaviour
             Gizmos.DrawCube(wayPoints[i], Vector3.one);
             Gizmos.DrawCube(wayPoints[i + 1], Vector3.one);
             Gizmos.DrawLine(wayPoints[i], wayPoints[i + 1]);
+        }
+
+        if(nextIndex < wayPoints.Length && nextIndex >= 0)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawCube(wayPoints[nextIndex], Vector3.one);
         }
     }
 }

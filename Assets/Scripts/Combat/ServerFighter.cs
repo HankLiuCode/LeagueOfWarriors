@@ -97,6 +97,34 @@ public class ServerFighter : NetworkBehaviour
         return Vector3.Distance(transform.position, target.transform.position) < attackRange;
     }
 
+    [Server]
+    private Vector3 GetAttackPosition()
+    {
+        Vector3 targetPos = target.transform.position;
+
+        Vector3 targetDir = (targetPos - transform.position).normalized;
+
+        Vector3 relativePosFromTarget = targetDir * (attackRange - MOVE_EPSILON);
+
+        Vector3 defaultAttackPos = targetPos - relativePosFromTarget;
+
+        return defaultAttackPos;
+    }
+
+    [Server]
+    private bool HasObstacle(Vector3 position)
+    {
+        List<Obstacle> obstacles = ObstacleManager.GetInstance().GetObstacles();
+        foreach(Obstacle o in obstacles)
+        {
+            if(VectorConvert.XZDistance(o.transform.position, position) < o.GetRadius())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     [ServerCallback]
     private void Update()
     {
@@ -110,8 +138,7 @@ public class ServerFighter : NetworkBehaviour
         {
             if (hasFinishedBackswing)
             {
-                Vector3 targetDir = (target.transform.position - transform.position).normalized;
-                mover.MoveTo(target.transform.position - targetDir * (attackRange - MOVE_EPSILON));
+                mover.MoveTo(GetAttackPosition());
             }
         }
         else
@@ -124,6 +151,15 @@ public class ServerFighter : NetworkBehaviour
                 netAnimator.SetTrigger("attack");
                 hasFinishedBackswing = false;
             }
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        if(target != null)
+        {
+            Gizmos.DrawCube(target.transform.position, Vector3.one);
         }
     }
 }

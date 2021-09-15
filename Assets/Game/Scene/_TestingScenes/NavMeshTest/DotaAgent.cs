@@ -9,9 +9,11 @@ public class DotaAgent : MonoBehaviour
     [SerializeField] NavMeshAgent agent = null;
     [SerializeField] float speed = 5f;
     [SerializeField] PathFollower pathFollower = null;
-
-    public bool IsStopped { get; set; }
+    [SerializeField] Obstacle obstacle = null;
     public float Speed { get { return speed; } set { speed = value; } }
+    public bool CanMove { get; set; }
+    public bool IsMoving { get { return (!pathFollower.ReachedDestination) && CanMove; } }
+
     // Cache
     NavMeshPath navMeshPath;
 
@@ -20,28 +22,28 @@ public class DotaAgent : MonoBehaviour
         navMeshPath = new NavMeshPath();
     }
 
+    public void SetMask(int mask)
+    {
+        agent.areaMask = mask;
+    }
+    
     public void SetDestination(Vector3 targetPoint)
     {
-        IsStopped = false;
         bool isOnNav = agent.isOnNavMesh;
-        agent.CalculatePath(targetPoint, navMeshPath);
+
+        NavMesh.SamplePosition(targetPoint, out NavMeshHit pointOnNavMesh, 500f, NavMesh.AllAreas);
+
+        agent.CalculatePath(pointOnNavMesh.position, navMeshPath);
+
         pathFollower.SetPath(navMeshPath.corners);
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(1))
+        obstacle.IsEnabled = !IsMoving;
+
+        if (CanMove)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
-            {
-                SetDestination(hit.point);
-            }
-        }
-        
-        if (!IsStopped)
-        {
-            Debug.Log("Following Path");
             pathFollower.Move(agent, Speed);
         }
     }
