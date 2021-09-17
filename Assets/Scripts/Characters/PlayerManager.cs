@@ -16,9 +16,9 @@ public class PlayerManager : NetworkBehaviour
     [SerializeField] List<Champion> debugPlayers = new List<Champion>();
     SyncList<Champion> players = new SyncList<Champion>();
 
-
     public event System.Action<Champion> OnChampionAdded;
     public event System.Action<Champion> OnChampionRemoved;
+    
     public event System.Action OnLocalChampionReady;
 
 
@@ -92,6 +92,8 @@ public class PlayerManager : NetworkBehaviour
             // BUT 
             // 1. The champion list is on client not synced with the server yet
             // 2. The champion might not be spawned yet on the client 
+
+            OnLocalChampionReady?.Invoke();
             RpcNotifyServerSpawnedAllChampion();
         }
     }

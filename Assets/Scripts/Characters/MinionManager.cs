@@ -112,7 +112,7 @@ public class MinionManager : NetworkBehaviour
     }
 
     [Server]
-    public void SpawnMinion(Team team, Vector3 spawnPosition, Transform[] towers, Transform targetBase, Lane lane)
+    public void SpawnMinion(Team team, Vector3 spawnPosition, Tower[] towers, Base targetBase, Lane lane)
     {
         GameObject minionPrefab = team == Team.Blue ? blueMinionPrefab : redMinionPrefab;
 

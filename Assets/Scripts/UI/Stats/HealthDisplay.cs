@@ -20,15 +20,15 @@ namespace Dota.UI
         {
             if(this.health != null)
             {
-                this.health.OnHealthModified -= Health_OnHealthModified;
+                this.health.OnHealthModified -= Health_OnClientHealthModified;
             }
 
             this.health = health;
-            this.health.OnHealthModified += Health_OnHealthModified;
+            this.health.OnHealthModified += Health_OnClientHealthModified;
             UpdateHealth();
         }
 
-        private void Health_OnHealthModified()
+        private void Health_OnClientHealthModified()
         {
             UpdateHealth();
         }

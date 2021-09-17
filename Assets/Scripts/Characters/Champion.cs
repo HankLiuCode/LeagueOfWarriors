@@ -22,18 +22,16 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
     {
         health.ServerRevive();
     }
+
+
     #endregion
 
+    // Both
     private void Start()
     {
         health.OnHealthDead += Champion_OnHealthDead;
         health.OnHealthDeadEnd += Health_OnHealthDeadEnd;
         health.OnHealthRevive += Health_OnHealthRevive;
-    }
-
-    private void Health_OnHealthRevive()
-    {
-        gameObject.SetActive(true);
     }
 
     private void Health_OnHealthDeadEnd()
@@ -44,6 +42,19 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
     private void Champion_OnHealthDead(Health health)
     {
         OnChampionDead?.Invoke(this);
+    }
+
+    // this prevents the other clients seeing champion fly through the sky
+    private void Health_OnHealthRevive()
+    {
+        StartCoroutine(SetActiveAfter(0.2f));
+    }
+
+    IEnumerator SetActiveAfter(float waitSeconds)
+    {
+        yield return new WaitForSeconds(waitSeconds);
+
+        gameObject.SetActive(true);
     }
 
     public Sprite GetIcon()

@@ -75,7 +75,7 @@ public class Minimap : MonoBehaviour
             case "Minion":
                 return minionIconLayer;
 
-            case "Tower":
+            case "Building":
                 return towerIconLayer;
 
             default:

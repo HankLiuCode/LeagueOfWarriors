@@ -17,7 +17,7 @@ namespace Dota.Attributes
         [SerializeField] Collider healthCollider = null;
         [SerializeField] AnimationEventHandler animationEventHandler = null;
         [SerializeField] float healthDisplayOffset = 3f;
-
+        
         public event System.Action OnHealthRevive;
         public event System.Action OnHealthModified;
         public event System.Action<Health> OnHealthDead;

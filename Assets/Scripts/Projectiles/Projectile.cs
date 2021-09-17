@@ -1,0 +1,43 @@
+using Mirror;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Projectile : NetworkBehaviour
+{
+    public const float ACCEPTABLE_LATENCY = 0.2f;
+    public const float DESTROY_EPSILON = 0.1f;
+
+    [SyncVar]
+    [SerializeField] 
+    CombatTarget target;
+
+    [SerializeField] Vector3 spawnPosition;
+    [SerializeField] float speed = 5f;
+
+    #region Server
+
+    public void SetTarget(CombatTarget target, Vector3 spawnPosition)
+    {
+        this.target = target;
+        this.spawnPosition = spawnPosition;
+    }
+
+    #endregion
+
+
+    private void Update()
+    {
+        Vector3 targetVec = target.GetAimPoint().position - transform.position;
+        Vector3 direction = targetVec.normalized;
+        if (isServer)
+        {
+            float delta = speed * Time.deltaTime;
+            transform.position += direction * delta;
+            if (targetVec.magnitude <= DESTROY_EPSILON)
+            {
+                NetworkServer.Destroy(gameObject);
+            }
+        }
+    }
+}

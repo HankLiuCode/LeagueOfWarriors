@@ -27,10 +27,9 @@ namespace Dota.Controls
                 {
                     GameObject go = hit.collider.gameObject;
 
-                    Debug.Log(go.name);
-
                     if (fighter.IsAttackable(go))
                     {
+                        Debug.Log("Is Attackable");
                         if (go == gameObject) { return; }
 
                         fighter.StartAttack(go);
@@ -38,6 +37,7 @@ namespace Dota.Controls
                     }
                     else
                     {
+                        Debug.Log("Is Not Attackable");
                         fighter.StopAttack();
                         mover.MoveTo(hit.point);
                     }

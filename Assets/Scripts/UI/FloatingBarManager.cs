@@ -56,19 +56,19 @@ public class FloatingBarManager : MonoBehaviour
         }
     }
 
-    private void VisibilityChecker_OnVisionEntityAdded(VisionEntity obj)
+    private void VisibilityChecker_OnVisionEntityAdded(VisionEntity visionEntity)
     {
         Team localPlayerTeam = playerManager.GetLocalChampion().GetTeam();
 
-        Health health = obj.GetComponent<Health>();
+        Health health = visionEntity.GetComponent<Health>();
 
-        Mana mana = obj.GetComponent<Mana>();
+        Mana mana = visionEntity.GetComponent<Mana>();
 
-        ITeamMember teamMember = obj.GetComponent<ITeamMember>();
+        ITeamMember teamMember = visionEntity.GetComponent<ITeamMember>();
 
         if (floatingBars.ContainsKey(health))
         {
-            Debug.Log("Already Contains Key For: " + obj.name);
+            Debug.Log("Already Contains Key For: " + visionEntity.name);
             return;
         }
 

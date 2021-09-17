@@ -342,14 +342,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 1
-  blueMinionPrefab: {fileID: 411657605277521728, guid: 9c09a4223c69d6c4086a3700624a8aad,
+  blueMinionPrefab: {fileID: 2136612336401763621, guid: 840b9e1749073a44fa678a357e63d622,
     type: 3}
-  redMinionPrefab: {fileID: 411657605277521728, guid: 9c09a4223c69d6c4086a3700624a8aad,
+  redMinionPrefab: {fileID: 2136612336401763621, guid: 840b9e1749073a44fa678a357e63d622,
     type: 3}
   spawnMinion: 1
-  firstWaveSpawnAfter: 3
+  firstWaveSpawnAfter: 5
   minionPerWave: 2
-  spawnInterval: 5
+  spawnInterval: 10
   blueStartPositions:
   - {fileID: 822654627}
   - {fileID: 1097295595}

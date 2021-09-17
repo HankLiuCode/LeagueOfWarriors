@@ -5,6 +5,9 @@ using UnityEngine;
 public class VisionEntity : MonoBehaviour
 {
     [SerializeField] List<GameObject> renderers;
+    [SerializeField] bool isAlwaysVisible = false;
+    public bool IsAlwaysVisible { get { return isAlwaysVisible; } }
+
     bool isVisible = true;
 
     public void SetVisible(bool isVisible)

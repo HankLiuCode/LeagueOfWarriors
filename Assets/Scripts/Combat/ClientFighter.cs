@@ -12,7 +12,7 @@ namespace Dota.Combat
     {
         public const float MOVE_EPSILON = 0.1f;
 
-        Health target;
+        CombatTarget target;
 
         [SerializeField] float attackCooldownTimer;
         [SerializeField] float attackRange = 2f;
@@ -63,24 +63,25 @@ namespace Dota.Combat
             hasFinishedBackswing = true;
         }
 
-        public bool IsAttackable(GameObject combatTarget)
+        public bool IsAttackable(GameObject combatCandidate)
         {
-            if (combatTarget == gameObject) return false;
+            if (combatCandidate == gameObject) return false;
 
-            if(TeamChecker.IsSameTeam(gameObject, combatTarget)) { return false; }
+            if(TeamChecker.IsSameTeam(gameObject, combatCandidate)) { return false; }
 
-            Health health = combatTarget.GetComponent<Health>();
+            CombatTarget combatTarget = combatCandidate.GetComponent<CombatTarget>();
 
-            if (health == null) return false;
+            if (combatTarget == null) return false;
 
             return true;
         }
 
         public void StartAttack(GameObject combatTarget)
         {
-            Health health = combatTarget.GetComponent<Health>();
-            if (health == null) { return; }
-            target = health;
+            CombatTarget target = combatTarget.GetComponent<CombatTarget>();
+            if (target == null) { return; }
+
+            this.target = target;
         }
 
         public void StopAttack()
@@ -101,12 +102,14 @@ namespace Dota.Combat
 
         void MeleeAttack()
         {
-            CmdDealDamageTo(target, statStore.GetStats().attackDamage);
+            CmdDealDamageTo(target.GetHealth(), statStore.GetStats().attackDamage);
         }
 
         private bool GetIsInRange()
         {
-            return Vector3.Distance(transform.position, target.transform.position) < attackRange;
+            bool isInRange = Vector3.Distance(transform.position, target.transform.position) < attackRange + target.GetAllowAttackRadius();
+
+            return isInRange;
         }
         
         [ClientCallback]
@@ -118,14 +121,17 @@ namespace Dota.Combat
 
             if (target == null) { return; }
 
-            if (target.IsDead()) { return; }
+            if (target.GetHealth().IsDead()) { return; }
             
             if (!GetIsInRange())
             {
                 if (hasFinishedBackswing)
                 {
                     Vector3 targetDir = (target.transform.position - transform.position).normalized;
-                    mover.MoveTo(target.transform.position - targetDir * (attackRange - MOVE_EPSILON));
+
+                    Vector3 moveToPos = target.transform.position - targetDir * (attackRange - MOVE_EPSILON);
+
+                    mover.MoveTo(moveToPos);
                 }
             }
             else

@@ -1,21 +1,45 @@
+using Dota.Attributes;
+using Dota.Utils;
 using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity
+public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner
 {
     [SerializeField] Team team;
     [SerializeField] GameObject minimapIconPrefab = null;
+    [SerializeField] Health health = null;
+    [SerializeField] Sprite towerIcon = null;
+
+    [Header("Tower")]
+    [SerializeField] GameObject projectilePrefab;
+    [SerializeField] Transform projectileSpawnPos;
+    [SerializeField] LayerMask attackLayer;
+    [SerializeField] float attackRadius = 10f;
+    [SerializeField] float checkInterval = 0.2f;
+    [SerializeField] float fireInterval = 1f;
+
+    
+    Collider[] colliderBuffer = new Collider[10];
+    Coroutine bulletFireRoutine;
+    Coroutine checkEnemyRoutine;
+    [SerializeField] CombatTarget currentTarget;
+
+    public List<Minion> enemyMinions = new List<Minion>();
+    public List<Champion> enemyChampions = new List<Champion>();
+
+    List<Projectile> projectilePool = new List<Projectile>();
+
 
     public string GetLayerName()
     {
-        return "Tower";
+        return "Building";
     }
 
     public MinimapIcon GetMinimapIconInstance()
     {
-        MinimapTowerIcon minimapIconInstance = Instantiate(minimapIconPrefab).GetComponent<MinimapTowerIcon>();
+        MinimapDefaultIcon minimapIconInstance = Instantiate(minimapIconPrefab).GetComponent<MinimapDefaultIcon>();
         minimapIconInstance.SetVisible(false);
         minimapIconInstance.SetTeam(team);
 
@@ -32,66 +56,110 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity
         this.team = team;
     }
 
+    public Sprite GetIcon()
+    {
+        return towerIcon;
+    }
 
-    ////定義箭塔類型
-    //public int towerType;
-    ////創建一個集合，當小兵移動到箭塔範圍之內把其添加到集合裡，否則將其移除集合
-    //public List<GameObject> listSolider = new List<GameObject>();
-    ////創建一個集合，當英雄移動到箭塔範圍之內把其添加到集合裡，否則將其移除集合
-    //public List<GameObject> listHero = new List<GameObject>();
+    #region Server
+    private void Start()
+    {
+        health.OnHealthDead += Health_OnHealthDead;
+        if (isServer)
+        {
+            checkEnemyRoutine = StartCoroutine(GetTargetRoutine());
+            bulletFireRoutine = StartCoroutine(FireBulletRoutine());
+        }
+    }
 
-    //[SerializeField]
-    //private GameObject bulletPrefab;//子彈
-    //[SerializeField]
-    //private Transform bulletStart;//子彈生成時所在的位置
-    //[SerializeField]
-    //private Transform parent;//生成的子彈放在這個物體下
+    private void Health_OnHealthDead(Health health)
+    {
+        NetworkServer.Destroy(gameObject);
+    }
+
+    IEnumerator FireBulletRoutine()
+    {
+        while (true)
+        {
+            if (currentTarget != null)
+            {
+                if(Vector3.Distance(currentTarget.transform.position, transform.position) > attackRadius)
+                {
+                    currentTarget = null;
+                }
+                else
+                {
+                    SpawnProjectile(currentTarget);
+                }
+            }
+            yield return new WaitForSeconds(fireInterval);
+        }
+    }
+
+
+    IEnumerator GetTargetRoutine()
+    {
+        while (true)
+        {
+            if (currentTarget == null)
+            {
+                currentTarget = GetTarget();
+            }
+            yield return new WaitForSeconds(checkInterval);
+        }
+    }
+
+    private void SpawnProjectile(CombatTarget target)
+    {
+
+        GameObject bulletInstance = Instantiate(projectilePrefab, projectileSpawnPos.position, Quaternion.identity);
+        Projectile projectile = bulletInstance.GetComponent<Projectile>();
+        
+        NetworkServer.Spawn(bulletInstance);
+        projectile.SetTarget(target, projectileSpawnPos.position);
+    }
+
+    private CombatTarget GetTarget()
+    {
+        int hitCount = Physics.OverlapSphereNonAlloc(transform.position, attackRadius, colliderBuffer, attackLayer);
+
+        if(hitCount <= 0) { return null; }
+
+        for (int i = 0; i < hitCount; i++)
+        {
+            CombatTarget combatTarget = colliderBuffer[i].GetComponent<CombatTarget>();
+            if (combatTarget != null && !TeamChecker.IsSameTeam(gameObject, combatTarget.gameObject))
+            {
+                return combatTarget;
+            }
+        }
+        return null;
+    }
+
+    #endregion
+
+
+
 
     //void Start()
     //{
-    //    //有了標籤為什麼還要定義int，主要是跟小兵類型有個對應
-    //    //防止我方箭塔去攻擊我方小兵
-    //    if (this.gameObject.tag.Equals("Blue"))
-    //    {
-    //        towerType = 0;//藍方箭塔
-    //    }
-    //    else
-    //    {
-    //        towerType = 1;//紅方箭塔
-    //    }
     //    InvokeRepeating("CreateBullet", 0.1f, 1.3f);
     //}
-    ////生成子彈
-    //public void CreateBullet()
-    //{
+    //生成子彈
+    public void CreateBullet()
+    {
+        if(enemyChampions.Count <= 0 && enemyMinions.Count <= 0) { return; }
 
-    //    //沒有敵人，不生成子彈
-    //    if (listHero.Count == 0 && listSolider.Count == 0) return;
-    //    //否則生成子彈
-    //    GameObject bullet = (GameObject)Instantiate(bulletPrefab, bulletStart.position, Quaternion.identity);
-    //    bullet.transform.parent = parent;
-    //    BulletTarget(bullet);//設置子彈攻擊目標
-    //}
-    ////塔是先射擊小兵，沒有小兵再射擊英雄
-    //public void BulletTarget(GameObject bullet)
-    //{
-    //    if (listSolider.Count > 0)
-    //    {
-    //        //把列表裡的第一個小兵作為攻擊對象
-    //        bullet.GetComponent<Bullet>().SetTarget(listSolider[0]);
-
-    //    }
-    //    else
-    //    {
-    //        //把列表裡的第一個英雄作為攻擊對象
-    //        bullet.GetComponent<Bullet>().SetTarget(listHero[0]);
-
-    //    }
-
-    //}
+        // Instantiate Bullet
 
 
-    ////小兵進入到箭塔範圍，箭塔從集合中找攻擊目標
+
+        // If has minion  Set Bullet Target to minion
+        // If not set bullet target to champion
+    }
+
+
+    //小兵進入到箭塔範圍，箭塔從集合中找攻擊目標
     //private void OnTriggerEnter(Collider other)
     //{
     //    //進入箭塔是英雄
@@ -102,12 +170,11 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity
     //    else
     //    {
     //        //進入箭塔是小兵
-    //        SmartSolider solider = other.GetComponent<SmartSolider>();
+    //        Minion minion = other.GetComponent<Minion>();
     //        //當小兵不為空時，判斷小兵與箭塔類型是否一致，不一致表示可以攻擊
-    //        if (solider && solider.type != towerType)
+    //        if (minion && minion.GetTeam() != team)
     //        {
     //            listSolider.Add(other.gameObject);//小兵放在可攻擊的列表內
-
     //        }
 
     //    }

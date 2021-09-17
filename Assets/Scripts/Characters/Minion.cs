@@ -5,12 +5,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using Dota.Utils;
 
 public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
 {
     [SerializeField] 
-    [SyncVar]
     Team team;
 
     [SerializeField] Animator animator = null;
@@ -26,20 +24,20 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
     [SerializeField] LayerMask enemyLayerMask;
 
     Transform currentTarget;
-    Transform[] towers = null;
-    Transform targetBase = null;
+    Tower[] towers = null;
+    Base targetBase = null;
     [SerializeField] List<Health> enemyList = new List<Health>();
     List<Health> toRemove = new List<Health>();
 
 
     private void Start()
     {
-        health.OnHealthDeadEnd += Health_OnHealthDeadEnd;
+        health.OnHealthDeadEnd += Health_OnServerHealthDeadEnd;
     }
 
-    private void Health_OnHealthDeadEnd()
+    private void Health_OnServerHealthDeadEnd()
     {
-        Destroy(gameObject);
+        NetworkServer.Destroy(gameObject);
     }
 
     #region Server
@@ -50,9 +48,8 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
         gameObject.tag = team.ToString();
     }
 
-    public void SetTowers(Transform[] towers, Transform targetBase)
+    public void SetTowers(Tower[] towers, Base targetBase)
     {
-        transform.forward = towers[2].position - transform.position;
         this.towers = towers;
         this.targetBase = targetBase;
     }
@@ -70,6 +67,15 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
     }
 
 
+    #region Client
+
+    [ClientRpc]
+    private void RpcNotifyTeamChanged(Team team)
+    {
+
+    }
+
+    #endregion
 
     Transform GetTarget()
     {
@@ -113,12 +119,11 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
         {
             if (!towers[i].GetComponent<Health>().IsDead())
             {
-                return towers[i];
+                return towers[i].transform;
             }
         }
-        return targetBase;
+        return targetBase.transform;
     }
-
     #endregion
 
     public Team GetTeam()

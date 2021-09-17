@@ -36,6 +36,14 @@ public class VisionChecker : MonoBehaviour
 
         towerManager.OnTowerAdded += TowerManager_OnTowerAdded;
         towerManager.OnTowerRemoved += TowerManager_OnTowerRemoved;
+
+        towerManager.OnBaseAdded += TowerManager_OnBaseAdded;
+    }
+
+    private void TowerManager_OnBaseAdded(Base teamBase)
+    {
+        VisionEntity visionEntity = teamBase.GetComponent<VisionEntity>();
+        AddVisionEntity(visionEntity, teamBase.GetTeam());
     }
 
     private void TowerManager_OnTowerRemoved(Tower tower)
@@ -96,7 +104,6 @@ public class VisionChecker : MonoBehaviour
         {
             enemies.Remove(visionEntity);
         }
-
         OnVisionEntityRemoved?.Invoke(visionEntity);
     }
 
@@ -110,7 +117,6 @@ public class VisionChecker : MonoBehaviour
         {
             enemies.Add(visionEntity);
         }
-
         OnVisionEntityAdded?.Invoke(visionEntity);
     }
 
@@ -139,10 +145,24 @@ public class VisionChecker : MonoBehaviour
         UpdateVisibleEnemy();
     }
 
+    private void UpdateVisibleAlly()
+    {
+        foreach (VisionEntity ally in allies)
+        {
+            ally.SetVisible(true);
+        }
+    }
+
     private void UpdateVisibleEnemy()
     {
         foreach (VisionEntity enemy in enemies)
         {
+            if (enemy.IsAlwaysVisible)
+            {
+                enemy.SetVisible(true);
+                continue;
+            }
+
             bool wasVisible = enemy.GetVisible();
             bool isVisible = false;
 
