@@ -20,6 +20,7 @@ public class MinionManager : NetworkBehaviour
 
 
     [SerializeField] bool spawnMinion;
+
     [SerializeField] float firstWaveSpawnAfter = 5f;
     [SerializeField] int minionPerWave = 3;
     [SerializeField] float spawnInterval = 10f;
@@ -86,21 +87,20 @@ public class MinionManager : NetworkBehaviour
 
         while (spawnMinion)
         {
-            //一個for循環代表一波小兵
             for (int i = 0; i < minionPerWave; i++)
             {
                 switch (team)
                 {
                     case Team.Red:
                         SpawnMinion(Team.Red, redStartPositions[1].position, buildingManager.GetTowers(Team.Blue, Lane.Middle), buildingManager.GetBase(Team.Blue), Lane.Middle); // Mid
-                        SpawnMinion(Team.Red, redStartPositions[0].position, buildingManager.GetTowers(Team.Blue, Lane.Top), buildingManager.GetBase(Team.Blue), Lane.Top);    // Top
-                        SpawnMinion(Team.Red, redStartPositions[2].position, buildingManager.GetTowers(Team.Blue, Lane.Bottom), buildingManager.GetBase(Team.Blue), Lane.Bottom); // Bottom
+                        //SpawnMinion(Team.Red, redStartPositions[0].position, buildingManager.GetTowers(Team.Blue, Lane.Top), buildingManager.GetBase(Team.Blue), Lane.Top);    // Top
+                        //SpawnMinion(Team.Red, redStartPositions[2].position, buildingManager.GetTowers(Team.Blue, Lane.Bottom), buildingManager.GetBase(Team.Blue), Lane.Bottom); // Bottom
                         break;
 
                     case Team.Blue:
                         SpawnMinion(Team.Blue, blueStartPositions[1].position, buildingManager.GetTowers(Team.Red, Lane.Middle), buildingManager.GetBase(Team.Red), Lane.Middle); // Mid
-                        SpawnMinion(Team.Blue, blueStartPositions[0].position, buildingManager.GetTowers(Team.Red, Lane.Top), buildingManager.GetBase(Team.Red), Lane.Top);    // Top
-                        SpawnMinion(Team.Blue, blueStartPositions[2].position, buildingManager.GetTowers(Team.Red, Lane.Bottom), buildingManager.GetBase(Team.Red), Lane.Bottom); // Bottom
+                        //SpawnMinion(Team.Blue, blueStartPositions[0].position, buildingManager.GetTowers(Team.Red, Lane.Top), buildingManager.GetBase(Team.Red), Lane.Top);    // Top
+                        //SpawnMinion(Team.Blue, blueStartPositions[2].position, buildingManager.GetTowers(Team.Red, Lane.Bottom), buildingManager.GetBase(Team.Red), Lane.Bottom); // Bottom
                         break;
                 }
 

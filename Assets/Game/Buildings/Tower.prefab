@@ -154,12 +154,16 @@ MonoBehaviour:
   projectilePrefab: {fileID: 3171829230800741641, guid: 1071c91a612857a44b822507620ac825,
     type: 3}
   projectileSpawnPos: {fileID: 957232243300092509}
-  attackLayer:
+  championLayer:
     serializedVersion: 2
-    m_Bits: 6144
+    m_Bits: 2048
+  minionLayer:
+    serializedVersion: 2
+    m_Bits: 4096
   attackRadius: 7
   checkInterval: 0.2
   fireInterval: 1
+  towerDamage: 20
   currentTarget: {fileID: 0}
   enemyMinions: []
   enemyChampions: []

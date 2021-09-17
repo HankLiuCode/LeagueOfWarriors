@@ -15,10 +15,14 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner
     [Header("Tower")]
     [SerializeField] GameObject projectilePrefab;
     [SerializeField] Transform projectileSpawnPos;
-    [SerializeField] LayerMask attackLayer;
+    [SerializeField] LayerMask championLayer;
+    [SerializeField] LayerMask minionLayer;
+
+
     [SerializeField] float attackRadius = 10f;
     [SerializeField] float checkInterval = 0.2f;
     [SerializeField] float fireInterval = 1f;
+    [SerializeField] float towerDamage = 20f;
 
     
     Collider[] colliderBuffer = new Collider[10];
@@ -83,7 +87,7 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner
         {
             if (currentTarget != null)
             {
-                if(Vector3.Distance(currentTarget.transform.position, transform.position) > attackRadius)
+                if((Vector3.Distance(currentTarget.transform.position, transform.position) > attackRadius) || currentTarget.GetHealth().IsDead())
                 {
                     currentTarget = null;
                 }
@@ -111,21 +115,22 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner
 
     private void SpawnProjectile(CombatTarget target)
     {
-
         GameObject bulletInstance = Instantiate(projectilePrefab, projectileSpawnPos.position, Quaternion.identity);
         Projectile projectile = bulletInstance.GetComponent<Projectile>();
         
         NetworkServer.Spawn(bulletInstance);
-        projectile.SetTarget(target, projectileSpawnPos.position);
+        projectile.SetTarget(target, towerDamage, projectileSpawnPos.position);
     }
 
     private CombatTarget GetTarget()
     {
-        int hitCount = Physics.OverlapSphereNonAlloc(transform.position, attackRadius, colliderBuffer, attackLayer);
+        int championCount = Physics.OverlapSphereNonAlloc(transform.position, attackRadius, colliderBuffer, championLayer);
 
-        if(hitCount <= 0) { return null; }
+        int minionCount = Physics.OverlapSphereNonAlloc(transform.position, attackRadius, colliderBuffer, minionLayer);
+        
+        if(championCount <= 0 && minionCount <= 0) { return null; }
 
-        for (int i = 0; i < hitCount; i++)
+        for (int i = 0; i < championCount; i++)
         {
             CombatTarget combatTarget = colliderBuffer[i].GetComponent<CombatTarget>();
             if (combatTarget != null && !TeamChecker.IsSameTeam(gameObject, combatTarget.gameObject))
@@ -133,6 +138,16 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner
                 return combatTarget;
             }
         }
+
+        for (int i = 0; i < minionCount; i++)
+        {
+            CombatTarget combatTarget = colliderBuffer[i].GetComponent<CombatTarget>();
+            if (combatTarget != null && !TeamChecker.IsSameTeam(gameObject, combatTarget.gameObject))
+            {
+                return combatTarget;
+            }
+        }
+        
         return null;
     }
 

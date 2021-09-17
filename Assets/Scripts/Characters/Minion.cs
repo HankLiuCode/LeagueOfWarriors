@@ -8,6 +8,7 @@ using UnityEngine.AI;
 
 public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
 {
+    [SyncVar]
     [SerializeField] 
     Team team;
 
@@ -21,18 +22,23 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
 
     [SerializeField] float noticeRadius = 5f;
     [SerializeField] float attackRadius = 3f;
-    [SerializeField] LayerMask enemyLayerMask;
+    [SerializeField] float checkInterval = 0.2f;
+    [SerializeField] LayerMask attackLayer;
 
-    Transform currentTarget;
-    Tower[] towers = null;
+
+    [SerializeField] CombatTarget currentTarget;
+
+    Collider[] colliderBuffer = new Collider[10];
+    List<Tower> towers = new List<Tower>();
     Base targetBase = null;
-    [SerializeField] List<Health> enemyList = new List<Health>();
-    List<Health> toRemove = new List<Health>();
-
-
+    
     private void Start()
     {
         health.OnHealthDeadEnd += Health_OnServerHealthDeadEnd;
+        if (isServer)
+        {
+            StartCoroutine(GetTargetRoutine());
+        }
     }
 
     private void Health_OnServerHealthDeadEnd()
@@ -50,7 +56,7 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
 
     public void SetTowers(Tower[] towers, Base targetBase)
     {
-        this.towers = towers;
+        this.towers = new List<Tower>(towers);
         this.targetBase = targetBase;
     }
 
@@ -62,67 +68,104 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
     [ServerCallback]
     void Update()
     {
-        currentTarget = GetTarget();
-        serverFighter.StartAttack(currentTarget.gameObject);
-    }
-
-
-    #region Client
-
-    [ClientRpc]
-    private void RpcNotifyTeamChanged(Team team)
-    {
-
-    }
-
-    #endregion
-
-    Transform GetTarget()
-    {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, noticeRadius, enemyLayerMask);
-
-        foreach(Collider c in colliders)
+        if(currentTarget != null)
         {
-            if(!TeamChecker.IsSameTeam(c.gameObject, gameObject))
+            if (currentTarget.GetHealth().IsDead())
             {
-                Health health = c.GetComponent<Health>();
-                if (health != null && !enemyList.Contains(health))
+                currentTarget = GetTarget();
+            }
+            serverFighter.StartAttack(currentTarget.gameObject);
+        }
+    }
+
+    IEnumerator GetTargetRoutine()
+    {
+        while (true)
+        {
+            UpdateCurrentTarget();
+            yield return new WaitForSeconds(checkInterval);
+        }
+    }
+
+    private void UpdateCurrentTarget()
+    {
+        if (currentTarget == null || currentTarget.GetHealth().IsDead())
+        {
+            currentTarget = GetTarget();
+        }
+        else
+        {
+            if (IsBuildingTarget(currentTarget) || IsOutOfNoticeRange(currentTarget))
+            {
+                currentTarget = GetTarget();
+            }
+        }
+    }
+
+    private bool IsOutOfNoticeRange(CombatTarget target)
+    {
+        if(VectorConvert.XZDistance(target.transform.position, transform.position) > noticeRadius)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private bool IsBuildingTarget(CombatTarget target)
+    {
+        Tower tower = target.GetComponent<Tower>();
+        if (tower != null)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private CombatTarget GetTarget()
+    {
+        CombatTarget characterTarget = GetCharacterTarget();
+        if(characterTarget == null)
+        {
+            return GetBuildingTarget();
+        }
+        return characterTarget;
+    }
+
+    private CombatTarget GetCharacterTarget()
+    {
+        int targetCount = Physics.OverlapSphereNonAlloc(transform.position, noticeRadius, colliderBuffer, attackLayer);
+
+        for (int i = 0; i < targetCount; i++)
+        {
+            GameObject colliderGameObject = colliderBuffer[i].gameObject;
+
+            if (colliderGameObject == gameObject) { continue; }
+
+            if ((!TeamChecker.IsSameTeam(gameObject, colliderGameObject)))
+            {
+                CombatTarget combatTarget = colliderGameObject.GetComponent<CombatTarget>();
+
+                return combatTarget;
+            }
+        }
+        return null;
+    }
+
+    private CombatTarget GetBuildingTarget()
+    {
+        for(int i= towers.Count - 1; i >= 0; i--)
+        {
+            if(towers[i] != null && !towers[i].GetComponent<CombatTarget>().GetHealth().IsDead())
+            {
+                CombatTarget combatTarget = towers[i].GetComponent<CombatTarget>();
+                if(combatTarget != null && !combatTarget.GetHealth().IsDead())
                 {
-                    enemyList.Add(health);
+                    return combatTarget;
                 }
             }
         }
 
-        foreach (Health health in enemyList)
-        {
-            if (health.IsDead() || VectorConvert.XZDistance(health.transform.position, transform.position) > noticeRadius)
-            {
-                toRemove.Add(health);
-            }
-        }
-
-        foreach (Health health in toRemove)
-        {
-            enemyList.Remove(health);
-        }
-
-        toRemove.Clear();
-
-
-        if (enemyList.Count >= 1)
-        {
-            return enemyList[0].transform;
-        }
-
-
-        for (int i = towers.Length - 1; i >= 0; i--)
-        {
-            if (!towers[i].GetComponent<Health>().IsDead())
-            {
-                return towers[i].transform;
-            }
-        }
-        return targetBase.transform;
+        return targetBase.GetComponent<CombatTarget>();
     }
     #endregion
 

@@ -10,7 +10,7 @@ public class ServerFighter : NetworkBehaviour
 {
     public const float MOVE_EPSILON = 0.1f;
 
-    Health target;
+    CombatTarget target;
 
     [SerializeField] float attackCooldownTimer;
     [SerializeField] float attackRange = 2f;
@@ -66,9 +66,9 @@ public class ServerFighter : NetworkBehaviour
 
     public void StartAttack(GameObject combatTarget)
     {
-        Health health = combatTarget.GetComponent<Health>();
-        if (health == null) { return; }
-        target = health;
+        CombatTarget target = combatTarget.GetComponent<CombatTarget>();
+        if (target == null) { return; }
+        this.target = target;
     }
 
     public void StopAttack()
@@ -89,12 +89,14 @@ public class ServerFighter : NetworkBehaviour
 
     void MeleeAttack()
     {
-        ServerDealDamageTo(target, statStore.GetStats().attackDamage);
+        Health health = target.GetHealth();
+        ServerDealDamageTo(health, statStore.GetStats().attackDamage);
     }
 
     private bool GetIsInRange()
     {
-        return Vector3.Distance(transform.position, target.transform.position) < attackRange;
+        bool isInRange = Vector3.Distance(transform.position, target.transform.position) < attackRange + target.GetAllowAttackRadius();
+        return isInRange;
     }
 
     [Server]
@@ -114,8 +116,8 @@ public class ServerFighter : NetworkBehaviour
     [Server]
     private bool HasObstacle(Vector3 position)
     {
-        List<Obstacle> obstacles = ObstacleManager.GetInstance().GetObstacles();
-        foreach(Obstacle o in obstacles)
+        List<DotaObstacle> obstacles = ObstacleManager.GetInstance().GetObstacles();
+        foreach(DotaObstacle o in obstacles)
         {
             if(VectorConvert.XZDistance(o.transform.position, position) < o.GetRadius())
             {
@@ -132,7 +134,7 @@ public class ServerFighter : NetworkBehaviour
 
         if (target == null) { return; }
 
-        if (target.IsDead()) { return; }
+        if (target.GetHealth().IsDead()) { return; }
 
         if (!GetIsInRange())
         {

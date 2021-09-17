@@ -23,6 +23,7 @@ public class AreaAbility : Ability
 
     [SerializeField] ActionLocker actionLocker = null;
 
+    [SerializeField] LayerMask attackLayer;
     [SerializeField] float maxRange = 2f;
     [SerializeField] float baseDamage = 10f;
 
@@ -45,7 +46,7 @@ public class AreaAbility : Ability
         GameObject effectInstance = Instantiate(spellPrefab, abilityData.castPos, Quaternion.identity);
         NetworkServer.Spawn(effectInstance, connectionToClient);
 
-        Collider[] colliders = Physics.OverlapSphere(abilityData.castPos, damageRadius);
+        Collider[] colliders = Physics.OverlapSphere(abilityData.castPos, damageRadius, attackLayer);
         foreach (Collider c in colliders)
         {
             GameObject go = c.gameObject;

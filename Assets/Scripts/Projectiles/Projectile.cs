@@ -14,10 +14,11 @@ public class Projectile : NetworkBehaviour
 
     [SerializeField] Vector3 spawnPosition;
     [SerializeField] float speed = 5f;
+    float damage = 10f;
 
     #region Server
 
-    public void SetTarget(CombatTarget target, Vector3 spawnPosition)
+    public void SetTarget(CombatTarget target, float damage, Vector3 spawnPosition)
     {
         this.target = target;
         this.spawnPosition = spawnPosition;
@@ -36,6 +37,7 @@ public class Projectile : NetworkBehaviour
             transform.position += direction * delta;
             if (targetVec.magnitude <= DESTROY_EPSILON)
             {
+                target.GetHealth().ServerTakeDamage(damage);
                 NetworkServer.Destroy(gameObject);
             }
         }

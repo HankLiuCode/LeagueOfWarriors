@@ -43,17 +43,9 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
     {
         OnChampionDead?.Invoke(this);
     }
-
-    // this prevents the other clients seeing champion fly through the sky
+    
     private void Health_OnHealthRevive()
     {
-        StartCoroutine(SetActiveAfter(0.2f));
-    }
-
-    IEnumerator SetActiveAfter(float waitSeconds)
-    {
-        yield return new WaitForSeconds(waitSeconds);
-
         gameObject.SetActive(true);
     }
 

@@ -348,8 +348,8 @@ MonoBehaviour:
     type: 3}
   spawnMinion: 1
   firstWaveSpawnAfter: 5
-  minionPerWave: 2
-  spawnInterval: 10
+  minionPerWave: 1
+  spawnInterval: 20
   blueStartPositions:
   - {fileID: 822654627}
   - {fileID: 1097295595}
