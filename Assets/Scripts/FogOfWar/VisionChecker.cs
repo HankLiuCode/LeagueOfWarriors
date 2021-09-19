@@ -181,10 +181,17 @@ public class VisionChecker : MonoBehaviour
 
                 if (ally.IsInGrass())
                 {
-                    if (enemy.IsInGrass() && (ally.GetCurrentBush() == enemy.GetCurrentBush()))
+                    if (enemy.IsInGrass())
                     {
-                        isVisible = true;
-                        break;
+                        if((ally.GetCurrentBush() == enemy.GetCurrentBush()))
+                        {
+                            isVisible = true;
+                            break;
+                        }
+                        else
+                        {
+                            isVisible = false;
+                        }
                     }
                     else
                     {
