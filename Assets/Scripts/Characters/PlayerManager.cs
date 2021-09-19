@@ -110,7 +110,9 @@ public class PlayerManager : NetworkBehaviour
     {
         yield return new WaitForSeconds(seconds);
 
-        champion.transform.position = GetSpawnPosition(champion.GetTeam());
+        Vector3 spawnPos = GetSpawnPosition(champion.GetTeam());
+
+        RpcTeleportChampionToSpawnPos(champion, spawnPos);
 
         champion.ServerRevive();
         
@@ -138,6 +140,11 @@ public class PlayerManager : NetworkBehaviour
         StartCoroutine(InvokeWhenChampionListSynced());
     }
 
+    [ClientRpc]
+    private void RpcTeleportChampionToSpawnPos(Champion champion, Vector3 spawnPos)
+    {
+        champion.transform.position = spawnPos;
+    }
 
     [Client]
     IEnumerator InvokeWhenChampionListSynced()

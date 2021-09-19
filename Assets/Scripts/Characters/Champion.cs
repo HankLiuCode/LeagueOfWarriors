@@ -23,7 +23,6 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
         health.ServerRevive();
     }
 
-
     #endregion
 
     // Both
