@@ -267,7 +267,7 @@ MonoBehaviour:
   health: {fileID: 1187138297185360588}
   clickableLayer:
     serializedVersion: 2
-    m_Bits: 6400
+    m_Bits: 14592
 --- !u!114 &2928662850204982764
 MonoBehaviour:
   m_ObjectHideFlags: 0
