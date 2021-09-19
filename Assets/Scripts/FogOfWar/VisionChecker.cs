@@ -8,18 +8,19 @@ using UnityEngine;
 public class VisionChecker : MonoBehaviour
 {
     [SerializeField] Team localPlayerTeam;
-    [SerializeField] float checkRadius = 10f;
 
     [SerializeField] MinionManager minionManager = null;
     [SerializeField] PlayerManager playerManager = null;
+    [SerializeField] BuildingManager towerManager = null;
+    [SerializeField] float visionCheckHeight = 0.5f;
 
     [SerializeField] List<VisionEntity> allies = new List<VisionEntity>();
     [SerializeField] List<VisionEntity> enemies = new List<VisionEntity>();
     [SerializeField] LayerMask obstacleLayer = new LayerMask();
+    [SerializeField] LayerMask grassLayer = new LayerMask();
 
     public event Action<VisionEntity> OnVisionEntityExit;
     public event Action<VisionEntity> OnVisionEntityEnter;
-
 
     public event Action<VisionEntity> OnVisionEntityAdded;
     public event Action<VisionEntity> OnVisionEntityRemoved;
@@ -27,8 +28,35 @@ public class VisionChecker : MonoBehaviour
     private void Awake()
     {
         playerManager.OnLocalChampionReady += PlayerManager_OnLocalChampionReady;
+
+        playerManager.OnChampionAdded += PlayerManager_OnChampionAdded;
+        playerManager.OnChampionRemoved += PlayerManager_OnChampionRemoved;
+
         minionManager.OnMinionAdded += MinionManager_OnMinionAdded;
         minionManager.OnMinionRemoved += MinionManager_OnMinionRemoved;
+
+        towerManager.OnTowerAdded += TowerManager_OnTowerAdded;
+        towerManager.OnTowerRemoved += TowerManager_OnTowerRemoved;
+
+        towerManager.OnBaseAdded += TowerManager_OnBaseAdded;
+    }
+
+    private void TowerManager_OnBaseAdded(Base teamBase)
+    {
+        VisionEntity visionEntity = teamBase.GetComponent<VisionEntity>();
+        AddVisionEntity(visionEntity, teamBase.GetTeam());
+    }
+
+    private void TowerManager_OnTowerRemoved(Tower tower)
+    {
+        VisionEntity visionEntity = tower.GetComponent<VisionEntity>();
+        RemoveVisionEntity(visionEntity, tower.GetTeam());
+    }
+
+    private void TowerManager_OnTowerAdded(Tower tower)
+    {
+        VisionEntity visionEntity = tower.GetComponent<VisionEntity>();
+        AddVisionEntity(visionEntity, tower.GetTeam());
     }
 
     private void PlayerManager_OnLocalChampionReady()
@@ -41,6 +69,18 @@ public class VisionChecker : MonoBehaviour
         {
             AddVisionEntity(player.GetComponent<VisionEntity>(), player.GetTeam());
         }
+    }
+
+    private void PlayerManager_OnChampionRemoved(Champion champion)
+    {
+        VisionEntity visionEntity = champion.GetComponent<VisionEntity>();
+        RemoveVisionEntity(visionEntity, champion.GetTeam());
+    }
+
+    private void PlayerManager_OnChampionAdded(Champion champion)
+    {
+        VisionEntity visionEntity = champion.GetComponent<VisionEntity>();
+        AddVisionEntity(visionEntity, champion.GetTeam());
     }
 
     private void MinionManager_OnMinionAdded(Minion minion)
@@ -65,7 +105,6 @@ public class VisionChecker : MonoBehaviour
         {
             enemies.Remove(visionEntity);
         }
-
         OnVisionEntityRemoved?.Invoke(visionEntity);
     }
 
@@ -79,7 +118,6 @@ public class VisionChecker : MonoBehaviour
         {
             enemies.Add(visionEntity);
         }
-
         OnVisionEntityAdded?.Invoke(visionEntity);
     }
 
@@ -108,81 +146,90 @@ public class VisionChecker : MonoBehaviour
         UpdateVisibleEnemy();
     }
 
-    //private void UpdateVisibleEnemy()
-    //{
-    //    foreach (VisionEntity enemy in enemies)
-    //    {
-    //        bool wasVisible = enemy.GetVisible();
-    //        bool isVisible = false;
-
-    //        foreach (VisionEntity ally in allies)
-    //        {
-    //            Vector3 direction = enemy.transform.position - ally.transform.position;
-    //            float distance = direction.magnitude;
-
-    //            if (distance < checkRadius && !Physics.Raycast(ally.transform.position, direction, distance, obstacleLayer))
-    //            {
-    //                isVisible = true;
-    //                enemy.SetVisible(true);
-
-    //                if (!wasVisible)
-    //                {
-    //                    Debug.Log("Enemy Enter Vision");
-    //                    OnVisionEntityEnter?.Invoke(enemy);
-    //                }
-    //            }
-    //            else
-    //            {
-    //                enemy.SetVisible(false);
-
-    //                if (wasVisible)
-    //                {
-    //                    Debug.Log("Enemy Exit Vision");
-    //                    OnVisionEntityExit?.Invoke(enemy);
-    //                }
-    //            }
-    //        }
-    //    }
-    //}
+    private void UpdateVisibleAlly()
+    {
+        foreach (VisionEntity ally in allies)
+        {
+            ally.SetVisible(true);
+        }
+    }
 
     private void UpdateVisibleEnemy()
     {
         foreach (VisionEntity enemy in enemies)
         {
+            if (enemy.IsAlwaysVisible)
+            {
+                enemy.SetVisible(true);
+                continue;
+            }
+
             bool wasVisible = enemy.GetVisible();
             bool isVisible = false;
 
             foreach (VisionEntity ally in allies)
             {
+
                 float distance = Vector3.Distance(ally.transform.position, enemy.transform.position);
-                if (distance > checkRadius)
+                if (distance > ally.GetViewRadius())
                 {
                     isVisible = false;
                     continue;
                 }
 
                 Vector3 direction = enemy.transform.position - ally.transform.position;
-                bool hasObstacle = Physics.Raycast(ally.transform.position, direction, distance, obstacleLayer);
 
-                if (hasObstacle)
+                if (ally.IsInGrass())
                 {
-                    isVisible = false;
+                    if (enemy.IsInGrass())
+                    {
+                        if((ally.GetCurrentBush() == enemy.GetCurrentBush()))
+                        {
+                            isVisible = true;
+                            break;
+                        }
+                        else
+                        {
+                            isVisible = false;
+                        }
+                    }
+                    else
+                    {
+                        bool hasObstacle = Physics.Raycast(ally.transform.position + Vector3.up * visionCheckHeight, direction, distance, obstacleLayer);
+                        if (hasObstacle)
+                        {
+                            isVisible = false;
+                        }
+                        else
+                        {
+                            isVisible = true;
+                            break;
+                        }
+                    }
                 }
                 else
                 {
-                    isVisible = true;
-                    break;
+                    LayerMask checkLayer = obstacleLayer | grassLayer;
+
+                    bool hasObstacle = Physics.Raycast(ally.transform.position + Vector3.up * visionCheckHeight, direction, distance, checkLayer);
+                    if (hasObstacle)
+                    {
+                        isVisible = false;
+                    }
+                    else
+                    {
+                        isVisible = true;
+                        break;
+                    }
                 }
             }
 
             if (wasVisible && !isVisible)
             {
-                Debug.Log("Enemy Exit View");
                 OnVisionEntityExit?.Invoke(enemy);
             }
             else if(!wasVisible && isVisible)
             {
-                Debug.Log("Enemy Enter View");
                 OnVisionEntityEnter?.Invoke(enemy);
             }
 

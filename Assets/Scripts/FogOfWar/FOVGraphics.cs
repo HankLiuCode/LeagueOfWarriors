@@ -3,12 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FOVGraphics : NetworkBehaviour
+public class FOVGraphics : MonoBehaviour
 {
+    [SerializeField] Collider currentBush = null;
+
     [SerializeField] float viewRadius = 20f;
     [SerializeField] int degreePerCast = 10;
-    [SerializeField] LayerMask obstacleMask;
-
+    [SerializeField] LayerMask obstacleLayer;
+    [SerializeField] LayerMask grassLayer;
+    [SerializeField] float offset = 0.5f;
     [SerializeField] MeshFilter viewMeshFilter = null;
 
     Mesh viewMesh;
@@ -16,8 +19,18 @@ public class FOVGraphics : NetworkBehaviour
     Vector3[] vertices;
     int[] triangles;
 
-    private void Start()
+    RaycastHit[] hitBuffer = new RaycastHit[3];
+
+    float updateInterval = 0.01f;
+    bool isUpdating = false;
+
+    float updateTimer;
+
+    public void GenerateMesh(float viewRadius, int degreePerCast)
     {
+        this.viewRadius = viewRadius;
+        this.degreePerCast = degreePerCast;
+
         viewMesh = new Mesh();
         viewMesh.name = "ViewMesh";
         viewMeshFilter.mesh = viewMesh;
@@ -52,9 +65,25 @@ public class FOVGraphics : NetworkBehaviour
         viewMesh.RecalculateNormals();
     }
 
+    public void StartUpdateMesh(float updateInterval)
+    {
+        this.updateInterval = updateInterval;
+        this.isUpdating = true;
+    }
+
     private void Update()
     {
         UpdateMesh();
+
+        //if (!isUpdating){ return; }
+
+        //if(updateTimer <= 0)
+        //{
+        //    UpdateMesh();
+        //    updateTimer = updateInterval;
+        //}
+
+        //updateTimer -= Time.deltaTime;
     }
 
     private void UpdateMesh()
@@ -82,10 +111,24 @@ public class FOVGraphics : NetworkBehaviour
         {
             Vector3 direction = DirectionFromAngle(i);
 
-            bool hasHit = Physics.Raycast(transform.position, direction, out RaycastHit hit, viewRadius, obstacleMask);
+            LayerMask checkLayer = obstacleLayer | grassLayer;
 
-            Vector3 vertexPoint = hasHit ? hit.point : transform.position + direction * viewRadius;
+            int hitCount = Physics.RaycastNonAlloc(transform.position + Vector3.up * offset, direction, hitBuffer, viewRadius, checkLayer);
 
+            Vector3 vertexPoint = transform.position + direction * viewRadius;
+            float minDist = viewRadius;
+            for (int j=0; j < hitCount; j++)
+            {
+                if( hitBuffer[j].collider == currentBush ) { continue; }
+
+                float dist = Vector3.Distance(hitBuffer[j].point, transform.position);
+
+                if(dist < minDist)
+                {
+                    vertexPoint = hitBuffer[j].point;
+                    minDist = dist;
+                }
+            }
             viewPoints.Add(vertexPoint);
         }
         return viewPoints;
@@ -94,5 +137,22 @@ public class FOVGraphics : NetworkBehaviour
     public Vector3 DirectionFromAngle(float angleInDegrees)
     {
         return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
+    }
+    
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if ((1 << other.gameObject.layer & grassLayer) > 0)
+        {
+            currentBush = other;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other == currentBush)
+        {
+            currentBush = null;
+        }
     }
 }

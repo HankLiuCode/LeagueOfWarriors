@@ -2,15 +2,52 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using Dota.Attributes;
 
 public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
 {
     [SyncVar]
     [SerializeField] 
     Team team;
+    
+    [SerializeField] Sprite icon = null;
+    [SerializeField] GameObject minimapIconPrefab = null;
+    [SerializeField] Health health = null;
 
-    [SerializeField] Sprite icon;
-    [SerializeField] GameObject minimapIconPrefab;
+    public event System.Action<Champion> OnChampionDead;
+
+    #region Server
+    [Server]
+    public void ServerRevive()
+    {
+        health.ServerRevive();
+    }
+
+
+    #endregion
+
+    // Both
+    private void Start()
+    {
+        health.OnHealthDead += Champion_OnHealthDead;
+        health.OnHealthDeadEnd += Health_OnHealthDeadEnd;
+        health.OnHealthRevive += Health_OnHealthRevive;
+    }
+
+    private void Health_OnHealthDeadEnd()
+    {
+        gameObject.SetActive(false);
+    }
+
+    private void Champion_OnHealthDead(Health health)
+    {
+        OnChampionDead?.Invoke(this);
+    }
+    
+    private void Health_OnHealthRevive()
+    {
+        gameObject.SetActive(true);
+    }
 
     public Sprite GetIcon()
     {
@@ -20,11 +57,6 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
     public string GetLayerName()
     {
         return "Champion";
-    }
-
-    public Sprite GetMinimapIcon()
-    {
-        return icon;
     }
 
     public MinimapIcon GetMinimapIconInstance()

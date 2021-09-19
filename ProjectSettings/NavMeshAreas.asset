@@ -11,11 +11,11 @@ NavMeshProjectSettings:
     cost: 1
   - name: Jump
     cost: 2
-  - name: 
+  - name: Top
     cost: 1
-  - name: 
+  - name: Middle
     cost: 1
-  - name: 
+  - name: Bottom
     cost: 1
   - name: 
     cost: 1

@@ -19,6 +19,7 @@ public class Minimap : MonoBehaviour
 
     [SerializeField] private RectTransform defaultIconLayer = null;
     [SerializeField] private RectTransform minionIconLayer = null;
+    [SerializeField] private RectTransform towerIconLayer = null;
     [SerializeField] private RectTransform playerIconLayer = null;
     
     private Vector2 defaultCameraRectSize = new Vector2(80, 45);
@@ -32,18 +33,36 @@ public class Minimap : MonoBehaviour
 
     private void VisibilityChecker_OnVisionEntityRemoved(VisionEntity visionEntity)
     {
-        minimapIconInstances.Remove(visionEntity.transform);
+        if (minimapIconInstances.ContainsKey(visionEntity.transform))
+        {
+            MinimapIcon icon = minimapIconInstances[visionEntity.transform];
+
+            minimapIconInstances.Remove(visionEntity.transform);
+
+            Destroy(icon.gameObject);
+        }
+        else
+        {
+            Debug.Log(visionEntity.name + "Doesn't Exist");
+        }
     }
 
     private void VisibilityChecker_OnVisionEntityAdded(VisionEntity visionEntity)
     {
-        IMinimapEntity minimapEntity = visionEntity.GetComponent<IMinimapEntity>();
+        if (!minimapIconInstances.ContainsKey(visionEntity.transform))
+        {
+            IMinimapEntity minimapEntity = visionEntity.GetComponent<IMinimapEntity>();
 
-        MinimapIcon minimapIconInstance = minimapEntity.GetMinimapIconInstance();
-        
-        minimapIconInstance.transform.SetParent(GetLayer(minimapEntity.GetLayerName()));
+            MinimapIcon minimapIconInstance = minimapEntity.GetMinimapIconInstance();
 
-        minimapIconInstances.Add(visionEntity.transform, minimapIconInstance);
+            minimapIconInstance.transform.SetParent(GetLayer(minimapEntity.GetLayerName()));
+
+            minimapIconInstances.Add(visionEntity.transform, minimapIconInstance);
+        }
+        else
+        {
+            Debug.Log(visionEntity.name + "Already Exist in miniMapIconInstances");
+        }
     }
 
     private Transform GetLayer(string layerName)
@@ -55,6 +74,9 @@ public class Minimap : MonoBehaviour
 
             case "Minion":
                 return minionIconLayer;
+
+            case "Building":
+                return towerIconLayer;
 
             default:
                 return defaultIconLayer;

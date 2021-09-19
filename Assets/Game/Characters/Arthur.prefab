@@ -1,5 +1,21 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!54 &-6446642152525583346
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 452546937840963528}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!114 &-4533690763673579477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30,6 +46,9 @@ MonoBehaviour:
   animationEventHandler: {fileID: 2928662850204982764}
   animationTrigger: abilityW
   actionLocker: {fileID: 2654738810189758476}
+  attackLayer:
+    serializedVersion: 2
+    m_Bits: 6144
   maxRange: 6
   baseDamage: 10
   damageRadius: 2
@@ -49,6 +68,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   renderers:
   - {fileID: 620882805556932440}
+  viewRadius: 25
+  isAlwaysVisible: 0
+  grassLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  currentBush: {fileID: 0}
 --- !u!114 &-3679921401897041321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,6 +153,9 @@ MonoBehaviour:
   animationEventHandler: {fileID: 2928662850204982764}
   animationTrigger: abilityW
   actionLocker: {fileID: 2654738810189758476}
+  attackLayer:
+    serializedVersion: 2
+    m_Bits: 0
   maxRange: 6
   baseDamage: 10
   damageRadius: 2
@@ -179,11 +207,14 @@ MonoBehaviour:
   animationEventHandler: {fileID: 2928662850204982764}
   animationTrigger: abilityQ
   actionLocker: {fileID: 2654738810189758476}
-  damage: 50
+  attackLayer:
+    serializedVersion: 2
+    m_Bits: 6144
+  baseDamage: 20
   length: 5
   width: 1
-  delayTime: 0.3
-  destroyTime: 0.8
+  delayTime: 0.4
+  destroyTime: 0.6
 --- !u!114 &647313025124628012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,6 +233,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 46d2bf8f83a47f642a51d6c922e6055a, type: 3}
   minimapIconPrefab: {fileID: 6530037425827343085, guid: 843f6fc95a6483847874722a294126ab,
     type: 3}
+  health: {fileID: 1187138297185360588}
 --- !u!114 &4583548578950598173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,6 +265,9 @@ MonoBehaviour:
   mover: {fileID: 452546937840963535}
   fighter: {fileID: 4873311908163361665}
   health: {fileID: 1187138297185360588}
+  clickableLayer:
+    serializedVersion: 2
+    m_Bits: 6400
 --- !u!114 &2928662850204982764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -261,6 +296,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5930651934562835495, guid: 88c3cb8882347c647a97c08523c9dbd2,
+        type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5930651934574334247, guid: 88c3cb8882347c647a97c08523c9dbd2,
         type: 3}
@@ -539,6 +579,11 @@ PrefabInstance:
       propertyPath: baseStats.attackDamage
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 2020297958654239429, guid: b31cb8edadf36634680f82045f41209b,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
     - target: {fileID: 2433690888149234406, guid: b31cb8edadf36634680f82045f41209b,
         type: 3}
       propertyPath: stats
@@ -569,6 +614,11 @@ PrefabInstance:
       propertyPath: animationEventHandler
       value: 
       objectReference: {fileID: 2928662850204982764}
+    - target: {fileID: 4419022097544162935, guid: b31cb8edadf36634680f82045f41209b,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7214919029000824485, guid: b31cb8edadf36634680f82045f41209b,
         type: 3}
       propertyPath: sceneId
@@ -617,7 +667,7 @@ PrefabInstance:
     - target: {fileID: 7214919029000824491, guid: b31cb8edadf36634680f82045f41209b,
         type: 3}
       propertyPath: m_Radius
-      value: 0.5
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 7214919029000824491, guid: b31cb8edadf36634680f82045f41209b,
         type: 3}
@@ -704,6 +754,16 @@ PrefabInstance:
       propertyPath: animator
       value: 
       objectReference: {fileID: 620882805927242775}
+    - target: {fileID: 8223221447003321259, guid: b31cb8edadf36634680f82045f41209b,
+        type: 3}
+      propertyPath: healthCollider
+      value: 
+      objectReference: {fileID: 9110436669243722658}
+    - target: {fileID: 8223221447003321259, guid: b31cb8edadf36634680f82045f41209b,
+        type: 3}
+      propertyPath: animationEventHandler
+      value: 
+      objectReference: {fileID: 2928662850204982764}
     - target: {fileID: 8913722561556947162, guid: b31cb8edadf36634680f82045f41209b,
         type: 3}
       propertyPath: animator
@@ -725,6 +785,12 @@ GameObject:
 --- !u!4 &452546937840963529 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7214919029000824494, guid: b31cb8edadf36634680f82045f41209b,
+    type: 3}
+  m_PrefabInstance: {fileID: 7090723737346992487}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &9110436669243722658 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 2020297958654239429, guid: b31cb8edadf36634680f82045f41209b,
     type: 3}
   m_PrefabInstance: {fileID: 7090723737346992487}
   m_PrefabAsset: {fileID: 0}

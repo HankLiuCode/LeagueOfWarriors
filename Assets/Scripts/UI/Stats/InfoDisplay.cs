@@ -13,6 +13,9 @@ public class InfoDisplay : MonoBehaviour
     public void SetInfo(StatStore stats)
     {
         IIconOwner iconOwner = stats.GetComponent<IIconOwner>();
+
+        if(iconOwner == null) { Debug.LogError(stats.name + "Does not implement IIconOwner"); }
+
         Health health = stats.GetComponent<Health>();
         Mana mana = stats.GetComponent<Mana>();
 

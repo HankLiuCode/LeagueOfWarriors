@@ -1,4 +1,5 @@
 using Dota.Core;
+using Dota.Utils;
 using Mirror;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,7 +22,9 @@ public class DirectionalAbility : Ability
 
     [SerializeField] ActionLocker actionLocker = null;
 
-    [SerializeField] float damage = 50f;
+    [SerializeField] LayerMask attackLayer;
+    
+    [SerializeField] float baseDamage = 50f;
     [SerializeField] float length = 5f;
     [SerializeField] float width = 2f;
 
@@ -52,11 +55,21 @@ public class DirectionalAbility : Ability
 
         NetworkServer.Spawn(effectInstance, connectionToClient);
 
-        yield return new WaitForSeconds(destroyTime);
-        
-        // Physics.SphereCastAll()
+        RaycastHit[] raycastHits = Physics.SphereCastAll(transform.position, width, direction, length, attackLayer);
+        foreach (RaycastHit hit in raycastHits)
+        {
+            GameObject go = hit.collider.gameObject;
+            CombatTarget combatTarget = go.GetComponent<CombatTarget>();
+            if (combatTarget && !TeamChecker.IsSameTeam(gameObject, combatTarget.gameObject))
+            {
+                float damage = baseDamage + statStore.GetStats().magicDamage;
+                combatTarget.GetHealth().ServerTakeDamage(damage);
+            }
+        }
 
-        // TODO: Deal Damage to health in rect
+        Debug.Log("Deal Damage");
+
+        yield return new WaitForSeconds(destroyTime);
 
         NetworkServer.Destroy(effectInstance);
         NetworkServer.Destroy(damageRectInstance.gameObject);

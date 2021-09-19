@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Blue
   - Red
+  - solider
   layers:
   - Default
   - TransparentFX
@@ -17,10 +18,10 @@ TagManager:
   - FOV
   - Ground
   - Grass
-  - Obstacle
+  - VisionBlocker
   - Champion
   - Minion
-  - 
+  - Clickable
   - 
   - 
   - 

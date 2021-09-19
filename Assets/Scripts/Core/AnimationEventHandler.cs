@@ -7,6 +7,12 @@ public class AnimationEventHandler : MonoBehaviour
 {
     public event Action OnAttackPoint;
     public event Action OnAttackBackswing;
+    public event Action OnDeathEnd;
+
+    public void DeathEnd()
+    {
+        OnDeathEnd?.Invoke();
+    }
 
     public void AttackPoint()
     {

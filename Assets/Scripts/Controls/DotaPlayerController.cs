@@ -10,9 +10,10 @@ namespace Dota.Controls
 {
     public class DotaPlayerController : NetworkBehaviour
     {
-        [SerializeField] DotaMover mover = null;
-        [SerializeField] DotaFighter fighter = null;
+        [SerializeField] ClientMover mover = null;
+        [SerializeField] ClientFighter fighter = null;
         [SerializeField] Health health = null;
+        [SerializeField] LayerMask clickableLayer;
 
         [ClientCallback]
         private void Update()
@@ -23,13 +24,14 @@ namespace Dota.Controls
 
             if (Input.GetMouseButtonDown(1))
             {
-                if (Physics.Raycast(CameraController.GetMouseRay(), out RaycastHit hit, Mathf.Infinity))
+                if (Physics.Raycast(CameraController.GetMouseRay(), out RaycastHit hit, Mathf.Infinity, clickableLayer))
                 {
                     GameObject go = hit.collider.gameObject;
-                    if (go == gameObject) { return; }
 
                     if (fighter.IsAttackable(go))
                     {
+                        if (go == gameObject) { return; }
+
                         fighter.StartAttack(go);
                         return;
                     }

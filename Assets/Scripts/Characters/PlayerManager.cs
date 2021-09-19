@@ -15,7 +15,12 @@ public class PlayerManager : NetworkBehaviour
     
     [SerializeField] List<Champion> debugPlayers = new List<Champion>();
     SyncList<Champion> players = new SyncList<Champion>();
+
+    public event System.Action<Champion> OnChampionAdded;
+    public event System.Action<Champion> OnChampionRemoved;
+    
     public event System.Action OnLocalChampionReady;
+
 
     private void Awake()
     {
@@ -67,6 +72,8 @@ public class PlayerManager : NetworkBehaviour
 
         Champion champion = championInstance.GetComponent<Champion>();
 
+        champion.OnChampionDead += Champion_OnChampionDead;
+
         champion.SetTeam(championTeam);
 
         yield return new WaitUntil(() => dotaGamePlayer.connectionToClient != null);
@@ -85,9 +92,31 @@ public class PlayerManager : NetworkBehaviour
             // BUT 
             // 1. The champion list is on client not synced with the server yet
             // 2. The champion might not be spawned yet on the client 
+
+            OnLocalChampionReady?.Invoke();
             RpcNotifyServerSpawnedAllChampion();
         }
     }
+
+    private void Champion_OnChampionDead(Champion champion)
+    {
+        OnChampionRemoved?.Invoke(champion);
+
+        StartCoroutine(ReviveChampionAfter(champion, 5f));
+    }
+
+    [Server]
+    IEnumerator ReviveChampionAfter(Champion champion, float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+
+        champion.transform.position = GetSpawnPosition(champion.GetTeam());
+
+        champion.ServerRevive();
+        
+        OnChampionAdded?.Invoke(champion);
+    }
+
 
     [Server]
     private void PlayerManager_OnAllGamePlayersAdded()
@@ -108,6 +137,7 @@ public class PlayerManager : NetworkBehaviour
     {
         StartCoroutine(InvokeWhenChampionListSynced());
     }
+
 
     [Client]
     IEnumerator InvokeWhenChampionListSynced()

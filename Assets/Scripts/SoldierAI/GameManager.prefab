@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &9219879362531066362
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9219879362531066364}
+  - component: {fileID: 9219879362531066365}
+  - component: {fileID: 9219879362531066367}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9219879362531066364
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9219879362531066362}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -25.34, y: 0.5026965, z: -23.53}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9219879362531066365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9219879362531066362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a0342f5b0fd3c6479dd48061adac973, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soliderPrefab: {fileID: 400000777045997878, guid: 16070eaec628a8942af67f2fcbaf1521,
+    type: 3}
+  Start1:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  soliderParent: {fileID: 0}
+  soliderCount: 3
+  middleRedTowers: []
+  LeftRedTowers: []
+  RightRedTowers: []
+--- !u!114 &9219879362531066367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9219879362531066362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd11c6cf220cf0c46a4d3652bb1ec80f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soliderPrefab: {fileID: 4179620763872953171, guid: 023b831c9cd644c4f81095c479740457,
+    type: 3}
+  Start2:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  soliderParent: {fileID: 0}
+  soliderCount: 3
+  middleBlueTowers: []
+  LeftBlueTowers: []
+  RightBlueTowers: []
