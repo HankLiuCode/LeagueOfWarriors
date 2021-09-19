@@ -210,6 +210,7 @@ MonoBehaviour:
   renderers:
   - {fileID: 0}
   - {fileID: 0}
+  viewRadius: 5
   isAlwaysVisible: 0
 --- !u!114 &-7754430342046818133
 MonoBehaviour:

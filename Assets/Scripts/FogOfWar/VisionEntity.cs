@@ -5,10 +5,16 @@ using UnityEngine;
 public class VisionEntity : MonoBehaviour
 {
     [SerializeField] List<GameObject> renderers;
+    [SerializeField] float viewRadius = 15f;
     [SerializeField] bool isAlwaysVisible = false;
     public bool IsAlwaysVisible { get { return isAlwaysVisible; } }
 
     bool isVisible = true;
+
+    public float GetViewRadius()
+    {
+        return viewRadius;
+    }
 
     public void SetVisible(bool isVisible)
     {

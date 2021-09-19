@@ -136,10 +136,11 @@ namespace Dota.Combat
             }
             else
             {
+                transform.LookAt(target.transform);
+
                 if (attackCooldownTimer <= 0)
                 {
                     attackCooldownTimer = timeBetweenAttacks;
-                    transform.LookAt(target.transform);
                     netAnimator.ResetTrigger("stopAttack");
                     netAnimator.SetTrigger("attack");
                     hasFinishedBackswing = false;

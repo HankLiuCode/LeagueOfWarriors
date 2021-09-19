@@ -13,14 +13,10 @@ public class FogOfWarVisual : MonoBehaviour
     [SerializeField] Team localPlayerTeam;
     [SerializeField] List<FOVGraphics> fovGraphicsList = new List<FOVGraphics>();
 
-    [SerializeField] float towerVisualRadius = 20f;
-
     [SerializeField] float minionUpdateMeshInterval = 0.1f;
-    [SerializeField] float minionVisualRadius = 5f;
     [SerializeField] int minionDegreePercast = 30;
 
     [SerializeField] float championUpdateMeshInterval = 0.05f;
-    [SerializeField] float championVisualRadius = 15f;
     [SerializeField] int championDegreePercast = 10;
 
     private void Awake()
@@ -42,9 +38,10 @@ public class FogOfWarVisual : MonoBehaviour
 
     private void BuildingManager_OnTowerAdded(Tower tower)
     {
+        VisionEntity visionEntity = tower.GetComponent<VisionEntity>();
         if (tower.GetTeam() == localPlayerTeam)
         {
-            AttachViewMesh(tower.gameObject, towerVisualRadius, 20, 10);
+            AttachViewMesh(tower.gameObject, visionEntity.GetViewRadius(), 20, 10);
         }
     }
 
@@ -58,9 +55,10 @@ public class FogOfWarVisual : MonoBehaviour
 
         foreach (Champion player in players)
         {
+            VisionEntity visionEntity = player.GetComponent<VisionEntity>();
             if (player.GetTeam() == this.localPlayerTeam)
             {
-                AttachViewMesh(player.gameObject, championVisualRadius, championDegreePercast, championUpdateMeshInterval);
+                AttachViewMesh(player.gameObject, visionEntity.GetViewRadius(), championDegreePercast, championUpdateMeshInterval);
             }
         }
     }
@@ -75,14 +73,21 @@ public class FogOfWarVisual : MonoBehaviour
 
     private void MinionManager_OnMinionAdded(Minion minion)
     {
+        VisionEntity visionEntity = minion.GetComponent<VisionEntity>();
         if (minion.GetTeam() == localPlayerTeam)
         {
-            AttachViewMesh(minion.gameObject, minionVisualRadius, minionDegreePercast, minionUpdateMeshInterval);
+            AttachViewMesh(minion.gameObject, visionEntity.GetViewRadius(), minionDegreePercast, minionUpdateMeshInterval);
         }
     }
 
     public void AttachViewMesh(GameObject go, float viewRadius, int degreePerCast, float updateInterval)
     {
+        if(go.GetComponentInChildren<FOVGraphics>() != null) 
+        {
+            Debug.Log(go.name + "Already has ViewMesh Attached");
+            return;
+        }
+
         GameObject fovGraphicsGameObject = Instantiate(FOVGraphicsPrefab);
         fovGraphicsGameObject.transform.parent = go.transform;
         fovGraphicsGameObject.transform.localPosition = Vector3.zero;

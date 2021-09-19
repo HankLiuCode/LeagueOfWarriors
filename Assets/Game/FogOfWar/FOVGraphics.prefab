@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 7210818289739607522}
   - component: {fileID: 2861087459045875977}
   - component: {fileID: 2522897362963977967}
+  - component: {fileID: 2402790608686241128}
+  - component: {fileID: -5168325721908104567}
   m_Layer: 7
   m_Name: FOVGraphics
   m_TagString: Untagged
@@ -28,7 +30,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7048376951635086711}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.2, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -112,11 +114,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c8a7ae38ddf840449e372d769fdc574, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
+  currentBush: {fileID: 0}
   viewRadius: 15
   degreePerCast: 10
-  obstacleMask:
+  obstacleLayer:
     serializedVersion: 2
     m_Bits: 1024
+  grassLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  offset: 0.5
   viewMeshFilter: {fileID: 7548646018610231034}
+--- !u!65 &2402790608686241128
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7048376951635086711}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &-5168325721908104567
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7048376951635086711}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

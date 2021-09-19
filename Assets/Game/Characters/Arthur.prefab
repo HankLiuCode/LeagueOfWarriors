@@ -52,6 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   renderers:
   - {fileID: 620882805556932440}
+  viewRadius: 25
   isAlwaysVisible: 0
 --- !u!114 &-3679921401897041321
 MonoBehaviour:

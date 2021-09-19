@@ -8,7 +8,6 @@ using UnityEngine;
 public class VisionChecker : MonoBehaviour
 {
     [SerializeField] Team localPlayerTeam;
-    [SerializeField] float checkRadius = 10f;
 
     [SerializeField] MinionManager minionManager = null;
     [SerializeField] PlayerManager playerManager = null;
@@ -168,8 +167,9 @@ public class VisionChecker : MonoBehaviour
 
             foreach (VisionEntity ally in allies)
             {
+
                 float distance = Vector3.Distance(ally.transform.position, enemy.transform.position);
-                if (distance > checkRadius)
+                if (distance > ally.GetViewRadius())
                 {
                     isVisible = false;
                     continue;
@@ -177,7 +177,6 @@ public class VisionChecker : MonoBehaviour
 
                 Vector3 direction = enemy.transform.position - ally.transform.position;
                 bool hasObstacle = Physics.Raycast(ally.transform.position, direction, distance, obstacleLayer);
-
                 if (hasObstacle)
                 {
                     isVisible = false;
