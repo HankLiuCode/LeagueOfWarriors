@@ -12,10 +12,12 @@ public class VisionChecker : MonoBehaviour
     [SerializeField] MinionManager minionManager = null;
     [SerializeField] PlayerManager playerManager = null;
     [SerializeField] BuildingManager towerManager = null;
+    [SerializeField] float visionCheckHeight = 0.5f;
 
     [SerializeField] List<VisionEntity> allies = new List<VisionEntity>();
     [SerializeField] List<VisionEntity> enemies = new List<VisionEntity>();
     [SerializeField] LayerMask obstacleLayer = new LayerMask();
+    [SerializeField] LayerMask grassLayer = new LayerMask();
 
     public event Action<VisionEntity> OnVisionEntityExit;
     public event Action<VisionEntity> OnVisionEntityEnter;
@@ -176,15 +178,42 @@ public class VisionChecker : MonoBehaviour
                 }
 
                 Vector3 direction = enemy.transform.position - ally.transform.position;
-                bool hasObstacle = Physics.Raycast(ally.transform.position, direction, distance, obstacleLayer);
-                if (hasObstacle)
+
+                if (ally.IsInGrass())
                 {
-                    isVisible = false;
+                    if (enemy.IsInGrass() && (ally.GetCurrentBush() == enemy.GetCurrentBush()))
+                    {
+                        isVisible = true;
+                        break;
+                    }
+                    else
+                    {
+                        bool hasObstacle = Physics.Raycast(ally.transform.position + Vector3.up * visionCheckHeight, direction, distance, obstacleLayer);
+                        if (hasObstacle)
+                        {
+                            isVisible = false;
+                        }
+                        else
+                        {
+                            isVisible = true;
+                            break;
+                        }
+                    }
                 }
                 else
                 {
-                    isVisible = true;
-                    break;
+                    LayerMask checkLayer = obstacleLayer | grassLayer;
+
+                    bool hasObstacle = Physics.Raycast(ally.transform.position + Vector3.up * visionCheckHeight, direction, distance, checkLayer);
+                    if (hasObstacle)
+                    {
+                        isVisible = false;
+                    }
+                    else
+                    {
+                        isVisible = true;
+                        break;
+                    }
                 }
             }
 
