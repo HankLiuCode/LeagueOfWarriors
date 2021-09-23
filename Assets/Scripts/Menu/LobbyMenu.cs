@@ -7,107 +7,86 @@ using System;
 
 public class LobbyMenu : NetworkBehaviour
 {
-    [SerializeField] List<CardSlot> slots = new List<CardSlot>();
+    [SerializeField] List<CardSlot> redSlots = new List<CardSlot>();
+    [SerializeField] List<CardSlot> blueSlots = new List<CardSlot>();
 
     public override void OnStartClient()
     {
-        //DotaNewRoomPlayer[] players = FindObjectsOfType<DotaNewRoomPlayer>();
-        //foreach(DotaNewRoomPlayer player in players)
-        //{
-        //    foreach (CardSlot slot in slots)
-        //    {
-        //        if (!slot.HasPlayer && slot.IsSameTeam(player))
-        //        {
-        //            slot.SetPlayer(player);
-        //            break;
-        //        }
-        //    }
-        //}
-
-        DotaNewRoomPlayer.OnPlayerModified += DotaGamePlayer_OnPlayerModified;
-        DotaNewRoomPlayer.OnPlayerConnect += DotaGamePlayer_OnPlayerConnect;
-        DotaNewRoomPlayer.OnPlayerDisconnect += DotaGamePlayer_OnPlayerLeave;
-        DotaNewRoomPlayer.OnPlayerReady += DotaNewRoomPlayer_OnPlayerReady;
+        DotaRoomPlayer.OnPlayerTeamModified += DotaRoomPlayer_OnPlayerTeamModified;
+        DotaRoomPlayer.OnPlayerConnect += DotaRoomPlayer_OnPlayerConnect;
+        DotaRoomPlayer.OnPlayerDisconnect += DotaRoomPlayer_OnPlayerDisconnect;
     }
 
     public override void OnStopClient()
     {
-        Debug.Log("OnStopClient LobbyMenu");
-        DotaNewRoomPlayer.OnPlayerModified -= DotaGamePlayer_OnPlayerModified;
-        DotaNewRoomPlayer.OnPlayerConnect -= DotaGamePlayer_OnPlayerConnect;
-        DotaNewRoomPlayer.OnPlayerDisconnect -= DotaGamePlayer_OnPlayerLeave;
-        DotaNewRoomPlayer.OnPlayerReady -= DotaNewRoomPlayer_OnPlayerReady;
+        DotaRoomPlayer.OnPlayerTeamModified -= DotaRoomPlayer_OnPlayerTeamModified;
+        DotaRoomPlayer.OnPlayerConnect -= DotaRoomPlayer_OnPlayerConnect;
+        DotaRoomPlayer.OnPlayerDisconnect -= DotaRoomPlayer_OnPlayerDisconnect;
     }
 
-    private void DotaNewRoomPlayer_OnPlayerReady(DotaNewRoomPlayer player)
+    private void DotaRoomPlayer_OnPlayerConnect(DotaRoomPlayer player)
     {
-        foreach (CardSlot slot in slots)
+        foreach(CardSlot slot in redSlots)
         {
-            if (slot.HasPlayer)
-            {
-                slot.UpdatePlayerInfo();
-            }
-        }
-    }
-
-    private void DotaGamePlayer_OnPlayerLeave(DotaNewRoomPlayer player)
-    {
-        foreach (CardSlot slot in slots)
-        {
-            if(slot.HasPlayer && slot.GetPlayer() == player)
-            {
-                slot.RemovePlayer();
-                return;
-            }
-        }
-        Debug.LogError("player Not Found in slots: " + player.name);
-    }
-
-    private void DotaGamePlayer_OnPlayerConnect(DotaNewRoomPlayer player)
-    {
-        foreach(CardSlot slot in slots)
-        {
-            if (!slot.HasPlayer && slot.IsSameTeam(player))
+            if (!slot.HasPlayer)
             {
                 slot.SetPlayer(player);
                 return;
             }
         }
 
-        Debug.LogError("No Available slot for player: " + player.name);
-    }
-
-    private void DotaGamePlayer_OnPlayerModified(DotaNewRoomPlayer player)
-    {
-        CardSlot modifiedSlot = null;
-
-        foreach (CardSlot slot in slots)
+        foreach (CardSlot slot in blueSlots)
         {
-            if (slot.HasPlayer && slot.GetPlayer() == player)
+            if (!slot.HasPlayer)
             {
-                modifiedSlot = slot;
-                break;
+                slot.SetPlayer(player);
+                return;
             }
         }
 
-        if(modifiedSlot == null)
+        Debug.LogError("Room Is Full");
+    }
+
+    private void DotaRoomPlayer_OnPlayerDisconnect(DotaRoomPlayer player)
+    {
+        foreach (CardSlot slot in redSlots)
         {
-            Debug.LogError("Modified Slots not found: " + player.name);
+            if(slot.GetPlayer() == player)
+            {
+                slot.SetPlayer(null);
+                return;
+            }
         }
 
-        if (modifiedSlot.IsSameTeam(player))
+        foreach (CardSlot slot in blueSlots)
         {
-            modifiedSlot.UpdatePlayerInfo();
+            if (slot.GetPlayer() == player)
+            {
+                slot.SetPlayer(null);
+                return;
+            }
+        }
+
+        Debug.LogError("Disconnected Player Not found");
+    }
+
+    private void DotaRoomPlayer_OnPlayerTeamModified(DotaRoomPlayer player)
+    {
+        int redIndex = redSlots.FindIndex(slot => slot.GetPlayer() == player);
+        int blueIndex = blueSlots.FindIndex(slot => slot.GetPlayer() == player);
+        if(redIndex == -1 && blueIndex != -1)
+        {
+            blueSlots[blueIndex].SetPlayer(null);
+            redSlots[redIndex].SetPlayer(player);
+        }
+        else if(redIndex != -1 && blueIndex == -1)
+        {
+            blueSlots[blueIndex].SetPlayer(player);
+            redSlots[redIndex].SetPlayer(null);
         }
         else
         {
-            foreach (CardSlot slot in slots)
-            {
-                if (!slot.HasPlayer && slot.IsSameTeam(player))
-                {
-                    CardSlot.Swap(modifiedSlot, slot);
-                }
-            }
+            Debug.Log("Player Not found in both slots");
         }
     }
 }

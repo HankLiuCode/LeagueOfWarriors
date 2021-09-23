@@ -5,91 +5,58 @@ using UnityEngine;
 
 public class CardSlot : MonoBehaviour
 {
-    [SerializeField] PlayerCard playerCardPrefab;
-    [SerializeField] DotaNewRoomPlayer cardPlayer;
-    [SerializeField] Team team;
     public bool HasPlayer { get { return cardPlayer != null; } }
+    [SerializeField] DotaRoomPlayer cardPlayer;
+    [SerializeField] PlayerCard playerCardInstance;
 
-    PlayerCard playerCardInstance;
-
-    public DotaNewRoomPlayer GetPlayer()
+    public DotaRoomPlayer GetPlayer()
     {
         return cardPlayer;
     }
 
-    public Team GetTeam()
+    public void SetPlayer(DotaRoomPlayer player)
     {
-        return team;
-    }
+        // if player is null hide playerCardInstance
+        // if already has player, remove listeners from dotaRoomPlayer
+        // if don't have player instantiate playercard and listen to player events
 
-    public bool IsSameTeam(DotaNewRoomPlayer player)
-    {
-        if (player.GetTeam() == team) return true;
-        return false;
-    }
-
-    public void UpdatePlayerInfo()
-    {
-        if(cardPlayer == null) { return; }
-        playerCardInstance.SetCard(cardPlayer.GetPlayerName(), cardPlayer.GetTeam(), cardPlayer.GetChampionId(), cardPlayer.GetIsReady());
-    }
-
-    public static void Swap(CardSlot slot1, CardSlot slot2)
-    {
-        if (slot1.HasPlayer && slot2.HasPlayer) 
+        if(cardPlayer != null)
         {
-            DotaNewRoomPlayer slot1Player = slot1.GetPlayer();
-            DotaNewRoomPlayer slot2Player = slot2.GetPlayer();
-
-            slot1.RemovePlayer();
-            slot2.RemovePlayer();
-
-            slot1.SetPlayer(slot2Player);
-            slot2.SetPlayer(slot1Player);
+            DotaRoomPlayer.OnPlayerChampionModified -= DotaRoomPlayer_OnPlayerChampionModified;
+            DotaRoomPlayer.OnPlayerConnectionModified -= DotaRoomPlayer_OnPlayerConnectionModified;
         }
-        else if(slot1.HasPlayer && !slot2.HasPlayer)
+
+        if (player == null)
         {
-            DotaNewRoomPlayer slot1Player = slot1.GetPlayer();
-            slot1.RemovePlayer();
-            slot2.SetPlayer(slot1Player);
-        }
-        else if (!slot1.HasPlayer && slot2.HasPlayer)
-        {
-            DotaNewRoomPlayer slot2Player = slot2.GetPlayer();
-            slot2.RemovePlayer();
-            slot1.SetPlayer(slot2Player);
-        }
-        else
-        {
+            cardPlayer = null;
+            playerCardInstance.gameObject.SetActive(false);
             return;
-        }
-    }
-
-    public void SetPlayer(DotaNewRoomPlayer player)
-    {
-        if(cardPlayer != null) 
-        {
-            Debug.LogError("Slot already has player");
-            return;
-        }
-
-        if(player.GetTeam() != team)
-        {
-            Debug.LogError("player is not the same team as slot");
         }
 
         cardPlayer = player;
-        playerCardInstance = Instantiate(playerCardPrefab, transform);
-        playerCardInstance.SetCard(player.GetPlayerName(), player.GetTeam(), player.GetChampionId(), player.GetIsReady());
+        UpdateCardInfo(cardPlayer);
+        DotaRoomPlayer.OnPlayerChampionModified += DotaRoomPlayer_OnPlayerChampionModified;
+        DotaRoomPlayer.OnPlayerConnectionModified += DotaRoomPlayer_OnPlayerConnectionModified;
+    }
+
+    private void UpdateCardInfo(DotaRoomPlayer player)
+    {
+        Debug.Log("Update Card Info");
+
+        playerCardInstance.gameObject.SetActive(true);
+        playerCardInstance.SetCard(player.GetPlayerName(), player.GetTeam(), player.GetChampionId(), player.GetConnectionState());
         playerCardInstance.transform.localPosition = Vector3.zero;
     }
 
-    public void RemovePlayer()
+    private void DotaRoomPlayer_OnPlayerChampionModified(DotaRoomPlayer player)
     {
-        if(cardPlayer != null)
-        {
-            cardPlayer = null;
-            Destroy(playerCardInstance.gameObject);
-        }
+        if (cardPlayer == null || cardPlayer != player) { return; }
+        UpdateCardInfo(player);
+    }
+
+    private void DotaRoomPlayer_OnPlayerConnectionModified(DotaRoomPlayer player, PlayerConnectionState connState)
+    {
+        if (cardPlayer == null || cardPlayer != player) { return; }
+        UpdateCardInfo(player);
     }
 }

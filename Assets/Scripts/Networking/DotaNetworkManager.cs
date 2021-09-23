@@ -6,7 +6,7 @@ using Dota.Networking;
 
 public class DotaNetworkManager : NetworkManager
 {
-    [SerializeField] List<DotaNewRoomPlayer> serverPlayerList = new List<DotaNewRoomPlayer>();
+    [SerializeField] List<DotaRoomPlayer> serverPlayerList = new List<DotaRoomPlayer>();
     
     // Client Side Event
     public static event System.Action<NetworkConnection> OnClientConnected;
@@ -17,15 +17,68 @@ public class DotaNetworkManager : NetworkManager
     public override void OnStartServer()
     {
         NetworkServer.RegisterHandler<PlayerConnectMessage>(OnPlayerConnected);
-        DotaNewRoomPlayer.OnPlayerReady += DotaNewRoomPlayer_OnPlayerReady;
+        NetworkServer.RegisterHandler<PlayerUpdateMessage> (OnPlayerUpdated);
+
+        DotaRoomPlayer.OnPlayerConnectionModified += DotaRoomPlayer_OnPlayerConnectionModified;
     }
 
-    private void DotaNewRoomPlayer_OnPlayerReady(DotaNewRoomPlayer roomPlayer)
+    // Server
+    public void OnPlayerUpdated(NetworkConnection conn, PlayerUpdateMessage playerUpdateMsg)
+    {
+
+        foreach (DotaRoomPlayer player in serverPlayerList)
+        {
+            if (player.connectionToClient == conn)
+            {
+                if (playerUpdateMsg.switchChampion)
+                {
+                    player.ServerSetChampionId(playerUpdateMsg.championId);
+                }
+
+                if (playerUpdateMsg.switchTeam)
+                {
+                    Team originTeam = player.GetTeam();
+                    if(originTeam == Team.Red)
+                    {
+                        player.ServerSetTeam(Team.Blue);
+                    }
+                    else if(originTeam == Team.Blue)
+                    {
+                        player.ServerSetTeam(Team.Red);
+                    }
+                }
+
+                if (playerUpdateMsg.toggleReady)
+                {
+                    player.ServerSetConnectionState(PlayerConnectionState.RoomReady);
+                }
+            }
+        }
+    }
+
+    // Server
+    public void OnPlayerConnected(NetworkConnection conn, PlayerConnectMessage playerConnectMsg)
+    {
+        GameObject playerInstance = Instantiate(playerPrefab);
+
+        DotaRoomPlayer dotaGamePlayer = playerInstance.GetComponent<DotaRoomPlayer>();
+
+        dotaGamePlayer.ServerSetPlayerName(playerConnectMsg.playerName);
+
+        serverPlayerList.Add(dotaGamePlayer);
+
+        playerInstance.name = $"{playerPrefab.name} [connId={conn.connectionId}]";
+
+        NetworkServer.AddPlayerForConnection(conn, playerInstance);
+    }
+
+    // Server
+    private void DotaRoomPlayer_OnPlayerConnectionModified(DotaRoomPlayer roomPlayer, PlayerConnectionState playerConnState)
     {
         bool allPlayersReady = true;
-        foreach(DotaNewRoomPlayer player in serverPlayerList)
+        foreach (DotaRoomPlayer player in serverPlayerList)
         {
-            if (!player.GetIsReady())
+            if (!(playerConnState == PlayerConnectionState.RoomReady))
             {
                 allPlayersReady = false;
                 break;
@@ -33,20 +86,20 @@ public class DotaNetworkManager : NetworkManager
         }
         if (allPlayersReady)
         {
-            foreach (DotaNewRoomPlayer player in serverPlayerList)
+            foreach (DotaRoomPlayer player in serverPlayerList)
             {
-                player.ServerSetReady(false);
+                player.ServerSetConnectionState(PlayerConnectionState.RoomToGame);
             }
             ServerChangeScene("Game");
         }
     }
 
-    public void ReturnToRoom()
+    public override void OnClientSceneChanged(NetworkConnection conn)
     {
-        ServerChangeScene("Room");
+        conn.Send(new ClientSceneLoadedMessage());
     }
 
-    public List<DotaNewRoomPlayer> GetServerPlayerList()
+    public List<DotaRoomPlayer> GetServerPlayerList()
     {
         return serverPlayerList;
     }
@@ -70,7 +123,7 @@ public class DotaNetworkManager : NetworkManager
 
     public override void OnServerDisconnect(NetworkConnection conn)
     {
-        foreach (DotaNewRoomPlayer player in serverPlayerList)
+        foreach (DotaRoomPlayer player in serverPlayerList)
         {
             if (player.connectionToClient == conn)
             {
@@ -82,21 +135,6 @@ public class DotaNetworkManager : NetworkManager
             }
         }
         serverPlayerList.RemoveAll(player => player.connectionToClient == conn);
-    }
-
-    public void OnPlayerConnected(NetworkConnection conn, PlayerConnectMessage playerConnectMsg)
-    { 
-        GameObject playerInstance = Instantiate(playerPrefab);
-
-        DotaNewRoomPlayer dotaGamePlayer = playerInstance.GetComponent<DotaNewRoomPlayer>();
-
-        dotaGamePlayer.ServerSetPlayerName(playerConnectMsg.playerName);
-
-        serverPlayerList.Add(dotaGamePlayer);
-
-        playerInstance.name = $"{playerPrefab.name} [connId={conn.connectionId}]";
-
-        NetworkServer.AddPlayerForConnection(conn, playerInstance);
     }
 
     public override void OnServerAddPlayer(NetworkConnection conn) { }

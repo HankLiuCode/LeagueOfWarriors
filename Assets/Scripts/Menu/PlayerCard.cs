@@ -13,11 +13,21 @@ public class PlayerCard : MonoBehaviour
     [SerializeField] TextMeshProUGUI readyTextMesh = null;
     [SerializeField] ChampionIdMapping mapping = null;
 
-    public void SetCard(string playerName, Team team, int championId, bool isReady)
+    public void SetCard(string playerName, Team team, int championId, PlayerConnectionState connectionState)
     {
         playerIcon.sprite = mapping.GetIcon(championId);
         playerNameTextMesh.text = playerName;
         teamTextMesh.text = team.ToString();
-        readyTextMesh.text = isReady ? "Ready" : "Not Ready";
+
+        string showText = "not ready";
+        if(connectionState == PlayerConnectionState.RoomNotReady)
+        {
+            showText = "not ready";
+        }
+        else if(connectionState == PlayerConnectionState.RoomReady)
+        {
+            showText = "ready";
+        }
+        readyTextMesh.text = showText;
     }
 }

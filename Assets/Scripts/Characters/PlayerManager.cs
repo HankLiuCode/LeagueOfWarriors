@@ -28,8 +28,8 @@ public class PlayerManager : NetworkBehaviour
 
     private void DotaNetworkManager_OnGameSceneFinishLoading()
     {
-        List<DotaNewRoomPlayer> dotaGamePlayers = ((DotaNetworkManager) NetworkManager.singleton).GetServerPlayerList();
-        foreach (DotaNewRoomPlayer gamePlayer in dotaGamePlayers)
+        List<DotaRoomPlayer> dotaGamePlayers = ((DotaNetworkManager) NetworkManager.singleton).GetServerPlayerList();
+        foreach (DotaRoomPlayer gamePlayer in dotaGamePlayers)
         {
             SpawnChampion(gamePlayer);
         }
@@ -64,13 +64,13 @@ public class PlayerManager : NetworkBehaviour
 
     #region Server
     [Server]
-    public void SpawnChampion(DotaNewRoomPlayer dotaGamePlayer)
+    public void SpawnChampion(DotaRoomPlayer dotaGamePlayer)
     {
         StartCoroutine(SpawnChampionWhenConnectionReady(dotaGamePlayer));
     }
 
     [Server]
-    IEnumerator SpawnChampionWhenConnectionReady(DotaNewRoomPlayer dotaGamePlayer)
+    IEnumerator SpawnChampionWhenConnectionReady(DotaRoomPlayer dotaGamePlayer)
     {
         Team championTeam = dotaGamePlayer.GetTeam();
 
@@ -90,7 +90,7 @@ public class PlayerManager : NetworkBehaviour
 
         players.Add(championInstance.GetComponent<Champion>());
 
-        List<DotaNewRoomPlayer> dotaGamePlayers = ((DotaNetworkManager)NetworkManager.singleton).GetServerPlayerList();
+        List<DotaRoomPlayer> dotaGamePlayers = ((DotaNetworkManager)NetworkManager.singleton).GetServerPlayerList();
 
         if (players.Count == dotaGamePlayers.Count)
         {
