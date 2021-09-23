@@ -31,7 +31,7 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
     Collider[] colliderBuffer = new Collider[10];
     List<Tower> towers = new List<Tower>();
     Base targetBase = null;
-    
+
     private void Start()
     {
         health.OnHealthDeadEnd += Health_OnServerHealthDeadEnd;
@@ -48,7 +48,7 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
 
     #region Server
 
-    public void SetTeam(Team team)
+    public void ServerSetTeam(Team team)
     {
         this.team = team;
         gameObject.tag = team.ToString();

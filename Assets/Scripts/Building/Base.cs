@@ -34,7 +34,7 @@ public class Base : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
         return team;
     }
 
-    public void SetTeam(Team team)
+    public void ServerSetTeam(Team team)
     {
         this.team = team;
     }

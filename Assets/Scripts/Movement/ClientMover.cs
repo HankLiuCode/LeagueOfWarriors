@@ -28,9 +28,11 @@ namespace Dota.Movement
             bool canMove = actionLocker.TryGetLock(this);
             if (canMove)
             {
+                NavMesh.SamplePosition(position, out NavMeshHit hit, 10f, NavMesh.AllAreas);
+
                 agent.speed = statStore.GetStats().moveSpeed;
                 agent.isStopped = false;
-                agent.SetDestination(position);
+                agent.SetDestination(hit.position);
             }
         }
 

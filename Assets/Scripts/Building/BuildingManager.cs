@@ -102,7 +102,7 @@ public class BuildingManager : NetworkBehaviour
     {
         Health health = teamBase.GetComponent<Health>();
         health.OnHealthDead += OnBaseDead;
-        teamBase.SetTeam(team);
+        teamBase.ServerSetTeam(team);
         OnBaseAdded?.Invoke(teamBase);
     }
 
@@ -112,7 +112,7 @@ public class BuildingManager : NetworkBehaviour
         {
             Health health = tower.GetComponent<Health>();
             health.OnHealthDead += OnTowerDead;
-            tower.SetTeam(team);
+            tower.ServerSetTeam(team);
             OnTowerAdded?.Invoke(tower);
         }
     }

@@ -11,6 +11,7 @@ namespace Dota.Attributes
         [SerializeField]
         Stats baseStats;
 
+        List<Stats> statsModifiers = new List<Stats>();
         public event System.Action<Stats> OnStatsModified;
         
         private void OnStatsChanged(Stats oldValue, Stats newValue)

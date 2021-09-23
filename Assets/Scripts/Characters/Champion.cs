@@ -24,7 +24,6 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
     }
 
     #endregion
-
     // Both
     private void Start()
     {
@@ -71,7 +70,7 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
         return team;
     }
 
-    public void SetTeam(Team team)
+    public void ServerSetTeam(Team team)
     {
         this.team = team;
         gameObject.tag = team.ToString();

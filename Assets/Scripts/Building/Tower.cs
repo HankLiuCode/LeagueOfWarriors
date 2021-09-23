@@ -56,7 +56,7 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner, 
         return team;
     }
 
-    public void SetTeam(Team team)
+    public void ServerSetTeam(Team team)
     {
         this.team = team;
     }

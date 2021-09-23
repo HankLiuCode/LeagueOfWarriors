@@ -21,10 +21,18 @@ public class PlayerManager : NetworkBehaviour
     
     public event System.Action OnLocalChampionReady;
 
-
     private void Awake()
     {
-        ((DotaNetworkRoomManager) NetworkRoomManager.singleton).OnAllGamePlayersAdded += PlayerManager_OnAllGamePlayersAdded;
+        DotaNetworkManager.OnGameSceneFinishLoading += DotaNetworkManager_OnGameSceneFinishLoading;
+    }
+
+    private void DotaNetworkManager_OnGameSceneFinishLoading()
+    {
+        List<DotaNewRoomPlayer> dotaGamePlayers = ((DotaNetworkManager) NetworkManager.singleton).GetServerPlayerList();
+        foreach (DotaNewRoomPlayer gamePlayer in dotaGamePlayers)
+        {
+            SpawnChampion(gamePlayer);
+        }
     }
 
     public SyncList<Champion> GetChampions()
@@ -56,13 +64,13 @@ public class PlayerManager : NetworkBehaviour
 
     #region Server
     [Server]
-    public void SpawnChampion(DotaGamePlayer dotaGamePlayer)
+    public void SpawnChampion(DotaNewRoomPlayer dotaGamePlayer)
     {
         StartCoroutine(SpawnChampionWhenConnectionReady(dotaGamePlayer));
     }
 
     [Server]
-    IEnumerator SpawnChampionWhenConnectionReady(DotaGamePlayer dotaGamePlayer)
+    IEnumerator SpawnChampionWhenConnectionReady(DotaNewRoomPlayer dotaGamePlayer)
     {
         Team championTeam = dotaGamePlayer.GetTeam();
 
@@ -74,7 +82,7 @@ public class PlayerManager : NetworkBehaviour
 
         champion.OnChampionDead += Champion_OnChampionDead;
 
-        champion.SetTeam(championTeam);
+        champion.ServerSetTeam(championTeam);
 
         yield return new WaitUntil(() => dotaGamePlayer.connectionToClient != null);
 
@@ -82,7 +90,7 @@ public class PlayerManager : NetworkBehaviour
 
         players.Add(championInstance.GetComponent<Champion>());
 
-        List<DotaGamePlayer> dotaGamePlayers = ((DotaNetworkRoomManager)NetworkRoomManager.singleton).ServerGetDotaPlayers();
+        List<DotaNewRoomPlayer> dotaGamePlayers = ((DotaNetworkManager)NetworkManager.singleton).GetServerPlayerList();
 
         if (players.Count == dotaGamePlayers.Count)
         {
@@ -93,7 +101,7 @@ public class PlayerManager : NetworkBehaviour
             // 1. The champion list is on client not synced with the server yet
             // 2. The champion might not be spawned yet on the client 
 
-            OnLocalChampionReady?.Invoke();
+            //OnLocalChampionReady?.Invoke();
             RpcNotifyServerSpawnedAllChampion();
         }
     }
@@ -101,7 +109,6 @@ public class PlayerManager : NetworkBehaviour
     private void Champion_OnChampionDead(Champion champion)
     {
         OnChampionRemoved?.Invoke(champion);
-
         StartCoroutine(ReviveChampionAfter(champion, 5f));
     }
 
@@ -118,20 +125,7 @@ public class PlayerManager : NetworkBehaviour
         
         OnChampionAdded?.Invoke(champion);
     }
-
-
-    [Server]
-    private void PlayerManager_OnAllGamePlayersAdded()
-    {
-        List<DotaGamePlayer> dotaGamePlayers = ((DotaNetworkRoomManager) NetworkRoomManager.singleton).ServerGetDotaPlayers();
-
-        foreach(DotaGamePlayer gamePlayer in dotaGamePlayers)
-        {
-            SpawnChampion(gamePlayer);
-        }
-    }
     #endregion
-    
 
     #region Client
     [ClientRpc]
@@ -149,7 +143,7 @@ public class PlayerManager : NetworkBehaviour
     [Client]
     IEnumerator InvokeWhenChampionListSynced()
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
 
         // this has to be called since the client doesn't receive the callback from server
         SyncDebugList();

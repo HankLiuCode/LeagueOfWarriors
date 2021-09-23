@@ -12,6 +12,7 @@ public class VisionChecker : MonoBehaviour
     [SerializeField] MinionManager minionManager = null;
     [SerializeField] PlayerManager playerManager = null;
     [SerializeField] BuildingManager towerManager = null;
+    [SerializeField] MonsterManager monsterManager = null;
     [SerializeField] float visionCheckHeight = 0.5f;
 
     [SerializeField] List<VisionEntity> allies = new List<VisionEntity>();
@@ -39,6 +40,24 @@ public class VisionChecker : MonoBehaviour
         towerManager.OnTowerRemoved += TowerManager_OnTowerRemoved;
 
         towerManager.OnBaseAdded += TowerManager_OnBaseAdded;
+
+        monsterManager.OnMonsterAdded += MonsterManager_OnMonsterAdded;
+        monsterManager.OnMonsterRemoved += MonsterManager_OnMonsterRemoved;
+
+    }
+
+    private void MonsterManager_OnMonsterRemoved(Monster monster)
+    {
+        Debug.Log("OnMonsterRemoved");
+        VisionEntity visionEntity = monster.GetComponent<VisionEntity>();
+        RemoveVisionEntity(visionEntity, monster.GetTeam());
+    }
+
+    private void MonsterManager_OnMonsterAdded(Monster monster)
+    {
+        Debug.Log("OnMonsterAdded");
+        VisionEntity visionEntity = monster.GetComponent<VisionEntity>();
+        AddVisionEntity(visionEntity, monster.GetTeam());
     }
 
     private void TowerManager_OnBaseAdded(Base teamBase)

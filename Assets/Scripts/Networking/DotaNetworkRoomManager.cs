@@ -24,7 +24,7 @@ public class DotaNetworkRoomManager : NetworkRoomManager
     #region Server Callbacks
 
     // dotaGamePlayers List on Server
-    [SerializeField] private List<DotaGamePlayer> serverDotaGamePlayers = new List<DotaGamePlayer>();
+    [SerializeField] private List<DotaNewRoomPlayer> serverDotaGamePlayers = new List<DotaNewRoomPlayer>();
 
     public event Action OnAllGamePlayersAdded;
 
@@ -120,11 +120,13 @@ public class DotaNetworkRoomManager : NetworkRoomManager
     /// <returns>False to not allow this player to replace the room player.</returns>
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject roomPlayer, GameObject gamePlayer)
     {
-        DotaRoomPlayer dotaRoomPlayer = roomPlayer.GetComponent<DotaRoomPlayer>();
-        DotaGamePlayer dotaGamePlayer = gamePlayer.GetComponent<DotaGamePlayer>();
+        serverDotaGamePlayers.RemoveAll(item => item == null);
 
-        dotaGamePlayer.SetPlayerName(dotaRoomPlayer.GetPlayerName());
-        dotaGamePlayer.SetTeam(dotaRoomPlayer.GetTeam());
+        DotaRoomPlayer dotaRoomPlayer = roomPlayer.GetComponent<DotaRoomPlayer>();
+        DotaNewRoomPlayer dotaGamePlayer = gamePlayer.GetComponent<DotaNewRoomPlayer>();
+
+        dotaGamePlayer.ServerSetPlayerName(dotaRoomPlayer.GetPlayerName());
+        dotaGamePlayer.ServerSetTeam(dotaRoomPlayer.GetTeam());
 
         serverDotaGamePlayers.Add(dotaGamePlayer);
 
@@ -136,7 +138,7 @@ public class DotaNetworkRoomManager : NetworkRoomManager
         return base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
     }
 
-    public List<DotaGamePlayer> ServerGetDotaPlayers()
+    public List<DotaNewRoomPlayer> ServerGetDotaPlayers()
     {
         return serverDotaGamePlayers;
     }
@@ -213,7 +215,10 @@ public class DotaNetworkRoomManager : NetworkRoomManager
     /// Called on the client when adding a player to the room fails.
     /// <para>This could be because the room is full, or the connection is not allowed to have more players.</para>
     /// </summary>
-    public override void OnRoomClientAddPlayerFailed() { }
+    public override void OnRoomClientAddPlayerFailed() 
+    { 
+        
+    }
 
     #endregion
 

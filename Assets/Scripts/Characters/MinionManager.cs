@@ -124,7 +124,7 @@ public class MinionManager : NetworkBehaviour
 
         health.OnHealthDead += Health_OnHealthDead;
 
-        minion.SetTeam(team);
+        minion.ServerSetTeam(team);
 
         minion.SetTowers(towers, targetBase);
 
