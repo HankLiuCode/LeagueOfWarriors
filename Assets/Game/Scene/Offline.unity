@@ -2801,7 +2801,7 @@ MonoBehaviour:
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 1733577146257814026, guid: c58fd42f1d8e0f4499070dd48c898ff7,
     type: 3}
-  autoCreatePlayer: 0
+  autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs:
   - {fileID: 452546937840963528, guid: 3dbc6cd5f5aa16d48baca7aa12e1cef9, type: 3}
@@ -2818,7 +2818,8 @@ MonoBehaviour:
   - {fileID: 2394137765132811957, guid: e6d5a21c501f06b4d8765f0eb0f8e3fd, type: 3}
   - {fileID: 2856393900053598539, guid: da4d07239e278344392d2070457cfb7e, type: 3}
   - {fileID: 4782127842387989451, guid: fdf584ccc23e3a04fbf7d0732c5d8006, type: 3}
-  serverPlayerList: []
+  gameScene: Assets/Game/Scene/Game.unity
+  clientPlayers: []
 --- !u!114 &921599512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2826,7 +2827,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 921599508}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
   m_Name: 

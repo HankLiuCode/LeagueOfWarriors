@@ -11,7 +11,7 @@ public class JoinMenu : MonoBehaviour
 
     public void JoinLobby()
     {
-        DotaNetworkManager.OnClientConnected += DotaNetworkManager_OnClientConnected;
+        //DotaNetworkManager.OnClientConnected += DotaNetworkManager_OnClientConnected;
         DotaNetworkManager.singleton.networkAddress = address.text;
         DotaNetworkManager.singleton.StartClient();
     }
@@ -19,6 +19,6 @@ public class JoinMenu : MonoBehaviour
     private void DotaNetworkManager_OnClientConnected(NetworkConnection conn)
     {
         string playerStr = playerName.text;
-        conn.Send(new PlayerConnectMessage { playerName = playerStr });
+        conn.Send(new ClientConnectMessage { playerName = playerStr });
     }
 }

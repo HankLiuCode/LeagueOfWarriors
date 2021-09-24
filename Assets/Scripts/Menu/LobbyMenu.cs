@@ -12,16 +12,14 @@ public class LobbyMenu : NetworkBehaviour
 
     public override void OnStartClient()
     {
-        DotaRoomPlayer.OnPlayerTeamModified += DotaRoomPlayer_OnPlayerTeamModified;
-        DotaRoomPlayer.OnPlayerConnect += DotaRoomPlayer_OnPlayerConnect;
-        DotaRoomPlayer.OnPlayerDisconnect += DotaRoomPlayer_OnPlayerDisconnect;
+        DotaRoomPlayer.OnPlayerConnected += DotaRoomPlayer_OnPlayerConnect;
+        DotaRoomPlayer.OnPlayerDisconnected += DotaRoomPlayer_OnPlayerDisconnect;
     }
 
     public override void OnStopClient()
     {
-        DotaRoomPlayer.OnPlayerTeamModified -= DotaRoomPlayer_OnPlayerTeamModified;
-        DotaRoomPlayer.OnPlayerConnect -= DotaRoomPlayer_OnPlayerConnect;
-        DotaRoomPlayer.OnPlayerDisconnect -= DotaRoomPlayer_OnPlayerDisconnect;
+        DotaRoomPlayer.OnPlayerConnected -= DotaRoomPlayer_OnPlayerConnect;
+        DotaRoomPlayer.OnPlayerDisconnected -= DotaRoomPlayer_OnPlayerDisconnect;
     }
 
     private void DotaRoomPlayer_OnPlayerConnect(DotaRoomPlayer player)

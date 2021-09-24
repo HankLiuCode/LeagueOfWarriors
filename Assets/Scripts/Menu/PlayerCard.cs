@@ -19,15 +19,22 @@ public class PlayerCard : MonoBehaviour
         playerNameTextMesh.text = playerName;
         teamTextMesh.text = team.ToString();
 
-        string showText = "not ready";
-        if(connectionState == PlayerConnectionState.RoomNotReady)
+        string showText = "Nan";
+        switch (connectionState)
         {
-            showText = "not ready";
+            case PlayerConnectionState.RoomToGame:
+                showText = "entering";
+                break;
+
+            case PlayerConnectionState.RoomReady:
+                showText = "ready";
+                break;
+
+            case PlayerConnectionState.RoomNotReady:
+                showText = "not ready";
+                break;
         }
-        else if(connectionState == PlayerConnectionState.RoomReady)
-        {
-            showText = "ready";
-        }
+
         readyTextMesh.text = showText;
     }
 }

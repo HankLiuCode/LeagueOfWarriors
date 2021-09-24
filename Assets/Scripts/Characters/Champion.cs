@@ -14,7 +14,12 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
     [SerializeField] GameObject minimapIconPrefab = null;
     [SerializeField] Health health = null;
 
+
+    public static event System.Action<Champion> OnChampionSpawned;
+    public static event System.Action<Champion> OnChampionDestroyed;
     public event System.Action<Champion> OnChampionDead;
+
+
 
     #region Server
     [Server]

@@ -3,153 +3,147 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using Dota.Networking;
+using UnityEngine.SceneManagement;
 
 public class DotaNetworkManager : NetworkManager
 {
-    [SerializeField] List<DotaRoomPlayer> serverPlayerList = new List<DotaRoomPlayer>();
-    
-    // Client Side Event
-    public static event System.Action<NetworkConnection> OnClientConnected;
-    
-    // Server Side Event
-    public static event System.Action OnGameSceneFinishLoading;
+    [Scene] [SerializeField] string gameScene;
+    [SerializeField] List<DotaRoomPlayer> serverPlayers = new List<DotaRoomPlayer>();
+    [SerializeField] List<DotaRoomPlayer> clientPlayers = new List<DotaRoomPlayer>();
+    string serverCurrentScene;
+    List<NetworkConnection> sceneLoadedClients = new List<NetworkConnection>();
 
-    public override void OnStartServer()
+    public static event System.Action<string> ClientOnAllClientSceneLoaded;
+    public static event System.Action<string> ServerOnAllClientSceneLoaded;
+
+    public override void Awake()
     {
-        NetworkServer.RegisterHandler<PlayerConnectMessage>(OnPlayerConnected);
-        NetworkServer.RegisterHandler<PlayerUpdateMessage> (OnPlayerUpdated);
-
-        DotaRoomPlayer.OnPlayerConnectionModified += DotaRoomPlayer_OnPlayerConnectionModified;
+        base.Awake();
+        DotaRoomPlayer.OnPlayerConnected += DotaRoomPlayer_OnPlayerConnected;
+        DotaRoomPlayer.OnPlayerDisconnected += DotaRoomPlayer_OnPlayerDisconnected;
     }
 
-    // Server
-    public void OnPlayerUpdated(NetworkConnection conn, PlayerUpdateMessage playerUpdateMsg)
+    #region Client
+
+    public override void OnStartClient()
     {
-
-        foreach (DotaRoomPlayer player in serverPlayerList)
-        {
-            if (player.connectionToClient == conn)
-            {
-                if (playerUpdateMsg.switchChampion)
-                {
-                    player.ServerSetChampionId(playerUpdateMsg.championId);
-                }
-
-                if (playerUpdateMsg.switchTeam)
-                {
-                    Team originTeam = player.GetTeam();
-                    if(originTeam == Team.Red)
-                    {
-                        player.ServerSetTeam(Team.Blue);
-                    }
-                    else if(originTeam == Team.Blue)
-                    {
-                        player.ServerSetTeam(Team.Red);
-                    }
-                }
-
-                if (playerUpdateMsg.toggleReady)
-                {
-                    player.ServerSetConnectionState(PlayerConnectionState.RoomReady);
-                }
-            }
-        }
+        NetworkClient.RegisterHandler<AllClientFinishLoadSceneMessage>(HandleAllClientSceneLoaded);
     }
 
-    // Server
-    public void OnPlayerConnected(NetworkConnection conn, PlayerConnectMessage playerConnectMsg)
+    public override void OnStopClient()
     {
-        GameObject playerInstance = Instantiate(playerPrefab);
-
-        DotaRoomPlayer dotaGamePlayer = playerInstance.GetComponent<DotaRoomPlayer>();
-
-        dotaGamePlayer.ServerSetPlayerName(playerConnectMsg.playerName);
-
-        serverPlayerList.Add(dotaGamePlayer);
-
-        playerInstance.name = $"{playerPrefab.name} [connId={conn.connectionId}]";
-
-        NetworkServer.AddPlayerForConnection(conn, playerInstance);
+        DotaRoomPlayer.OnPlayerConnected -= DotaRoomPlayer_OnPlayerConnected;
+        DotaRoomPlayer.OnPlayerDisconnected -= DotaRoomPlayer_OnPlayerDisconnected;
     }
 
-    // Server
-    private void DotaRoomPlayer_OnPlayerConnectionModified(DotaRoomPlayer roomPlayer, PlayerConnectionState playerConnState)
+    public List<DotaRoomPlayer> GetClientPlayers()
     {
-        bool allPlayersReady = true;
-        foreach (DotaRoomPlayer player in serverPlayerList)
-        {
-            if (!(playerConnState == PlayerConnectionState.RoomReady))
-            {
-                allPlayersReady = false;
-                break;
-            }
-        }
-        if (allPlayersReady)
-        {
-            foreach (DotaRoomPlayer player in serverPlayerList)
-            {
-                player.ServerSetConnectionState(PlayerConnectionState.RoomToGame);
-            }
-            ServerChangeScene("Game");
-        }
+        return clientPlayers;
+    }
+
+    public List<DotaRoomPlayer> GetServerPlayers()
+    {
+        return serverPlayers;
+    }
+
+    private void HandleAllClientSceneLoaded(AllClientFinishLoadSceneMessage msg)
+    {
+        ClientOnAllClientSceneLoaded?.Invoke(msg.scenePath);
     }
 
     public override void OnClientSceneChanged(NetworkConnection conn)
     {
-        conn.Send(new ClientSceneLoadedMessage());
+        base.OnClientSceneChanged(conn);
+        conn.Send(new ClientSceneLoadedMessage { scenePath = SceneManager.GetActiveScene().path});
     }
 
-    public List<DotaRoomPlayer> GetServerPlayerList()
+    private void DotaRoomPlayer_OnPlayerDisconnected(DotaRoomPlayer player)
     {
-        return serverPlayerList;
+        clientPlayers.Remove(player);
     }
 
-    public override void OnServerSceneChanged(string sceneName)
+    private void DotaRoomPlayer_OnPlayerConnected(DotaRoomPlayer player)
     {
-        if(sceneName == "Game")
-        {
-            OnGameSceneFinishLoading?.Invoke();
-        }
-        else
-        {
-            Debug.Log(sceneName + " Finished loading.");
-        }
+        clientPlayers.Add(player);
+    }
+    #endregion
+
+    #region Server
+    public override void OnStartServer()
+    {
+        DotaRoomPlayer.OnPlayerConnectionModified += DotaRoomPlayer_OnPlayerConnectionModified;
+        NetworkServer.RegisterHandler<ClientSceneLoadedMessage>(OnServerClientSceneLoaded);
     }
 
     public override void OnStopServer()
     {
-        serverPlayerList.Clear();
+        DotaRoomPlayer.OnPlayerConnectionModified -= DotaRoomPlayer_OnPlayerConnectionModified;
+        DotaRoomPlayer.OnPlayerConnected -= DotaRoomPlayer_OnPlayerConnected;
+        DotaRoomPlayer.OnPlayerDisconnected -= DotaRoomPlayer_OnPlayerDisconnected;
     }
 
-    public override void OnServerDisconnect(NetworkConnection conn)
+    public override void OnServerAddPlayer(NetworkConnection conn)
     {
-        foreach (DotaRoomPlayer player in serverPlayerList)
+        Transform startPos = GetStartPosition();
+        GameObject player = startPos != null
+            ? Instantiate(playerPrefab, startPos.position, startPos.rotation)
+            : Instantiate(playerPrefab);
+
+        DotaRoomPlayer roomPlayer = player.GetComponent<DotaRoomPlayer>();
+        serverPlayers.Add(roomPlayer);
+
+        // instantiating a "Player" prefab gives it the name "Player(clone)"
+        // => appending the connectionId is WAY more useful for debugging!
+        player.name = $"{playerPrefab.name} [connId={conn.connectionId}]";
+        NetworkServer.AddPlayerForConnection(conn, player);
+    }
+
+    public override void OnServerSceneChanged(string sceneName)
+    {
+        base.OnServerSceneChanged(sceneName);
+        serverCurrentScene = sceneName;
+    }
+
+    public void OnServerClientSceneLoaded(NetworkConnection networkConnection, ClientSceneLoadedMessage msg)
+    {
+        if (serverCurrentScene == msg.scenePath)
         {
-            if (player.connectionToClient == conn)
+            sceneLoadedClients.Add(networkConnection);
+        }
+
+        if(sceneLoadedClients.Count == serverPlayers.Count)
+        {
+            foreach(NetworkConnection connection in sceneLoadedClients)
             {
-                NetworkServer.Destroy(player.gameObject);
+                ServerOnAllClientSceneLoaded?.Invoke(serverCurrentScene);
+                connection.Send(new AllClientFinishLoadSceneMessage { scenePath = serverCurrentScene });
             }
-            else
+            sceneLoadedClients.Clear();
+        }
+    }
+
+    private void DotaRoomPlayer_OnPlayerConnectionModified(DotaRoomPlayer player)
+    {
+        if (IsAllPlayersRoomReady())
+        {
+            ServerChangeScene(gameScene);
+        }
+    }
+    private bool IsAllPlayersRoomReady()
+    {
+        int readyCount = 0;
+        foreach (DotaRoomPlayer clientPlayer in clientPlayers)
+        {
+            if (clientPlayer.GetConnectionState() == PlayerConnectionState.RoomReady)
             {
-                player.connectionToClient.Send(new PlayerLeaveMessage());
+                readyCount++;
             }
         }
-        serverPlayerList.RemoveAll(player => player.connectionToClient == conn);
+        if (readyCount == clientPlayers.Count && clientPlayers.Count != 0)
+        {
+            return true;
+        }
+        return false;
     }
-
-    public override void OnServerAddPlayer(NetworkConnection conn) { }
-
-
-    #region Client
-
-    public override void OnClientConnect(NetworkConnection conn)
-    {
-        base.OnClientConnect(conn);
-        
-        Debug.Log("OnClientConnect");
-
-        OnClientConnected?.Invoke(conn);
-    }
-
     #endregion
 }

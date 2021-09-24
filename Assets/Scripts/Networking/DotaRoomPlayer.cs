@@ -31,14 +31,15 @@ namespace Dota.Networking
         int championId;
 
         [SerializeField]
+        [SyncVar(hook = nameof(OnPlayerConnectionChanged))]
         PlayerConnectionState playerConnState;
 
-        public static event System.Action<DotaRoomPlayer> OnPlayerConnect;
-        public static event System.Action<DotaRoomPlayer> OnPlayerDisconnect;
+        public static event System.Action<DotaRoomPlayer> OnPlayerConnected;
+        public static event System.Action<DotaRoomPlayer> OnPlayerDisconnected;
+
         public static event System.Action<DotaRoomPlayer> OnPlayerTeamModified;
         public static event System.Action<DotaRoomPlayer> OnPlayerChampionModified;
-        public static event System.Action<DotaRoomPlayer, PlayerConnectionState> OnPlayerConnectionModified;
-
+        public static event System.Action<DotaRoomPlayer> OnPlayerConnectionModified;
 
         private void Awake()
         {
@@ -65,6 +66,22 @@ namespace Dota.Networking
             return playerConnState;
         }
 
+        #region Client
+
+        public override void OnStartClient()
+        {
+            if (hasAuthority)
+            {
+                CmdSetConnectionState(PlayerConnectionState.RoomNotReady);
+            }
+            OnPlayerConnected?.Invoke(this);
+        }
+
+        public override void OnStopClient()
+        {
+            OnPlayerDisconnected?.Invoke(this);
+        }
+
         public void OnChampionIdChanged(int oldValue, int newValue)
         {
             OnPlayerChampionModified?.Invoke(this);
@@ -77,18 +94,26 @@ namespace Dota.Networking
 
         public void OnPlayerConnectionChanged(PlayerConnectionState oldValue, PlayerConnectionState newValue)
         {
-            OnPlayerConnectionModified?.Invoke(this, newValue);
+            OnPlayerConnectionModified?.Invoke(this);
         }
 
-        public override void OnStartClient()
+        public void ClientSetTeam(Team team)
         {
-            OnPlayerConnect?.Invoke(this);
+            CmdSetTeam(team);
         }
 
-        public override void OnStopClient()
+        public void ClientSetChampionId(int championId)
         {
-            OnPlayerDisconnect?.Invoke(this);
+            CmdSetChampionId(championId);
         }
+
+        public void ClientSetConnectionState(PlayerConnectionState playerConnState)
+        {
+            CmdSetConnectionState(playerConnState);
+        }
+
+        #endregion
+
 
         #region Server
 

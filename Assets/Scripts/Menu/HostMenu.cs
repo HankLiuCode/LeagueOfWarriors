@@ -11,13 +11,13 @@ public class HostMenu : MonoBehaviour
 
     public void HostLobby()
     {
-        DotaNetworkManager.OnClientConnected += DotaNetworkManager_OnClientConnected;
+        //DotaNetworkManager.OnClientConnected += DotaNetworkManager_OnClientConnected;
         DotaNetworkManager.singleton.StartHost();
     }
 
     private void DotaNetworkManager_OnClientConnected(NetworkConnection conn)
     {
         string playerStr = playerName.text;
-        conn.Send(new PlayerConnectMessage { playerName = playerStr });
+        conn.Send(new ClientConnectMessage { playerName = playerStr });
     }
 }

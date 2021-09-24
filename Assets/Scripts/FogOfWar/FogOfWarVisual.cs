@@ -22,6 +22,9 @@ public class FogOfWarVisual : MonoBehaviour
     private void Awake()
     {
         playerManager.OnLocalChampionReady += PlayerManager_OnLocalPlayerConnectionReady;
+
+
+
         minionManager.OnMinionAdded += MinionManager_OnMinionAdded;
         minionManager.OnMinionRemoved += MinionManager_OnMinionRemoved;
         buildingManager.OnTowerAdded += BuildingManager_OnTowerAdded;
