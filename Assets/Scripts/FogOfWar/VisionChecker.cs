@@ -5,12 +5,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VisionChecker : MonoBehaviour
+public class VisionChecker : NetworkBehaviour
 {
     [SerializeField] Team localPlayerTeam;
 
     [SerializeField] MinionManager minionManager = null;
-    [SerializeField] PlayerManager playerManager = null;
     [SerializeField] BuildingManager towerManager = null;
     [SerializeField] MonsterManager monsterManager = null;
     [SerializeField] float visionCheckHeight = 0.5f;
@@ -26,24 +25,52 @@ public class VisionChecker : MonoBehaviour
     public event Action<VisionEntity> OnVisionEntityAdded;
     public event Action<VisionEntity> OnVisionEntityRemoved;
 
+
+    // Don't forget to unsubscribe
     private void Awake()
     {
-        playerManager.OnLocalChampionReady += PlayerManager_OnLocalChampionReady;
-
-        playerManager.OnChampionAdded += PlayerManager_OnChampionAdded;
-        playerManager.OnChampionRemoved += PlayerManager_OnChampionRemoved;
+        Champion.OnChampionSpawned += Champion_OnChampionSpawned;
+        Champion.OnChampionDestroyed += Champion_OnChampionDestroyed;
 
         minionManager.OnMinionAdded += MinionManager_OnMinionAdded;
         minionManager.OnMinionRemoved += MinionManager_OnMinionRemoved;
 
-        towerManager.OnTowerAdded += TowerManager_OnTowerAdded;
-        towerManager.OnTowerRemoved += TowerManager_OnTowerRemoved;
+        Tower.OnTowerSpawned += Tower_OnTowerSpawned;
+        Tower.OnTowerDestroyed += Tower_OnTowerDestroyed;
 
         towerManager.OnBaseAdded += TowerManager_OnBaseAdded;
 
         monsterManager.OnMonsterAdded += MonsterManager_OnMonsterAdded;
         monsterManager.OnMonsterRemoved += MonsterManager_OnMonsterRemoved;
+    }
 
+    public override void OnStartClient()
+    {
+        localPlayerTeam = NetworkClient.localPlayer.GetComponent<DotaRoomPlayer>().GetTeam();
+    }
+
+    private void Tower_OnTowerDestroyed(Tower tower)
+    {
+        VisionEntity visionEntity = tower.GetComponent<VisionEntity>();
+        RemoveVisionEntity(visionEntity, tower.GetTeam());
+    }
+
+    private void Tower_OnTowerSpawned(Tower tower)
+    {
+        VisionEntity visionEntity = tower.GetComponent<VisionEntity>();
+        AddVisionEntity(visionEntity, tower.GetTeam());
+    }
+
+    private void Champion_OnChampionDestroyed(Champion champion)
+    {
+        VisionEntity visionEntity = champion.GetComponent<VisionEntity>();
+        RemoveVisionEntity(visionEntity, champion.GetTeam());
+    }
+
+    private void Champion_OnChampionSpawned(Champion champion)
+    {
+        VisionEntity visionEntity = champion.GetComponent<VisionEntity>();
+        AddVisionEntity(visionEntity, champion.GetTeam());
     }
 
     private void MonsterManager_OnMonsterRemoved(Monster monster)
@@ -64,30 +91,6 @@ public class VisionChecker : MonoBehaviour
     {
         VisionEntity visionEntity = teamBase.GetComponent<VisionEntity>();
         AddVisionEntity(visionEntity, teamBase.GetTeam());
-    }
-
-    private void TowerManager_OnTowerRemoved(Tower tower)
-    {
-        VisionEntity visionEntity = tower.GetComponent<VisionEntity>();
-        RemoveVisionEntity(visionEntity, tower.GetTeam());
-    }
-
-    private void TowerManager_OnTowerAdded(Tower tower)
-    {
-        VisionEntity visionEntity = tower.GetComponent<VisionEntity>();
-        AddVisionEntity(visionEntity, tower.GetTeam());
-    }
-
-    private void PlayerManager_OnLocalChampionReady()
-    {
-        Champion localPlayer = playerManager.GetLocalChampion();
-        localPlayerTeam = localPlayer.GetTeam();
-        SyncList<Champion> players = playerManager.GetChampions();
-
-        foreach (Champion player in players)
-        {
-            AddVisionEntity(player.GetComponent<VisionEntity>(), player.GetTeam());
-        }
     }
 
     private void PlayerManager_OnChampionRemoved(Champion champion)
@@ -171,6 +174,11 @@ public class VisionChecker : MonoBehaviour
         {
             ally.SetVisible(true);
         }
+    }
+
+    private void OnDestroy()
+    {
+        
     }
 
     private void UpdateVisibleEnemy()

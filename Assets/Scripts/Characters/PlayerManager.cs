@@ -12,21 +12,19 @@ public class PlayerManager : NetworkBehaviour
 
     int blueStartPositionIndex = 0;
     int redStartPositionIndex = 0;
-    
-    [SerializeField] List<Champion> debugPlayers = new List<Champion>();
-    SyncList<Champion> champions = new SyncList<Champion>();
-
-    public event System.Action<Champion> OnChampionAdded;
-    public event System.Action<Champion> OnChampionRemoved;
 
     public override void OnStartServer()
     {
+        Debug.Log("PlayerManager OnStartServer");
         DotaNetworkManager.ServerOnAllClientSceneLoaded += DotaNetworkManager_ServerOnAllClientSceneLoaded;
     }
 
     private void DotaNetworkManager_ServerOnAllClientSceneLoaded(string scene)
     {
-        List<DotaRoomPlayer> roomPlayers = ((DotaNetworkManager)NetworkManager.singleton).GetClientPlayers();
+        List<DotaRoomPlayer> roomPlayers = ((DotaNetworkManager)NetworkManager.singleton).GetServerPlayers();
+
+        Debug.Log("roomPlayers Count:" + roomPlayers.Count);
+
         SpawnChampionsForPlayers(roomPlayers);
     }
 
@@ -55,18 +53,12 @@ public class PlayerManager : NetworkBehaviour
         NetworkServer.Spawn(championInstance, player.connectionToClient);
     }
 
-    public SyncList<Champion> GetChampions()
-    {
-        return champions;
-    }
-
     [Server]
     public Vector3 GetSpawnPosition(Team team)
     {
         switch (team)
         {
             case Team.Red:
-
                 Transform redStartPos = redStartPositions[redStartPositionIndex];
                 redStartPositionIndex = (redStartPositionIndex + 1) % redStartPositions.Length;
                 return redStartPos.position;
@@ -92,8 +84,6 @@ public class PlayerManager : NetworkBehaviour
         RpcTeleportChampionToSpawnPos(champion, spawnPos);
 
         champion.ServerRevive();
-        
-        OnChampionAdded?.Invoke(champion);
     }
 
     #region Client
@@ -103,19 +93,6 @@ public class PlayerManager : NetworkBehaviour
     {
         champion.transform.position = spawnPos;
     }
-
-    //[Client]
-    //public Champion GetLocalChampion()
-    //{
-    //    foreach (Champion player in champions)
-    //    {
-    //        if(player.hasAuthority && isClient)
-    //        {
-    //            return player;
-    //        }
-    //    }
-    //    throw new System.Exception("LocalPlayer not Ready");
-    //}
     #endregion
 
 }

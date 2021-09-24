@@ -10,16 +10,18 @@ using Dota.Controls;
 public class CameraSetup : MonoBehaviour
 {
     [SerializeField] CameraController cameraControllerInstance = null;
-    [SerializeField] PlayerManager playerManager = null;
 
     private void Start()
     {
-        playerManager.OnLocalChampionReady += PlayerManager_OnLocalChampionReady;
+        Champion.OnChampionSpawned += Champion_OnChampionSpawned;
     }
 
-    private void PlayerManager_OnLocalChampionReady()
+    private void Champion_OnChampionSpawned(Champion champion)
     {
-        Champion champion = playerManager.GetLocalChampion();
-        cameraControllerInstance.Initialize(champion.transform);
+        if (champion.hasAuthority)
+        {
+            cameraControllerInstance.SetFollowTarget(champion.transform);
+        }
     }
+
 }

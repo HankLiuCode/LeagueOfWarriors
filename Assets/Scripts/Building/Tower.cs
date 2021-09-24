@@ -36,6 +36,9 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner, 
 
     List<Projectile> projectilePool = new List<Projectile>();
 
+    public static event System.Action<Tower> OnTowerSpawned;
+    public static event System.Action<Tower> OnTowerDestroyed;
+
 
     public string GetLayerName()
     {
@@ -65,6 +68,20 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner, 
     {
         return towerIcon;
     }
+
+    #region Client
+
+    public override void OnStartClient()
+    {
+        OnTowerSpawned?.Invoke(this);
+    }
+
+    public override void OnStopClient()
+    {
+        OnTowerDestroyed?.Invoke(this);
+    }
+
+    #endregion
 
     #region Server
     private void Start()
@@ -154,65 +171,8 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner, 
 
     #endregion
 
-
-
-
-    //void Start()
-    //{
-    //    InvokeRepeating("CreateBullet", 0.1f, 1.3f);
-    //}
-    //生成子彈
-    public void CreateBullet()
-    {
-        if(enemyChampions.Count <= 0 && enemyMinions.Count <= 0) { return; }
-
-        // Instantiate Bullet
-
-
-
-        // If has minion  Set Bullet Target to minion
-        // If not set bullet target to champion
-    }
-
     public VisionEntity GetVisionEntity()
     {
         return visionEntity;
     }
-
-
-    //小兵進入到箭塔範圍，箭塔從集合中找攻擊目標
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    //進入箭塔是英雄
-    //    if (other.gameObject.tag == "Player")
-    //    {
-    //        listHero.Add(other.gameObject);
-    //    }
-    //    else
-    //    {
-    //        //進入箭塔是小兵
-    //        Minion minion = other.GetComponent<Minion>();
-    //        //當小兵不為空時，判斷小兵與箭塔類型是否一致，不一致表示可以攻擊
-    //        if (minion && minion.GetTeam() != team)
-    //        {
-    //            listSolider.Add(other.gameObject);//小兵放在可攻擊的列表內
-    //        }
-
-    //    }
-
-    //}
-    ////人物退出範圍，移除列表
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    if (other.gameObject.tag == "Player")
-    //    {
-    //        listHero.Remove(other.gameObject);
-    //    }
-    //    else
-    //    {
-
-    //        listSolider.Remove(other.gameObject);
-
-    //    }
-    //}
 }

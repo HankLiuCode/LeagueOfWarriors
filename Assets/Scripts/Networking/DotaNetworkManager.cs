@@ -10,6 +10,7 @@ public class DotaNetworkManager : NetworkManager
     [Scene] [SerializeField] string gameScene;
     [SerializeField] List<DotaRoomPlayer> serverPlayers = new List<DotaRoomPlayer>();
     [SerializeField] List<DotaRoomPlayer> clientPlayers = new List<DotaRoomPlayer>();
+
     string serverCurrentScene;
     List<NetworkConnection> sceneLoadedClients = new List<NetworkConnection>();
 
@@ -113,9 +114,9 @@ public class DotaNetworkManager : NetworkManager
 
         if(sceneLoadedClients.Count == serverPlayers.Count)
         {
-            foreach(NetworkConnection connection in sceneLoadedClients)
+            ServerOnAllClientSceneLoaded?.Invoke(serverCurrentScene);
+            foreach (NetworkConnection connection in sceneLoadedClients)
             {
-                ServerOnAllClientSceneLoaded?.Invoke(serverCurrentScene);
                 connection.Send(new AllClientFinishLoadSceneMessage { scenePath = serverCurrentScene });
             }
             sceneLoadedClients.Clear();

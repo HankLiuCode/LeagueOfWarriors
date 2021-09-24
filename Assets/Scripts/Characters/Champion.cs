@@ -17,9 +17,21 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
 
     public static event System.Action<Champion> OnChampionSpawned;
     public static event System.Action<Champion> OnChampionDestroyed;
-    public event System.Action<Champion> OnChampionDead;
+    public static event System.Action<Champion> OnChampionDead;
 
+    #region Client
 
+    public override void OnStartClient()
+    {
+        OnChampionSpawned?.Invoke(this);
+    }
+
+    public override void OnStopClient()
+    {
+        OnChampionDestroyed?.Invoke(this);
+    }
+
+    #endregion
 
     #region Server
     [Server]
@@ -29,6 +41,8 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
     }
 
     #endregion
+    
+    
     // Both
     private void Start()
     {

@@ -28,7 +28,7 @@ public class BuildingManager : NetworkBehaviour
 
     private void Awake()
     {
-        playerManager.OnLocalChampionReady += PlayerManager_OnLocalChampionReady;
+        //playerManager.OnLocalChampionReady += PlayerManager_OnLocalChampionReady;
     }
 
     private void PlayerManager_OnLocalChampionReady()
@@ -82,7 +82,6 @@ public class BuildingManager : NetworkBehaviour
 
         throw new System.Exception("Base of team: " + team + "Doesn't Exist");
     }
-
 
     private void NotifyBuildingsAdded()
     {

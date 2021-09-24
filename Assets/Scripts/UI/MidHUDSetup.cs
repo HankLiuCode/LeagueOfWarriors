@@ -1,10 +1,10 @@
 using UnityEngine;
 using Dota.UI;
 using Dota.Attributes;
+using Mirror;
 
 public class MidHUDSetup : MonoBehaviour
 {
-    [SerializeField] PlayerManager playerManager = null;
     [SerializeField] IconDisplay iconDisplay = null;
     [SerializeField] HealthDisplay healthDisplay = null;
     [SerializeField] ManaDisplay manaDisplay = null;
@@ -12,23 +12,25 @@ public class MidHUDSetup : MonoBehaviour
 
     private void Start()
     {
-        playerManager.OnLocalChampionReady += PlayerManager_OnLocalChampionReady;
+        Champion.OnChampionSpawned += Champion_OnChampionSpawned;
     }
 
-    private void PlayerManager_OnLocalChampionReady()
+    private void Champion_OnChampionSpawned(Champion champion)
     {
-        Champion champion = playerManager.GetLocalChampion();
-        Health health = champion.GetComponent<Health>();
-        Mana mana = champion.GetComponent<Mana>();
-
-        iconDisplay.SetIcon(champion.GetIcon());
-        healthDisplay.SetHealth(health);
-        manaDisplay.SetMana(mana);
-
-        AbilityUI[] abilityUIs = abilitiesContainer.GetComponentsInChildren<AbilityUI>();
-        foreach (AbilityUI abilityUI in abilityUIs)
+        if (champion.hasAuthority)
         {
-            abilityUI.SetUp(champion.GetComponent<AbilityCaster>());
+            Health health = champion.GetComponent<Health>();
+            Mana mana = champion.GetComponent<Mana>();
+
+            iconDisplay.SetIcon(champion.GetIcon());
+            healthDisplay.SetHealth(health);
+            manaDisplay.SetMana(mana);
+
+            AbilityUI[] abilityUIs = abilitiesContainer.GetComponentsInChildren<AbilityUI>();
+            foreach (AbilityUI abilityUI in abilityUIs)
+            {
+                abilityUI.SetUp(champion.GetComponent<AbilityCaster>());
+            }
         }
     }
 }

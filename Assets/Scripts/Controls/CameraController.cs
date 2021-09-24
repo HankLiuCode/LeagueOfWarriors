@@ -49,7 +49,7 @@ public class CameraController : MonoBehaviour
         return zMinMax;
     }
 
-    public void Initialize(Transform target)
+    public void SetFollowTarget(Transform target)
     {
         followTarget = target;
         lookAtPoint = target.position;

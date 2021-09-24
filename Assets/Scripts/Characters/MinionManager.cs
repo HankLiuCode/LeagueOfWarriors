@@ -12,7 +12,6 @@ public enum Lane
     Middle,
     Bottom
 }
-
 public class MinionManager : NetworkBehaviour
 {
     [SerializeField] GameObject blueMinionPrefab;
