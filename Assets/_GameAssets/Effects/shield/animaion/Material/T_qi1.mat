@@ -1,0 +1,156 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: T_qi1
+  m_Shader: {fileID: 4800000, guid: 7e9f0e0d8f8480a48b572258d7503375, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 2800000, guid: c21c9986bfafd6548852d5d155966781, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: c21c9986bfafd6548852d5d155966781, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - EValue: 0
+    - Light: 0
+    - TurnToLiquid: 0
+    - _Alpha: 0
+    - _AlphaProgress: 0
+    - _BlendOp: 0
+    - _Brightness: 1
+    - _BumpScale: 1
+    - _ClipDown: 1
+    - _ClipLeft: 1
+    - _ClipRight: 1
+    - _ClipUp: 1
+    - _ColorB: 0
+    - _ColorLevel: 0.037
+    - _ColorMask: 15
+    - _Colors: 4
+    - _Contast: 1
+    - _Cutoff: 0.5
+    - _Deep: 1
+    - _DetailNormalMapScale: 1
+    - _DistanceX: 0
+    - _DistanceY: 0
+    - _Distortion: 1
+    - _DstBlend: 0
+    - _EdgeSize: 0
+    - _FadeIn: 0
+    - _FllowDelay: -0.86
+    - _GlossMapScale: 1
+    - _Glossiness: 0.5
+    - _GlossyReflections: 1
+    - _Hole: 0
+    - _HueShift: 1
+    - _InOut: 1
+    - _Intensity: 0
+    - _Main_SpeedX: 0
+    - _Main_SpeedY: 0
+    - _Metallic: 0
+    - _Mode: 0
+    - _OcclusionStrength: 1
+    - _Offset: -1
+    - _OffsetX: 0
+    - _OffsetY: 0
+    - _Parallax: 0.02
+    - _PosX: 1
+    - _PosY: 1
+    - _Sat: 1
+    - _Size: 0
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _Speed: 1
+    - _SrcBlend: 1
+    - _Stencil: -1.14
+    - _StencilComp: 10.8
+    - _StencilOp: 2.12
+    - _StencilReadMask: 291
+    - _StencilWriteMask: 257.18
+    - _Tolerance: 1
+    - _UOffset: -2
+    - _UTiling: 0.87
+    - _UVSec: 0
+    - _VOffset: 0.03
+    - _VTiling: 1.19
+    - _Val: 1
+    - _Value1: 0
+    - _Value2: 0
+    - _Value3: 0
+    - _Value4: 0
+    - _Value5: 0
+    - _WaveTimeX: 0
+    - _WaveTimeY: 0
+    - _Z: 0
+    - _ZWrite: 1
+    - _Zoom: 0
+    - __dirty: 1
+    - _offset: 1
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color1: {r: 1, g: 0, b: 0, a: 1}
+    - _Color2: {r: 1, g: 0, b: 0, a: 1}
+    - _Color3: {r: 1, g: 0, b: 0, a: 1}
+    - _Color4: {r: 1, g: 0, b: 0, a: 1}
+    - _ColorA: {r: 2.45976, g: 2.45976, b: 2.45976, a: 0}
+    - _ColorB: {r: 1, g: 0, b: 0.4117651, a: 0}
+    - _ColorX: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _MainColor: {r: 0.7490196, g: 0.7490196, b: 0.7490196, a: 1}
