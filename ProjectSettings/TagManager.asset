@@ -7,6 +7,7 @@ TagManager:
   - Blue
   - Red
   - solider
+  - Enemy
   layers:
   - Default
   - TransparentFX
