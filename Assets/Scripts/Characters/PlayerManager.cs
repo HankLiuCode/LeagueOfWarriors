@@ -22,9 +22,6 @@ public class PlayerManager : NetworkBehaviour
     private void DotaNetworkManager_ServerOnAllClientSceneLoaded(string scene)
     {
         List<DotaRoomPlayer> roomPlayers = ((DotaNetworkManager)NetworkManager.singleton).GetServerPlayers();
-
-        Debug.Log("roomPlayers Count:" + roomPlayers.Count);
-
         SpawnChampionsForPlayers(roomPlayers);
     }
 

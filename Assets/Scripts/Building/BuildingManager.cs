@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class BuildingManager : NetworkBehaviour
 {
-    [SerializeField] PlayerManager playerManager = null;
-
     [Header("Blue")]
     [SerializeField] Base blueBase;
     [SerializeField] Tower[] topBlueTowers;
@@ -25,16 +23,6 @@ public class BuildingManager : NetworkBehaviour
 
     public event System.Action<Base> OnBaseAdded;
     public event System.Action<Base> OnBaseRemoved;
-
-    private void Awake()
-    {
-        //playerManager.OnLocalChampionReady += PlayerManager_OnLocalChampionReady;
-    }
-
-    private void PlayerManager_OnLocalChampionReady()
-    {
-        NotifyBuildingsAdded();
-    }
 
     public Tower[] GetTowers(Team team, Lane lane)
     {
@@ -81,20 +69,6 @@ public class BuildingManager : NetworkBehaviour
         }
 
         throw new System.Exception("Base of team: " + team + "Doesn't Exist");
-    }
-
-    private void NotifyBuildingsAdded()
-    {
-        NotifyBaseAdded(blueBase, Team.Blue);
-        NotifyBaseAdded(redBase, Team.Red);
-
-        NotifyTowersAdded(topBlueTowers, Team.Blue);
-        NotifyTowersAdded(middleBlueTowers, Team.Blue);
-        NotifyTowersAdded(bottomBlueTowers, Team.Blue);
-
-        NotifyTowersAdded(topRedTowers, Team.Red);
-        NotifyTowersAdded(middleRedTowers, Team.Red);
-        NotifyTowersAdded(bottomRedTowers, Team.Red);
     }
 
     private void NotifyBaseAdded(Base teamBase, Team team)

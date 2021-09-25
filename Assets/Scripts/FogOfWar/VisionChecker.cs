@@ -32,16 +32,29 @@ public class VisionChecker : NetworkBehaviour
         Champion.OnChampionSpawned += Champion_OnChampionSpawned;
         Champion.OnChampionDestroyed += Champion_OnChampionDestroyed;
 
-        minionManager.OnMinionAdded += MinionManager_OnMinionAdded;
-        minionManager.OnMinionRemoved += MinionManager_OnMinionRemoved;
-
         Tower.OnTowerSpawned += Tower_OnTowerSpawned;
         Tower.OnTowerDestroyed += Tower_OnTowerDestroyed;
 
-        towerManager.OnBaseAdded += TowerManager_OnBaseAdded;
+        Base.OnBaseSpawned += Base_OnBaseSpawned;
+        Base.OnBaseDestroyed += Base_OnBaseDestroyed;
+
+        minionManager.OnMinionAdded += MinionManager_OnMinionAdded;
+        minionManager.OnMinionRemoved += MinionManager_OnMinionRemoved;
 
         monsterManager.OnMonsterAdded += MonsterManager_OnMonsterAdded;
         monsterManager.OnMonsterRemoved += MonsterManager_OnMonsterRemoved;
+    }
+
+    private void Base_OnBaseDestroyed(Base teamBase)
+    {
+        VisionEntity visionEntity = teamBase.GetComponent<VisionEntity>();
+        RemoveVisionEntity(visionEntity, teamBase.GetTeam());
+    }
+
+    private void Base_OnBaseSpawned(Base teamBase)
+    {
+        VisionEntity visionEntity = teamBase.GetComponent<VisionEntity>();
+        AddVisionEntity(visionEntity, teamBase.GetTeam());
     }
 
     public override void OnStartClient()
@@ -85,24 +98,6 @@ public class VisionChecker : NetworkBehaviour
         Debug.Log("OnMonsterAdded");
         VisionEntity visionEntity = monster.GetComponent<VisionEntity>();
         AddVisionEntity(visionEntity, monster.GetTeam());
-    }
-
-    private void TowerManager_OnBaseAdded(Base teamBase)
-    {
-        VisionEntity visionEntity = teamBase.GetComponent<VisionEntity>();
-        AddVisionEntity(visionEntity, teamBase.GetTeam());
-    }
-
-    private void PlayerManager_OnChampionRemoved(Champion champion)
-    {
-        VisionEntity visionEntity = champion.GetComponent<VisionEntity>();
-        RemoveVisionEntity(visionEntity, champion.GetTeam());
-    }
-
-    private void PlayerManager_OnChampionAdded(Champion champion)
-    {
-        VisionEntity visionEntity = champion.GetComponent<VisionEntity>();
-        AddVisionEntity(visionEntity, champion.GetTeam());
     }
 
     private void MinionManager_OnMinionAdded(Minion minion)
