@@ -14,7 +14,24 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
     [SerializeField] GameObject minimapIconPrefab = null;
     [SerializeField] Health health = null;
 
-    public event System.Action<Champion> OnChampionDead;
+
+    public static event System.Action<Champion> OnChampionSpawned;
+    public static event System.Action<Champion> OnChampionDestroyed;
+    public static event System.Action<Champion> OnChampionDead;
+
+    #region Client
+
+    public override void OnStartClient()
+    {
+        OnChampionSpawned?.Invoke(this);
+    }
+
+    public override void OnStopClient()
+    {
+        OnChampionDestroyed?.Invoke(this);
+    }
+
+    #endregion
 
     #region Server
     [Server]
@@ -23,9 +40,9 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
         health.ServerRevive();
     }
 
-
     #endregion
-
+    
+    
     // Both
     private void Start()
     {
@@ -72,7 +89,7 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
         return team;
     }
 
-    public void SetTeam(Team team)
+    public void ServerSetTeam(Team team)
     {
         this.team = team;
         gameObject.tag = team.ToString();

@@ -9,6 +9,7 @@ public class MinimapDefaultIcon : MinimapIcon
     [SerializeField] Image teamRepresentImage = null;
     [SerializeField] Sprite redTeamSprite = null;
     [SerializeField] Sprite blueTeamSprite = null;
+    [SerializeField] Sprite noneTeamSprite = null;
     [SerializeField] bool isVisible;
 
     public override void SetTeam(Team team)
@@ -21,6 +22,10 @@ public class MinimapDefaultIcon : MinimapIcon
 
             case Team.Blue:
                 teamRepresentImage.sprite = blueTeamSprite;
+                break;
+
+            case Team.None:
+                teamRepresentImage.sprite = noneTeamSprite;
                 break;
         }
     }

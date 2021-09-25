@@ -78,6 +78,9 @@ public class Minimap : MonoBehaviour
             case "Building":
                 return towerIconLayer;
 
+            case "Monster":
+                return defaultIconLayer;
+
             default:
                 return defaultIconLayer;
         }
@@ -106,8 +109,15 @@ public class Minimap : MonoBehaviour
     {
         foreach (VisionEntity visionEntity in visibilityChecker.GetAll())
         {
-            minimapIconInstances[visionEntity.transform].SetVisible(visionEntity.GetVisible());
-            UpdatePosition(visionEntity.transform, minimapIconInstances[visionEntity.transform].transform);
+            if (minimapIconInstances.ContainsKey(visionEntity.transform))
+            {
+                minimapIconInstances[visionEntity.transform].SetVisible(visionEntity.GetVisible());
+                UpdatePosition(visionEntity.transform, minimapIconInstances[visionEntity.transform].transform);
+            }
+            else
+            {
+                Debug.LogError(visionEntity.name + "Not Found");
+            }
         }
 
         UpdatePosition(cameraController.GetLookAtPoint(), cameraRect.transform);

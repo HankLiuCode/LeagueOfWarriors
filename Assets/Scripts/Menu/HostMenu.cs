@@ -2,29 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Mirror;
+using System;
 
 public class HostMenu : MonoBehaviour
 {
-    [SerializeField] private GameObject joinLobbyPanel;
-    [SerializeField] private TextMeshProUGUI textMesh;
+    [SerializeField] TMP_InputField playerName = null;
+
     public void HostLobby()
     {
-        DotaNetworkRoomManager.singleton.StartHost();
+        //DotaNetworkManager.OnClientConnected += DotaNetworkManager_OnClientConnected;
+        DotaNetworkManager.singleton.StartHost();
     }
 
-    public void ShowJoinLobbyPanel()
+    private void DotaNetworkManager_OnClientConnected(NetworkConnection conn)
     {
-        joinLobbyPanel.gameObject.SetActive(true);
-    }
-
-    public void HideJoinLobbyPanel()
-    {
-        joinLobbyPanel.gameObject.SetActive(false);
-    }
-
-    public void JoinLobby()
-    {
-        DotaNetworkRoomManager.singleton.networkAddress = textMesh.text;
-        DotaNetworkRoomManager.singleton.StartClient();
+        string playerStr = playerName.text;
+        conn.Send(new ClientConnectMessage { playerName = playerStr });
     }
 }

@@ -28,6 +28,8 @@ namespace Dota.Controls
                 {
                     GameObject go = hit.collider.gameObject;
 
+                    Debug.Log(go.name);
+
                     if (fighter.IsAttackable(go))
                     {
                         if (go == gameObject) { return; }

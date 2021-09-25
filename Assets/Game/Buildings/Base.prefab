@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -2370677061696525167}
   - component: {fileID: 2211041439223768276}
   - component: {fileID: -7164417189995110478}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -115,7 +115,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   renderers: []
+  viewRadius: 15
   isAlwaysVisible: 1
+  grassLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  currentBush: {fileID: 0}
 --- !u!114 &-2370677061696525167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,3 +168,4 @@ MonoBehaviour:
   syncInterval: 0.1
   allowAttackRadius: 2.5
   health: {fileID: 6131693119581513629}
+  aimPoint: {fileID: 0}

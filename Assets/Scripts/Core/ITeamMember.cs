@@ -5,5 +5,5 @@ using UnityEngine;
 public interface ITeamMember
 {
     public Team GetTeam();
-    public void SetTeam(Team team);
+    public void ServerSetTeam(Team team);
 }

@@ -49,7 +49,7 @@ MonoBehaviour:
   actionLocker: {fileID: 2654738810189758476}
   attackLayer:
     serializedVersion: 2
-    m_Bits: 6144
+    m_Bits: 38912
   maxRange: 6
   baseDamage: 10
   damageRadius: 2
@@ -211,7 +211,7 @@ MonoBehaviour:
   actionLocker: {fileID: 2654738810189758476}
   attackLayer:
     serializedVersion: 2
-    m_Bits: 6144
+    m_Bits: 38912
   baseDamage: 20
   length: 5
   width: 1
@@ -269,7 +269,7 @@ MonoBehaviour:
   health: {fileID: 1187138297185360588}
   clickableLayer:
     serializedVersion: 2
-    m_Bits: 6400
+    m_Bits: 47360
 --- !u!114 &2928662850204982764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -569,7 +569,7 @@ PrefabInstance:
     - target: {fileID: -7159978106751353337, guid: b31cb8edadf36634680f82045f41209b,
         type: 3}
       propertyPath: baseStats.magicDamage
-      value: 10
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: -7159978106751353337, guid: b31cb8edadf36634680f82045f41209b,
         type: 3}

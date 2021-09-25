@@ -54,8 +54,7 @@ public class CreatMonster : MonoBehaviour
 
         //生成的怪物取得該重生點資訊
         MonsterAI monst = obj.GetComponent<MonsterAI>();
-        monst.RebirthPrefab = this.gameObject;
-
+        //monst.RebirthPrefab = this.gameObject;
     }
 
 }

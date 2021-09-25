@@ -10,6 +10,23 @@ public class Base : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
 
     [SerializeField] GameObject minimapIconPrefab = null;
 
+    public static event System.Action<Base> OnBaseSpawned;
+    public static event System.Action<Base> OnBaseDestroyed;
+
+    #region Client
+
+    public override void OnStartClient()
+    {
+        OnBaseSpawned?.Invoke(this);
+    }
+
+    public override void OnStopClient()
+    {
+        OnBaseDestroyed?.Invoke(this);
+    }
+
+    #endregion
+
     public Sprite GetIcon()
     {
         return baseIcon;
@@ -34,7 +51,7 @@ public class Base : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
         return team;
     }
 
-    public void SetTeam(Team team)
+    public void ServerSetTeam(Team team)
     {
         this.team = team;
     }

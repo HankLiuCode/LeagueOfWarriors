@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Dota.Attributes;
+using Mirror;
+using Dota.Networking;
 
 public class FloatingBarManager : MonoBehaviour
 {
-    // Need this for localPlayer Indentification
-    [SerializeField] PlayerManager playerManager = null;
+    [SerializeField] Team localPlayerTeam;
     [SerializeField] VisionChecker visibilityChecker = null;
 
     [SerializeField] Transform floatingBarParent = null;
@@ -20,6 +21,11 @@ public class FloatingBarManager : MonoBehaviour
         visibilityChecker.OnVisionEntityRemoved += VisibilityChecker_OnVisionEntityRemoved;
         visibilityChecker.OnVisionEntityEnter += VisibilityChecker_OnVisionEntityEnter;
         visibilityChecker.OnVisionEntityExit += VisibilityChecker_OnVisionEntityExit;
+    }
+
+    private void Start()
+    {
+        localPlayerTeam = NetworkClient.localPlayer.GetComponent<DotaRoomPlayer>().GetTeam();
     }
 
     private void VisibilityChecker_OnVisionEntityExit(VisionEntity obj)
@@ -58,8 +64,6 @@ public class FloatingBarManager : MonoBehaviour
 
     private void VisibilityChecker_OnVisionEntityAdded(VisionEntity visionEntity)
     {
-        Team localPlayerTeam = playerManager.GetLocalChampion().GetTeam();
-
         Health health = visionEntity.GetComponent<Health>();
 
         Mana mana = visionEntity.GetComponent<Mana>();
@@ -75,7 +79,7 @@ public class FloatingBarManager : MonoBehaviour
         FloatingBar floatingBarInstance = Instantiate(floatingBarPrefab, floatingBarParent).GetComponent<FloatingBar>();
 
         floatingBarInstance.Setup(health, mana, localPlayerTeam, teamMember.GetTeam(), Vector3.up * health.GetDisplayOffset());
-        
+
         floatingBars.Add(health, floatingBarInstance);
     }
 }

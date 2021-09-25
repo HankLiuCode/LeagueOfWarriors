@@ -22,9 +22,9 @@ TagManager:
   - VisionBlocker
   - Champion
   - Minion
-  - Clickable
-  - 
-  - 
+  - Building
+  - DetectChampion
+  - Monster
   - 
   - 
   - 

@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: -4896049819520709566}
   - component: {fileID: 151699965358344611}
   - component: {fileID: 6882124140416566410}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Tower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,7 +118,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   renderers: []
+  viewRadius: 15
   isAlwaysVisible: 1
+  grassLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  currentBush: {fileID: 0}
 --- !u!65 &4284419294965936292
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -147,6 +152,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   team: 0
+  visionEntity: {fileID: 0}
   minimapIconPrefab: {fileID: 1343747072031780302, guid: 0fd8a0bfd292f2a408167f66759f7eed,
     type: 3}
   health: {fileID: 6355302794267498092}

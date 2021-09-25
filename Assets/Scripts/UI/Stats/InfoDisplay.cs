@@ -10,6 +10,8 @@ public class InfoDisplay : MonoBehaviour
     [SerializeField] ManaDisplay manaDisplay = null;
     [SerializeField] StatsDisplay statsDisplay = null;
 
+    [SerializeField] LayerMask displayLayer;
+
     public void SetInfo(StatStore stats)
     {
         IIconOwner iconOwner = stats.GetComponent<IIconOwner>();
@@ -34,21 +36,23 @@ public class InfoDisplay : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (Physics.Raycast(CameraController.GetMouseRay(), out RaycastHit hit, Mathf.Infinity))
+            bool showInfo = false;
+            if (Physics.Raycast(CameraController.GetMouseRay(), out RaycastHit hit, Mathf.Infinity, displayLayer))
             {
                 GameObject go = hit.collider.gameObject;
                 StatStore stats = go.GetComponent<StatStore>();
 
                 if (stats != null)
                 {
-                    infoPanel.SetActive(true);
+                    showInfo = true;
                     SetInfo(stats);
                 }
                 else
                 {
-                    infoPanel.SetActive(false);
+                    showInfo = false;
                 }
             }
+            infoPanel.SetActive(showInfo);
         }
     }
 }

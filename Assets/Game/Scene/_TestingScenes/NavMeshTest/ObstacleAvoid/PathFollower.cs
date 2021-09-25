@@ -13,6 +13,9 @@ public class PathFollower : MonoBehaviour
     [SerializeField] ObstacleAvoider obstacleAvoider = null;
     public const float ARRIVE_EPSILON = 0.1f;
 
+    private Quaternion targetRotation;
+    float turnSpeed = 0.1f;
+
     public bool ReachedDestination { get { return reachedDest; } }
 
 
@@ -47,6 +50,10 @@ public class PathFollower : MonoBehaviour
             }
         }
 
+        //targetRotation = Quaternion.LookRotation(wayPoints[nextIndex] - transform.position, Vector3.up);
+        //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed);
+
+        //navMeshAgent.Move(transform.forward * speed * Time.deltaTime);
 
         Vector3 direction = VectorConvert.XZDirection(transform.position, wayPoints[nextIndex]);
         transform.forward = direction;

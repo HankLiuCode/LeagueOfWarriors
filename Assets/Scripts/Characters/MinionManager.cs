@@ -12,7 +12,6 @@ public enum Lane
     Middle,
     Bottom
 }
-
 public class MinionManager : NetworkBehaviour
 {
     [SerializeField] GameObject blueMinionPrefab;
@@ -93,14 +92,14 @@ public class MinionManager : NetworkBehaviour
                 {
                     case Team.Red:
                         SpawnMinion(Team.Red, redStartPositions[1].position, buildingManager.GetTowers(Team.Blue, Lane.Middle), buildingManager.GetBase(Team.Blue), Lane.Middle); // Mid
-                        //SpawnMinion(Team.Red, redStartPositions[0].position, buildingManager.GetTowers(Team.Blue, Lane.Top), buildingManager.GetBase(Team.Blue), Lane.Top);    // Top
-                        //SpawnMinion(Team.Red, redStartPositions[2].position, buildingManager.GetTowers(Team.Blue, Lane.Bottom), buildingManager.GetBase(Team.Blue), Lane.Bottom); // Bottom
+                        SpawnMinion(Team.Red, redStartPositions[0].position, buildingManager.GetTowers(Team.Blue, Lane.Top), buildingManager.GetBase(Team.Blue), Lane.Top);    // Top
+                        SpawnMinion(Team.Red, redStartPositions[2].position, buildingManager.GetTowers(Team.Blue, Lane.Bottom), buildingManager.GetBase(Team.Blue), Lane.Bottom); // Bottom
                         break;
 
                     case Team.Blue:
                         SpawnMinion(Team.Blue, blueStartPositions[1].position, buildingManager.GetTowers(Team.Red, Lane.Middle), buildingManager.GetBase(Team.Red), Lane.Middle); // Mid
-                        //SpawnMinion(Team.Blue, blueStartPositions[0].position, buildingManager.GetTowers(Team.Red, Lane.Top), buildingManager.GetBase(Team.Red), Lane.Top);    // Top
-                        //SpawnMinion(Team.Blue, blueStartPositions[2].position, buildingManager.GetTowers(Team.Red, Lane.Bottom), buildingManager.GetBase(Team.Red), Lane.Bottom); // Bottom
+                        SpawnMinion(Team.Blue, blueStartPositions[0].position, buildingManager.GetTowers(Team.Red, Lane.Top), buildingManager.GetBase(Team.Red), Lane.Top);    // Top
+                        SpawnMinion(Team.Blue, blueStartPositions[2].position, buildingManager.GetTowers(Team.Red, Lane.Bottom), buildingManager.GetBase(Team.Red), Lane.Bottom); // Bottom
                         break;
                 }
 
@@ -124,7 +123,7 @@ public class MinionManager : NetworkBehaviour
 
         health.OnHealthDead += Health_OnHealthDead;
 
-        minion.SetTeam(team);
+        minion.ServerSetTeam(team);
 
         minion.SetTowers(towers, targetBase);
 

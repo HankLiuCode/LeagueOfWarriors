@@ -5,13 +5,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VisionChecker : MonoBehaviour
+public class VisionChecker : NetworkBehaviour
 {
     [SerializeField] Team localPlayerTeam;
 
     [SerializeField] MinionManager minionManager = null;
-    [SerializeField] PlayerManager playerManager = null;
     [SerializeField] BuildingManager towerManager = null;
+    [SerializeField] MonsterManager monsterManager = null;
     [SerializeField] float visionCheckHeight = 0.5f;
 
     [SerializeField] List<VisionEntity> allies = new List<VisionEntity>();
@@ -25,62 +25,79 @@ public class VisionChecker : MonoBehaviour
     public event Action<VisionEntity> OnVisionEntityAdded;
     public event Action<VisionEntity> OnVisionEntityRemoved;
 
+
+    // Don't forget to unsubscribe
     private void Awake()
     {
-        playerManager.OnLocalChampionReady += PlayerManager_OnLocalChampionReady;
+        Champion.OnChampionSpawned += Champion_OnChampionSpawned;
+        Champion.OnChampionDestroyed += Champion_OnChampionDestroyed;
 
-        playerManager.OnChampionAdded += PlayerManager_OnChampionAdded;
-        playerManager.OnChampionRemoved += PlayerManager_OnChampionRemoved;
+        Tower.OnTowerSpawned += Tower_OnTowerSpawned;
+        Tower.OnTowerDestroyed += Tower_OnTowerDestroyed;
+
+        Base.OnBaseSpawned += Base_OnBaseSpawned;
+        Base.OnBaseDestroyed += Base_OnBaseDestroyed;
 
         minionManager.OnMinionAdded += MinionManager_OnMinionAdded;
         minionManager.OnMinionRemoved += MinionManager_OnMinionRemoved;
 
-        towerManager.OnTowerAdded += TowerManager_OnTowerAdded;
-        towerManager.OnTowerRemoved += TowerManager_OnTowerRemoved;
-
-        towerManager.OnBaseAdded += TowerManager_OnBaseAdded;
+        monsterManager.OnMonsterAdded += MonsterManager_OnMonsterAdded;
+        monsterManager.OnMonsterRemoved += MonsterManager_OnMonsterRemoved;
     }
 
-    private void TowerManager_OnBaseAdded(Base teamBase)
+    private void Base_OnBaseDestroyed(Base teamBase)
+    {
+        VisionEntity visionEntity = teamBase.GetComponent<VisionEntity>();
+        RemoveVisionEntity(visionEntity, teamBase.GetTeam());
+    }
+
+    private void Base_OnBaseSpawned(Base teamBase)
     {
         VisionEntity visionEntity = teamBase.GetComponent<VisionEntity>();
         AddVisionEntity(visionEntity, teamBase.GetTeam());
     }
 
-    private void TowerManager_OnTowerRemoved(Tower tower)
+    public override void OnStartClient()
+    {
+        localPlayerTeam = NetworkClient.localPlayer.GetComponent<DotaRoomPlayer>().GetTeam();
+    }
+
+    private void Tower_OnTowerDestroyed(Tower tower)
     {
         VisionEntity visionEntity = tower.GetComponent<VisionEntity>();
         RemoveVisionEntity(visionEntity, tower.GetTeam());
     }
 
-    private void TowerManager_OnTowerAdded(Tower tower)
+    private void Tower_OnTowerSpawned(Tower tower)
     {
         VisionEntity visionEntity = tower.GetComponent<VisionEntity>();
         AddVisionEntity(visionEntity, tower.GetTeam());
     }
 
-    private void PlayerManager_OnLocalChampionReady()
-    {
-        Champion localPlayer = playerManager.GetLocalChampion();
-        localPlayerTeam = localPlayer.GetTeam();
-        SyncList<Champion> players = playerManager.GetChampions();
-
-        foreach (Champion player in players)
-        {
-            AddVisionEntity(player.GetComponent<VisionEntity>(), player.GetTeam());
-        }
-    }
-
-    private void PlayerManager_OnChampionRemoved(Champion champion)
+    private void Champion_OnChampionDestroyed(Champion champion)
     {
         VisionEntity visionEntity = champion.GetComponent<VisionEntity>();
         RemoveVisionEntity(visionEntity, champion.GetTeam());
     }
 
-    private void PlayerManager_OnChampionAdded(Champion champion)
+    private void Champion_OnChampionSpawned(Champion champion)
     {
         VisionEntity visionEntity = champion.GetComponent<VisionEntity>();
         AddVisionEntity(visionEntity, champion.GetTeam());
+    }
+
+    private void MonsterManager_OnMonsterRemoved(Monster monster)
+    {
+        Debug.Log("OnMonsterRemoved");
+        VisionEntity visionEntity = monster.GetComponent<VisionEntity>();
+        RemoveVisionEntity(visionEntity, monster.GetTeam());
+    }
+
+    private void MonsterManager_OnMonsterAdded(Monster monster)
+    {
+        Debug.Log("OnMonsterAdded");
+        VisionEntity visionEntity = monster.GetComponent<VisionEntity>();
+        AddVisionEntity(visionEntity, monster.GetTeam());
     }
 
     private void MinionManager_OnMinionAdded(Minion minion)
@@ -152,6 +169,11 @@ public class VisionChecker : MonoBehaviour
         {
             ally.SetVisible(true);
         }
+    }
+
+    private void OnDestroy()
+    {
+        
     }
 
     private void UpdateVisibleEnemy()
