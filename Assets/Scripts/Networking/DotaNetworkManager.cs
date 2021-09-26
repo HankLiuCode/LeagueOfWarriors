@@ -16,12 +16,13 @@ public class DotaNetworkManager : NetworkManager
 
     public static event System.Action<string> ClientOnAllClientSceneLoaded;
     public static event System.Action<string> ServerOnAllClientSceneLoaded;
+    public static event System.Action<DotaRoomPlayer> ServerOnClientDisconnect;
 
     public override void Awake()
     {
         base.Awake();
-        DotaRoomPlayer.OnPlayerConnected += DotaRoomPlayer_OnPlayerConnected;
-        DotaRoomPlayer.OnPlayerDisconnected += DotaRoomPlayer_OnPlayerDisconnected;
+        DotaRoomPlayer.ClientOnPlayerConnected += DotaRoomPlayer_OnPlayerConnected;
+        DotaRoomPlayer.ClientOnPlayerDisconnected += DotaRoomPlayer_OnPlayerDisconnected;
     }
 
     #region Client
@@ -33,8 +34,8 @@ public class DotaNetworkManager : NetworkManager
 
     public override void OnStopClient()
     {
-        DotaRoomPlayer.OnPlayerConnected -= DotaRoomPlayer_OnPlayerConnected;
-        DotaRoomPlayer.OnPlayerDisconnected -= DotaRoomPlayer_OnPlayerDisconnected;
+        DotaRoomPlayer.ClientOnPlayerConnected -= DotaRoomPlayer_OnPlayerConnected;
+        DotaRoomPlayer.ClientOnPlayerDisconnected -= DotaRoomPlayer_OnPlayerDisconnected;
     }
 
     public List<DotaRoomPlayer> GetClientPlayers()
@@ -79,8 +80,29 @@ public class DotaNetworkManager : NetworkManager
     public override void OnStopServer()
     {
         DotaRoomPlayer.OnPlayerConnectionModified -= DotaRoomPlayer_OnPlayerConnectionModified;
-        DotaRoomPlayer.OnPlayerConnected -= DotaRoomPlayer_OnPlayerConnected;
-        DotaRoomPlayer.OnPlayerDisconnected -= DotaRoomPlayer_OnPlayerDisconnected;
+        DotaRoomPlayer.ClientOnPlayerConnected -= DotaRoomPlayer_OnPlayerConnected;
+        DotaRoomPlayer.ClientOnPlayerDisconnected -= DotaRoomPlayer_OnPlayerDisconnected;
+    }
+
+    public override void OnServerDisconnect(NetworkConnection conn)
+    {
+        List<DotaRoomPlayer> toRemove = new List<DotaRoomPlayer>();
+        foreach(DotaRoomPlayer player in serverPlayers)
+        {
+            if(player.connectionToClient == conn)
+            {
+                toRemove.Add(player);
+            }
+        }
+
+        foreach(DotaRoomPlayer player in toRemove)
+        {
+            serverPlayers.Remove(player);
+            ServerOnClientDisconnect?.Invoke(player);
+            Debug.Log("Player Disconnect: " + conn);
+        }
+
+        base.OnServerDisconnect(conn);
     }
 
     public override void OnServerAddPlayer(NetworkConnection conn)

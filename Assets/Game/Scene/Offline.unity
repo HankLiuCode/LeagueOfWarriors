@@ -2808,8 +2808,6 @@ MonoBehaviour:
   - {fileID: 2136612336401763621, guid: 840b9e1749073a44fa678a357e63d622, type: 3}
   - {fileID: 7449486549517724255, guid: 39273ae671b38d5429ffc87492fe8995, type: 3}
   - {fileID: 2726156333138317243, guid: fc7f15d385167fb4da78c58e3435cb54, type: 3}
-  - {fileID: 115730, guid: 0a73296bdf0db3a4ebcc1d70cf756dce, type: 3}
-  - {fileID: 195142, guid: f2e388aa3b923c841b408eb1e5dd22c4, type: 3}
   - {fileID: 3171829230800741641, guid: 1071c91a612857a44b822507620ac825, type: 3}
   - {fileID: 3860925666066704547, guid: e48fba4a6ae747c49aa92ac15d65fb20, type: 3}
   - {fileID: 1713897388442340064, guid: dbf5c8e28d5a06a43b51dfa1cdcf5b1b, type: 3}
@@ -2818,7 +2816,12 @@ MonoBehaviour:
   - {fileID: 2394137765132811957, guid: e6d5a21c501f06b4d8765f0eb0f8e3fd, type: 3}
   - {fileID: 2856393900053598539, guid: da4d07239e278344392d2070457cfb7e, type: 3}
   - {fileID: 4782127842387989451, guid: fdf584ccc23e3a04fbf7d0732c5d8006, type: 3}
+  - {fileID: 100002, guid: e7f1d122947740542b477ccc0b41d880, type: 3}
+  - {fileID: 1210069404974878, guid: f9d5b69e96abfb2499f3e5babf223986, type: 3}
+  - {fileID: 100000, guid: 1ccc170aa4bae6a47ae1827131a363ae, type: 3}
+  - {fileID: 6097260162213657970, guid: 0d9b3c6c410c8df409d36096904da2a5, type: 3}
   gameScene: Assets/Game/Scene/Game.unity
+  serverPlayers: []
   clientPlayers: []
 --- !u!114 &921599512
 MonoBehaviour:

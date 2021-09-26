@@ -1,3 +1,4 @@
+using Dota.Attributes;
 using Mirror;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,20 +10,43 @@ public class Base : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
     [SerializeField] Sprite baseIcon = null;
 
     [SerializeField] GameObject minimapIconPrefab = null;
+    [SerializeField] Health health = null;
 
     public static event System.Action<Base> OnBaseSpawned;
     public static event System.Action<Base> OnBaseDestroyed;
+
+    public static event System.Action<Base> ServerOnBaseDead;
+    public static event System.Action<Base> ClientOnBaseDead;
 
     #region Client
 
     public override void OnStartClient()
     {
         OnBaseSpawned?.Invoke(this);
+        health.ClientOnHealthDead += Health_ClientOnHealthDead;
+    }
+
+    private void Health_ClientOnHealthDead(Health health)
+    {
+        ClientOnBaseDead?.Invoke(this);
     }
 
     public override void OnStopClient()
     {
         OnBaseDestroyed?.Invoke(this);
+    }
+
+    #endregion
+
+    #region Server
+    public override void OnStartServer()
+    {
+        health.ServerOnHealthDead += Health_ServerOnHealthDead;
+    }
+
+    private void Health_ServerOnHealthDead(Health obj)
+    {
+        ServerOnBaseDead?.Invoke(this);
     }
 
     #endregion

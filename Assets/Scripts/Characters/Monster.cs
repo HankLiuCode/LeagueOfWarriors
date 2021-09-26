@@ -6,9 +6,9 @@ using Mirror;
 
 public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
 {
-    CombatTarget target;          //獲取玩家單位
+    CombatTarget target;
 
-    [SerializeField] Animator animator = null;          //自身動畫
+    [SerializeField] Animator animator = null;
     [SerializeField] NetworkAnimator netAnimator = null;
     [SerializeField] AnimationEventHandler animationEventHandler = null;
     [SerializeField] Health health = null;
@@ -16,46 +16,48 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
     [SerializeField] MinimapDefaultIcon minimapIconPrefab = null;
     [SerializeField] Sprite icon = null;
 
-    private Vector3 initialPosition;            //初始位置
+    private Vector3 initialPosition;            
     private Quaternion initalRotation;
 
-    [SerializeField] float defendRadius = 3f;          //自衛半徑，玩家進入後怪物會追擊玩家，當距離<攻擊距離則會發動攻擊
-    [SerializeField] float chaseRadius = 4f;            //追擊半徑，當怪物超出追擊半徑後會放棄追擊，返回追擊起始位置
+    [SerializeField] float defendRadius = 3f;          
+    [SerializeField] float chaseRadius = 4f;            
 
-    [SerializeField] float attackRange = 2f;            //攻擊距離
-    [SerializeField] float runSpeed = 5f;          //跑動速度
-    [SerializeField] float turnSpeed = 0.1f;         //轉身速度，建議0.1
+    [SerializeField] float attackRange = 2f;            
+    [SerializeField] float runSpeed = 5f;          
+    [SerializeField] float turnSpeed = 0.1f;
+    [SerializeField] float destroyTime = 3f;
 
     private enum MonsterState
     {
-        IDLE,        //原地待機
-        RELAX,       //原地觀察
-        CHASE,       //追擊狀態
-        RETURN,      //超出追擊範圍後返回
-        ATTACK,      //攻擊狀態
-        DEAD,        //死亡狀態
+        IDLE,
+        RELAX,
+        CHASE,      
+        RETURN,      
+        ATTACK,      
+        DEAD,       
     }
-    private MonsterState currentState = MonsterState.IDLE;          //默認狀態為原地待機
+    private MonsterState currentState = MonsterState.IDLE;          
 
-    [SerializeField] float[] actionWeight = { 5000, 5000 };         //設置待機時各種動作的權重，順序依次為待機、觀察
-    [SerializeField] float actRestTme = 1f;            //更換待機指令的間隔時間
-    [SerializeField] float lastActTime;          //最近一次指令時間
+    [SerializeField] float[] actionWeight = { 5000, 5000 };         
+    [SerializeField] float actRestTme = 1f;         
+    [SerializeField] float lastActTime;        
 
-    [SerializeField] private float distanceToPlayer = Mathf.Infinity;    //怪物與玩家的距離
-    private float distanceToInitial;         //怪物與初始位置的距離
-    private Quaternion targetRotation;         //怪物的目標朝向
-
+    [SerializeField] private float distanceToPlayer = Mathf.Infinity; 
+    private float distanceToInitial;        
+    private Quaternion targetRotation;       
     private bool is_Running = false;
 
+    public static event System.Action<Monster> ServerOnMonsterDead;
+    public static event System.Action<Monster> ClientOnMonsterDead;
+    public static event System.Action<Monster> OnMonsterSpawned;
+    public static event System.Action<Monster> OnMonsterDestroyed;
 
+    #region Server
     public override void OnStartServer()
     {
-        //playerUnit = GameObject.FindGameObjectWithTag("Player");
-        //thisAnimator = GetComponent<Animator>();
+        health.ServerOnHealthDead += Health_ServerOnHealthDead;
         animationEventHandler.OnAttackPoint += AnimationEventHandler_OnAttackPoint;
-        animationEventHandler.OnDeathEnd += AnimationEventHandler_OnDeathEnd;
 
-        //保存初始位置信息
         initialPosition = transform.position;
         initalRotation = transform.rotation;
 
@@ -64,6 +66,18 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
 
         //隨機一個待機動作
         RandomAction();
+    }
+
+    private void Health_ServerOnHealthDead(Health obj)
+    {
+        StartCoroutine(DestroyAfter(destroyTime));
+        ServerOnMonsterDead?.Invoke(this);
+    }
+
+    IEnumerator DestroyAfter(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        NetworkServer.Destroy(gameObject);
     }
 
     /// <summary>
@@ -93,10 +107,10 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
     [ServerCallback]
     private void OnTriggerStay(Collider other)
     {
-        if(target != null) { return; }
+        if (target != null) { return; }
 
         CombatTarget combatTarget = other.GetComponent<CombatTarget>();
-        if(health != null)
+        if (health != null)
         {
             target = combatTarget;
         }
@@ -108,7 +122,7 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
         Health health = other.GetComponent<Health>();
         if (health != null)
         {
-            if(target != null && other.gameObject == target.gameObject)
+            if (target != null && other.gameObject == target.gameObject)
             {
                 target = null;
             }
@@ -273,20 +287,12 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
         }
     }
 
-
     // Animation Event
     [Server]
     private void AnimationEventHandler_OnAttackPoint()
     {
         target.GetHealth().ServerTakeDamage(statStore.GetStats().attackDamage);
     }
-
-    [Server]
-    private void AnimationEventHandler_OnDeathEnd()
-    {
-        Destroy(gameObject);
-    }
-
 
     /// <summary>
     /// 攻擊狀態檢測
@@ -323,6 +329,29 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
             currentState = MonsterState.RETURN;         //返回出生位置
         }
     }
+
+    #endregion
+
+
+    #region Client
+
+    public override void OnStartClient()
+    {
+        OnMonsterSpawned?.Invoke(this);
+        health.ClientOnHealthDead += Health_ClientOnHealthDead;
+    }
+
+    private void Health_ClientOnHealthDead(Health obj)
+    {
+        ClientOnMonsterDead?.Invoke(this);
+    }
+
+    public override void OnStopClient()
+    {
+        OnMonsterDestroyed?.Invoke(this);
+    }
+
+    #endregion
 
     public Sprite GetIcon()
     {

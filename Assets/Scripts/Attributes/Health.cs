@@ -15,13 +15,19 @@ namespace Dota.Attributes
         [SerializeField] Animator animator = null;
         [SerializeField] StatStore stats = null;
         [SerializeField] Collider healthCollider = null;
+
         [SerializeField] AnimationEventHandler animationEventHandler = null;
+
         [SerializeField] float healthDisplayOffset = 3f;
+
+        public event System.Action ClientOnHealthModified;
+        public event System.Action<Health> ClientOnHealthDead;
+        public event System.Action ClientOnHealthDeadEnd;
+
+        public event System.Action ServerOnHealthModified;
+        public event System.Action<Health> ServerOnHealthDead;
+        public event System.Action ServerOnHealthDeadEnd;
         
-        public event System.Action OnHealthRevive;
-        public event System.Action OnHealthModified;
-        public event System.Action<Health> OnHealthDead;
-        public event System.Action OnHealthDeadEnd;
 
         public override void OnStartClient()
         {
@@ -63,20 +69,8 @@ namespace Dota.Attributes
             if (healthPoint == 0 && !isDead)
             {
                 RpcNotifyHealthDead();
-                OnHealthDead?.Invoke(this);
+                ServerOnHealthDead?.Invoke(this);
                 isDead = true;
-            }
-        }
-
-        [Server]
-        public void ServerRevive()
-        {
-            if (isDead)
-            {
-                isDead = false;
-                ServerHeal(GetMaxHealth());
-                RpcNotifyHealthRevive();
-                OnHealthRevive?.Invoke();
             }
         }
 
@@ -102,7 +96,7 @@ namespace Dota.Attributes
 
         private void OnHealthChanged(float oldValue, float newValue)
         {
-            OnHealthModified?.Invoke();
+            ClientOnHealthModified?.Invoke();
         }
         #endregion
 
@@ -111,27 +105,16 @@ namespace Dota.Attributes
         [ClientRpc]
         private void RpcNotifyHealthDead()
         {
-            Debug.Log("NotifyHealthDead");
-            animator.ResetTrigger("revive");
             animator.SetTrigger("die");
             healthCollider.enabled = false;
-            OnHealthDead?.Invoke(this);
-        }
-
-        [ClientRpc]
-        private void RpcNotifyHealthRevive()
-        {
-            Debug.Log("NotifyHealthRevive");
-            animator.SetTrigger("revive");
-            healthCollider.enabled = true;
-            OnHealthRevive?.Invoke();
+            ClientOnHealthDead?.Invoke(this);
         }
         
         // Animation Trigger Event
         private void AnimationEventHandler_OnDeathEnd()
         {
-            // do disappear shader
-            OnHealthDeadEnd?.Invoke();
+            ClientOnHealthDeadEnd?.Invoke();
+            ServerOnHealthDeadEnd?.Invoke();
         }
         #endregion
     }

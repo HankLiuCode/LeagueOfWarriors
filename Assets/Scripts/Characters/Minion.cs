@@ -16,6 +16,7 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
     [SerializeField] ServerMover serverMover = null;
     [SerializeField] ServerFighter serverFighter = null;
     [SerializeField] Health health = null;
+    [SerializeField] Disolver disolver = null;
 
     [SerializeField] Sprite icon = null;
     [SerializeField] GameObject minimapIconPrefab = null;
@@ -32,21 +33,28 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
     List<Tower> towers = new List<Tower>();
     Base targetBase = null;
 
-    private void Start()
+    public static event System.Action<Minion> ClientOnMinionDead;
+    public static event System.Action<Minion> OnMinionSpawned;
+    public static event System.Action<Minion> OnMinionDestroyed;
+
+    #region Server
+
+    public override void OnStartServer()
     {
-        health.OnHealthDeadEnd += Health_OnServerHealthDeadEnd;
-        if (isServer)
-        {
-            StartCoroutine(GetTargetRoutine());
-        }
+        health.ServerOnHealthDeadEnd += Health_OnServerHealthDeadEnd;
+        StartCoroutine(GetTargetRoutine());
     }
 
     private void Health_OnServerHealthDeadEnd()
     {
-        NetworkServer.Destroy(gameObject);
+        StartCoroutine(DestroyAfter(disolver.GetDisolveDuration()));
     }
 
-    #region Server
+    IEnumerator DestroyAfter(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        NetworkServer.Destroy(gameObject);
+    }
 
     public void ServerSetTeam(Team team)
     {
@@ -166,6 +174,30 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
         }
 
         return targetBase.GetComponent<CombatTarget>();
+    }
+    #endregion
+
+    #region Client
+    public override void OnStartClient()
+    {
+        OnMinionSpawned?.Invoke(this);
+        health.ClientOnHealthDead += Health_ClientOnHealthDead;
+        health.ClientOnHealthDeadEnd += Health_ClientOnHealthDeadEnd;
+    }
+
+    private void Health_ClientOnHealthDead(Health health)
+    {
+        ClientOnMinionDead?.Invoke(this);
+    }
+
+    public override void OnStopClient()
+    {
+        OnMinionDestroyed?.Invoke(this);
+    }
+
+    private void Health_ClientOnHealthDeadEnd()
+    {
+        disolver.StartDisolve();
     }
     #endregion
 

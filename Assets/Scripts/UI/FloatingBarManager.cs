@@ -5,7 +5,7 @@ using Dota.Attributes;
 using Mirror;
 using Dota.Networking;
 
-public class FloatingBarManager : MonoBehaviour
+public class FloatingBarManager : NetworkBehaviour
 {
     [SerializeField] Team localPlayerTeam;
     [SerializeField] VisionChecker visibilityChecker = null;
@@ -17,15 +17,14 @@ public class FloatingBarManager : MonoBehaviour
 
     private void Awake()
     {
+        Team team = NetworkClient.localPlayer.GetComponent<DotaRoomPlayer>().GetTeam();
+        localPlayerTeam = team;
+
         visibilityChecker.OnVisionEntityAdded += VisibilityChecker_OnVisionEntityAdded;
         visibilityChecker.OnVisionEntityRemoved += VisibilityChecker_OnVisionEntityRemoved;
+
         visibilityChecker.OnVisionEntityEnter += VisibilityChecker_OnVisionEntityEnter;
         visibilityChecker.OnVisionEntityExit += VisibilityChecker_OnVisionEntityExit;
-    }
-
-    private void Start()
-    {
-        localPlayerTeam = NetworkClient.localPlayer.GetComponent<DotaRoomPlayer>().GetTeam();
     }
 
     private void VisibilityChecker_OnVisionEntityExit(VisionEntity obj)
@@ -46,9 +45,27 @@ public class FloatingBarManager : MonoBehaviour
         }
     }
 
-    private void VisibilityChecker_OnVisionEntityRemoved(VisionEntity obj)
+    private void VisibilityChecker_OnVisionEntityRemoved(VisionEntity visionEntity)
     {
-        Health health = obj.GetComponent<Health>();
+        if(visionEntity == null)
+        {
+            List<Health> toRemove = new List<Health>();
+            foreach(Health h in floatingBars.Keys)
+            {
+                if(h == null)
+                {
+                    toRemove.Add(h);
+                }
+            }
+
+            foreach(Health r in toRemove)
+            {
+                floatingBars.Remove(r);
+            }
+            return;
+        }
+
+        Health health = visionEntity.GetComponent<Health>();
 
         if(health == null) { return; }
 

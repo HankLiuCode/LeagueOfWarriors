@@ -7,7 +7,7 @@ public class ObstacleManager : NetworkBehaviour
 {
     public static ObstacleManager instance;
 
-    [SerializeField] MinionManager minionManager = null;
+    [SerializeField] MinionSpawner minionManager = null;
     [SerializeField] PlayerManager playerManager = null;
     [SerializeField] List<DotaObstacle> obstacles = new List<DotaObstacle>();
 
@@ -22,8 +22,8 @@ public class ObstacleManager : NetworkBehaviour
             Destroy(this);
         }
         
-        minionManager.OnMinionAdded += MinionManager_OnMinionAdded;
-        minionManager.OnMinionRemoved += MinionManager_OnMinionRemoved;
+        //minionManager.OnMinionAdded += MinionManager_OnMinionAdded;
+        //minionManager.OnMinionRemoved += MinionManager_OnMinionRemoved;
 
     }
 

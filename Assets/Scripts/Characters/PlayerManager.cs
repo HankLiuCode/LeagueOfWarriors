@@ -10,15 +10,41 @@ public class PlayerManager : NetworkBehaviour
     [SerializeField] Transform[] blueStartPositions;
     [SerializeField] Transform[] redStartPositions;
 
+    [SerializeField] List<Champion> serverChampions = new List<Champion>();
+
+    [SerializeField] float deathTime = 3f;
+
     int blueStartPositionIndex = 0;
     int redStartPositionIndex = 0;
 
     public override void OnStartServer()
     {
-        Debug.Log("PlayerManager OnStartServer");
         DotaNetworkManager.ServerOnAllClientSceneLoaded += DotaNetworkManager_ServerOnAllClientSceneLoaded;
+        DotaNetworkManager.ServerOnClientDisconnect += DotaNetworkManager_ServerOnClientDisconnect;
+        Champion.ServerOnChampionDead += Champion_ServerOnChampionDead;
     }
 
+    [Server]
+    private void DotaNetworkManager_ServerOnClientDisconnect(DotaRoomPlayer player)
+    {
+        foreach(Champion champion in serverChampions)
+        {
+            if(champion.GetOwner() == player)
+            {
+                champion.netIdentity.RemoveClientAuthority();
+                Debug.Log("Champion Authority Removed");
+            }
+        }
+    }
+
+    [Server]
+    private void Champion_ServerOnChampionDead(Champion champion)
+    {
+        serverChampions.Remove(champion);
+        StartCoroutine(SpawnChampionForPlayerAfterSeconds(champion.GetOwner(), deathTime));
+    }
+
+    [Server]
     private void DotaNetworkManager_ServerOnAllClientSceneLoaded(string scene)
     {
         List<DotaRoomPlayer> roomPlayers = ((DotaNetworkManager)NetworkManager.singleton).GetServerPlayers();
@@ -35,6 +61,13 @@ public class PlayerManager : NetworkBehaviour
     }
 
     [Server]
+    IEnumerator SpawnChampionForPlayerAfterSeconds(DotaRoomPlayer player, float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        SpawnChampionForPlayer(player);
+    }
+
+    [Server]
     public void SpawnChampionForPlayer(DotaRoomPlayer player)
     {
         Team championTeam = player.GetTeam();
@@ -45,7 +78,11 @@ public class PlayerManager : NetworkBehaviour
 
         Champion champion = championInstance.GetComponent<Champion>();
 
+        champion.ServerSetOwner(player);
+
         champion.ServerSetTeam(championTeam);
+
+        serverChampions.Add(champion);
 
         NetworkServer.Spawn(championInstance, player.connectionToClient);
     }
@@ -71,20 +108,7 @@ public class PlayerManager : NetworkBehaviour
         }
     }
 
-    [Server]
-    IEnumerator ReviveChampionAfter(Champion champion, float seconds)
-    {
-        yield return new WaitForSeconds(seconds);
-
-        Vector3 spawnPos = GetSpawnPosition(champion.GetTeam());
-
-        RpcTeleportChampionToSpawnPos(champion, spawnPos);
-
-        champion.ServerRevive();
-    }
-
     #region Client
-
     [ClientRpc]
     private void RpcTeleportChampionToSpawnPos(Champion champion, Vector3 spawnPos)
     {

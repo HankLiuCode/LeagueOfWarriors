@@ -139,6 +139,7 @@ MonoBehaviour:
   baseIcon: {fileID: 0}
   minimapIconPrefab: {fileID: 3278981384245904717, guid: bd3b2826c6b031342a0e9223ad2c5204,
     type: 3}
+  health: {fileID: 6131693119581513629}
 --- !u!65 &2211041439223768276
 BoxCollider:
   m_ObjectHideFlags: 0

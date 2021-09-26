@@ -5,10 +5,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner, IVisionEntityOwner
+public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner
 {
     [SerializeField] Team team;
-    [SerializeField] VisionEntity visionEntity = null;
     [SerializeField] GameObject minimapIconPrefab = null;
     [SerializeField] Health health = null;
     [SerializeField] Sprite towerIcon = null;
@@ -33,12 +32,13 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner, 
 
     public List<Minion> enemyMinions = new List<Minion>();
     public List<Champion> enemyChampions = new List<Champion>();
+    public float destroyTime = 1f;
 
-    List<Projectile> projectilePool = new List<Projectile>();
+    public static event System.Action<Tower> ServerOnTowerDied;
+    public static event System.Action<Tower> ClientOnTowerDead;
 
     public static event System.Action<Tower> OnTowerSpawned;
     public static event System.Action<Tower> OnTowerDestroyed;
-
 
     public string GetLayerName()
     {
@@ -74,6 +74,7 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner, 
     public override void OnStartClient()
     {
         OnTowerSpawned?.Invoke(this);
+        health.ClientOnHealthDead += Health_ClientOnHealthDead;
     }
 
     public override void OnStopClient()
@@ -81,21 +82,33 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner, 
         OnTowerDestroyed?.Invoke(this);
     }
 
+    private void Health_ClientOnHealthDead(Health health)
+    {
+        ClientOnTowerDead?.Invoke(this);
+    }
+
     #endregion
 
     #region Server
-    private void Start()
+
+    public override void OnStartServer()
     {
-        health.OnHealthDead += Health_OnHealthDead;
-        if (isServer)
-        {
-            checkEnemyRoutine = StartCoroutine(GetTargetRoutine());
-            bulletFireRoutine = StartCoroutine(FireBulletRoutine());
-        }
+        health.ServerOnHealthDead += Health_ServerOnHealthDead;
+        checkEnemyRoutine = StartCoroutine(GetTargetRoutine());
+        bulletFireRoutine = StartCoroutine(FireBulletRoutine());
     }
 
-    private void Health_OnHealthDead(Health health)
+    private void Health_ServerOnHealthDead(Health obj)
     {
+        StopCoroutine(bulletFireRoutine);
+        StopCoroutine(checkEnemyRoutine);
+        ServerOnTowerDied?.Invoke(this);
+        StartCoroutine(DestroyAfter(destroyTime));
+    }
+
+    IEnumerator DestroyAfter(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
         NetworkServer.Destroy(gameObject);
     }
 
@@ -170,9 +183,4 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner, 
     }
 
     #endregion
-
-    public VisionEntity GetVisionEntity()
-    {
-        return visionEntity;
-    }
 }

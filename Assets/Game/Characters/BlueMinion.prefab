@@ -1,5 +1,20 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &868963972588697192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2136612336401763621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f71e688fe18acb64d86886bd9ce01960, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshRenderer: {fileID: 1916292671032829259}
+  disolveShader: {fileID: 4800000, guid: f7c9e981cd3f19347b1a312bf9ef6d0e, type: 3}
+  disolveDuration: 2
 --- !u!114 &7881081430112815507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,6 +131,11 @@ PrefabInstance:
       objectReference: {fileID: 1916292671037001483}
     - target: {fileID: 1407597664436666948, guid: 9c09a4223c69d6c4086a3700624a8aad,
         type: 3}
+      propertyPath: disolver
+      value: 
+      objectReference: {fileID: 868963972588697192}
+    - target: {fileID: 1407597664436666948, guid: 9c09a4223c69d6c4086a3700624a8aad,
+        type: 3}
       propertyPath: animationEventHandler
       value: 
       objectReference: {fileID: 7881081430112815507}
@@ -140,8 +160,19 @@ PrefabInstance:
       propertyPath: animator
       value: 
       objectReference: {fileID: 1916292671037001483}
+    - target: {fileID: 8741716338738734724, guid: 9c09a4223c69d6c4086a3700624a8aad,
+        type: 3}
+      propertyPath: disolver
+      value: 
+      objectReference: {fileID: 868963972588697192}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c09a4223c69d6c4086a3700624a8aad, type: 3}
+--- !u!1 &2136612336401763621 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 411657605277521728, guid: 9c09a4223c69d6c4086a3700624a8aad,
+    type: 3}
+  m_PrefabInstance: {fileID: 1733962756691221093}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2136612336401763620 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 411657605277521729, guid: 9c09a4223c69d6c4086a3700624a8aad,
@@ -250,6 +281,12 @@ GameObject:
 --- !u!1 &1916292671027601033 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 195508, guid: 8a4a0878068573c4ca13bdeaeb706bb6,
+    type: 3}
+  m_PrefabInstance: {fileID: 1916292671027684669}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &1916292671032829259 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 13795446, guid: 8a4a0878068573c4ca13bdeaeb706bb6,
     type: 3}
   m_PrefabInstance: {fileID: 1916292671027684669}
   m_PrefabAsset: {fileID: 0}

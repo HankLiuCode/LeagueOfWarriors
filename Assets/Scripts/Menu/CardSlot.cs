@@ -9,6 +9,12 @@ public class CardSlot : MonoBehaviour
     [SerializeField] DotaRoomPlayer cardPlayer;
     [SerializeField] PlayerCard playerCardInstance;
 
+
+    private void Awake()
+    {
+        
+    }
+
     public DotaRoomPlayer GetPlayer()
     {
         return cardPlayer;
@@ -16,7 +22,6 @@ public class CardSlot : MonoBehaviour
 
     public void SetPlayer(DotaRoomPlayer player)
     {
-
         if(cardPlayer != null)
         {
             DotaRoomPlayer.OnPlayerChampionModified -= DotaRoomPlayer_OnPlayerChampionModified;
@@ -65,11 +70,6 @@ public class CardSlot : MonoBehaviour
 
     private void OnDestroy()
     {
-        if(cardPlayer != null)
-        {
-            DotaRoomPlayer.OnPlayerChampionModified -= DotaRoomPlayer_OnPlayerChampionModified;
-            DotaRoomPlayer.OnPlayerConnectionModified -= DotaRoomPlayer_OnPlayerConnectionModified;
-            DotaRoomPlayer.OnPlayerTeamModified -= DotaRoomPlayer_OnPlayerTeamModified;
-        }
+        SetPlayer(null);
     }
 }

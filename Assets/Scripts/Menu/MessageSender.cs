@@ -8,12 +8,12 @@ public class MessageSender : NetworkBehaviour
 
     public override void OnStartClient()
     {
-        DotaRoomPlayer.OnPlayerConnected += DotaRoomPlayer_OnPlayerConnect;
+        DotaRoomPlayer.ClientOnPlayerConnected += DotaRoomPlayer_OnPlayerConnect;
     }
 
     public override void OnStopClient()
     {
-        DotaRoomPlayer.OnPlayerConnected -= DotaRoomPlayer_OnPlayerConnect;
+        DotaRoomPlayer.ClientOnPlayerConnected -= DotaRoomPlayer_OnPlayerConnect;
     }
 
     private void DotaRoomPlayer_OnPlayerConnect(DotaRoomPlayer player)

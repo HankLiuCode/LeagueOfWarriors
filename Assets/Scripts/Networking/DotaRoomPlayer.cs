@@ -34,8 +34,8 @@ namespace Dota.Networking
         [SyncVar(hook = nameof(OnPlayerConnectionChanged))]
         PlayerConnectionState playerConnState;
 
-        public static event System.Action<DotaRoomPlayer> OnPlayerConnected;
-        public static event System.Action<DotaRoomPlayer> OnPlayerDisconnected;
+        public static event System.Action<DotaRoomPlayer> ClientOnPlayerConnected;
+        public static event System.Action<DotaRoomPlayer> ClientOnPlayerDisconnected;
 
         public static event System.Action<DotaRoomPlayer> OnPlayerTeamModified;
         public static event System.Action<DotaRoomPlayer> OnPlayerChampionModified;
@@ -74,12 +74,12 @@ namespace Dota.Networking
             {
                 CmdSetConnectionState(PlayerConnectionState.RoomNotReady);
             }
-            OnPlayerConnected?.Invoke(this);
+            ClientOnPlayerConnected?.Invoke(this);
         }
 
         public override void OnStopClient()
         {
-            OnPlayerDisconnected?.Invoke(this);
+            ClientOnPlayerDisconnected?.Invoke(this);
         }
 
         public void OnChampionIdChanged(int oldValue, int newValue)

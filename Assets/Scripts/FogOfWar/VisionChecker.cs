@@ -5,19 +5,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Operation
+{
+    AddAlly,
+    RemoveAlly,
+    AddEnemy,
+    RemoveEnemy
+}
+
+public struct ModifyRequest
+{
+    public VisionEntity visionEntity;
+    public Operation operation;
+    public ModifyRequest(VisionEntity visionEntity, Operation operation)
+    {
+        this.visionEntity = visionEntity;
+        this.operation = operation;
+    }
+}
+
 public class VisionChecker : NetworkBehaviour
 {
     [SerializeField] Team localPlayerTeam;
 
-    [SerializeField] MinionManager minionManager = null;
-    [SerializeField] BuildingManager towerManager = null;
-    [SerializeField] MonsterManager monsterManager = null;
+    [SerializeField] MonsterSpawner monsterManager = null;
     [SerializeField] float visionCheckHeight = 0.5f;
 
     [SerializeField] List<VisionEntity> allies = new List<VisionEntity>();
     [SerializeField] List<VisionEntity> enemies = new List<VisionEntity>();
     [SerializeField] LayerMask obstacleLayer = new LayerMask();
     [SerializeField] LayerMask grassLayer = new LayerMask();
+
+    List<ModifyRequest> modifyRequests = new List<ModifyRequest>();
 
     public event Action<VisionEntity> OnVisionEntityExit;
     public event Action<VisionEntity> OnVisionEntityEnter;
@@ -29,26 +48,37 @@ public class VisionChecker : NetworkBehaviour
     // Don't forget to unsubscribe
     private void Awake()
     {
+        Team team = NetworkClient.localPlayer.GetComponent<DotaRoomPlayer>().GetTeam();
+        localPlayerTeam = team;
+
         Champion.OnChampionSpawned += Champion_OnChampionSpawned;
-        Champion.OnChampionDestroyed += Champion_OnChampionDestroyed;
+        Champion.ClientOnChampionDead += Champion_ClientOnChampionDead;
 
         Tower.OnTowerSpawned += Tower_OnTowerSpawned;
-        Tower.OnTowerDestroyed += Tower_OnTowerDestroyed;
+        Tower.ClientOnTowerDead += Tower_ClientOnTowerDead;
 
         Base.OnBaseSpawned += Base_OnBaseSpawned;
-        Base.OnBaseDestroyed += Base_OnBaseDestroyed;
+        Base.ClientOnBaseDead += Base_ClientOnBaseDead;
 
-        minionManager.OnMinionAdded += MinionManager_OnMinionAdded;
-        minionManager.OnMinionRemoved += MinionManager_OnMinionRemoved;
+        Minion.OnMinionSpawned += Minion_OnMinionSpawned;
+        Minion.ClientOnMinionDead += Minion_ClientOnMinionDead;
 
-        monsterManager.OnMonsterAdded += MonsterManager_OnMonsterAdded;
-        monsterManager.OnMonsterRemoved += MonsterManager_OnMonsterRemoved;
+        Monster.OnMonsterSpawned += Monster_OnMonsterSpawned;
+        Monster.ClientOnMonsterDead += Monster_ClientOnMonsterDead;
     }
 
-    private void Base_OnBaseDestroyed(Base teamBase)
+    #region Client
+
+    private void Monster_ClientOnMonsterDead(Monster monster)
     {
-        VisionEntity visionEntity = teamBase.GetComponent<VisionEntity>();
-        RemoveVisionEntity(visionEntity, teamBase.GetTeam());
+        VisionEntity visionEntity = monster.GetComponent<VisionEntity>();
+        RemoveVisionEntity(visionEntity, monster.GetTeam());
+    }
+
+    private void Monster_OnMonsterSpawned(Monster monster)
+    {
+        VisionEntity visionEntity = monster.GetComponent<VisionEntity>();
+        AddVisionEntity(visionEntity, monster.GetTeam());
     }
 
     private void Base_OnBaseSpawned(Base teamBase)
@@ -57,12 +87,25 @@ public class VisionChecker : NetworkBehaviour
         AddVisionEntity(visionEntity, teamBase.GetTeam());
     }
 
-    public override void OnStartClient()
+    private void Base_ClientOnBaseDead(Base teamBase)
     {
-        localPlayerTeam = NetworkClient.localPlayer.GetComponent<DotaRoomPlayer>().GetTeam();
+        VisionEntity visionEntity = teamBase.GetComponent<VisionEntity>();
+        RemoveVisionEntity(visionEntity, teamBase.GetTeam());
     }
 
-    private void Tower_OnTowerDestroyed(Tower tower)
+    private void Minion_OnMinionSpawned(Minion minion)
+    {
+        VisionEntity visionEntity = minion.GetComponent<VisionEntity>();
+        AddVisionEntity(visionEntity, minion.GetTeam());
+    }
+
+    private void Minion_ClientOnMinionDead(Minion minion)
+    {
+        VisionEntity visionEntity = minion.GetComponent<VisionEntity>();
+        RemoveVisionEntity(visionEntity, minion.GetTeam());
+    }
+
+    private void Tower_ClientOnTowerDead(Tower tower)
     {
         VisionEntity visionEntity = tower.GetComponent<VisionEntity>();
         RemoveVisionEntity(visionEntity, tower.GetTeam());
@@ -74,7 +117,7 @@ public class VisionChecker : NetworkBehaviour
         AddVisionEntity(visionEntity, tower.GetTeam());
     }
 
-    private void Champion_OnChampionDestroyed(Champion champion)
+    private void Champion_ClientOnChampionDead(Champion champion)
     {
         VisionEntity visionEntity = champion.GetComponent<VisionEntity>();
         RemoveVisionEntity(visionEntity, champion.GetTeam());
@@ -86,56 +129,28 @@ public class VisionChecker : NetworkBehaviour
         AddVisionEntity(visionEntity, champion.GetTeam());
     }
 
-    private void MonsterManager_OnMonsterRemoved(Monster monster)
+    private void AddVisionEntity(VisionEntity visionEntity, Team team)
     {
-        Debug.Log("OnMonsterRemoved");
-        VisionEntity visionEntity = monster.GetComponent<VisionEntity>();
-        RemoveVisionEntity(visionEntity, monster.GetTeam());
-    }
-
-    private void MonsterManager_OnMonsterAdded(Monster monster)
-    {
-        Debug.Log("OnMonsterAdded");
-        VisionEntity visionEntity = monster.GetComponent<VisionEntity>();
-        AddVisionEntity(visionEntity, monster.GetTeam());
-    }
-
-    private void MinionManager_OnMinionAdded(Minion minion)
-    {
-        VisionEntity visionEntity = minion.GetComponent<VisionEntity>();
-        AddVisionEntity(visionEntity, minion.GetTeam());
-    }
-
-    private void MinionManager_OnMinionRemoved(Minion minion)
-    {
-        VisionEntity visionEntity = minion.GetComponent<VisionEntity>();
-        RemoveVisionEntity(visionEntity, minion.GetTeam());
+        if (localPlayerTeam == team)
+        {
+            modifyRequests.Add(new ModifyRequest(visionEntity, Operation.AddAlly));
+        }
+        else
+        {
+            modifyRequests.Add(new ModifyRequest(visionEntity, Operation.AddEnemy));
+        }
     }
 
     private void RemoveVisionEntity(VisionEntity visionEntity, Team team)
     {
         if (localPlayerTeam == team)
         {
-            allies.Remove(visionEntity);
+            modifyRequests.Add(new ModifyRequest(visionEntity, Operation.RemoveAlly));
         }
         else
         {
-            enemies.Remove(visionEntity);
+            modifyRequests.Add(new ModifyRequest(visionEntity, Operation.RemoveEnemy));
         }
-        OnVisionEntityRemoved?.Invoke(visionEntity);
-    }
-
-    private void AddVisionEntity(VisionEntity visionEntity, Team team)
-    {
-        if (localPlayerTeam == team)
-        {
-            allies.Add(visionEntity);
-        }
-        else
-        {
-            enemies.Add(visionEntity);
-        }
-        OnVisionEntityAdded?.Invoke(visionEntity);
     }
 
     public List<VisionEntity> GetVisible()
@@ -160,23 +175,41 @@ public class VisionChecker : NetworkBehaviour
 
     private void Update()
     {
-        UpdateVisibleEnemy();
+        UpdateAllyEnemyList();
+        AdjustEnemyVisibility();
     }
 
-    private void UpdateVisibleAlly()
+    void UpdateAllyEnemyList()
     {
-        foreach (VisionEntity ally in allies)
+        foreach(ModifyRequest request in modifyRequests)
         {
-            ally.SetVisible(true);
+            switch (request.operation)
+            {
+                case Operation.AddAlly:
+                    allies.Add(request.visionEntity);
+                    OnVisionEntityAdded?.Invoke(request.visionEntity);
+                    break;
+
+                case Operation.RemoveAlly:
+                    allies.Remove(request.visionEntity);
+                    OnVisionEntityRemoved?.Invoke(request.visionEntity);
+                    break;
+
+                case Operation.AddEnemy:
+                    enemies.Add(request.visionEntity);
+                    OnVisionEntityAdded?.Invoke(request.visionEntity);
+                    break;
+
+                case Operation.RemoveEnemy:
+                    enemies.Remove(request.visionEntity);
+                    OnVisionEntityRemoved?.Invoke(request.visionEntity);
+                    break;
+            }
         }
+        modifyRequests.Clear();
     }
 
-    private void OnDestroy()
-    {
-        
-    }
-
-    private void UpdateVisibleEnemy()
+    private void AdjustEnemyVisibility()
     {
         foreach (VisionEntity enemy in enemies)
         {
@@ -191,7 +224,6 @@ public class VisionChecker : NetworkBehaviour
 
             foreach (VisionEntity ally in allies)
             {
-
                 float distance = Vector3.Distance(ally.transform.position, enemy.transform.position);
                 if (distance > ally.GetViewRadius())
                 {
@@ -205,7 +237,7 @@ public class VisionChecker : NetworkBehaviour
                 {
                     if (enemy.IsInGrass())
                     {
-                        if((ally.GetCurrentBush() == enemy.GetCurrentBush()))
+                        if ((ally.GetCurrentBush() == enemy.GetCurrentBush()))
                         {
                             isVisible = true;
                             break;
@@ -250,7 +282,7 @@ public class VisionChecker : NetworkBehaviour
             {
                 OnVisionEntityExit?.Invoke(enemy);
             }
-            else if(!wasVisible && isVisible)
+            else if (!wasVisible && isVisible)
             {
                 OnVisionEntityEnter?.Invoke(enemy);
             }
@@ -258,4 +290,24 @@ public class VisionChecker : NetworkBehaviour
             enemy.SetVisible(isVisible);
         }
     }
+
+    private void OnDestroy()
+    {
+        Champion.OnChampionSpawned -= Champion_OnChampionSpawned;
+        Champion.ClientOnChampionDead -= Champion_ClientOnChampionDead;
+
+        Tower.OnTowerSpawned -= Tower_OnTowerSpawned;
+        Tower.ClientOnTowerDead -= Tower_ClientOnTowerDead;
+
+        Base.OnBaseSpawned -= Base_OnBaseSpawned;
+        Base.ClientOnBaseDead -= Base_ClientOnBaseDead;
+
+        Minion.OnMinionSpawned -= Minion_OnMinionSpawned;
+        Minion.ClientOnMinionDead -= Minion_ClientOnMinionDead;
+
+        Monster.OnMonsterSpawned -= Monster_OnMonsterSpawned;
+        Monster.ClientOnMonsterDead -= Monster_ClientOnMonsterDead;
+    }
+
+    #endregion
 }

@@ -3,27 +3,45 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using Dota.Attributes;
+using Dota.Networking;
 
 public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
 {
     [SyncVar]
     [SerializeField] 
     Team team;
-    
+
     [SerializeField] Sprite icon = null;
     [SerializeField] GameObject minimapIconPrefab = null;
     [SerializeField] Health health = null;
+    [SerializeField] Disolver disolver = null;
 
+    [SyncVar]
+    DotaRoomPlayer owner;
 
     public static event System.Action<Champion> OnChampionSpawned;
     public static event System.Action<Champion> OnChampionDestroyed;
-    public static event System.Action<Champion> OnChampionDead;
+
+    public static event System.Action<Champion> ServerOnChampionDead;
+    public static event System.Action<Champion> ClientOnChampionDead;
 
     #region Client
 
     public override void OnStartClient()
     {
         OnChampionSpawned?.Invoke(this);
+        health.ClientOnHealthDead += Health_ClientOnHealthDead;
+        health.ClientOnHealthDeadEnd += Health_ClientOnHealthDeadEnd;
+    }
+
+    private void Health_ClientOnHealthDeadEnd()
+    {
+        disolver.StartDisolve();
+    }
+
+    private void Health_ClientOnHealthDead(Health health)
+    {
+        ClientOnChampionDead?.Invoke(this);
     }
 
     public override void OnStopClient()
@@ -34,37 +52,40 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
     #endregion
 
     #region Server
-    [Server]
-    public void ServerRevive()
+
+    public override void OnStartServer()
     {
-        health.ServerRevive();
+        health.ServerOnHealthDead += Health_ServerOnHealthDead;
+        health.ServerOnHealthDeadEnd += Health_ServerOnHealthDeadEnd;
     }
 
+    private void Health_ServerOnHealthDeadEnd()
+    {
+        StartCoroutine(DestroyAfter(disolver.GetDisolveDuration()));
+    }
+
+    private void Health_ServerOnHealthDead(Health obj)
+    {
+        ServerOnChampionDead?.Invoke(this);
+    }
+
+    IEnumerator DestroyAfter(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        NetworkServer.Destroy(gameObject);
+    }
+
+    public void ServerSetOwner(DotaRoomPlayer player)
+    {
+        owner = player;
+    }
+
+    public void ServerSetTeam(Team team)
+    {
+        this.team = team;
+        gameObject.tag = team.ToString();
+    }
     #endregion
-    
-    
-    // Both
-    private void Start()
-    {
-        health.OnHealthDead += Champion_OnHealthDead;
-        health.OnHealthDeadEnd += Health_OnHealthDeadEnd;
-        health.OnHealthRevive += Health_OnHealthRevive;
-    }
-
-    private void Health_OnHealthDeadEnd()
-    {
-        gameObject.SetActive(false);
-    }
-
-    private void Champion_OnHealthDead(Health health)
-    {
-        OnChampionDead?.Invoke(this);
-    }
-    
-    private void Health_OnHealthRevive()
-    {
-        gameObject.SetActive(true);
-    }
 
     public Sprite GetIcon()
     {
@@ -89,9 +110,8 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
         return team;
     }
 
-    public void ServerSetTeam(Team team)
+    public DotaRoomPlayer GetOwner()
     {
-        this.team = team;
-        gameObject.tag = team.ToString();
+        return owner;
     }
 }

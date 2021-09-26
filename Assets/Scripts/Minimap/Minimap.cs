@@ -23,7 +23,7 @@ public class Minimap : MonoBehaviour
     [SerializeField] private RectTransform playerIconLayer = null;
     
     private Vector2 defaultCameraRectSize = new Vector2(80, 45);
-    private Dictionary<Transform, MinimapIcon> minimapIconInstances = new Dictionary<Transform, MinimapIcon>();
+    private Dictionary<VisionEntity, MinimapIcon> minimapIconInstances = new Dictionary<VisionEntity, MinimapIcon>();
 
     private void Awake()
     {
@@ -33,31 +33,28 @@ public class Minimap : MonoBehaviour
 
     private void VisibilityChecker_OnVisionEntityRemoved(VisionEntity visionEntity)
     {
-        if (minimapIconInstances.ContainsKey(visionEntity.transform))
+        if (minimapIconInstances.ContainsKey(visionEntity))
         {
-            MinimapIcon icon = minimapIconInstances[visionEntity.transform];
-
-            minimapIconInstances.Remove(visionEntity.transform);
+            MinimapIcon icon = minimapIconInstances[visionEntity];
+            
+            minimapIconInstances.Remove(visionEntity);
 
             Destroy(icon.gameObject);
         }
         else
         {
-            Debug.Log(visionEntity.name + "Doesn't Exist");
+            Debug.Log(visionEntity.name + "Doesn't Exist, Remove Failed");
         }
     }
 
     private void VisibilityChecker_OnVisionEntityAdded(VisionEntity visionEntity)
     {
-        if (!minimapIconInstances.ContainsKey(visionEntity.transform))
+        if (!minimapIconInstances.ContainsKey(visionEntity))
         {
             IMinimapEntity minimapEntity = visionEntity.GetComponent<IMinimapEntity>();
-
             MinimapIcon minimapIconInstance = minimapEntity.GetMinimapIconInstance();
-
             minimapIconInstance.transform.SetParent(GetLayer(minimapEntity.GetLayerName()));
-
-            minimapIconInstances.Add(visionEntity.transform, minimapIconInstance);
+            minimapIconInstances.Add(visionEntity, minimapIconInstance);
         }
         else
         {
@@ -107,17 +104,13 @@ public class Minimap : MonoBehaviour
 
     private void Update()
     {
-        foreach (VisionEntity visionEntity in visibilityChecker.GetAll())
+        foreach (var visionEntity in minimapIconInstances.Keys)
         {
-            if (minimapIconInstances.ContainsKey(visionEntity.transform))
-            {
-                minimapIconInstances[visionEntity.transform].SetVisible(visionEntity.GetVisible());
-                UpdatePosition(visionEntity.transform, minimapIconInstances[visionEntity.transform].transform);
-            }
-            else
-            {
-                Debug.LogError(visionEntity.name + "Not Found");
-            }
+            minimapIconInstances[visionEntity].SetVisible(visionEntity.GetVisible());
+
+            Vector3 entityPosition = visionEntity.transform.position;
+
+            UpdatePosition(entityPosition, minimapIconInstances[visionEntity].transform);
         }
 
         UpdatePosition(cameraController.GetLookAtPoint(), cameraRect.transform);

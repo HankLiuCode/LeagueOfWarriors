@@ -71,25 +71,6 @@ public class BuildingManager : NetworkBehaviour
         throw new System.Exception("Base of team: " + team + "Doesn't Exist");
     }
 
-    private void NotifyBaseAdded(Base teamBase, Team team)
-    {
-        Health health = teamBase.GetComponent<Health>();
-        health.OnHealthDead += OnBaseDead;
-        teamBase.ServerSetTeam(team);
-        OnBaseAdded?.Invoke(teamBase);
-    }
-
-    private void NotifyTowersAdded(Tower[] towers, Team team)
-    {
-        foreach (Tower tower in towers)
-        {
-            Health health = tower.GetComponent<Health>();
-            health.OnHealthDead += OnTowerDead;
-            tower.ServerSetTeam(team);
-            OnTowerAdded?.Invoke(tower);
-        }
-    }
-
     private void OnBaseDead(Health health)
     {
         Base b = health.GetComponent<Base>();

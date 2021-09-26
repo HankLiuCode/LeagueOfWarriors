@@ -6,11 +6,9 @@ using UnityEngine;
 
 public class FogOfWarVisual : NetworkBehaviour
 {
-    [SerializeField] GameObject FOVGraphicsPrefab = null;
-    [SerializeField] MinionManager minionManager = null;
-    [SerializeField] PlayerManager playerManager = null;
-    [SerializeField] BuildingManager buildingManager = null;
     [SerializeField] Team localPlayerTeam;
+    [SerializeField] GameObject FOVGraphicsPrefab = null;
+    [SerializeField] MinionSpawner minionManager = null;
     [SerializeField] List<FOVGraphics> fovGraphicsList = new List<FOVGraphics>();
 
     [SerializeField] float minionUpdateMeshInterval = 0.1f;
@@ -21,25 +19,61 @@ public class FogOfWarVisual : NetworkBehaviour
 
     private void Awake()
     {
+        Team team = NetworkClient.localPlayer.GetComponent<DotaRoomPlayer>().GetTeam();
+        localPlayerTeam = team;
+
         Champion.OnChampionSpawned += Champion_OnChampionSpawned;
-        Champion.OnChampionDestroyed += Champion_OnChampionDestroyed;
+        Champion.ClientOnChampionDead += Champion_ClientOnChampionDead;
 
-        minionManager.OnMinionAdded += MinionManager_OnMinionAdded;
-        minionManager.OnMinionRemoved += MinionManager_OnMinionRemoved;
-        buildingManager.OnTowerAdded += BuildingManager_OnTowerAdded;
-        buildingManager.OnTowerRemoved += BuildingManager_OnTowerRemoved;
+        Tower.OnTowerSpawned += Tower_OnTowerSpawned;
+        Tower.OnTowerDestroyed += Tower_OnTowerDestroyed;
+
+        Base.OnBaseSpawned += Base_OnBaseSpawned;
+
+        Minion.OnMinionSpawned += Minion_OnMinionSpawned;
+        Minion.OnMinionDestroyed += Minion_OnMinionDestroyed;
     }
 
-    public override void OnStartClient()
+    private void Minion_OnMinionSpawned(Minion minion)
     {
-        localPlayerTeam = NetworkClient.localPlayer.GetComponent<DotaRoomPlayer>().GetTeam();
-    }
-
-    private void Champion_OnChampionDestroyed(Champion champion)
-    {
-        if (champion.GetTeam() == localPlayerTeam)
+        VisionEntity visionEntity = minion.GetComponent<VisionEntity>();
+        if (minion.GetTeam() == localPlayerTeam)
         {
-            RemoveViewMesh(champion.gameObject);
+            AttachViewMesh(minion.gameObject, visionEntity.GetViewRadius(), minionDegreePercast, minionUpdateMeshInterval);
+        }
+    }
+
+    private void Minion_OnMinionDestroyed(Minion minion)
+    {
+        if (minion.GetTeam() == localPlayerTeam)
+        {
+            RemoveViewMesh(minion.gameObject);
+        }
+    }
+
+    private void Base_OnBaseSpawned(Base teamBase)
+    {
+        VisionEntity visionEntity = teamBase.GetComponent<VisionEntity>();
+        if (teamBase.GetTeam() == localPlayerTeam)
+        {
+            AttachViewMesh(teamBase.gameObject, visionEntity.GetViewRadius(), 20, 10);
+        }
+    }
+
+    private void Tower_OnTowerDestroyed(Tower tower)
+    {
+        if (tower.GetTeam() == localPlayerTeam)
+        {
+            RemoveViewMesh(tower.gameObject);
+        }
+    }
+
+    private void Tower_OnTowerSpawned(Tower tower)
+    {
+        VisionEntity visionEntity = tower.GetComponent<VisionEntity>();
+        if (tower.GetTeam() == localPlayerTeam)
+        {
+            AttachViewMesh(tower.gameObject, visionEntity.GetViewRadius(), 20, 10);
         }
     }
 
@@ -52,55 +86,13 @@ public class FogOfWarVisual : NetworkBehaviour
         }
     }
 
-    private void BuildingManager_OnTowerRemoved(Tower tower)
+    private void Champion_ClientOnChampionDead(Champion champion)
     {
-        if (tower.GetTeam() == localPlayerTeam)
+        Debug.Log("Champion Dead: " + champion.name);
+
+        if (champion.GetTeam() == localPlayerTeam)
         {
-            RemoveViewMesh(tower.gameObject);
-        }
-    }
-
-    private void BuildingManager_OnTowerAdded(Tower tower)
-    {
-        VisionEntity visionEntity = tower.GetComponent<VisionEntity>();
-        if (tower.GetTeam() == localPlayerTeam)
-        {
-            AttachViewMesh(tower.gameObject, visionEntity.GetViewRadius(), 20, 10);
-        }
-    }
-
-    //private void PlayerManager_OnLocalPlayerConnectionReady()
-    //{
-    //    Team localPlayerTeam = playerManager.GetLocalChampion().GetTeam();
-
-    //    this.localPlayerTeam = localPlayerTeam;
-
-    //    SyncList<Champion> players = playerManager.GetChampions();
-
-    //    foreach (Champion player in players)
-    //    {
-    //        VisionEntity visionEntity = player.GetComponent<VisionEntity>();
-    //        if (player.GetTeam() == this.localPlayerTeam)
-    //        {
-    //            AttachViewMesh(player.gameObject, visionEntity.GetViewRadius(), championDegreePercast, championUpdateMeshInterval);
-    //        }
-    //    }
-    //}
-
-    private void MinionManager_OnMinionRemoved(Minion minion)
-    {
-        if(minion.GetTeam() == localPlayerTeam)
-        {
-            RemoveViewMesh(minion.gameObject);
-        }
-    }
-
-    private void MinionManager_OnMinionAdded(Minion minion)
-    {
-        VisionEntity visionEntity = minion.GetComponent<VisionEntity>();
-        if (minion.GetTeam() == localPlayerTeam)
-        {
-            AttachViewMesh(minion.gameObject, visionEntity.GetViewRadius(), minionDegreePercast, minionUpdateMeshInterval);
+            RemoveViewMesh(champion.gameObject);
         }
     }
 

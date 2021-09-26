@@ -12,11 +12,10 @@ public class SpawnGroup : NetworkBehaviour
     [SerializeField] List<SpawnData> spawnCandidates;
     [SerializeField] float spawnInterval = 10f;
 
-    public static event System.Action<Monster> OnMonsterAdded;
-    public static event System.Action<Monster> OnMonsterRemoved;
-    public static event System.Action<SpawnGroup> OnAllDead;
+    public static event System.Action<SpawnGroup> OnGroupDead;
 
-
+    public List<Monster> alive = new List<Monster>();
+    
     public float GetSpawnInterval()
     {
         return spawnInterval;
@@ -29,34 +28,28 @@ public class SpawnGroup : NetworkBehaviour
 
         foreach (SpawnData spawnData in spawnCandidates)
         {
-            GameObject instance = Instantiate(spawnData.prefab, spawnData.spawnPoint.position, spawnData.spawnPoint.rotation);
+            Monster monster = Instantiate(spawnData.monsterPrefab, spawnData.spawnPoint.position, spawnData.spawnPoint.rotation).GetComponent<Monster>();
 
-            NetworkServer.Spawn(instance);
+            NetworkServer.Spawn(monster.gameObject);
 
-            Health health = instance.GetComponent<Health>();
+            Health health = monster.GetComponent<Health>();
 
-            health.OnHealthDead += Health_OnHealthDead;
+            alive.Add(monster);
 
-            Monster monster = instance.GetComponent<Monster>();
-
-            OnMonsterAdded?.Invoke(monster);
+            health.ServerOnHealthDead += Health_ServerOnHealthDead;
         }
     }
 
     [Server]
-    private void Health_OnHealthDead(Health health)
+    private void Health_ServerOnHealthDead(Health health)
     {
-        health.OnHealthDead -= Health_OnHealthDead;
-
-        aliveCount -= 1;
-
         Monster monster = health.GetComponent<Monster>();
 
-        OnMonsterRemoved?.Invoke(monster);
+        alive.Remove(monster);
 
-        if (aliveCount == 0)
+        if (alive.Count == 0)
         {
-            OnAllDead?.Invoke(this);
+            OnGroupDead?.Invoke(this);
         }
     }
 }
@@ -65,6 +58,6 @@ public class SpawnGroup : NetworkBehaviour
 [System.Serializable]
 public class SpawnData
 {
-    public GameObject prefab;
+    public GameObject monsterPrefab;
     public Transform spawnPoint;
 }
