@@ -4,34 +4,17 @@ using UnityEngine;
 
 public class MessageSender : NetworkBehaviour
 {
-    DotaRoomPlayer localPlayer = null;
-
-    public override void OnStartClient()
-    {
-        DotaRoomPlayer.ClientOnPlayerConnected += DotaRoomPlayer_OnPlayerConnect;
-    }
-
-    public override void OnStopClient()
-    {
-        DotaRoomPlayer.ClientOnPlayerConnected -= DotaRoomPlayer_OnPlayerConnect;
-    }
-
-    private void DotaRoomPlayer_OnPlayerConnect(DotaRoomPlayer player)
-    {
-        if (player.isLocalPlayer)
-        {
-            localPlayer = player;
-        }
-    }
 
     public void ToggleReady()
     {
+        DotaRoomPlayer localPlayer = NetworkClient.localPlayer.GetComponent<DotaRoomPlayer>();
         bool isRoomReady = (localPlayer.GetConnectionState() == PlayerConnectionState.RoomReady);
         localPlayer.CmdSetConnectionState(isRoomReady ? PlayerConnectionState.RoomNotReady : PlayerConnectionState.RoomReady);
     }
 
     public void SwitchTeam()
     {
+        DotaRoomPlayer localPlayer = NetworkClient.localPlayer.GetComponent<DotaRoomPlayer>();
         Team team = localPlayer.GetTeam();
 
         if (team == Team.Red)

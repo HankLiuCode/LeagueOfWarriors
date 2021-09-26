@@ -26,12 +26,42 @@ public class FogOfWarVisual : NetworkBehaviour
         Champion.ClientOnChampionDead += Champion_ClientOnChampionDead;
 
         Tower.OnTowerSpawned += Tower_OnTowerSpawned;
-        Tower.OnTowerDestroyed += Tower_OnTowerDestroyed;
-
-        Base.OnBaseSpawned += Base_OnBaseSpawned;
+        Tower.ClientOnTowerDead += Tower_ClientOnTowerDead;
 
         Minion.OnMinionSpawned += Minion_OnMinionSpawned;
-        Minion.OnMinionDestroyed += Minion_OnMinionDestroyed;
+        Minion.ClientOnMinionDead += Minion_ClientOnMinionDead;
+
+        Base.OnBaseSpawned += Base_OnBaseSpawned;
+    }
+
+    private void OnDestroy()
+    {
+        Champion.OnChampionSpawned -= Champion_OnChampionSpawned;
+        Champion.ClientOnChampionDead -= Champion_ClientOnChampionDead;
+
+        Tower.OnTowerSpawned -= Tower_OnTowerSpawned;
+        Tower.ClientOnTowerDead -= Tower_ClientOnTowerDead;
+
+        Minion.OnMinionSpawned -= Minion_OnMinionSpawned;
+        Minion.ClientOnMinionDead -= Minion_ClientOnMinionDead;
+
+        Base.OnBaseSpawned -= Base_OnBaseSpawned;
+    }
+
+    private void Minion_ClientOnMinionDead(Minion minion)
+    {
+        if (minion.GetTeam() == localPlayerTeam)
+        {
+            RemoveViewMesh(minion.gameObject);
+        }
+    }
+
+    private void Tower_ClientOnTowerDead(Tower tower)
+    {
+        if (tower.GetTeam() == localPlayerTeam)
+        {
+            RemoveViewMesh(tower.gameObject);
+        }
     }
 
     private void Minion_OnMinionSpawned(Minion minion)
@@ -43,28 +73,12 @@ public class FogOfWarVisual : NetworkBehaviour
         }
     }
 
-    private void Minion_OnMinionDestroyed(Minion minion)
-    {
-        if (minion.GetTeam() == localPlayerTeam)
-        {
-            RemoveViewMesh(minion.gameObject);
-        }
-    }
-
     private void Base_OnBaseSpawned(Base teamBase)
     {
         VisionEntity visionEntity = teamBase.GetComponent<VisionEntity>();
         if (teamBase.GetTeam() == localPlayerTeam)
         {
             AttachViewMesh(teamBase.gameObject, visionEntity.GetViewRadius(), 20, 10);
-        }
-    }
-
-    private void Tower_OnTowerDestroyed(Tower tower)
-    {
-        if (tower.GetTeam() == localPlayerTeam)
-        {
-            RemoveViewMesh(tower.gameObject);
         }
     }
 

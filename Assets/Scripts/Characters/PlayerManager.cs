@@ -6,6 +6,10 @@ using Dota.Networking;
 
 public class PlayerManager : NetworkBehaviour
 {
+    [Scene] 
+    [SerializeField]
+    string gameScene;
+
     [SerializeField] GameObject championPrefab;
     [SerializeField] Transform[] blueStartPositions;
     [SerializeField] Transform[] redStartPositions;
@@ -22,6 +26,13 @@ public class PlayerManager : NetworkBehaviour
         DotaNetworkManager.ServerOnAllClientSceneLoaded += DotaNetworkManager_ServerOnAllClientSceneLoaded;
         DotaNetworkManager.ServerOnClientDisconnect += DotaNetworkManager_ServerOnClientDisconnect;
         Champion.ServerOnChampionDead += Champion_ServerOnChampionDead;
+    }
+
+    public override void OnStopServer()
+    {
+        DotaNetworkManager.ServerOnAllClientSceneLoaded -= DotaNetworkManager_ServerOnAllClientSceneLoaded;
+        DotaNetworkManager.ServerOnClientDisconnect -= DotaNetworkManager_ServerOnClientDisconnect;
+        Champion.ServerOnChampionDead -= Champion_ServerOnChampionDead;
     }
 
     [Server]
@@ -47,8 +58,11 @@ public class PlayerManager : NetworkBehaviour
     [Server]
     private void DotaNetworkManager_ServerOnAllClientSceneLoaded(string scene)
     {
-        List<DotaRoomPlayer> roomPlayers = ((DotaNetworkManager)NetworkManager.singleton).GetServerPlayers();
-        SpawnChampionsForPlayers(roomPlayers);
+        if(scene == gameScene)
+        {
+            List<DotaRoomPlayer> roomPlayers = ((DotaNetworkManager)NetworkManager.singleton).GetServerPlayers();
+            SpawnChampionsForPlayers(roomPlayers);
+        }
     }
 
     [Server]

@@ -7,14 +7,23 @@ using Dota.Networking;
 
 public class PlayerCard : MonoBehaviour
 {
+    [SerializeField] GameObject card = null;
     [SerializeField] Image playerIcon = null;
     [SerializeField] TextMeshProUGUI playerNameTextMesh = null;
     [SerializeField] TextMeshProUGUI teamTextMesh = null;
     [SerializeField] TextMeshProUGUI readyTextMesh = null;
     [SerializeField] ChampionIdMapping mapping = null;
 
+
+    public void HideCard()
+    {
+        card.gameObject.SetActive(false);
+    }
+
     public void SetCard(string playerName, Team team, int championId, PlayerConnectionState connectionState)
     {
+        card.gameObject.SetActive(true);
+
         playerIcon.sprite = mapping.GetIcon(championId);
         playerNameTextMesh.text = playerName;
         teamTextMesh.text = team.ToString();
@@ -33,8 +42,11 @@ public class PlayerCard : MonoBehaviour
             case PlayerConnectionState.RoomNotReady:
                 showText = "not ready";
                 break;
-        }
 
+            default:
+                showText = connectionState.ToString();
+                break;
+        }
         readyTextMesh.text = showText;
     }
 }

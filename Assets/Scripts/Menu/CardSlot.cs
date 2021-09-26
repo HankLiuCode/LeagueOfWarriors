@@ -24,9 +24,9 @@ public class CardSlot : MonoBehaviour
     {
         if(cardPlayer != null)
         {
-            DotaRoomPlayer.OnPlayerChampionModified -= DotaRoomPlayer_OnPlayerChampionModified;
-            DotaRoomPlayer.OnPlayerConnectionModified -= DotaRoomPlayer_OnPlayerConnectionModified;
-            DotaRoomPlayer.OnPlayerTeamModified -= DotaRoomPlayer_OnPlayerTeamModified;
+            DotaRoomPlayer.ClientOnPlayerChampionModified -= DotaRoomPlayer_OnPlayerChampionModified;
+            DotaRoomPlayer.ClientOnPlayerConnectionModified -= DotaRoomPlayer_OnPlayerConnectionModified;
+            DotaRoomPlayer.ClientOnPlayerTeamModified -= DotaRoomPlayer_OnPlayerTeamModified;
         }
 
         if (player == null)
@@ -38,9 +38,9 @@ public class CardSlot : MonoBehaviour
 
         cardPlayer = player;
         UpdateCardInfo(cardPlayer);
-        DotaRoomPlayer.OnPlayerChampionModified += DotaRoomPlayer_OnPlayerChampionModified;
-        DotaRoomPlayer.OnPlayerConnectionModified += DotaRoomPlayer_OnPlayerConnectionModified;
-        DotaRoomPlayer.OnPlayerTeamModified += DotaRoomPlayer_OnPlayerTeamModified;
+        DotaRoomPlayer.ClientOnPlayerChampionModified += DotaRoomPlayer_OnPlayerChampionModified;
+        DotaRoomPlayer.ClientOnPlayerConnectionModified += DotaRoomPlayer_OnPlayerConnectionModified;
+        DotaRoomPlayer.ClientOnPlayerTeamModified += DotaRoomPlayer_OnPlayerTeamModified;
     }
 
     private void UpdateCardInfo(DotaRoomPlayer player)

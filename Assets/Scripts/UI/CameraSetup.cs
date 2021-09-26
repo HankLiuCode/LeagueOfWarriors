@@ -16,6 +16,11 @@ public class CameraSetup : MonoBehaviour
         Champion.OnChampionSpawned += Champion_OnChampionSpawned;
     }
 
+    private void OnDestroy()
+    {
+        Champion.OnChampionSpawned -= Champion_OnChampionSpawned;
+    }
+
     private void Champion_OnChampionSpawned(Champion champion)
     {
         if (champion.hasAuthority)

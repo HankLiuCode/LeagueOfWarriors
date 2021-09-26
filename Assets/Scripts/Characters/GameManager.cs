@@ -7,38 +7,52 @@ using UnityEngine;
 public class GameManager : NetworkBehaviour
 {
     [SerializeField] Team localPlayerTeam;
-    [SerializeField] Canvas loadingScreen;
+    [SerializeField] GameOverCanvas gameOverCanvas;
 
-    void Awake()
-    {
-        DotaNetworkManager.ClientOnAllClientSceneLoaded += DotaNetworkManager_ClientOnAllClientSceneLoaded;
-        Base.ClientOnBaseDead += Base_ClientOnBaseDead;
-    }
-
-    public override void OnStartClient()
+    private void Awake()
     {
         localPlayerTeam = NetworkClient.localPlayer.GetComponent<DotaRoomPlayer>().GetTeam();
     }
 
+    #region Server
+    public override void OnStartServer()
+    {
+        Base.ServerOnBaseDead += Base_ServerOnBaseDead;
+    }
+
+    public override void OnStopServer()
+    {
+        Base.ServerOnBaseDead -= Base_ServerOnBaseDead;
+    }
+
+    private void Base_ServerOnBaseDead(Base obj)
+    {
+        
+    }
+    #endregion
+
+    #region Client
+
+    public override void OnStartClient()
+    {
+        Base.ClientOnBaseDead += Base_ClientOnBaseDead;
+    }
+
+    public override void OnStopClient()
+    {
+        Base.ClientOnBaseDead -= Base_ClientOnBaseDead;
+    }
+
     private void Base_ClientOnBaseDead(Base teamBase)
     {
-        if(teamBase.GetTeam() == localPlayerTeam)
+        if (teamBase.GetTeam() == localPlayerTeam)
         {
-            Debug.Log("You Lose!");
+            gameOverCanvas.ShowDefeat();
         }
         else
         {
-            Debug.Log("You Win!");
+            gameOverCanvas.ShowVictory();
         }
     }
-
-    private void DotaNetworkManager_ClientOnAllClientSceneLoaded(string obj)
-    {
-        SetLoadingScreenVisible(false);
-    }
-
-    public void SetLoadingScreenVisible(bool isActive)
-    {
-        loadingScreen.gameObject.SetActive(isActive);
-    }
+    #endregion
 }

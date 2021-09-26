@@ -67,8 +67,6 @@ public class DirectionalAbility : Ability
             }
         }
 
-        Debug.Log("Deal Damage");
-
         yield return new WaitForSeconds(destroyTime);
 
         NetworkServer.Destroy(effectInstance);

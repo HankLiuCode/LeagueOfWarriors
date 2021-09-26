@@ -8,65 +8,75 @@ using System;
 public class LobbyMenu : NetworkBehaviour
 {
     [SerializeField] List<DotaRoomPlayer> players = new List<DotaRoomPlayer>();
+    [SerializeField] List<PlayerCard> cards = new List<PlayerCard>();
 
-    [SerializeField] List<CardSlot> redSlots = new List<CardSlot>();
-    [SerializeField] List<CardSlot> blueSlots = new List<CardSlot>();
-
-    public override void OnStartClient()
+    private void Start()
     {
-        DotaRoomPlayer.ClientOnPlayerConnected += DotaRoomPlayer_OnPlayerConnect;
-        DotaRoomPlayer.ClientOnPlayerDisconnected += DotaRoomPlayer_OnPlayerDisconnect;
+        if (isClient)
+        {
+            players.AddRange(FindObjectsOfType<DotaRoomPlayer>());
+            UpdateCards();
+            DotaRoomPlayer.ClientOnPlayerConnected += DotaRoomPlayer_OnPlayerConnect;
+            DotaRoomPlayer.ClientOnPlayerDisconnected += DotaRoomPlayer_OnPlayerDisconnect;
+            DotaRoomPlayer.ClientOnPlayerChampionModified += DotaRoomPlayer_ClientOnPlayerChampionModified;
+            DotaRoomPlayer.ClientOnPlayerConnectionModified += DotaRoomPlayer_ClientOnPlayerConnectionModified;
+            DotaRoomPlayer.ClientOnPlayerTeamModified += DotaRoomPlayer_ClientOnPlayerTeamModified;
+        }
     }
 
-    public override void OnStopClient()
+    private void OnDestroy()
     {
-        DotaRoomPlayer.ClientOnPlayerConnected -= DotaRoomPlayer_OnPlayerConnect;
-        DotaRoomPlayer.ClientOnPlayerDisconnected -= DotaRoomPlayer_OnPlayerDisconnect;
+        if (isClient)
+        {
+            DotaRoomPlayer.ClientOnPlayerConnected -= DotaRoomPlayer_OnPlayerConnect;
+            DotaRoomPlayer.ClientOnPlayerDisconnected -= DotaRoomPlayer_OnPlayerDisconnect;
+            DotaRoomPlayer.ClientOnPlayerChampionModified -= DotaRoomPlayer_ClientOnPlayerChampionModified;
+            DotaRoomPlayer.ClientOnPlayerConnectionModified -= DotaRoomPlayer_ClientOnPlayerConnectionModified;
+            DotaRoomPlayer.ClientOnPlayerTeamModified -= DotaRoomPlayer_ClientOnPlayerTeamModified;
+        }
+    }
+
+
+    private void UpdateCards()
+    {
+        for(int i=0; i<cards.Count; i++)
+        {
+            if(i < players.Count)
+            {
+                cards[i].SetCard(players[i].GetPlayerName(), players[i].GetTeam(), players[i].GetChampionId(), players[i].GetConnectionState());
+            }
+            else
+            {
+                cards[i].HideCard();
+            }
+        }
+    }
+
+    private void DotaRoomPlayer_ClientOnPlayerTeamModified(DotaRoomPlayer player)
+    {
+        UpdateCards();
+    }
+
+    private void DotaRoomPlayer_ClientOnPlayerConnectionModified(DotaRoomPlayer player)
+    {
+        Debug.Log(player.GetConnectionState());
+        UpdateCards();
+    }
+
+    private void DotaRoomPlayer_ClientOnPlayerChampionModified(DotaRoomPlayer player)
+    {
+        UpdateCards();
     }
 
     private void DotaRoomPlayer_OnPlayerConnect(DotaRoomPlayer player)
     {
-        foreach(CardSlot slot in redSlots)
-        {
-            if (!slot.HasPlayer)
-            {
-                slot.SetPlayer(player);
-                return;
-            }
-        }
-
-        foreach (CardSlot slot in blueSlots)
-        {
-            if (!slot.HasPlayer)
-            {
-                slot.SetPlayer(player);
-                return;
-            }
-        }
-
-        Debug.LogError("Room Is Full");
+        players.Add(player);
+        UpdateCards();
     }
 
     private void DotaRoomPlayer_OnPlayerDisconnect(DotaRoomPlayer player)
     {
-        foreach (CardSlot slot in redSlots)
-        {
-            if(slot.GetPlayer() == player)
-            {
-                slot.SetPlayer(null);
-                return;
-            }
-        }
-
-        foreach (CardSlot slot in blueSlots)
-        {
-            if (slot.GetPlayer() == player)
-            {
-                slot.SetPlayer(null);
-                return;
-            }
-        }
-
-        Debug.LogError("Disconnected Player Not found");
+        players.Remove(player);
+        UpdateCards();
     }
 }

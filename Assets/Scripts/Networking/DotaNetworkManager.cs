@@ -73,13 +73,13 @@ public class DotaNetworkManager : NetworkManager
     #region Server
     public override void OnStartServer()
     {
-        DotaRoomPlayer.OnPlayerConnectionModified += DotaRoomPlayer_OnPlayerConnectionModified;
+        DotaRoomPlayer.ClientOnPlayerConnectionModified += DotaRoomPlayer_OnPlayerConnectionModified;
         NetworkServer.RegisterHandler<ClientSceneLoadedMessage>(OnServerClientSceneLoaded);
     }
 
     public override void OnStopServer()
     {
-        DotaRoomPlayer.OnPlayerConnectionModified -= DotaRoomPlayer_OnPlayerConnectionModified;
+        DotaRoomPlayer.ClientOnPlayerConnectionModified -= DotaRoomPlayer_OnPlayerConnectionModified;
         DotaRoomPlayer.ClientOnPlayerConnected -= DotaRoomPlayer_OnPlayerConnected;
         DotaRoomPlayer.ClientOnPlayerDisconnected -= DotaRoomPlayer_OnPlayerDisconnected;
     }
@@ -143,6 +143,11 @@ public class DotaNetworkManager : NetworkManager
             }
             sceneLoadedClients.Clear();
         }
+    }
+    
+    public void ChangeToRoomScene()
+    {
+        ServerChangeScene(onlineScene);
     }
 
     private void DotaRoomPlayer_OnPlayerConnectionModified(DotaRoomPlayer player)

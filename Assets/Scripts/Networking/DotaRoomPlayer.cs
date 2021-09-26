@@ -12,8 +12,7 @@ namespace Dota.Networking
         RoomReady = 2,
         RoomToGame = 3,
         Game = 4,
-        GameToGameStats = 5,
-        GameStatsToRoom = 6
+        GameToRoom = 5
     }
 
     public class DotaRoomPlayer : NetworkBehaviour, ITeamMember
@@ -37,9 +36,9 @@ namespace Dota.Networking
         public static event System.Action<DotaRoomPlayer> ClientOnPlayerConnected;
         public static event System.Action<DotaRoomPlayer> ClientOnPlayerDisconnected;
 
-        public static event System.Action<DotaRoomPlayer> OnPlayerTeamModified;
-        public static event System.Action<DotaRoomPlayer> OnPlayerChampionModified;
-        public static event System.Action<DotaRoomPlayer> OnPlayerConnectionModified;
+        public static event System.Action<DotaRoomPlayer> ClientOnPlayerTeamModified;
+        public static event System.Action<DotaRoomPlayer> ClientOnPlayerChampionModified;
+        public static event System.Action<DotaRoomPlayer> ClientOnPlayerConnectionModified;
 
         private void Awake()
         {
@@ -84,17 +83,17 @@ namespace Dota.Networking
 
         public void OnChampionIdChanged(int oldValue, int newValue)
         {
-            OnPlayerChampionModified?.Invoke(this);
+            ClientOnPlayerChampionModified?.Invoke(this);
         }
 
         public void OnTeamChanged(Team oldTeam, Team newTeam)
         {
-            OnPlayerTeamModified?.Invoke(this);
+            ClientOnPlayerTeamModified?.Invoke(this);
         }
 
         public void OnPlayerConnectionChanged(PlayerConnectionState oldValue, PlayerConnectionState newValue)
         {
-            OnPlayerConnectionModified?.Invoke(this);
+            ClientOnPlayerConnectionModified?.Invoke(this);
         }
 
         public void ClientSetTeam(Team team)
