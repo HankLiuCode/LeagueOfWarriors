@@ -161,7 +161,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7509079907997610508}
   - component: {fileID: 971630010}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: CircleAbilityIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}

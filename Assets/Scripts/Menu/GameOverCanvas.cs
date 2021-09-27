@@ -10,7 +10,7 @@ public class GameOverCanvas : MonoBehaviour
     {
         if(defeat == null || victory == null)
         {
-            Debug.LogError("gameobject is null!");
+            Debug.LogError("defeat or victory panel is null!");
             return;
         }
         defeat.SetActive(false);
@@ -21,7 +21,7 @@ public class GameOverCanvas : MonoBehaviour
     {
         if (defeat == null || victory == null)
         {
-            Debug.LogError("gameobject is null!");
+            Debug.LogError("defeat or victory panel is null!");
             return;
         }
         victory.SetActive(false);

@@ -13,6 +13,7 @@ public class ServerMover : NetworkBehaviour, IAction
     [SerializeField] DotaAgent agent = null;
     [SerializeField] ActionLocker actionLocker = null;
     [SerializeField] StatStore statStore = null;
+    
 
     #region Server
 

@@ -18,12 +18,6 @@ public class BuildingManager : NetworkBehaviour
     [SerializeField] Tower[] middleRedTowers;
     [SerializeField] Tower[] bottomRedTowers;
 
-    public event System.Action<Tower> OnTowerAdded;
-    public event System.Action<Tower> OnTowerRemoved;
-
-    public event System.Action<Base> OnBaseAdded;
-    public event System.Action<Base> OnBaseRemoved;
-
     public Tower[] GetTowers(Team team, Lane lane)
     {
         if (team == Team.Red)
@@ -69,18 +63,5 @@ public class BuildingManager : NetworkBehaviour
         }
 
         throw new System.Exception("Base of team: " + team + "Doesn't Exist");
-    }
-
-    private void OnBaseDead(Health health)
-    {
-        Base b = health.GetComponent<Base>();
-        Debug.Log("Game Over!");
-        OnBaseRemoved?.Invoke(b);
-    }
-
-    private void OnTowerDead(Health health)
-    {
-        Tower t = health.GetComponent<Tower>();
-        OnTowerRemoved?.Invoke(t);
     }
 }

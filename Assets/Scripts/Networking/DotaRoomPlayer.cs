@@ -17,10 +17,6 @@ namespace Dota.Networking
 
     public class DotaRoomPlayer : NetworkBehaviour, ITeamMember
     {
-        [SerializeField] 
-        [SyncVar]
-        string playerName;
-
         [SerializeField]
         [SyncVar(hook = nameof(OnTeamChanged))]
         Team team;
@@ -43,11 +39,6 @@ namespace Dota.Networking
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
-        }
-
-        public string GetPlayerName()
-        {
-            return playerName;
         }
 
         public Team GetTeam()
@@ -144,12 +135,6 @@ namespace Dota.Networking
         public void ServerSetConnectionState(PlayerConnectionState playerConnState)
         {
             this.playerConnState = playerConnState;
-        }
-
-        [Server]
-        public void ServerSetPlayerName(string playerName)
-        {
-            this.playerName = playerName;
         }
 
         [Server]

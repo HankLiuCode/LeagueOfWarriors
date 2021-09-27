@@ -5,9 +5,11 @@ using Mirror;
 using Dota.Networking;
 using UnityEngine.SceneManagement;
 
+
 public class DotaNetworkManager : NetworkManager
 {
     [Scene] [SerializeField] string gameScene;
+    [SerializeField] int maxPlayers = 2;
     [SerializeField] List<DotaRoomPlayer> serverPlayers = new List<DotaRoomPlayer>();
     [SerializeField] List<DotaRoomPlayer> clientPlayers = new List<DotaRoomPlayer>();
 
@@ -107,6 +109,10 @@ public class DotaNetworkManager : NetworkManager
 
     public override void OnServerAddPlayer(NetworkConnection conn)
     {
+        if(serverPlayers.Count >= maxPlayers) { return; }
+
+        if(serverCurrentScene == gameScene) { return; }
+
         Transform startPos = GetStartPosition();
         GameObject player = startPos != null
             ? Instantiate(playerPrefab, startPos.position, startPos.rotation)
@@ -143,6 +149,16 @@ public class DotaNetworkManager : NetworkManager
             }
             sceneLoadedClients.Clear();
         }
+    }
+
+    public int GetMaxPlayers()
+    {
+        return maxPlayers;
+    }
+
+    public void SetMaxPlayers(int maxPlayers)
+    {
+        this.maxPlayers = maxPlayers;
     }
     
     public void ChangeToRoomScene()

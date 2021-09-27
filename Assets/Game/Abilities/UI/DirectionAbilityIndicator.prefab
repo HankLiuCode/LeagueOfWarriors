@@ -185,7 +185,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2726156333138317242}
   - component: {fileID: 2726156333138317245}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: DirectionAbilityIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -232,7 +232,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7866976040375430197}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Wrapper
   m_TagString: Untagged
   m_Icon: {fileID: 0}

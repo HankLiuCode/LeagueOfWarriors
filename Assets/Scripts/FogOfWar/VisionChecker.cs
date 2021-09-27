@@ -187,7 +187,9 @@ public class VisionChecker : NetworkBehaviour
             {
                 case Operation.AddAlly:
                     allies.Add(request.visionEntity);
+                    request.visionEntity.SetVisible(true);
                     OnVisionEntityAdded?.Invoke(request.visionEntity);
+                    OnVisionEntityEnter?.Invoke(request.visionEntity);
                     break;
 
                 case Operation.RemoveAlly:

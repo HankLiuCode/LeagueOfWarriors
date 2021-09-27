@@ -43,7 +43,7 @@ public class LobbyMenu : NetworkBehaviour
         {
             if(i < players.Count)
             {
-                cards[i].SetCard(players[i].GetPlayerName(), players[i].GetTeam(), players[i].GetChampionId(), players[i].GetConnectionState());
+                cards[i].SetCard(players[i].GetTeam(), players[i].GetChampionId(), players[i].GetConnectionState());
             }
             else
             {

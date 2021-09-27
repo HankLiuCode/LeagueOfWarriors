@@ -36,10 +36,17 @@ public class MinionSpawner : NetworkBehaviour
             blueSpawnRoutine = SpawnWaveRoutine(Team.Blue, firstWaveSpawnAfter, 1, spawnInterval);
             StartCoroutine(redSpawnRoutine);
             StartCoroutine(blueSpawnRoutine);
+
+            GameOverHandler.OnGameOver += GameOverHandler_OnGameOver;
         }
     }
 
     #region Server
+
+    private void GameOverHandler_OnGameOver()
+    {
+        spawnMinion = false;
+    }
 
     public void StartSpawnWave()
     {

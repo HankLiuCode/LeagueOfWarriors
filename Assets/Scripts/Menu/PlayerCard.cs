@@ -9,7 +9,7 @@ public class PlayerCard : MonoBehaviour
 {
     [SerializeField] GameObject card = null;
     [SerializeField] Image playerIcon = null;
-    [SerializeField] TextMeshProUGUI playerNameTextMesh = null;
+    [SerializeField] Image teamBackground = null;
     [SerializeField] TextMeshProUGUI teamTextMesh = null;
     [SerializeField] TextMeshProUGUI readyTextMesh = null;
     [SerializeField] ChampionIdMapping mapping = null;
@@ -20,15 +20,16 @@ public class PlayerCard : MonoBehaviour
         card.gameObject.SetActive(false);
     }
 
-    public void SetCard(string playerName, Team team, int championId, PlayerConnectionState connectionState)
+    public void SetCard(Team team, int championId, PlayerConnectionState connectionState)
     {
         card.gameObject.SetActive(true);
 
         playerIcon.sprite = mapping.GetIcon(championId);
-        playerNameTextMesh.text = playerName;
         teamTextMesh.text = team.ToString();
 
-        string showText = "Nan";
+        teamBackground.color = (team == Team.Red) ? Color.red : Color.white;
+
+        string showText;
         switch (connectionState)
         {
             case PlayerConnectionState.RoomToGame:
