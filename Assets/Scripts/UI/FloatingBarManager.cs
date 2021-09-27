@@ -97,8 +97,6 @@ public class FloatingBarManager : NetworkBehaviour
 
         floatingBarInstance.Setup(health, mana, localPlayerTeam, teamMember.GetTeam(), Vector3.up * health.GetDisplayOffset());
 
-        floatingBarInstance.gameObject.SetActive(false);
-
         floatingBars.Add(health, floatingBarInstance);
     }
 }

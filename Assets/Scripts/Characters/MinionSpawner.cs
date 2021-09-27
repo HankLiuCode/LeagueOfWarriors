@@ -43,7 +43,7 @@ public class MinionSpawner : NetworkBehaviour
 
     #region Server
 
-    private void GameOverHandler_OnGameOver()
+    private void GameOverHandler_OnGameOver(Base teamBase)
     {
         spawnMinion = false;
     }

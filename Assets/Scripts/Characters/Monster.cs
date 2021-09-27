@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using UnityEngine.AI;
 
 public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
 {
@@ -13,6 +14,7 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
     [SerializeField] AnimationEventHandler animationEventHandler = null;
     [SerializeField] Health health = null;
     [SerializeField] StatStore statStore = null;
+    [SerializeField] NavMeshAgent agent = null;
     [SerializeField] MinimapDefaultIcon minimapIconPrefab = null;
     [SerializeField] Sprite icon = null;
 
@@ -93,13 +95,11 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
         {
             currentState = MonsterState.IDLE;
             animator.SetBool("relax", false);
-            //thisAnimator.SetTrigger("IDLE");
         }
         else if (actionWeight[0] < number && number <= actionWeight[0] + actionWeight[1])
         {
             currentState = MonsterState.RELAX;
             animator.SetBool("relax", true);
-            //thisAnimator.SetTrigger("Check");
         }
 
     }
@@ -172,6 +172,7 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
                     is_Running = true;
                 }
                 transform.Translate(Vector3.forward * Time.deltaTime * runSpeed);
+
                 //朝向玩家位置
                 targetRotation = Quaternion.LookRotation(target.transform.position - transform.position, Vector3.up);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed);
@@ -239,6 +240,7 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
         {
             currentState = MonsterState.CHASE;          //進入追擊狀態
         }
+
         //if被攻擊(HP減少)
         //進入追擊狀態...
     }

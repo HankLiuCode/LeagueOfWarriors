@@ -1,5 +1,17 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &7881081430112815507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1916292671027601029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96ec5fe4c00163f499f1bf840990a0e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &868963972588697192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15,18 +27,6 @@ MonoBehaviour:
   meshRenderer: {fileID: 1916292671032829259}
   disolveShader: {fileID: 4800000, guid: f7c9e981cd3f19347b1a312bf9ef6d0e, type: 3}
   disolveDuration: 2
---- !u!114 &7881081430112815507
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1916292671027601029}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96ec5fe4c00163f499f1bf840990a0e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1733962756691221093
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -49,6 +49,11 @@ PrefabInstance:
       propertyPath: animator
       value: 
       objectReference: {fileID: 1916292671037001483}
+    - target: {fileID: -5490791059147047452, guid: 9c09a4223c69d6c4086a3700624a8aad,
+        type: 3}
+      propertyPath: health
+      value: 
+      objectReference: {fileID: 835575435654633505}
     - target: {fileID: -5490791059147047452, guid: 9c09a4223c69d6c4086a3700624a8aad,
         type: 3}
       propertyPath: animationEventHandler
@@ -179,6 +184,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1733962756691221093}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &835575435654633505 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1407597664436666948, guid: 9c09a4223c69d6c4086a3700624a8aad,
+    type: 3}
+  m_PrefabInstance: {fileID: 1733962756691221093}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2136612336401763621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b489b421b8c39b24cb4c74311a575374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1916292671027684669
 PrefabInstance:
   m_ObjectHideFlags: 0

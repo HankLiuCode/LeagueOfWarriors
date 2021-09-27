@@ -185,6 +185,7 @@ MonoBehaviour:
   serverMover: {fileID: -7754430342046818133}
   serverFighter: {fileID: -5490791059147047452}
   health: {fileID: 1407597664436666948}
+  disolver: {fileID: 0}
   icon: {fileID: 21300000, guid: 51d32f802cfabaf4a86ad058906b4c11, type: 3}
   minimapIconPrefab: {fileID: 495618344135852268, guid: 72345f921fd2bd44086cb1ddbb5e7023,
     type: 3}
@@ -212,6 +213,10 @@ MonoBehaviour:
   - {fileID: 0}
   viewRadius: 5
   isAlwaysVisible: 0
+  grassLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  currentBush: {fileID: 0}
 --- !u!114 &-7754430342046818133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,7 +263,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   attackCooldownTimer: 0
-  attackRange: 3
+  attackRange: 2
   timeBetweenAttacks: 1
   netAnimator: {fileID: 1884173398059766069}
   animationEventHandler: {fileID: 0}

@@ -76,6 +76,7 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
     [ServerCallback]
     void Update()
     {
+
         if(currentTarget != null)
         {
             if (currentTarget.GetHealth().IsDead())

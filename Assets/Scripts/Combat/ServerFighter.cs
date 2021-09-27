@@ -21,6 +21,7 @@ public class ServerFighter : NetworkBehaviour
 
     [SerializeField] NetworkAnimator netAnimator = null;
     [SerializeField] AnimationEventHandler animationEventHandler = null;
+    [SerializeField] Health health = null;
     [SerializeField] ServerMover mover = null;
     [SerializeField] StatStore statStore = null;
     
@@ -130,6 +131,8 @@ public class ServerFighter : NetworkBehaviour
     [ServerCallback]
     private void Update()
     {
+        if (health.IsDead()) { return; }
+
         attackCooldownTimer -= Time.deltaTime;
 
         if (target == null) { return; }

@@ -9,7 +9,7 @@ public class GameOverHandler : NetworkBehaviour
     [SerializeField] Team localPlayerTeam;
     [SerializeField] GameOverCanvas gameOverCanvas;
 
-    public static event System.Action OnGameOver;
+    public static event System.Action<Base> OnGameOver;
 
     private void Awake()
     {
@@ -29,7 +29,7 @@ public class GameOverHandler : NetworkBehaviour
 
     private void Base_ServerOnBaseDead(Base teamBase)
     {
-        OnGameOver?.Invoke();
+        OnGameOver?.Invoke(teamBase);
     }
     #endregion
 

@@ -20,9 +20,33 @@ public class CameraController : MonoBehaviour
     [SerializeField] 
     float viewDist = MAX_VIEW_DISTANCE;
 
-
     Vector3 lookAtPoint;
     Transform followTarget = null;
+
+    private void Start()
+    {
+        Champion.OnChampionSpawned += Champion_OnChampionSpawned;
+        GameOverHandler.OnGameOver += GameOverHandler_OnGameOver;
+    }
+
+    private void OnDestroy()
+    {
+        Champion.OnChampionSpawned -= Champion_OnChampionSpawned;
+        GameOverHandler.OnGameOver -= GameOverHandler_OnGameOver;
+    }
+
+    private void GameOverHandler_OnGameOver(Base teamBase)
+    {
+        SetFollowTarget(teamBase.transform);
+    }
+
+    private void Champion_OnChampionSpawned(Champion champion)
+    {
+        if (champion.hasAuthority)
+        {
+            SetFollowTarget(champion.transform);
+        }
+    }
 
     public Camera GetCamera()
     {

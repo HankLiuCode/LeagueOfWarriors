@@ -26,6 +26,7 @@ public class MinimapDefaultIcon : MinimapIcon
 
             case Team.None:
                 teamRepresentImage.sprite = noneTeamSprite;
+                teamRepresentImage.color = Color.green;
                 break;
         }
     }
