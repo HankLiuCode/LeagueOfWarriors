@@ -5,6 +5,12 @@ using UnityEngine;
 public class MessageSender : NetworkBehaviour
 {
 
+    public void NextChampion()
+    {
+        DotaRoomPlayer localPlayer = NetworkClient.localPlayer.GetComponent<DotaRoomPlayer>();
+        int championId = localPlayer.GetChampionId();
+    }
+
     public void ToggleReady()
     {
         DotaRoomPlayer localPlayer = NetworkClient.localPlayer.GetComponent<DotaRoomPlayer>();

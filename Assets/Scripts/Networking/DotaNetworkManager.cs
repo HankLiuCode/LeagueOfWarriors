@@ -4,7 +4,7 @@ using UnityEngine;
 using Mirror;
 using Dota.Networking;
 using UnityEngine.SceneManagement;
-
+using System;
 
 public class DotaNetworkManager : NetworkManager
 {
@@ -77,6 +77,12 @@ public class DotaNetworkManager : NetworkManager
     {
         DotaRoomPlayer.ClientOnPlayerConnectionModified += DotaRoomPlayer_OnPlayerConnectionModified;
         NetworkServer.RegisterHandler<ClientSceneLoadedMessage>(OnServerClientSceneLoaded);
+        NetworkServer.RegisterHandler<ClientGameToRoomRequestMessage>(ServerOnClientGameToRoomRequest);
+    }
+
+    public void ServerOnClientGameToRoomRequest(NetworkConnection networkConnection, ClientGameToRoomRequestMessage msg)
+    {
+        ChangeToRoomScene();
     }
 
     public override void OnStopServer()
@@ -163,6 +169,10 @@ public class DotaNetworkManager : NetworkManager
     
     public void ChangeToRoomScene()
     {
+        foreach(DotaRoomPlayer player in serverPlayers)
+        {
+            player.ServerSetConnectionState(PlayerConnectionState.RoomNotReady);
+        }
         ServerChangeScene(onlineScene);
     }
 

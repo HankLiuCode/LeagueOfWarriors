@@ -13,4 +13,9 @@ public class JoinMenu : MonoBehaviour
         DotaNetworkManager.singleton.networkAddress = address.text;
         DotaNetworkManager.singleton.StartClient();
     }
+
+    public void CancelJoin()
+    {
+        DotaNetworkManager.singleton.StopClient();
+    }
 }
