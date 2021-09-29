@@ -17,6 +17,7 @@ public class DotaNetworkManager : NetworkManager
     List<NetworkConnection> sceneLoadedClients = new List<NetworkConnection>();
 
     public static event System.Action<string> ClientOnAllClientSceneLoaded;
+    public static event System.Action ServerOnAllPlayersReady;
     public static event System.Action<string> ServerOnAllClientSceneLoaded;
     public static event System.Action<DotaRoomPlayer> ServerOnClientDisconnect;
 
@@ -176,14 +177,19 @@ public class DotaNetworkManager : NetworkManager
         ServerChangeScene(onlineScene);
     }
 
+    public void ChangeToGameScene()
+    {
+        ServerChangeScene(gameScene);
+    }
+
     private void DotaRoomPlayer_OnPlayerConnectionModified(DotaRoomPlayer player)
     {
         if (IsAllPlayersRoomReady())
         {
-            ServerChangeScene(gameScene);
+            ServerOnAllPlayersReady?.Invoke();
         }
     }
-    private bool IsAllPlayersRoomReady()
+    public bool IsAllPlayersRoomReady()
     {
         int readyCount = 0;
         foreach (DotaRoomPlayer clientPlayer in clientPlayers)

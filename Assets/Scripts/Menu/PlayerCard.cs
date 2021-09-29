@@ -48,6 +48,10 @@ public class PlayerCard : MonoBehaviour
                 showText = connectionState.ToString();
                 break;
         }
-        readyTextMesh.text = showText;
+
+        if(readyTextMesh != null)
+        {
+            readyTextMesh.text = showText;
+        }
     }
 }

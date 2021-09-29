@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MessageSender : NetworkBehaviour
 {
+
+    #region Client
     public void LastChampion()
     {
         DotaRoomPlayer localPlayer = NetworkClient.localPlayer.GetComponent<DotaRoomPlayer>();
@@ -39,4 +41,5 @@ public class MessageSender : NetworkBehaviour
             localPlayer.CmdSetTeam(Team.Red);
         }
     }
+    #endregion
 }

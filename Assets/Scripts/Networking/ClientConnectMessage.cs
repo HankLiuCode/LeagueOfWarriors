@@ -9,10 +9,7 @@ public struct ClientConnectMessage : NetworkMessage
     public string playerName;
 }
 
-public struct ClientGameToRoomRequestMessage : NetworkMessage
-{
-    
-}
+public struct ClientGameToRoomRequestMessage : NetworkMessage {}
 
 public struct ClientSceneLoadedMessage : NetworkMessage 
 {
