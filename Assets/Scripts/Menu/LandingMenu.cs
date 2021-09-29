@@ -16,4 +16,9 @@ public class LandingMenu : MonoBehaviour
     {
         joinLobbyPanel.SetActive(isActive);
     }
+
+    public void Quit()
+    {
+
+    }
 }
