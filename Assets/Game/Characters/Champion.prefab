@@ -50,6 +50,11 @@ GameObject:
   - component: {fileID: 5093792499633400171}
   - component: {fileID: -7159978106751353337}
   - component: {fileID: -5780347126821875179}
+  - component: {fileID: 5082810447845971404}
+  - component: {fileID: 3858554750723464716}
+  - component: {fileID: 4832241273574078050}
+  - component: {fileID: 202626032388791037}
+  - component: {fileID: 7071705302260239870}
   m_Layer: 11
   m_Name: Champion
   m_TagString: Untagged
@@ -282,3 +287,90 @@ MonoBehaviour:
   allowAttackRadius: 1
   health: {fileID: 8223221447003321259}
   aimPoint: {fileID: 4419022097544162935}
+--- !u!54 &5082810447845971404
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7214919029000824495}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &3858554750723464716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7214919029000824495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d43e9b81cf617244b05ab79a5ae24d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  team: 0
+  icon: {fileID: 21300000, guid: 46d2bf8f83a47f642a51d6c922e6055a, type: 3}
+  minimapIconPrefab: {fileID: 6530037425827343085, guid: 843f6fc95a6483847874722a294126ab,
+    type: 3}
+  health: {fileID: 8223221447003321259}
+  disolver: {fileID: 202626032388791037}
+--- !u!114 &4832241273574078050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7214919029000824495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 496b6424e47dba94b91cda2b72ddd622, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  manaPoint: 100
+  statStore: {fileID: -7159978106751353337}
+--- !u!114 &202626032388791037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7214919029000824495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f71e688fe18acb64d86886bd9ce01960, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshRenderer: {fileID: 0}
+  disolveShader: {fileID: 4800000, guid: f7c9e981cd3f19347b1a312bf9ef6d0e, type: 3}
+  disolveDuration: 1.5
+--- !u!114 &7071705302260239870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7214919029000824495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa08996a36889d248b1049e6ee73d2b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderers:
+  - {fileID: 0}
+  viewRadius: 25
+  isAlwaysVisible: 0
+  grassLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  currentBush: {fileID: 0}
