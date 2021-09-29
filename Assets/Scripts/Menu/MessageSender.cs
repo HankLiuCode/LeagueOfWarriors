@@ -4,11 +4,18 @@ using UnityEngine;
 
 public class MessageSender : NetworkBehaviour
 {
+    public void LastChampion()
+    {
+        DotaRoomPlayer localPlayer = NetworkClient.localPlayer.GetComponent<DotaRoomPlayer>();
+        int championId = localPlayer.GetChampionId();
+        localPlayer.CmdSetChampionId(championId - 1);
+    }
 
     public void NextChampion()
     {
         DotaRoomPlayer localPlayer = NetworkClient.localPlayer.GetComponent<DotaRoomPlayer>();
         int championId = localPlayer.GetChampionId();
+        localPlayer.CmdSetChampionId(championId + 1);
     }
 
     public void ToggleReady()

@@ -17,7 +17,7 @@ namespace Dota.Networking
 
     public class DotaRoomPlayer : NetworkBehaviour, ITeamMember
     {
-        public const int MAX_CHAMPION_ID = 1;
+        public const int MAX_CHAMPIONS = 2;
 
         [SerializeField]
         [SyncVar(hook = nameof(OnTeamChanged))]
@@ -130,8 +130,7 @@ namespace Dota.Networking
         [Server]
         public void ServerSetChampionId(int championId)
         {
-            this.championId = championId % MAX_CHAMPION_ID;
-            this.championId = championId;
+            this.championId = (championId + MAX_CHAMPIONS) % MAX_CHAMPIONS;
         }
 
         [Server]
