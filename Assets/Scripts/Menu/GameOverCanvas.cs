@@ -1,10 +1,11 @@
 using Mirror;
 using UnityEngine;
 
-public class GameOverCanvas : MonoBehaviour
+public class GameOverCanvas : NetworkBehaviour
 {
     [SerializeField] GameObject victory;
     [SerializeField] GameObject defeat;
+    [Scene] [SerializeField] string roomScene;
 
     public void ShowVictory()
     {
@@ -30,6 +31,13 @@ public class GameOverCanvas : MonoBehaviour
 
     public void BackToRoom()
     {
-        ((DotaNetworkManager) NetworkManager.singleton).ChangeToRoomScene();
+        if (isServer)
+        {
+            ((DotaNetworkManager)NetworkManager.singleton).ChangeToRoomScene();
+        }
+        else
+        {
+            NetworkClient.Send(new ClientGameToRoomRequestMessage());
+        }
     }
 }

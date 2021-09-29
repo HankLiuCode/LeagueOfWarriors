@@ -56,6 +56,11 @@ PrefabInstance:
       objectReference: {fileID: 835575435654633505}
     - target: {fileID: -5490791059147047452, guid: 9c09a4223c69d6c4086a3700624a8aad,
         type: 3}
+      propertyPath: attackRange
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -5490791059147047452, guid: 9c09a4223c69d6c4086a3700624a8aad,
+        type: 3}
       propertyPath: animationEventHandler
       value: 
       objectReference: {fileID: 7881081430112815507}
