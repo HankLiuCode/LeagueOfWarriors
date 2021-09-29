@@ -31,6 +31,44 @@ MonoBehaviour:
   meshRenderer: {fileID: 620882805560107910}
   disolveShader: {fileID: 4800000, guid: f7c9e981cd3f19347b1a312bf9ef6d0e, type: 3}
   disolveDuration: 1.5
+--- !u!114 &-5136682741964132428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 452546937840963528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb27bb0d0f6cecb4e98ab296ab2057a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  manaCost: 5
+  cooldownTime: 5
+  statStore: {fileID: 9134965200569341792}
+  icon: {fileID: 21300000, guid: f6eba69adf6393c4dac4c662468659c1, type: 3}
+  smartCast: 0
+  indicatorPrefab: {fileID: 2726156333138317243, guid: e49fdf0fe03ad394880183322ea11d43,
+    type: 3}
+  damageRectPrefab: {fileID: 2726156333138317243, guid: fc7f15d385167fb4da78c58e3435cb54,
+    type: 3}
+  spellPrefab: {fileID: 6097260162213657970, guid: 0d9b3c6c410c8df409d36096904da2a5,
+    type: 3}
+  spellEffectOffset: 2
+  networkAnimator: {fileID: 1861298204142979517}
+  animationEventHandler: {fileID: 2928662850204982764}
+  animationTrigger: abilityR
+  actionLocker: {fileID: 2654738810189758476}
+  attackLayer:
+    serializedVersion: 2
+    m_Bits: 38912
+  baseDamage: 20
+  length: 5
+  width: 5
+  delayTime: 0.6
+  destroyTime: 2
 --- !u!114 &-4533690763673579477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,6 +150,8 @@ MonoBehaviour:
   networkAnimator: {fileID: 1861298204142979517}
   animationEventHandler: {fileID: 2928662850204982764}
   actionLocker: {fileID: 2654738810189758476}
+  health: {fileID: 1187138297185360588}
+  baseHeal: 10
   animationTrigger: abilityE
 --- !u!114 &-1142228928501147130
 MonoBehaviour:
@@ -135,49 +175,10 @@ MonoBehaviour:
   - {fileID: 538770581797919719}
   - {fileID: -4533690763673579477}
   - {fileID: -3679921401897041321}
-  - {fileID: -396314808053693547}
+  - {fileID: -5136682741964132428}
   groundMask:
     serializedVersion: 2
     m_Bits: 256
---- !u!114 &-396314808053693547
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 452546937840963528}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52bf61089dc9acc49ae19af364fc2971, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  manaCost: 5
-  cooldownTime: 5
-  statStore: {fileID: 9134965200569341792}
-  icon: {fileID: 21300000, guid: 4637953d65a24364aab3372a525b9ed2, type: 3}
-  smartCast: 0
-  indicatorPrefab: {fileID: 7509079907997610509, guid: f7e58577928620441a8e147c3a9eaf13,
-    type: 3}
-  spellRangePrefab: {fileID: 3863486996862453941, guid: bf00ad13d1f143542a75c4b4b93f9805,
-    type: 3}
-  damageRadiusPrefab: {fileID: 7449486549517724255, guid: 39273ae671b38d5429ffc87492fe8995,
-    type: 3}
-  spellPrefab: {fileID: 1210069404974878, guid: f9d5b69e96abfb2499f3e5babf223986,
-    type: 3}
-  networkAnimator: {fileID: 1861298204142979517}
-  animationEventHandler: {fileID: 2928662850204982764}
-  animationTrigger: abilityW
-  actionLocker: {fileID: 2654738810189758476}
-  attackLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  maxRange: 6
-  baseDamage: 10
-  damageRadius: 2
-  delayTime: 2
-  destroyTime: 0.8
 --- !u!114 &228051818702057190
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,7 +218,6 @@ MonoBehaviour:
     type: 3}
   damageRectPrefab: {fileID: 2726156333138317243, guid: fc7f15d385167fb4da78c58e3435cb54,
     type: 3}
-  damageRectInstance: {fileID: 0}
   spellPrefab: {fileID: 100002, guid: e7f1d122947740542b477ccc0b41d880, type: 3}
   spellEffectOffset: 3
   networkAnimator: {fileID: 1861298204142979517}
@@ -227,8 +227,8 @@ MonoBehaviour:
   attackLayer:
     serializedVersion: 2
     m_Bits: 38912
-  baseDamage: 20
-  length: 5
+  baseDamage: 10
+  length: 6
   width: 1
   delayTime: 0.4
   destroyTime: 0.6
@@ -591,7 +591,7 @@ PrefabInstance:
     - target: {fileID: -7159978106751353337, guid: b31cb8edadf36634680f82045f41209b,
         type: 3}
       propertyPath: baseStats.magicDamage
-      value: 50
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: -7159978106751353337, guid: b31cb8edadf36634680f82045f41209b,
         type: 3}

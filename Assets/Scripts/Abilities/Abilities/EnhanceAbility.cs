@@ -1,3 +1,4 @@
+using Dota.Attributes;
 using Dota.Core;
 using Mirror;
 using System;
@@ -10,7 +11,8 @@ public class EnhanceAbility : Ability
     [SerializeField] NetworkAnimator networkAnimator = null;
     [SerializeField] AnimationEventHandler animationEventHandler = null;
     [SerializeField] ActionLocker actionLocker = null;
-
+    [SerializeField] Health health = null;
+    [SerializeField] float baseHeal = 10f;
     [SerializeField] string animationTrigger = "abilityE";
 
 
@@ -21,7 +23,7 @@ public class EnhanceAbility : Ability
         if (canDo)
         {
             networkAnimator.SetTrigger(animationTrigger);
-
+            health.CmdHeal(baseHeal + statStore.GetStats().magicDamage);
             transform.LookAt(abilityData.mousePos, Vector3.up);
         }
     }

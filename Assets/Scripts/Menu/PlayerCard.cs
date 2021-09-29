@@ -25,9 +25,8 @@ public class PlayerCard : MonoBehaviour
         card.gameObject.SetActive(true);
 
         playerIcon.sprite = mapping.GetIcon(championId);
-        teamTextMesh.text = team.ToString();
-
         teamBackground.color = (team == Team.Red) ? Color.red : Color.white;
+        teamTextMesh.text = team.ToString();
 
         string showText;
         switch (connectionState)
@@ -38,6 +37,7 @@ public class PlayerCard : MonoBehaviour
 
             case PlayerConnectionState.RoomReady:
                 showText = "ready";
+                teamTextMesh.gameObject.SetActive(false);
                 break;
 
             case PlayerConnectionState.RoomNotReady:

@@ -11,7 +11,6 @@ public class DirectionalAbility : Ability
     RectIndicator directionIndicatorInstance = null;
 
     [SerializeField] GameObject damageRectPrefab = null;
-    [SerializeField] GameObject damageRectInstance = null;
 
     [SerializeField] GameObject spellPrefab = null;
     [SerializeField] float spellEffectOffset = 2.0f;
@@ -30,6 +29,8 @@ public class DirectionalAbility : Ability
 
     [SerializeField] float delayTime = 1f;
     [SerializeField] float destroyTime = 1f;
+
+    GameObject damageRectInstance;
 
     #region Server
 
@@ -91,6 +92,7 @@ public class DirectionalAbility : Ability
     {
         directionIndicatorInstance = Instantiate(indicatorPrefab).GetComponent<RectIndicator>();
         directionIndicatorInstance.SetLength(length);
+        directionIndicatorInstance.SetWidth(width);
         directionIndicatorInstance.gameObject.SetActive(false);
 
         animationEventHandler.OnAttackBackswing += AnimationEventHandler_OnAttackBackswing;
@@ -100,7 +102,6 @@ public class DirectionalAbility : Ability
     public override void OnStopClient()
     {
         if (!hasAuthority) { return; }
-        //Destroy(directionIndicatorInstance.gameObject);
         animationEventHandler.OnAttackBackswing -= AnimationEventHandler_OnAttackBackswing;
         animationEventHandler.OnAttackPoint -= AnimationEventHandler_OnAttackPoint;
     }

@@ -16,6 +16,7 @@ public class PlayerUpdater : NetworkBehaviour
         {
             players.AddRange(FindObjectsOfType<DotaRoomPlayer>());
             UpdateCards();
+
             DotaRoomPlayer.ClientOnPlayerConnected += DotaRoomPlayer_OnPlayerConnect;
             DotaRoomPlayer.ClientOnPlayerDisconnected += DotaRoomPlayer_OnPlayerDisconnect;
             DotaRoomPlayer.ClientOnPlayerChampionModified += DotaRoomPlayer_ClientOnPlayerChampionModified;
@@ -41,7 +42,9 @@ public class PlayerUpdater : NetworkBehaviour
     {
         for(int i=0; i<cards.Count; i++)
         {
-            if(i < players.Count)
+            if (cards[i] == null) { continue; }
+
+            if (i < players.Count)
             {
                 cards[i].SetCard(players[i].GetTeam(), players[i].GetChampionId(), players[i].GetConnectionState());
             }

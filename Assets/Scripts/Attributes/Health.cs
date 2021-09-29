@@ -20,7 +20,7 @@ namespace Dota.Attributes
 
         [SerializeField] float healthDisplayOffset = 3f;
 
-        public event System.Action ClientOnHealthModified;
+        public event System.Action<float, float> ClientOnHealthModified;
         public event System.Action<Health> ClientOnHealthDead;
         public event System.Action ClientOnHealthDeadEnd;
 
@@ -96,7 +96,7 @@ namespace Dota.Attributes
 
         private void OnHealthChanged(float oldValue, float newValue)
         {
-            ClientOnHealthModified?.Invoke();
+            ClientOnHealthModified?.Invoke(oldValue, newValue);
         }
         #endregion
 
