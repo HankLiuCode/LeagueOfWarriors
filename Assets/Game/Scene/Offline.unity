@@ -1858,6 +1858,7 @@ MonoBehaviour:
   - {fileID: 1210069404974878, guid: f9d5b69e96abfb2499f3e5babf223986, type: 3}
   - {fileID: 100000, guid: 1ccc170aa4bae6a47ae1827131a363ae, type: 3}
   - {fileID: 6097260162213657970, guid: 0d9b3c6c410c8df409d36096904da2a5, type: 3}
+  - {fileID: 100004, guid: da985a6a0823be8498319a9302b21f0c, type: 3}
   gameScene: Assets/Game/Scene/Game.unity
   maxPlayers: 2
   serverPlayers: []

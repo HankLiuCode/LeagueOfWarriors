@@ -10,7 +10,8 @@ public class PlayerManager : NetworkBehaviour
     [SerializeField]
     string gameScene;
 
-    [SerializeField] GameObject championPrefab;
+    [SerializeField] ChampionIdMapping championMapping = null;
+
     [SerializeField] Transform[] blueStartPositions;
     [SerializeField] Transform[] redStartPositions;
 
@@ -87,6 +88,8 @@ public class PlayerManager : NetworkBehaviour
         Team championTeam = player.GetTeam();
 
         Vector3 spawnPosition = GetSpawnPosition(championTeam);
+
+        GameObject championPrefab = championMapping.GetPrefab(player.GetChampionId());
 
         GameObject championInstance = Instantiate(championPrefab, spawnPosition, Quaternion.identity);
 
