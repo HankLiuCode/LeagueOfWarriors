@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   championPrefabs:
   - championId: 0
-    championIcon: {fileID: 21300000, guid: 46d2bf8f83a47f642a51d6c922e6055a, type: 3}
+    championIcon: {fileID: 21300000, guid: a52db8c8658a3ee4caa6b63d0057385e, type: 3}
     championPrefab: {fileID: 452546937840963528, guid: 3dbc6cd5f5aa16d48baca7aa12e1cef9,
       type: 3}
   - championId: 1
     championIcon: {fileID: 21300000, guid: 7c8e0e7b86f596a4eb063abd698f945b, type: 3}
-    championPrefab: {fileID: 452546937840963528, guid: 3dbc6cd5f5aa16d48baca7aa12e1cef9,
+    championPrefab: {fileID: 5252308120716157901, guid: 1c5d525e699ff3b488b424db5cfba49d,
       type: 3}
