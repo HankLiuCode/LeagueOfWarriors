@@ -7,6 +7,9 @@ using Dota.Networking;
 
 public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
 {
+    public const float DEATH_TIME = 15f;
+
+
     [SyncVar]
     [SerializeField] 
     Team team;

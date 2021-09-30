@@ -10,7 +10,6 @@ public class DeathScreen : MonoBehaviour
 
     float deathTime = 10f;
 
-
     private void Start()
     {
         Champion.OnChampionSpawned += Champion_OnChampionSpawned;
@@ -20,7 +19,7 @@ public class DeathScreen : MonoBehaviour
     private void Update()
     {
         deathTime = Mathf.Max(deathTime - Time.deltaTime, 0);
-        deathText.text = "revive after: " + Mathf.CeilToInt(deathTime);
+        deathText.text = "Revive After: " + Mathf.CeilToInt(deathTime);
     }
 
     private void OnDestroy()
@@ -30,7 +29,7 @@ public class DeathScreen : MonoBehaviour
 
     private void Champion_ClientOnChampionDead(Champion champion)
     {
-        deathTime = 10f;
+        deathTime = Champion.DEATH_TIME;
         if (champion.hasAuthority)
         {
             canvas.gameObject.SetActive(true);

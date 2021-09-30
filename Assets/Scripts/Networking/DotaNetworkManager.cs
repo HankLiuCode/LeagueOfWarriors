@@ -184,26 +184,37 @@ public class DotaNetworkManager : NetworkManager
 
     private void DotaRoomPlayer_OnPlayerConnectionModified(DotaRoomPlayer player)
     {
-        if (IsAllPlayersRoomReady())
+        if (IsAllowedToStartGame())
         {
             ServerOnAllPlayersReady?.Invoke();
         }
     }
-    public bool IsAllPlayersRoomReady()
+
+    public bool IsAllowedToStartGame()
     {
         int readyCount = 0;
-        foreach (DotaRoomPlayer clientPlayer in clientPlayers)
+        int redCount = 0;
+        foreach (DotaRoomPlayer serverPlayer in serverPlayers)
         {
-            if (clientPlayer.GetConnectionState() == PlayerConnectionState.RoomReady)
+            if (serverPlayer.GetConnectionState() == PlayerConnectionState.RoomReady)
             {
                 readyCount++;
             }
+            if(serverPlayer.GetTeam() == Team.Red)
+            {
+                redCount++;
+            }
         }
-        if (readyCount == clientPlayers.Count && clientPlayers.Count != 0)
+        bool hasDifferentTeam = (redCount != serverPlayers.Count) && (redCount != 0);
+        bool allReady = readyCount == serverPlayers.Count && serverPlayers.Count != 0;
+
+        if (allReady)
         {
             return true;
         }
         return false;
     }
+
+
     #endregion
 }

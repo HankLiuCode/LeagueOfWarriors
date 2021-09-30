@@ -17,8 +17,6 @@ public class PlayerManager : NetworkBehaviour
 
     [SerializeField] List<Champion> serverChampions = new List<Champion>();
 
-    [SerializeField] float deathTime = 3f;
-
     int blueStartPositionIndex = 0;
     int redStartPositionIndex = 0;
 
@@ -53,7 +51,7 @@ public class PlayerManager : NetworkBehaviour
     private void Champion_ServerOnChampionDead(Champion champion)
     {
         serverChampions.Remove(champion);
-        StartCoroutine(SpawnChampionForPlayerAfterSeconds(champion.GetOwner(), deathTime));
+        StartCoroutine(SpawnChampionForPlayerAfterSeconds(champion.GetOwner(), Champion.DEATH_TIME));
     }
 
     [Server]

@@ -59,7 +59,7 @@ MonoBehaviour:
   attackLayer:
     serializedVersion: 2
     m_Bits: 38912
-  baseDamage: 20
+  baseDamage: 50
   length: 5
   width: 5
   delayTime: 0.6
