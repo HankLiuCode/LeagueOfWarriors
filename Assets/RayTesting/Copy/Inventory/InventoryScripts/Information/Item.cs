@@ -6,8 +6,17 @@ using UnityEngine;
 public class Item : ScriptableObject
 {
     public string itemName;  //物件名
-    public Sprite itemImage;
-    public int itemHeld;  //持有數
+
+    public int PhysicalAttack;
+    public int ManaAttack;
+
+    public int PhysicalDefence;
+    public int ManaDefence;
+
+    public int Health;
+    public int Mana;
+
+    public int speed;
 
     [TextArea]
     public string itemInfo;  //物件介紹
