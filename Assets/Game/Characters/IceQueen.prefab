@@ -20,6 +20,43 @@ MonoBehaviour:
   clickableLayer:
     serializedVersion: 2
     m_Bits: 47360
+--- !u!114 &1104402996505533267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5252308120716157901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb27bb0d0f6cecb4e98ab296ab2057a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  manaCost: 10
+  cooldownTime: 5
+  statStore: {fileID: 3486310655393381221}
+  icon: {fileID: 21300000, guid: 0fb731041fcd73c4e891a54eae09f049, type: 3}
+  smartCast: 0
+  indicatorPrefab: {fileID: 2726156333138317243, guid: e49fdf0fe03ad394880183322ea11d43,
+    type: 3}
+  damageRectPrefab: {fileID: 2726156333138317243, guid: fc7f15d385167fb4da78c58e3435cb54,
+    type: 3}
+  spellPrefab: {fileID: 100078, guid: cca5b5aa916528140b2736dd5b368794, type: 3}
+  spellEffectOffset: 2
+  networkAnimator: {fileID: 6300711492910048696}
+  animationEventHandler: {fileID: 676414953242045597}
+  animationTrigger: abilityQ
+  actionLocker: {fileID: 7670669767896853513}
+  attackLayer:
+    serializedVersion: 2
+    m_Bits: 38912
+  baseDamage: 50
+  length: 8
+  width: 5
+  delayTime: 1
+  destroyTime: 2
 --- !u!114 &1302935063396083513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,8 +158,8 @@ MonoBehaviour:
   cooldownStore: {fileID: 2524613444589093702}
   actionLocker: {fileID: 7670669767896853513}
   abilities:
-  - {fileID: 1302935063396083513}
-  - {fileID: 1302935063396083513}
+  - {fileID: 1104402996505533267}
+  - {fileID: 1104402996505533267}
   - {fileID: 3209427287336120408}
   - {fileID: 1302935063396083513}
   groundMask:
@@ -147,6 +184,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -7159978106751353337, guid: b31cb8edadf36634680f82045f41209b,
+        type: 3}
+      propertyPath: baseStats.attackRange
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 202626032388791037, guid: b31cb8edadf36634680f82045f41209b,
+        type: 3}
+      propertyPath: meshRenderer
+      value: 
+      objectReference: {fileID: 6605719202859912922}
+    - target: {fileID: 202626032388791037, guid: b31cb8edadf36634680f82045f41209b,
+        type: 3}
+      propertyPath: disolveTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: 5d67defbd97ea1b4b9f49f1597c4b47a, type: 3}
     - target: {fileID: 2020297958654239429, guid: b31cb8edadf36634680f82045f41209b,
         type: 3}
       propertyPath: m_Radius
@@ -156,6 +208,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Center.z
       value: -0.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 2433690888149234406, guid: b31cb8edadf36634680f82045f41209b,
+        type: 3}
+      propertyPath: attackRange
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2433690888149234406, guid: b31cb8edadf36634680f82045f41209b,
         type: 3}
@@ -480,6 +537,12 @@ GameObject:
 --- !u!95 &6605719202855710746 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 8606170345516457095, guid: cad2f0f7992a25a46ac23790c019f49d,
+    type: 3}
+  m_PrefabInstance: {fileID: 3225554563837897885}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &6605719202859912922 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8606170345520734791, guid: cad2f0f7992a25a46ac23790c019f49d,
     type: 3}
   m_PrefabInstance: {fileID: 3225554563837897885}
   m_PrefabAsset: {fileID: 0}

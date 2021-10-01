@@ -6,6 +6,7 @@ public class Disolver : MonoBehaviour
 {
     [SerializeField] SkinnedMeshRenderer meshRenderer;
     [SerializeField] Shader disolveShader = null;
+    [SerializeField] Texture2D disolveTexture = null;
     [SerializeField] float disolveDuration = 1f; 
 
 
@@ -19,6 +20,7 @@ public class Disolver : MonoBehaviour
         if(disolveShader != null)
         {
             meshRenderer.material.shader = disolveShader;
+            meshRenderer.material.SetTexture("_DissolveTex", disolveTexture);
         }
         StartCoroutine(DisolveRoutine());
     }

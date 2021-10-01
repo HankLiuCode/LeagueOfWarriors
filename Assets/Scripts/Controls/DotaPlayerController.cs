@@ -16,12 +16,29 @@ namespace Dota.Controls
         [SerializeField] Health health = null;
         [SerializeField] LayerMask clickableLayer;
 
+        bool canControl = true;
+
+        public override void OnStartClient()
+        {
+            GameOverHandler.OnClientGameOver += GameOverHandler_OnClientGameOver;
+        }
+
+        private void GameOverHandler_OnClientGameOver(Base obj)
+        {
+            canControl = false;
+        }
+
         [ClientCallback]
         private void Update()
         {
             if (!hasAuthority) { return; }
 
             if (health.IsDead()) { return; }
+
+            if (!canControl)
+            {
+                return;
+            }
 
             if (Input.GetMouseButtonDown(1))
             {
@@ -44,6 +61,8 @@ namespace Dota.Controls
                 }
             }
         }
+
+        
 
         //[SerializeField] LayerMask attackLayer;
         //[SerializeField] LayerMask moveLayer;

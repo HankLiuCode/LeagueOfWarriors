@@ -37,7 +37,7 @@ public class MinionSpawner : NetworkBehaviour
             StartCoroutine(redSpawnRoutine);
             StartCoroutine(blueSpawnRoutine);
 
-            GameOverHandler.OnGameOver += GameOverHandler_OnGameOver;
+            GameOverHandler.OnServerGameOver += GameOverHandler_OnGameOver;
         }
     }
 

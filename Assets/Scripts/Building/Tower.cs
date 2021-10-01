@@ -14,6 +14,7 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner
 
     [Header("Tower")]
     [SerializeField] GameObject projectilePrefab;
+
     [SerializeField] Transform projectileSpawnPos;
     [SerializeField] LayerMask championLayer;
     [SerializeField] LayerMask minionLayer;
@@ -94,8 +95,15 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner
     public override void OnStartServer()
     {
         health.ServerOnHealthDead += Health_ServerOnHealthDead;
+        GameOverHandler.OnServerGameOver += GameOverHandler_OnGameOver;
         checkEnemyRoutine = StartCoroutine(GetTargetRoutine());
         bulletFireRoutine = StartCoroutine(FireBulletRoutine());
+    }
+
+    private void GameOverHandler_OnGameOver(Base obj)
+    {
+        StopCoroutine(bulletFireRoutine);
+        StopCoroutine(checkEnemyRoutine);
     }
 
     private void Health_ServerOnHealthDead(Health obj)

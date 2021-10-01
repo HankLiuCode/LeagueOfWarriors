@@ -22,22 +22,24 @@ public class CameraController : MonoBehaviour
 
     Vector3 lookAtPoint;
     Transform followTarget = null;
+    bool canMove = true;
 
     private void Start()
     {
         Champion.OnChampionSpawned += Champion_OnChampionSpawned;
-        GameOverHandler.OnGameOver += GameOverHandler_OnGameOver;
+        GameOverHandler.OnServerGameOver += GameOverHandler_OnGameOver;
     }
 
     private void OnDestroy()
     {
         Champion.OnChampionSpawned -= Champion_OnChampionSpawned;
-        GameOverHandler.OnGameOver -= GameOverHandler_OnGameOver;
+        GameOverHandler.OnServerGameOver -= GameOverHandler_OnGameOver;
     }
 
     private void GameOverHandler_OnGameOver(Base teamBase)
     {
         SetFollowTarget(teamBase.transform);
+        canMove = false;
     }
 
     private void Champion_OnChampionSpawned(Champion champion)
@@ -103,6 +105,8 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         if (!Application.isFocused) { return; }
+
+        if (!canMove) { return; }
         
         if (Input.GetKey(KeyCode.Space))
         {

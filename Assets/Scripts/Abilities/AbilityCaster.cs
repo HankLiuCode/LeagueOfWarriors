@@ -27,10 +27,18 @@ public class AbilityCaster : NetworkBehaviour
     Ability currentAbility = null;
     AbilityData abilityData = null;
 
+    bool canCast = true;
+
     public override void OnStartAuthority()
     {
         abilityData = new AbilityData();
         abilityData.caster = this;
+        GameOverHandler.OnClientGameOver += GameOverHandler_OnClientGameOver;
+    }
+
+    private void GameOverHandler_OnClientGameOver(Base obj)
+    {
+        canCast = false;
     }
 
     [ClientCallback]
@@ -39,6 +47,8 @@ public class AbilityCaster : NetworkBehaviour
         if (!hasAuthority) { return; }
 
         if (health.IsDead()) { return; }
+
+        if (!canCast) { return; }
 
         if (Physics.Raycast(CameraController.GetMouseRay(), out RaycastHit groundHit, Mathf.Infinity, groundMask))
         {

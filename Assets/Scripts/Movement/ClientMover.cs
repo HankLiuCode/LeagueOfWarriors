@@ -52,7 +52,7 @@ namespace Dota.Movement
         public void MoveTo(Vector3 position)
         {
             bool canMove = actionLocker.TryGetLock(this);
-            Debug.Log(canMove);
+
             if (canMove)
             {
                 NavMesh.SamplePosition(position, out NavMeshHit hit, 10f, NavMesh.AllAreas);

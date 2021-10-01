@@ -26,6 +26,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshRenderer: {fileID: 1916292671032829259}
   disolveShader: {fileID: 4800000, guid: f7c9e981cd3f19347b1a312bf9ef6d0e, type: 3}
+  disolveTexture: {fileID: 2800000, guid: 5d67defbd97ea1b4b9f49f1597c4b47a, type: 3}
   disolveDuration: 2
 --- !u!1001 &1733962756691221093
 PrefabInstance:

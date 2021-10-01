@@ -56,7 +56,7 @@ public class DirectionalAbility : Ability
 
         NetworkServer.Spawn(effectInstance, connectionToClient);
 
-        RaycastHit[] raycastHits = Physics.SphereCastAll(transform.position, width, direction, length, attackLayer);
+        RaycastHit[] raycastHits = Physics.SphereCastAll(transform.position, width / 2, direction, length - width / 2, attackLayer);
         foreach (RaycastHit hit in raycastHits)
         {
             GameObject go = hit.collider.gameObject;

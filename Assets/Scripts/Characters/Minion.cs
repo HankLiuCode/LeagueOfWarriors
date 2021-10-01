@@ -34,6 +34,8 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
     List<Tower> towers = new List<Tower>();
     Base targetBase = null;
 
+    bool stopAllAction;
+
     public static event System.Action<Minion> ClientOnMinionDead;
     public static event System.Action<Minion> OnMinionSpawned;
     public static event System.Action<Minion> OnMinionDestroyed;
@@ -44,11 +46,16 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
     {
         health.ServerOnHealthDead += Health_ServerOnHealthDead;
         StartCoroutine(GetTargetRoutine());
+        GameOverHandler.OnServerGameOver += GameOverHandler_OnGameOver;
+    }
+
+    private void GameOverHandler_OnGameOver(Base obj)
+    {
+        stopAllAction = true;
     }
 
     private void Health_ServerOnHealthDead(Health obj)
     {
-        
         StartCoroutine(DestroyAfter(disolver.GetDisolveDuration() + dealthAnimDuration));
     }
 
@@ -75,13 +82,20 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
         serverMover.SetAreaMask(road);
     }
 
+    private bool StopAllAction()
+    {
+        return health.IsDead() || stopAllAction;
+    }
+
     [ServerCallback]
     void Update()
     {
-        if (health.IsDead()) 
+        if (StopAllAction()) 
         { 
             serverFighter.StopAttack();
+            serverMover.End();
             currentTarget = null;
+            return;
         }
 
         if(currentTarget != null)
