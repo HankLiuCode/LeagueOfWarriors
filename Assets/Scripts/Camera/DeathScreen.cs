@@ -29,7 +29,7 @@ public class DeathScreen : MonoBehaviour
 
     private void Champion_ClientOnChampionDead(Champion champion)
     {
-        deathTime = Champion.DEATH_TIME;
+        deathTime = Champion.REVIVE_TIME;
         if (champion.hasAuthority)
         {
             canvas.gameObject.SetActive(true);

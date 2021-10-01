@@ -10,12 +10,35 @@ public class ServerMover : NetworkBehaviour, IAction
 
     [SerializeField] Animator animator = null;
     [SerializeField] Health health = null;
-    [SerializeField] DotaAgent agent = null;
     [SerializeField] ActionLocker actionLocker = null;
     [SerializeField] StatStore statStore = null;
-    
+
+    [SerializeField] DotaAgent agent = null;
+    #region Client
+
+    public override void OnStartClient()
+    {
+        health.ClientOnHealthDead += Health_ClientOnHealthDead;
+    }
+
+    private void Health_ClientOnHealthDead(Health obj)
+    {
+        agent.SetEnable(false);
+    }
+
+    #endregion
 
     #region Server
+
+    public override void OnStartServer()
+    {
+        health.ServerOnHealthDead += Health_ServerOnHealthDead;
+    }
+
+    private void Health_ServerOnHealthDead(Health obj)
+    {
+        agent.SetEnable(false);
+    }
 
     public void MoveTo(Vector3 position)
     {

@@ -53,9 +53,9 @@ MonoBehaviour:
   attackLayer:
     serializedVersion: 2
     m_Bits: 38912
-  maxRange: 2
+  maxRange: 3
   baseDamage: 10
-  damageRadius: 1
+  damageRadius: 6
   delayTime: 2
   destroyTime: 3
 --- !u!114 &2524613444589093702
@@ -72,6 +72,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+--- !u!114 &3209427287336120408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5252308120716157901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69258fdf309e93a4dbb86f525c6c1f76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  manaCost: 10
+  cooldownTime: 2
+  statStore: {fileID: 3486310655393381221}
+  icon: {fileID: 21300000, guid: c69e5ff9431f05d4f9e3e6a02f853c86, type: 3}
+  smartCast: 1
+  networkAnimator: {fileID: 6300711492910048696}
+  animationEventHandler: {fileID: 676414953242045597}
+  actionLocker: {fileID: 7670669767896853513}
+  health: {fileID: 6835822804317959881}
+  baseHeal: 10
+  animationTrigger: abilityE
+  baseArmorBuff: 10
+  spellPrefab: {fileID: 1441184050990900, guid: c61284956d233fa40bcc1a3fe683ac11,
+    type: 3}
+  destroyTime: 2
+  castHeight: 2
 --- !u!114 &6409979848882138769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,7 +123,7 @@ MonoBehaviour:
   abilities:
   - {fileID: 1302935063396083513}
   - {fileID: 1302935063396083513}
-  - {fileID: 1302935063396083513}
+  - {fileID: 3209427287336120408}
   - {fileID: 1302935063396083513}
   groundMask:
     serializedVersion: 2
@@ -132,6 +162,12 @@ PrefabInstance:
       propertyPath: animationEventHandler
       value: 
       objectReference: {fileID: 676414953242045597}
+    - target: {fileID: 3858554750723464716, guid: b31cb8edadf36634680f82045f41209b,
+        type: 3}
+      propertyPath: icon
+      value: 
+      objectReference: {fileID: 21300000, guid: 7c8e0e7b86f596a4eb063abd698f945b,
+        type: 3}
     - target: {fileID: 7071705302260239870, guid: b31cb8edadf36634680f82045f41209b,
         type: 3}
       propertyPath: renderers.Array.data[0]

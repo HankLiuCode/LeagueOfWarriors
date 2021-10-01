@@ -32,7 +32,7 @@ public class PathFollower : MonoBehaviour
 
     public void Move(NavMeshAgent navMeshAgent, float speed)
     {
-        if (reachedDest) 
+        if (reachedDest || !navMeshAgent.enabled) 
         { 
             return; 
         }

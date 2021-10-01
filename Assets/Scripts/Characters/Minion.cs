@@ -25,6 +25,7 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
     [SerializeField] float attackRadius = 3f;
     [SerializeField] float checkInterval = 0.2f;
     [SerializeField] LayerMask attackLayer;
+    [SerializeField] float dealthAnimDuration = 1f;
 
 
     [SerializeField] CombatTarget currentTarget;
@@ -41,13 +42,14 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
 
     public override void OnStartServer()
     {
-        health.ServerOnHealthDeadEnd += Health_OnServerHealthDeadEnd;
+        health.ServerOnHealthDead += Health_ServerOnHealthDead;
         StartCoroutine(GetTargetRoutine());
     }
 
-    private void Health_OnServerHealthDeadEnd()
+    private void Health_ServerOnHealthDead(Health obj)
     {
-        StartCoroutine(DestroyAfter(disolver.GetDisolveDuration()));
+        
+        StartCoroutine(DestroyAfter(disolver.GetDisolveDuration() + dealthAnimDuration));
     }
 
     IEnumerator DestroyAfter(float seconds)
@@ -76,6 +78,11 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
     [ServerCallback]
     void Update()
     {
+        if (health.IsDead()) 
+        { 
+            serverFighter.StopAttack();
+            currentTarget = null;
+        }
 
         if(currentTarget != null)
         {

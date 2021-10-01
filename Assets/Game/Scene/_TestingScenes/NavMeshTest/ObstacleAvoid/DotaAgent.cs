@@ -23,6 +23,11 @@ public class DotaAgent : MonoBehaviour
         CanMove = true;
     }
 
+    public void SetEnable(bool enabled)
+    {
+        agent.enabled = enabled;
+    }
+
     public void SetMask(int mask)
     {
         agent.areaMask = mask;
@@ -30,6 +35,8 @@ public class DotaAgent : MonoBehaviour
     
     public void SetDestination(Vector3 targetPoint)
     {
+
+
         bool isOnNav = agent.isOnNavMesh;
 
         NavMesh.SamplePosition(targetPoint, out NavMeshHit pointOnNavMesh, 500f, NavMesh.AllAreas);

@@ -25,6 +25,11 @@ namespace Dota.Utils
             return pos22D - pos12D;
         }
 
+        public static Vector3 XZVector(Vector3 vec)
+        {
+            return new Vector3(vec.x, 0, vec.z);
+        }
+
     }
 
 }

@@ -16,7 +16,33 @@ namespace Dota.Movement
         [SerializeField] ActionLocker actionLocker = null;
         [SerializeField] StatStore statStore = null;
 
+
+        #region Server
+
+        public override void OnStartServer()
+        {
+            health.ServerOnHealthDead += Health_ServerOnHealthDead;
+        }
+
+        private void Health_ServerOnHealthDead(Health obj)
+        {
+            agent.enabled = false;
+        }
+        #endregion
+
+
         #region Client
+
+        public override void OnStartClient()
+        {
+            health.ClientOnHealthDead += Health_ClientOnHealthDead;
+        }
+
+        private void Health_ClientOnHealthDead(Health obj)
+        {
+            agent.enabled = false;
+        }
+
         public override void OnStartAuthority()
         {
             agent.speed = statStore.GetStats().moveSpeed;
@@ -26,6 +52,7 @@ namespace Dota.Movement
         public void MoveTo(Vector3 position)
         {
             bool canMove = actionLocker.TryGetLock(this);
+            Debug.Log(canMove);
             if (canMove)
             {
                 NavMesh.SamplePosition(position, out NavMeshHit hit, 10f, NavMesh.AllAreas);

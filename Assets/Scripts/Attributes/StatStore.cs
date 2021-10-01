@@ -21,7 +21,24 @@ namespace Dota.Attributes
 
         public Stats GetStats()
         {
-            return baseStats;
+            Stats retStats = baseStats;
+            foreach(Stats s in statsModifiers)
+            {
+                retStats += s;
+            }
+            return retStats;
+        }
+
+        public void AddStats(Stats stats)
+        {
+            statsModifiers.Add(stats);
+            OnStatsModified?.Invoke(GetStats());
+        }
+
+        public void RemoveStats(Stats stats)
+        {
+            statsModifiers.Remove(stats);
+            OnStatsModified?.Invoke(GetStats());
         }
     }
 }

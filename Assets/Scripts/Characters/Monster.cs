@@ -54,6 +54,7 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
     public static event System.Action<Monster> OnMonsterSpawned;
     public static event System.Action<Monster> OnMonsterDestroyed;
 
+
     #region Server
     public override void OnStartServer()
     {
@@ -72,6 +73,7 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
 
     private void Health_ServerOnHealthDead(Health obj)
     {
+        agent.enabled = false;
         StartCoroutine(DestroyAfter(destroyTime));
         ServerOnMonsterDead?.Invoke(this);
     }
@@ -101,7 +103,6 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
             currentState = MonsterState.RELAX;
             animator.SetBool("relax", true);
         }
-
     }
 
     [ServerCallback]
@@ -150,7 +151,7 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
 
             //待機狀態，由於觀察動畫時間較長，並希望動畫完整播放，故等待時間是根據一個完整動畫的播放長度，而不是指令間隔時間
             case MonsterState.RELAX:
-                transform.rotation = Quaternion.Slerp(transform.rotation, initalRotation, turnSpeed);
+                //transform.rotation = Quaternion.Slerp(transform.rotation, initalRotation, turnSpeed);
 
                 if (Time.time - lastActTime > animator.GetCurrentAnimatorStateInfo(0).length)
                 {
@@ -171,12 +172,11 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
                     animator.SetBool("running", true);
                     is_Running = true;
                 }
-                transform.Translate(Vector3.forward * Time.deltaTime * runSpeed);
 
-                //朝向玩家位置
-                targetRotation = Quaternion.LookRotation(target.transform.position - transform.position, Vector3.up);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed);
-                //該狀態下的檢測指令
+                Vector3 targetVec = target.transform.position - transform.position;
+
+                agent.Move(targetVec.normalized * Time.deltaTime * runSpeed);
+
                 ChaseRadiusCheck();
                 break;
 
@@ -186,9 +186,10 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
 
                 //朝向初始位置移動
                 animator.SetBool("running", true);
-                targetRotation = Quaternion.LookRotation(initialPosition - transform.position, Vector3.up);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed);
-                transform.Translate(Vector3.forward * Time.deltaTime * runSpeed);
+                agent.SetDestination(initialPosition);
+                //targetRotation = Quaternion.LookRotation(initialPosition - transform.position, Vector3.up);
+                //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed);
+                //transform.Translate(Vector3.forward * Time.deltaTime * runSpeed);
                 //該狀態下的檢測指令
                 ReturnCheck();
                 break;
@@ -345,6 +346,7 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
 
     private void Health_ClientOnHealthDead(Health obj)
     {
+        agent.enabled = false;
         ClientOnMonsterDead?.Invoke(this);
     }
 

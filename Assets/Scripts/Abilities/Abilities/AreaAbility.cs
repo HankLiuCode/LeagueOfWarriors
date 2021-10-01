@@ -16,7 +16,7 @@ public class AreaAbility : Ability
 
     [SerializeField] GameObject damageRadiusPrefab = null;
     [SerializeField] GameObject spellPrefab = null;
-    
+
     [SerializeField] NetworkAnimator networkAnimator = null;
     [SerializeField] AnimationEventHandler animationEventHandler = null;
     [SerializeField] string animationTrigger = "abilityW";
@@ -147,6 +147,7 @@ public class AreaAbility : Ability
 
     private void AnimationEventHandler_OnAttackBackswing()
     {
+        Debug.Log("Ability released lock");
         actionLocker.ReleaseLock(this);
     }
     private void AnimationEventHandler_OnAttackPoint()

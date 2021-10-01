@@ -51,7 +51,7 @@ public class PlayerManager : NetworkBehaviour
     private void Champion_ServerOnChampionDead(Champion champion)
     {
         serverChampions.Remove(champion);
-        StartCoroutine(SpawnChampionForPlayerAfterSeconds(champion.GetOwner(), Champion.DEATH_TIME));
+        StartCoroutine(SpawnChampionForPlayerAfterSeconds(champion.GetOwner(), Champion.REVIVE_TIME));
     }
 
     [Server]

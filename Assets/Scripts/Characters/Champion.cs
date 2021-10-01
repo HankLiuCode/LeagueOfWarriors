@@ -7,7 +7,7 @@ using Dota.Networking;
 
 public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
 {
-    public const float DEATH_TIME = 15f;
+    public const float REVIVE_TIME = 15f;
 
 
     [SyncVar]
@@ -18,6 +18,7 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
     [SerializeField] GameObject minimapIconPrefab = null;
     [SerializeField] Health health = null;
     [SerializeField] Disolver disolver = null;
+    [SerializeField] float dealthAnimDuration = 2f;
 
     [SyncVar]
     DotaRoomPlayer owner;
@@ -59,16 +60,11 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
     public override void OnStartServer()
     {
         health.ServerOnHealthDead += Health_ServerOnHealthDead;
-        health.ServerOnHealthDeadEnd += Health_ServerOnHealthDeadEnd;
     }
 
-    private void Health_ServerOnHealthDeadEnd()
+    private void Health_ServerOnHealthDead(Health health)
     {
-        StartCoroutine(DestroyAfter(disolver.GetDisolveDuration()));
-    }
-
-    private void Health_ServerOnHealthDead(Health obj)
-    {
+        StartCoroutine(DestroyAfter(disolver.GetDisolveDuration() + dealthAnimDuration));
         ServerOnChampionDead?.Invoke(this);
     }
 
