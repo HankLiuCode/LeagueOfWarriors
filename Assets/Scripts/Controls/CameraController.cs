@@ -27,19 +27,19 @@ public class CameraController : MonoBehaviour
     private void Start()
     {
         Champion.OnChampionSpawned += Champion_OnChampionSpawned;
-        GameOverHandler.OnServerGameOver += GameOverHandler_OnGameOver;
+        GameOverHandler.OnClientGameOver += GameOverHandler_OnClientGameOver;
+    }
+
+    private void GameOverHandler_OnClientGameOver(Base teamBase)
+    {
+        SetFollowTarget(teamBase.transform);
+        canMove = false;
     }
 
     private void OnDestroy()
     {
         Champion.OnChampionSpawned -= Champion_OnChampionSpawned;
-        GameOverHandler.OnServerGameOver -= GameOverHandler_OnGameOver;
-    }
-
-    private void GameOverHandler_OnGameOver(Base teamBase)
-    {
-        SetFollowTarget(teamBase.transform);
-        canMove = false;
+        GameOverHandler.OnClientGameOver -= GameOverHandler_OnClientGameOver;
     }
 
     private void Champion_OnChampionSpawned(Champion champion)
