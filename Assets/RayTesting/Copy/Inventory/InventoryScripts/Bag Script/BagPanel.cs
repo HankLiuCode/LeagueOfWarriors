@@ -5,7 +5,7 @@ using UnityEngine;
 public class BagPanel : MonoBehaviour
 {
     private List<Transform> cells;
-    // Start is called before the first frame update
+  
     void Start()
     {
         cells = new List<Transform>();
@@ -18,7 +18,6 @@ public class BagPanel : MonoBehaviour
             cells.Add(t);
         }
     }
-
 
     public int GetCellCount()
     {
