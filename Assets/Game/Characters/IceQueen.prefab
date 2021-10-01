@@ -20,6 +20,44 @@ MonoBehaviour:
   clickableLayer:
     serializedVersion: 2
     m_Bits: 47360
+--- !u!114 &-2588180277889450375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5252308120716157901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f873a58fdeb2425438cf1901cbe4e247, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  manaCost: 10
+  cooldownTime: 2
+  statStore: {fileID: 3486310655393381221}
+  icon: {fileID: 21300000, guid: f4327c91edee7144488e12afb0b9dc7d, type: 3}
+  smartCast: 0
+  indicatorPrefab: {fileID: 7509079907997610509, guid: f7e58577928620441a8e147c3a9eaf13,
+    type: 3}
+  spellRangePrefab: {fileID: 3863486996862453941, guid: bf00ad13d1f143542a75c4b4b93f9805,
+    type: 3}
+  damageRadiusPrefab: {fileID: 7449486549517724255, guid: 39273ae671b38d5429ffc87492fe8995,
+    type: 3}
+  spellPrefab: {fileID: 100012, guid: a42ece114ed9bd74c9ca285cb330b0d0, type: 3}
+  networkAnimator: {fileID: 6300711492910048696}
+  animationEventHandler: {fileID: 676414953242045597}
+  animationTrigger: abilityW
+  actionLocker: {fileID: 7670669767896853513}
+  attackLayer:
+    serializedVersion: 2
+    m_Bits: 38912
+  maxRange: 5
+  baseDamage: 10
+  damageRadius: 3
+  delayTime: 0.1
+  destroyTime: 3
 --- !u!114 &1104402996505533267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,7 +197,7 @@ MonoBehaviour:
   actionLocker: {fileID: 7670669767896853513}
   abilities:
   - {fileID: 1104402996505533267}
-  - {fileID: 1104402996505533267}
+  - {fileID: -2588180277889450375}
   - {fileID: 3209427287336120408}
   - {fileID: 1302935063396083513}
   groundMask:

@@ -29,9 +29,7 @@ public class ProgressiveAbility : Ability
 
     [SerializeField] float delayTime = 1f;
     [SerializeField] float destroyTime = 1f;
-
-    GameObject damageRectInstance;
-
+    
     #region Server
 
     [Server]
