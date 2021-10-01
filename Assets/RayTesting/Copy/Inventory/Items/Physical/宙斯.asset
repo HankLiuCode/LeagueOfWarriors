@@ -15,5 +15,5 @@ MonoBehaviour:
   itemName: "\u5B99\u65AF"
   itemImage: {fileID: 0}
   itemHeld: 0
-  itemInfo: "\u5B99\u65AF\n\n+40 \u7269\u7406\u653B\u64CA\n+40 \u9B54\u6CD5\u653B\u64CA"
+  itemInfo: "\u5B99\u65AF\n\n+50 \u7269\u7406\u653B\u64CA\n+40 \u9B54\u6CD5\u653B\u64CA"
   equip: 1

@@ -14,13 +14,11 @@ public class UIMain2 : MonoBehaviour
         mInstance = this;
     }
 
-    // Start is called before the first frame update
     void Start()
     {
 
     }
 
-    // Update is called once per frame
     void Update()
     {
 
