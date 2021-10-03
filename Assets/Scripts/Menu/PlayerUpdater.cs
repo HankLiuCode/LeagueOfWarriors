@@ -40,10 +40,16 @@ public class PlayerUpdater : NetworkBehaviour
 
     private void UpdateCards()
     {
+        DotaRoomPlayer localPlayer = NetworkClient.localPlayer.GetComponent<DotaRoomPlayer>();
+        DotaRoomPlayer firstPlayer = players[0];
+
+        int localPlayerIndex = players.IndexOf(localPlayer);
+        players[0] = localPlayer;
+        players[localPlayerIndex] = firstPlayer;
+
+
         for(int i=0; i<cards.Count; i++)
         {
-            if (cards[i] == null) { continue; }
-
             if (i < players.Count)
             {
                 cards[i].SetCard(players[i].GetTeam(), players[i].GetChampionId(), players[i].GetConnectionState());

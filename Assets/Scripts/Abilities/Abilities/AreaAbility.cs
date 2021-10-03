@@ -46,6 +46,7 @@ public class AreaAbility : Ability
         GameObject effectInstance = Instantiate(spellPrefab, abilityData.castPos, Quaternion.identity);
         NetworkServer.Spawn(effectInstance, connectionToClient);
 
+
         Collider[] colliders = Physics.OverlapSphere(abilityData.castPos, damageRadius, attackLayer);
         foreach (Collider c in colliders)
         {
@@ -57,6 +58,7 @@ public class AreaAbility : Ability
                 health.ServerTakeDamage(damage);
             }
         }
+
         yield return new WaitForSeconds(destroyTime);
         NetworkServer.Destroy(effectInstance);
         NetworkServer.Destroy(damageRadiusInstance.gameObject);

@@ -128,6 +128,7 @@ MonoBehaviour:
   health: {fileID: 1187138297185360588}
   baseHeal: 10
   animationTrigger: abilityE
+  baseArmorBuff: 10
   spellPrefab: {fileID: 100000, guid: 1ccc170aa4bae6a47ae1827131a363ae, type: 3}
   destroyTime: 2
   castHeight: 0
