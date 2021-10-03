@@ -37,6 +37,8 @@ namespace Dota.Controls
 
             if (!canControl)
             {
+                fighter.StopAttack();
+                mover.End();
                 return;
             }
 

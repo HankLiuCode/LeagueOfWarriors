@@ -60,7 +60,6 @@ namespace Dota.Combat
 
         private void AnimationEventHandler_OnAttackBackswing()
         {
-            Debug.Log("AttackBackswing");
             hasFinishedBackswing = true;
         }
 

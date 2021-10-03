@@ -23,7 +23,6 @@ public class PlayerCard : MonoBehaviour
     public void SetCard(Team team, int championId, PlayerConnectionState connectionState)
     {
         card.gameObject.SetActive(true);
-
         playerIcon.sprite = mapping.GetIcon(championId);
         teamBackground.color = (team == Team.Red) ? Color.red : Color.white;
         teamTextMesh.text = team.ToString();

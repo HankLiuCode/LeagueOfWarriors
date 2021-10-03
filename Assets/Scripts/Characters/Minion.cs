@@ -30,11 +30,13 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
 
     [SerializeField] CombatTarget currentTarget;
 
+    Coroutine getTargetRoutine;
+
     Collider[] colliderBuffer = new Collider[10];
     List<Tower> towers = new List<Tower>();
     Base targetBase = null;
 
-    bool stopAllAction;
+    bool stopAllMovement = false;
 
     public static event System.Action<Minion> ClientOnMinionDead;
     public static event System.Action<Minion> OnMinionSpawned;
@@ -44,14 +46,21 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
 
     public override void OnStartServer()
     {
-        health.ServerOnHealthDead += Health_ServerOnHealthDead;
-        StartCoroutine(GetTargetRoutine());
-        GameOverHandler.OnServerGameOver += GameOverHandler_OnGameOver;
+        stopAllMovement = GameOverHandler.Singleton().GetGameState() == GameState.GameOver;
+        if (!stopAllMovement)
+        {
+            health.ServerOnHealthDead += Health_ServerOnHealthDead;
+            getTargetRoutine = StartCoroutine(GetTargetRoutine());
+            GameOverHandler.OnServerGameOver += GameOverHandler_OnServerGameOver;
+        }
     }
 
-    private void GameOverHandler_OnGameOver(Base obj)
+    private void GameOverHandler_OnServerGameOver(Base obj)
     {
-        stopAllAction = true;
+        //StopAllCoroutines();
+        stopAllMovement = true;
+        serverFighter.StopAttack();
+        serverMover.End();
     }
 
     private void Health_ServerOnHealthDead(Health obj)
@@ -82,20 +91,13 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
         serverMover.SetAreaMask(road);
     }
 
-    private bool StopAllAction()
-    {
-        return health.IsDead() || stopAllAction;
-    }
-
     [ServerCallback]
     void Update()
     {
-        if (StopAllAction()) 
-        { 
+        if (health.IsDead() || stopAllMovement) 
+        {
             serverFighter.StopAttack();
-            serverMover.End();
-            currentTarget = null;
-            return;
+            return; 
         }
 
         if(currentTarget != null)
@@ -119,6 +121,8 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
 
     private void UpdateCurrentTarget()
     {
+        if (health.IsDead() || stopAllMovement) { return; }
+
         if (currentTarget == null || currentTarget.GetHealth().IsDead())
         {
             currentTarget = GetTarget();
