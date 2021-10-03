@@ -14,7 +14,7 @@ namespace Dota.UI
 
         [SerializeField] Image healthFill = null;
         [SerializeField] TextMeshProUGUI healthText = null;
-        [SerializeField] float fillSpeed = 0.005f;
+        [SerializeField] float fillSpeed = 0.01f;
 
         float targetHealthFill = 1f;
 
@@ -33,7 +33,9 @@ namespace Dota.UI
         private void Update()
         {
             float currentHealthFill = healthFill.fillAmount;
-            healthFill.fillAmount = Mathf.MoveTowards(currentHealthFill, targetHealthFill, fillSpeed * Time.deltaTime);
+
+            healthFill.fillAmount = targetHealthFill;
+            //healthFill.fillAmount = Mathf.MoveTowards(currentHealthFill, targetHealthFill, fillSpeed * Time.deltaTime);
         }
 
         private void Health_OnClientHealthModified(float oldVal, float newVal)
@@ -51,7 +53,7 @@ namespace Dota.UI
             }
 
             targetHealthFill = newVal / health.GetMaxHealth();
-            healthText.text = $"{(int) health.GetHealthPoint()} / {(int) health.GetMaxHealth()}";
+            healthText.text = $"{(int)health.GetHealthPoint()} / {(int)health.GetMaxHealth()}";
         }
     }
 
