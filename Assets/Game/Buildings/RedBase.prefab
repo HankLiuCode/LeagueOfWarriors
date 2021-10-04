@@ -9,10 +9,20 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -2370677061696525167, guid: cfed0efa79d2f194b95889d4f4e770ee,
         type: 3}
+      propertyPath: team
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2370677061696525167, guid: cfed0efa79d2f194b95889d4f4e770ee,
+        type: 3}
       propertyPath: baseIcon
       value: 
       objectReference: {fileID: 21300000, guid: 09564d31367194e4a979566a2cb4bacf,
         type: 3}
+    - target: {fileID: 1601277731794970700, guid: cfed0efa79d2f194b95889d4f4e770ee,
+        type: 3}
+      propertyPath: meshRenderer
+      value: 
+      objectReference: {fileID: 4450974253062087396}
     - target: {fileID: 2211041439223768276, guid: cfed0efa79d2f194b95889d4f4e770ee,
         type: 3}
       propertyPath: m_IsTrigger
@@ -199,3 +209,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96ec5fe4c00163f499f1bf840990a0e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!23 &4450974253062087396 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 889735972982340054, guid: 468a8995abfb9b546a1946f36a8ef44a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3575281579923299122}
+  m_PrefabAsset: {fileID: 0}

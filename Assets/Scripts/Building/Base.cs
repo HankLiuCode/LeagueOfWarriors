@@ -11,6 +11,8 @@ public class Base : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
 
     [SerializeField] GameObject minimapIconPrefab = null;
     [SerializeField] Health health = null;
+    [SerializeField] Disolver disolver = null;
+    [SerializeField] GameObject destroyEffect = null;
 
     public static event System.Action<Base> OnBaseSpawned;
     public static event System.Action<Base> OnBaseDestroyed;
@@ -28,6 +30,7 @@ public class Base : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
 
     private void Health_ClientOnHealthDead(Health health)
     {
+        disolver.StartDisolve();
         ClientOnBaseDead?.Invoke(this);
     }
 
@@ -46,6 +49,10 @@ public class Base : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
 
     private void Health_ServerOnHealthDead(Health obj)
     {
+        GameObject deathEffectInstance = Instantiate(destroyEffect, transform);
+        deathEffectInstance.transform.localPosition = Vector3.up;
+        NetworkServer.Spawn(deathEffectInstance);
+
         ServerOnBaseDead?.Invoke(this);
     }
 

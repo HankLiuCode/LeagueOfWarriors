@@ -159,13 +159,12 @@ MonoBehaviour:
     healthRegen: 1
     attackSpeed: 1
     moveSpeed: 3.5
-    attackDamage: 10
-    magicDamage: 10
+    attackDamage: 5
+    magicDamage: 5
     armor: 10
     magicResist: 10
     attackRange: 0
     cooldownReduction: 0
-    goldGeneration: 0
 --- !u!114 &8741716338738734724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,6 +194,7 @@ MonoBehaviour:
   attackLayer:
     serializedVersion: 2
     m_Bits: 6144
+  dealthAnimDuration: 1
   currentTarget: {fileID: 0}
 --- !u!114 &-7900126121708989658
 MonoBehaviour:
@@ -233,9 +233,9 @@ MonoBehaviour:
   syncInterval: 0.1
   animator: {fileID: 0}
   health: {fileID: 1407597664436666948}
-  agent: {fileID: -1718608531663603049}
   actionLocker: {fileID: 3089244958819557603}
   statStore: {fileID: 9022028439047737320}
+  agent: {fileID: -1718608531663603049}
 --- !u!114 &3089244958819557603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,6 +267,7 @@ MonoBehaviour:
   timeBetweenAttacks: 1
   netAnimator: {fileID: 1884173398059766069}
   animationEventHandler: {fileID: 0}
+  health: {fileID: 0}
   mover: {fileID: -7754430342046818133}
   statStore: {fileID: 9022028439047737320}
   hasFinishedBackswing: 1

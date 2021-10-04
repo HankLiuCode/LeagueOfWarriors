@@ -19,11 +19,12 @@ public class GameOverHandler : NetworkBehaviour
     [SyncVar]
     private GameState gameState;
 
+    public float gameOverAnimationLength = 5f;
+
     private static GameOverHandler Instance;
 
     public static event System.Action<Base> OnServerGameOver;
     public static event System.Action<Base> OnClientGameOver;
-
 
 
     private void Awake()
@@ -74,7 +75,14 @@ public class GameOverHandler : NetworkBehaviour
 
     private void Base_ClientOnBaseDead(Base teamBase)
     {
-        if (teamBase.GetTeam() == localPlayerTeam)
+        StartCoroutine(ShowCanvasAfter(teamBase, gameOverAnimationLength));
+    }
+
+    IEnumerator ShowCanvasAfter(Base destroyedBase, float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+
+        if (destroyedBase.GetTeam() == localPlayerTeam)
         {
             gameOverCanvas.ShowDefeat();
         }
@@ -82,7 +90,9 @@ public class GameOverHandler : NetworkBehaviour
         {
             gameOverCanvas.ShowVictory();
         }
-        OnClientGameOver?.Invoke(teamBase);
+
+        OnClientGameOver?.Invoke(destroyedBase);
     }
+
     #endregion
 }

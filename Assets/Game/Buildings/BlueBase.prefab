@@ -12,17 +12,11 @@ PrefabInstance:
       propertyPath: allowAttackRadius
       value: 2.5
       objectReference: {fileID: 0}
-    - target: {fileID: -2370677061696525167, guid: cfed0efa79d2f194b95889d4f4e770ee,
+    - target: {fileID: 1601277731794970700, guid: cfed0efa79d2f194b95889d4f4e770ee,
         type: 3}
-      propertyPath: team
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -2370677061696525167, guid: cfed0efa79d2f194b95889d4f4e770ee,
-        type: 3}
-      propertyPath: baseIcon
+      propertyPath: meshRenderer
       value: 
-      objectReference: {fileID: 21300000, guid: 287e782b14e0a8248a21ffa357051609,
-        type: 3}
+      objectReference: {fileID: 4450974253062087394}
     - target: {fileID: 2211041439223768276, guid: cfed0efa79d2f194b95889d4f4e770ee,
         type: 3}
       propertyPath: m_IsTrigger
@@ -234,3 +228,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96ec5fe4c00163f499f1bf840990a0e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!23 &4450974253062087394 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5487362455083368727, guid: 4d8b3bc446d83974e85ac76782bb2967,
+    type: 3}
+  m_PrefabInstance: {fileID: 8206137501369476085}
+  m_PrefabAsset: {fileID: 0}

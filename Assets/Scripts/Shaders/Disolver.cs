@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Disolver : MonoBehaviour
 {
-    [SerializeField] SkinnedMeshRenderer meshRenderer;
+    [SerializeField] Renderer meshRenderer;
     [SerializeField] Shader disolveShader = null;
     [SerializeField] Texture2D disolveTexture = null;
     [SerializeField] float disolveDuration = 1f; 
@@ -19,8 +19,11 @@ public class Disolver : MonoBehaviour
     {
         if(disolveShader != null)
         {
-            meshRenderer.material.shader = disolveShader;
-            meshRenderer.material.SetTexture("_DissolveTex", disolveTexture);
+            foreach (Material material in meshRenderer.materials)
+            {
+                material.shader = disolveShader;
+                material.SetTexture("_DissolveTex", disolveTexture);
+            }
         }
         StartCoroutine(DisolveRoutine());
     }
@@ -31,7 +34,10 @@ public class Disolver : MonoBehaviour
         while(value <= 1)
         {
             value += (1 / disolveDuration) * Time.deltaTime;
-            meshRenderer.material.SetFloat("_DissolveValue", value);
+            foreach(Material material in meshRenderer.materials)
+            {
+                material.SetFloat("_DissolveValue", value);
+            }
             yield return null;
         }
     }

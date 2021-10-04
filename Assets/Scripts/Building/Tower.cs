@@ -14,6 +14,7 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner
 
     [Header("Tower")]
     [SerializeField] GameObject projectilePrefab;
+    [SerializeField] GameObject towerDeadEffect;
 
     [SerializeField] Transform projectileSpawnPos;
     [SerializeField] LayerMask championLayer;
@@ -24,8 +25,9 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner
     [SerializeField] float checkInterval = 0.2f;
     [SerializeField] float fireInterval = 1f;
     [SerializeField] float towerDamage = 20f;
+    [SerializeField] Disolver disolver = null;
 
-    
+
     Collider[] colliderBuffer = new Collider[10];
     Coroutine bulletFireRoutine;
     Coroutine checkEnemyRoutine;
@@ -33,7 +35,7 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner
 
     public List<Minion> enemyMinions = new List<Minion>();
     public List<Champion> enemyChampions = new List<Champion>();
-    public float destroyTime = 1f;
+    public float dealthAnimDuration = 0.5f;
 
     public static event System.Action<Tower> ServerOnTowerDied;
     public static event System.Action<Tower> ClientOnTowerDead;
@@ -85,6 +87,7 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner
 
     private void Health_ClientOnHealthDead(Health health)
     {
+        disolver.StartDisolve();
         ClientOnTowerDead?.Invoke(this);
     }
 
@@ -102,7 +105,11 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner
     private void Health_ServerOnHealthDead(Health obj)
     {
         ServerOnTowerDied?.Invoke(this);
-        StartCoroutine(DestroyAfter(destroyTime));
+        GameObject deathEffectInstance = Instantiate(towerDeadEffect, transform);
+        deathEffectInstance.transform.localPosition = Vector3.up;
+        NetworkServer.Spawn(deathEffectInstance);
+
+        StartCoroutine(DestroyAfter(disolver.GetDisolveDuration() + dealthAnimDuration));
     }
 
     IEnumerator DestroyAfter(float seconds)

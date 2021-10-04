@@ -57,7 +57,6 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
 
     private void GameOverHandler_OnServerGameOver(Base obj)
     {
-        //StopAllCoroutines();
         stopAllMovement = true;
         serverFighter.StopAttack();
         serverMover.End();
@@ -213,6 +212,7 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
 
     private void Health_ClientOnHealthDead(Health health)
     {
+
         ClientOnMinionDead?.Invoke(this);
     }
 

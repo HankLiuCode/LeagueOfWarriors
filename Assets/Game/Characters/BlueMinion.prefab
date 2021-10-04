@@ -16,18 +16,6 @@ MonoBehaviour:
   disolveShader: {fileID: 4800000, guid: f7c9e981cd3f19347b1a312bf9ef6d0e, type: 3}
   disolveTexture: {fileID: 2800000, guid: 5d67defbd97ea1b4b9f49f1597c4b47a, type: 3}
   disolveDuration: 2
---- !u!114 &7881081430112815507
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1916292671027601029}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96ec5fe4c00163f499f1bf840990a0e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!82 &2457154609372842894
 AudioSource:
   m_ObjectHideFlags: 0
@@ -49,8 +37,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 20
-  MaxDistance: 30
+  MinDistance: 10
+  MaxDistance: 15
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -143,6 +131,18 @@ MonoBehaviour:
   soundFX3: {fileID: 0}
   soundFX4: {fileID: 0}
   soundFX5: {fileID: 8300000, guid: 629185b609131284881f98f94803486d, type: 3}
+--- !u!114 &7881081430112815507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1916292671027601029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96ec5fe4c00163f499f1bf840990a0e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1733962756691221093
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -291,6 +291,16 @@ PrefabInstance:
       propertyPath: disolver
       value: 
       objectReference: {fileID: 868963972588697192}
+    - target: {fileID: 9022028439047737320, guid: 9c09a4223c69d6c4086a3700624a8aad,
+        type: 3}
+      propertyPath: baseStats.magicDamage
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9022028439047737320, guid: 9c09a4223c69d6c4086a3700624a8aad,
+        type: 3}
+      propertyPath: baseStats.attackDamage
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c09a4223c69d6c4086a3700624a8aad, type: 3}
 --- !u!1 &2136612336401763621 stripped

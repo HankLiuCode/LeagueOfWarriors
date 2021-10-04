@@ -126,6 +126,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6026b74b275892a409e420ded65117c4, type: 3}
+--- !u!23 &3344746200337245954 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5573554236125211606, guid: 6026b74b275892a409e420ded65117c4,
+    type: 3}
+  m_PrefabInstance: {fileID: 7148289024387288276}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7148289025558749642
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -230,6 +236,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3171829230800741641, guid: a69fec8d1330c58499ceb798b3d9ef92,
         type: 3}
+    - target: {fileID: 9128435532647562802, guid: 2115a164068207c4a9c541518fc36c3f,
+        type: 3}
+      propertyPath: meshRenderer
+      value: 
+      objectReference: {fileID: 3344746200337245954}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2115a164068207c4a9c541518fc36c3f, type: 3}
 --- !u!4 &4251750746323433381 stripped

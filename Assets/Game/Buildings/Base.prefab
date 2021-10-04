@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: -2370677061696525167}
   - component: {fileID: 2211041439223768276}
   - component: {fileID: -7164417189995110478}
+  - component: {fileID: 1601277731794970700}
   m_Layer: 13
   m_Name: Base
   m_TagString: Untagged
@@ -101,7 +102,6 @@ MonoBehaviour:
     magicResist: 0
     attackRange: 0
     cooldownReduction: 0
-    goldGeneration: 0
 --- !u!114 &5903093996623051485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,11 +135,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  team: 0
-  baseIcon: {fileID: 0}
+  team: 1
+  baseIcon: {fileID: 21300000, guid: 287e782b14e0a8248a21ffa357051609, type: 3}
   minimapIconPrefab: {fileID: 3278981384245904717, guid: bd3b2826c6b031342a0e9223ad2c5204,
     type: 3}
   health: {fileID: 6131693119581513629}
+  disolver: {fileID: 1601277731794970700}
+  destroyEffect: {fileID: 100006, guid: 4f2b3cc0bce7b574d8c471a8c442dd28, type: 3}
 --- !u!65 &2211041439223768276
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -170,3 +172,19 @@ MonoBehaviour:
   allowAttackRadius: 2.5
   health: {fileID: 6131693119581513629}
   aimPoint: {fileID: 0}
+--- !u!114 &1601277731794970700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6131693119581513631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f71e688fe18acb64d86886bd9ce01960, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshRenderer: {fileID: 0}
+  disolveShader: {fileID: 0}
+  disolveTexture: {fileID: 0}
+  disolveDuration: 1
