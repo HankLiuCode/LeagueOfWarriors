@@ -47,10 +47,12 @@ public class Base : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
         health.ServerOnHealthDead += Health_ServerOnHealthDead;
     }
 
-    private void Health_ServerOnHealthDead(Health obj)
+    private void Health_ServerOnHealthDead(Health health)
     {
-        GameObject deathEffectInstance = Instantiate(destroyEffect, transform);
-        deathEffectInstance.transform.localPosition = Vector3.up;
+        Vector3 spawnPos = health.transform.position + Vector3.up;
+
+        GameObject deathEffectInstance = Instantiate(destroyEffect, spawnPos, Quaternion.identity);
+        
         NetworkServer.Spawn(deathEffectInstance);
 
         ServerOnBaseDead?.Invoke(this);

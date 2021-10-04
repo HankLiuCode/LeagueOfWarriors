@@ -24,6 +24,8 @@ public class MinionSpawner : NetworkBehaviour
     [SerializeField] Transform[] redStartPositions;
     [SerializeField] BuildingManager buildingManager = null;
 
+    [SerializeField] GameObject minionSpawnEffect = null;
+
     IEnumerator redSpawnRoutine;
     IEnumerator blueSpawnRoutine;
 
@@ -113,6 +115,10 @@ public class MinionSpawner : NetworkBehaviour
         minion.SetTowers(towers, targetBase);
 
         minion.SetRoad(GetMask(lane));
+
+        GameObject spawnEffectInstance = Instantiate(minionSpawnEffect, spawnPosition, Quaternion.identity);
+
+        NetworkServer.Spawn(spawnEffectInstance);
 
         NetworkServer.Spawn(minionInstance);
     }
