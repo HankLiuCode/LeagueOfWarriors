@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Sound : MonoBehaviour
 {
-
     public AudioClip soundFX0;
     public AudioClip soundFX1;
     public AudioClip soundFX2;
@@ -12,7 +11,6 @@ public class Sound : MonoBehaviour
     public AudioClip soundFX4;
     public AudioClip soundFX5;
     AudioSource audiosource;
-    
 
     void Start()
     {
@@ -46,10 +44,4 @@ public class Sound : MonoBehaviour
             audiosource.PlayOneShot(soundFX5, 0.7f);
         }
     }
-    
-    /*public void PlaySFX2()
-    {
-        audiosource.PlayOneShot(soundFX2, 0.7f);
-    }
-    */
 }

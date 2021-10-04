@@ -33,7 +33,6 @@ namespace Dota.UI
         private void Update()
         {
             healthFill.fillAmount = targetHealthFill;
-            Debug.Log(healthFill.fillAmount);
             //healthFill.fillAmount = Mathf.MoveTowards(currentHealthFill, targetHealthFill, fillSpeed * Time.deltaTime);
         }
 

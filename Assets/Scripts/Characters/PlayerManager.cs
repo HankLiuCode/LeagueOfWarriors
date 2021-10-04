@@ -12,10 +12,13 @@ public class PlayerManager : NetworkBehaviour
 
     [SerializeField] ChampionIdMapping championMapping = null;
 
+    [SerializeField] Transform blueStartParent = null;
     [SerializeField] Transform[] blueStartPositions;
+    [SerializeField] Transform redStartParent = null;
     [SerializeField] Transform[] redStartPositions;
 
     [SerializeField] List<Champion> serverChampions = new List<Champion>();
+    [SerializeField] GameObject rebirthPrefab = null;
 
     int blueStartPositionIndex = 0;
     int redStartPositionIndex = 0;
@@ -98,6 +101,9 @@ public class PlayerManager : NetworkBehaviour
         champion.ServerSetTeam(championTeam);
 
         serverChampions.Add(champion);
+
+        GameObject rebirthInstance = Instantiate(rebirthPrefab, (championTeam == Team.Red) ? redStartParent.position : blueStartParent.position, Quaternion.identity);
+        NetworkServer.Spawn(rebirthInstance);
 
         NetworkServer.Spawn(championInstance, player.connectionToClient);
     }

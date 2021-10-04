@@ -75,6 +75,7 @@ public class GameOverHandler : NetworkBehaviour
 
     private void Base_ClientOnBaseDead(Base teamBase)
     {
+        OnClientGameOver?.Invoke(teamBase);
         StartCoroutine(ShowCanvasAfter(teamBase, gameOverAnimationLength));
     }
 
@@ -90,8 +91,6 @@ public class GameOverHandler : NetworkBehaviour
         {
             gameOverCanvas.ShowVictory();
         }
-
-        OnClientGameOver?.Invoke(destroyedBase);
     }
 
     #endregion

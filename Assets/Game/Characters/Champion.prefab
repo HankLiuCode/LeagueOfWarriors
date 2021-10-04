@@ -269,7 +269,6 @@ MonoBehaviour:
     magicResist: 10
     attackRange: 0
     cooldownReduction: 0
-    goldGeneration: 0
 --- !u!114 &-5780347126821875179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -323,6 +322,7 @@ MonoBehaviour:
     type: 3}
   health: {fileID: 8223221447003321259}
   disolver: {fileID: 202626032388791037}
+  dealthAnimDuration: 2
 --- !u!114 &4832241273574078050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -353,6 +353,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshRenderer: {fileID: 0}
   disolveShader: {fileID: 4800000, guid: f7c9e981cd3f19347b1a312bf9ef6d0e, type: 3}
+  disolveTexture: {fileID: 2800000, guid: 5d67defbd97ea1b4b9f49f1597c4b47a, type: 3}
   disolveDuration: 1.5
 --- !u!114 &7071705302260239870
 MonoBehaviour:

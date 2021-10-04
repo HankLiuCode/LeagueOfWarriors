@@ -18,7 +18,7 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
     [SerializeField] GameObject minimapIconPrefab = null;
     [SerializeField] Health health = null;
     [SerializeField] Disolver disolver = null;
-    [SerializeField] float dealthAnimDuration = 2f;
+    [SerializeField] float dealthAnimDuration = 3f;
 
     [SyncVar]
     DotaRoomPlayer owner;

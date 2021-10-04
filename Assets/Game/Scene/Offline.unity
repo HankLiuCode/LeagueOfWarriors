@@ -1860,6 +1860,7 @@ MonoBehaviour:
   - {fileID: 7449486549517724255, guid: 39273ae671b38d5429ffc87492fe8995, type: 3}
   - {fileID: 2726156333138317243, guid: fc7f15d385167fb4da78c58e3435cb54, type: 3}
   - {fileID: 3171829230800741641, guid: 1071c91a612857a44b822507620ac825, type: 3}
+  - {fileID: 3171829230800741641, guid: a69fec8d1330c58499ceb798b3d9ef92, type: 3}
   - {fileID: 3860925666066704547, guid: e48fba4a6ae747c49aa92ac15d65fb20, type: 3}
   - {fileID: 1713897388442340064, guid: dbf5c8e28d5a06a43b51dfa1cdcf5b1b, type: 3}
   - {fileID: 8313535318199599379, guid: daa7ff2cc25938346ba96a865341a0f1, type: 3}
@@ -1869,12 +1870,17 @@ MonoBehaviour:
   - {fileID: 4782127842387989451, guid: fdf584ccc23e3a04fbf7d0732c5d8006, type: 3}
   - {fileID: 1344482632029174, guid: 994a88eb98ff7f742bdc2845a23979f8, type: 3}
   - {fileID: 1210069404974878, guid: f9d5b69e96abfb2499f3e5babf223986, type: 3}
+  - {fileID: 100000, guid: ddb8501fe056b154ea6239aa1796d978, type: 3}
   - {fileID: 100000, guid: 1ccc170aa4bae6a47ae1827131a363ae, type: 3}
   - {fileID: 6097260162213657970, guid: 0d9b3c6c410c8df409d36096904da2a5, type: 3}
+  - {fileID: 100000, guid: 235b4d7ac32ea9a4ba6528f13e2ff362, type: 3}
   - {fileID: 100078, guid: cca5b5aa916528140b2736dd5b368794, type: 3}
   - {fileID: 100012, guid: a42ece114ed9bd74c9ca285cb330b0d0, type: 3}
   - {fileID: 1441184050990900, guid: c61284956d233fa40bcc1a3fe683ac11, type: 3}
   - {fileID: 100004, guid: da985a6a0823be8498319a9302b21f0c, type: 3}
+  - {fileID: 3749962244544137532, guid: 46c1a2c04ad2c464693d72074d49a9ed, type: 3}
+  - {fileID: 100008, guid: df5d061754763e844a90e67ea235a721, type: 3}
+  - {fileID: 100006, guid: 4f2b3cc0bce7b574d8c471a8c442dd28, type: 3}
   gameScene: Assets/Game/Scene/Game.unity
   maxPlayers: 2
   serverPlayers: []

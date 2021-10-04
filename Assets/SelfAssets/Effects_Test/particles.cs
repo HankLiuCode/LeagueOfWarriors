@@ -9,10 +9,7 @@ public class particles : StateMachineBehaviour
 
     protected GameObject effectParticle;
 
-
-
-
-    [Server]
+    [ServerCallback]
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         effectParticle = Instantiate(particle, animator.transform.position, Quaternion.identity) as GameObject;
@@ -20,9 +17,9 @@ public class particles : StateMachineBehaviour
 
     }
 
+    [ServerCallback]
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Destroy(effectParticle);
         NetworkServer.Destroy(effectParticle);
     }
 
