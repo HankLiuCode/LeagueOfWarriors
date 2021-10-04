@@ -13,7 +13,12 @@ MonoBehaviour:
   m_Name: "\u592A\u967D\u4E4B\u529B"
   m_EditorClassIdentifier: 
   itemName: "\u592A\u967D\u795E\u529B"
-  itemImage: {fileID: 0}
-  itemHeld: 0
+  PhysicalAttack: 20
+  ManaAttack: 0
+  PhysicalDefence: 20
+  ManaDefence: 0
+  Health: 0
+  Mana: 0
+  speed: 0
   itemInfo: "\u592A\u967D\u4E4B\u529B\n\n+20 \u7269\u7406\u653B\u64CA\n+20 \u7269\u7406\u9632\u79A6"
   equip: 1

@@ -191,6 +191,19 @@ MonoBehaviour:
   width: 5
   delayTime: 0.6
   destroyTime: 2
+--- !u!114 &-4999459388117059341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 452546937840963528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9fc6af7e4879c74a8a7e9a5cfe2d14b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerStateData: {fileID: 11400000, guid: 9e4c1b410fe25ef45a44f3fcb023d907, type: 2}
 --- !u!114 &-4533690763673579477
 MonoBehaviour:
   m_ObjectHideFlags: 0
