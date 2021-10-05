@@ -8,6 +8,8 @@ TagManager:
   - Red
   - solider
   - Enemy
+  - Effect
+  - Fx
   layers:
   - Default
   - TransparentFX
@@ -25,7 +27,7 @@ TagManager:
   - Building
   - DetectChampion
   - Monster
-  - 
+  - Fountain
   - 
   - 
   - 

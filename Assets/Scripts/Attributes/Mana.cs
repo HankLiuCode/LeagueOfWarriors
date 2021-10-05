@@ -63,6 +63,13 @@ public class Mana : NetworkBehaviour
         return true;
     }
 
+    [Server]
+    public void ServerRegenMana(float manaToAdd)
+    {
+        manaPoint += manaToAdd;
+        manaPoint = Mathf.Min(manaPoint, statStore.GetStats().maxMana);
+    }
+
     [Command]
     public void CmdUseMana(float manaToUse)
     {

@@ -20,6 +20,7 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
     [SerializeField] Disolver disolver = null;
     [SerializeField] float dealthAnimDuration = 3f;
     [SerializeField] Level level = null;
+    [SerializeField] StatStore statStore = null;
 
     [SyncVar]
     DotaRoomPlayer owner;
@@ -57,6 +58,12 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
     #endregion
 
     #region Server
+
+    [ServerCallback]
+    private void Update()
+    {
+        health.ServerHeal(statStore.GetStats().healthRegen * Time.deltaTime);
+    }
 
     public override void OnStartServer()
     {

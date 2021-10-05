@@ -321,6 +321,7 @@ MonoBehaviour:
   disolver: {fileID: 202626032388791037}
   dealthAnimDuration: 2
   level: {fileID: 3406026971246550989}
+  statStore: {fileID: -7159978106751353337}
 --- !u!114 &4832241273574078050
 MonoBehaviour:
   m_ObjectHideFlags: 0
