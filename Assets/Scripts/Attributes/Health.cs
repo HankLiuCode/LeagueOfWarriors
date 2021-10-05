@@ -20,6 +20,8 @@ namespace Dota.Attributes
 
         [SerializeField] float healthDisplayOffset = 3f;
 
+        [SerializeField] float deadExp = 50f;
+
         public event System.Action<float, float> ClientOnHealthModified;
         public event System.Action<Health> ClientOnHealthDead;
         public event System.Action ClientOnHealthDeadEnd;
@@ -63,6 +65,21 @@ namespace Dota.Attributes
         #region Server
 
         [Server]
+        public void ServerTakeDamage(float damage, NetworkIdentity attacker)
+        {
+            healthPoint = Mathf.Max(healthPoint - damage, 0);
+            if (healthPoint == 0 && !isDead)
+            {
+                RpcNotifyHealthDead();
+                ServerOnHealthDead?.Invoke(this);
+                isDead = true;
+
+                IRewardReceiver receiver = attacker.GetComponent<IRewardReceiver>();
+                receiver.SendExp(deadExp);
+            }
+        }
+
+        [Server]
         public void ServerTakeDamage(float damage)
         {
             healthPoint = Mathf.Max(healthPoint - damage, 0);
@@ -83,9 +100,9 @@ namespace Dota.Attributes
         }
 
         [Command]
-        public void CmdTakeDamage(float damage)
+        public void CmdTakeDamage(float damage, NetworkIdentity attacker)
         {
-            ServerTakeDamage(damage);
+            ServerTakeDamage(damage, attacker);
         }
 
         [Command]

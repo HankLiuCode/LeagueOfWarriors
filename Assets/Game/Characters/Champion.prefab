@@ -55,6 +55,7 @@ GameObject:
   - component: {fileID: 4832241273574078050}
   - component: {fileID: 202626032388791037}
   - component: {fileID: 7071705302260239870}
+  - component: {fileID: 3406026971246550989}
   m_Layer: 11
   m_Name: Champion
   m_TagString: Untagged
@@ -214,6 +215,7 @@ MonoBehaviour:
   healthCollider: {fileID: 0}
   animationEventHandler: {fileID: 0}
   healthDisplayOffset: 3
+  deadExp: 50
 --- !u!114 &8913722561556947162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -261,14 +263,9 @@ MonoBehaviour:
     maxMana: 100
     manaRegen: 1
     healthRegen: 1
-    attackSpeed: 1
     moveSpeed: 5
     attackDamage: 10
-    magicDamage: 10
     armor: 10
-    magicResist: 10
-    attackRange: 0
-    cooldownReduction: 0
 --- !u!114 &-5780347126821875179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -323,6 +320,7 @@ MonoBehaviour:
   health: {fileID: 8223221447003321259}
   disolver: {fileID: 202626032388791037}
   dealthAnimDuration: 2
+  level: {fileID: 3406026971246550989}
 --- !u!114 &4832241273574078050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -375,3 +373,23 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   currentBush: {fileID: 0}
+--- !u!114 &3406026971246550989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7214919029000824495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f961aacee816d12478e79ee014026397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  statStore: {fileID: -7159978106751353337}
+  exp: 0
+  currentLevel: 1
+  levelUpEffect: {fileID: 1397451955840750, guid: 98d4e8619209e9f469b6312561f0fded,
+    type: 3}
+  progression: {fileID: 11400000, guid: 267cd0f0455beb649ac1a48ebbd6d08e, type: 2}

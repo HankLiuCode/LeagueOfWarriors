@@ -16,42 +16,23 @@ namespace Dota.UI
         [SerializeField] TextMeshProUGUI healthText = null;
         [SerializeField] float fillSpeed = 0.01f;
 
-        float targetHealthFill = 1f;
-
         public void SetHealth(Health health)
         {
-            if(this.health != null)
-            {
-                this.health.ClientOnHealthModified -= Health_OnClientHealthModified;
-            }
-
             this.health = health;
-            this.health.ClientOnHealthModified += Health_OnClientHealthModified;
-            targetHealthFill = health.GetHealthPercent();
+            healthFill.fillAmount = health.GetHealthPercent();
         }
 
         private void Update()
         {
-            healthFill.fillAmount = targetHealthFill;
-            //healthFill.fillAmount = Mathf.MoveTowards(currentHealthFill, targetHealthFill, fillSpeed * Time.deltaTime);
-        }
-
-        private void Health_OnClientHealthModified(float oldVal, float newVal)
-        {
-            UpdateHealth(oldVal, newVal);
-        }
-
-        private void UpdateHealth(float oldVal, float newVal)
-        {
             // gameObject is disabled before this function is called
-            if(healthFill == null) 
+            if (healthFill == null)
             {
                 Debug.Log("Health Fill is Null");
-                return; 
+                return;
             }
-
-            targetHealthFill = newVal / health.GetMaxHealth();
+            healthFill.fillAmount = health.GetHealthPercent();
             healthText.text = $"{(int)health.GetHealthPoint()} / {(int)health.GetMaxHealth()}";
+            //healthFill.fillAmount = Mathf.MoveTowards(currentHealthFill, targetHealthFill, fillSpeed * Time.deltaTime);
         }
     }
 

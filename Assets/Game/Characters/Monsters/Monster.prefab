@@ -168,6 +168,7 @@ MonoBehaviour:
   healthCollider: {fileID: 6002377142173262695}
   animationEventHandler: {fileID: 0}
   healthDisplayOffset: 3
+  deadExp: 50
 --- !u!136 &6002377142173262695
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -201,15 +202,9 @@ MonoBehaviour:
     maxMana: 0
     manaRegen: 0
     healthRegen: 0
-    attackSpeed: 0
     moveSpeed: 0
-    attackDamage: 10
-    magicDamage: 0
+    attackDamage: 5
     armor: 0
-    magicResist: 0
-    attackRange: 0
-    cooldownReduction: 0
-    goldGeneration: 0
 --- !u!54 &2642626602909313306
 Rigidbody:
   m_ObjectHideFlags: 0

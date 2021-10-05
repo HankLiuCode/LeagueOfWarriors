@@ -5,7 +5,7 @@ using Mirror;
 using Dota.Attributes;
 using Dota.Networking;
 
-public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
+public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity, IRewardReceiver
 {
     public const float REVIVE_TIME = 15f;
 
@@ -19,6 +19,7 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
     [SerializeField] Health health = null;
     [SerializeField] Disolver disolver = null;
     [SerializeField] float dealthAnimDuration = 3f;
+    [SerializeField] Level level = null;
 
     [SyncVar]
     DotaRoomPlayer owner;
@@ -112,5 +113,10 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
     public DotaRoomPlayer GetOwner()
     {
         return owner;
+    }
+
+    public void SendExp(float exp)
+    {
+        level.AddExperience(exp);
     }
 }

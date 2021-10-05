@@ -19,6 +19,12 @@ namespace Dota.Attributes
             OnStatsModified?.Invoke(newValue);
         }
 
+        public void SetStats(Stats stats)
+        {
+            baseStats = stats;
+            OnStatsModified?.Invoke(stats);
+        }
+
         public Stats GetStats()
         {
             Stats retStats = baseStats;

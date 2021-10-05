@@ -61,8 +61,9 @@ public class ProgressiveAbility : Ability
             CombatTarget combatTarget = go.GetComponent<CombatTarget>();
             if (combatTarget && !TeamChecker.IsSameTeam(gameObject, combatTarget.gameObject))
             {
-                float damage = baseDamage + statStore.GetStats().magicDamage;
-                combatTarget.GetHealth().ServerTakeDamage(damage);
+                float damage = baseDamage + statStore.GetStats().attackDamage;
+
+                combatTarget.GetHealth().ServerTakeDamage(damage, abilityData.caster.netIdentity);
             }
         }
 

@@ -32,11 +32,11 @@ public class StatsDisplay : MonoBehaviour
     private void UpdateStats(Stats stats)
     {
         statRows[0].SetRow(stringIconMapping.GetIcon("moveSpeed"), stats.moveSpeed);
-        statRows[1].SetRow(stringIconMapping.GetIcon("attackSpeed"), stats.attackSpeed);
+        statRows[1].SetRow(stringIconMapping.GetIcon("attackSpeed"), stats.attackDamage);
         statRows[2].SetRow(stringIconMapping.GetIcon("attackDamage"), stats.attackDamage);
-        statRows[3].SetRow(stringIconMapping.GetIcon("magicDamage"), stats.magicDamage);
+        statRows[3].SetRow(stringIconMapping.GetIcon("magicDamage"), stats.attackDamage);
         statRows[4].SetRow(stringIconMapping.GetIcon("armor"), stats.armor);
-        statRows[5].SetRow(stringIconMapping.GetIcon("magicResist"), stats.magicResist);
+        statRows[5].SetRow(stringIconMapping.GetIcon("magicResist"), stats.armor);
         statRows[6].SetRow(stringIconMapping.GetIcon("maxHealth"), stats.maxHealth);
         statRows[7].SetRow(stringIconMapping.GetIcon("maxMana"), stats.maxMana); 
     }

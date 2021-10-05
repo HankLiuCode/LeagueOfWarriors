@@ -62,7 +62,7 @@ public class EnhanceAbility : Ability
         if (canDo)
         {
             networkAnimator.SetTrigger(animationTrigger);
-            health.CmdHeal(baseHeal + statStore.GetStats().magicDamage);
+            health.CmdHeal(baseHeal + statStore.GetStats().attackDamage);
             CmdSpawnAbilityEffect(abilityData);
         }
     }

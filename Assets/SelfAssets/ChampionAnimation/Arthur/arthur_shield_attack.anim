@@ -112206,7 +112206,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.8666667
+  - time: 0.8333333
     functionName: AttackBackswing
     data: 
     objectReferenceParameter: {fileID: 0}

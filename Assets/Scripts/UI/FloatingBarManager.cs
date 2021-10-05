@@ -93,9 +93,16 @@ public class FloatingBarManager : NetworkBehaviour
             return;
         }
 
+        Level level = visionEntity.GetComponent<Level>();
+
         FloatingBar floatingBarInstance = Instantiate(floatingBarPrefab, floatingBarParent).GetComponent<FloatingBar>();
 
         floatingBarInstance.Setup(health, mana, localPlayerTeam, teamMember.GetTeam(), Vector3.up * health.GetDisplayOffset());
+
+        if(level != null)
+        {
+            floatingBarInstance.SetLevel(level);
+        }
 
         floatingBars.Add(health, floatingBarInstance);
     }

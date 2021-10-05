@@ -1,5 +1,222 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7414020059541944781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 452546937840963528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 205a593dcb1f2384791655ed570197b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  health: {fileID: 1187138297185360588}
+  mana: {fileID: 2407418632379457285}
+  cooldownStore: {fileID: 4583548578950598173}
+  actionLocker: {fileID: 2654738810189758476}
+  abilities:
+  - {fileID: 538770581797919719}
+  - {fileID: -4533690763673579477}
+  - {fileID: -3679921401897041321}
+  - {fileID: -5136682741964132428}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 256
+--- !u!114 &-5136682741964132428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 452546937840963528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb27bb0d0f6cecb4e98ab296ab2057a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  manaCost: 20
+  cooldownTime: 30
+  statStore: {fileID: 9134965200569341792}
+  icon: {fileID: 21300000, guid: f6eba69adf6393c4dac4c662468659c1, type: 3}
+  smartCast: 0
+  indicatorPrefab: {fileID: 2726156333138317243, guid: e49fdf0fe03ad394880183322ea11d43,
+    type: 3}
+  damageRectPrefab: {fileID: 2726156333138317243, guid: fc7f15d385167fb4da78c58e3435cb54,
+    type: 3}
+  spellPrefab: {fileID: 6097260162213657970, guid: 0d9b3c6c410c8df409d36096904da2a5,
+    type: 3}
+  spellEffectOffset: 2
+  networkAnimator: {fileID: 1861298204142979517}
+  animationEventHandler: {fileID: 2928662850204982764}
+  animationTrigger: abilityR
+  actionLocker: {fileID: 2654738810189758476}
+  attackLayer:
+    serializedVersion: 2
+    m_Bits: 38912
+  baseDamage: 50
+  length: 5
+  width: 5
+  delayTime: 0.6
+  destroyTime: 2
+--- !u!114 &-4999459388117059341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 452546937840963528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9fc6af7e4879c74a8a7e9a5cfe2d14b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerStateData: {fileID: 11400000, guid: 9e4c1b410fe25ef45a44f3fcb023d907, type: 2}
+--- !u!114 &-4533690763673579477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 452546937840963528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52bf61089dc9acc49ae19af364fc2971, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  manaCost: 5
+  cooldownTime: 5
+  statStore: {fileID: 9134965200569341792}
+  icon: {fileID: 21300000, guid: 4637953d65a24364aab3372a525b9ed2, type: 3}
+  smartCast: 0
+  indicatorPrefab: {fileID: 7509079907997610509, guid: f7e58577928620441a8e147c3a9eaf13,
+    type: 3}
+  spellRangePrefab: {fileID: 3863486996862453941, guid: bf00ad13d1f143542a75c4b4b93f9805,
+    type: 3}
+  damageRadiusPrefab: {fileID: 7449486549517724255, guid: 39273ae671b38d5429ffc87492fe8995,
+    type: 3}
+  spellPrefab: {fileID: 1210069404974878, guid: f9d5b69e96abfb2499f3e5babf223986,
+    type: 3}
+  networkAnimator: {fileID: 1861298204142979517}
+  animationEventHandler: {fileID: 2928662850204982764}
+  animationTrigger: abilityW
+  actionLocker: {fileID: 2654738810189758476}
+  attackLayer:
+    serializedVersion: 2
+    m_Bits: 38912
+  maxRange: 6
+  baseDamage: 10
+  damageRadius: 2
+  delayTime: 1
+  destroyTime: 0.8
+--- !u!114 &-3679921401897041321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 452546937840963528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69258fdf309e93a4dbb86f525c6c1f76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  manaCost: 20
+  cooldownTime: 2
+  statStore: {fileID: 9134965200569341792}
+  icon: {fileID: 21300000, guid: 2e350bcef09f70943ba03de78d8c063a, type: 3}
+  smartCast: 1
+  networkAnimator: {fileID: 1861298204142979517}
+  animationEventHandler: {fileID: 2928662850204982764}
+  actionLocker: {fileID: 2654738810189758476}
+  health: {fileID: 1187138297185360588}
+  baseHeal: 10
+  animationTrigger: abilityE
+  baseArmorBuff: 10
+  spellPrefab: {fileID: 100000, guid: 1ccc170aa4bae6a47ae1827131a363ae, type: 3}
+  destroyTime: 2
+  castHeight: 0
+--- !u!114 &538770581797919719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 452546937840963528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb27bb0d0f6cecb4e98ab296ab2057a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  manaCost: 20
+  cooldownTime: 2
+  statStore: {fileID: 9134965200569341792}
+  icon: {fileID: 21300000, guid: 2c04f4986ebc72e48a8b0c3eb2e42db2, type: 3}
+  smartCast: 0
+  indicatorPrefab: {fileID: 2726156333138317243, guid: e49fdf0fe03ad394880183322ea11d43,
+    type: 3}
+  damageRectPrefab: {fileID: 2726156333138317243, guid: fc7f15d385167fb4da78c58e3435cb54,
+    type: 3}
+  spellPrefab: {fileID: 1344482632029174, guid: 994a88eb98ff7f742bdc2845a23979f8,
+    type: 3}
+  spellEffectOffset: 3
+  networkAnimator: {fileID: 1861298204142979517}
+  animationEventHandler: {fileID: 2928662850204982764}
+  animationTrigger: abilityQ
+  actionLocker: {fileID: 2654738810189758476}
+  attackLayer:
+    serializedVersion: 2
+    m_Bits: 38912
+  baseDamage: 10
+  length: 6
+  width: 1
+  delayTime: 0.4
+  destroyTime: 0.6
+--- !u!114 &4583548578950598173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 452546937840963528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb05060cf5f748747bd3570711739dc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+--- !u!114 &4968188805439103641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 452546937840963528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ba32ca4e29c30a40af0a03041e3280c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  mover: {fileID: 452546937840963535}
+  fighter: {fileID: 4873311908163361665}
+  health: {fileID: 1187138297185360588}
+  clickableLayer:
+    serializedVersion: 2
+    m_Bits: 47360
 --- !u!82 &2543827792019805567
 AudioSource:
   m_ObjectHideFlags: 0
@@ -127,227 +344,6 @@ MonoBehaviour:
   soundFX3: {fileID: 8300000, guid: 0e576dc557b8c2f4d9fb872cd09d64ab, type: 3}
   soundFX4: {fileID: 8300000, guid: 4e5ce578d7fabc84bab15ba5a9e95dc1, type: 3}
   soundFX5: {fileID: 8300000, guid: 579d818a4f834dd45a399af88c8d4cee, type: 3}
---- !u!114 &-7414020059541944781
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 452546937840963528}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 205a593dcb1f2384791655ed570197b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  health: {fileID: 1187138297185360588}
-  mana: {fileID: 2407418632379457285}
-  cooldownStore: {fileID: 4583548578950598173}
-  actionLocker: {fileID: 2654738810189758476}
-  abilities:
-  - {fileID: 538770581797919719}
-  - {fileID: -4533690763673579477}
-  - {fileID: -3679921401897041321}
-  - {fileID: -5136682741964132428}
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 256
---- !u!114 &-5136682741964132428
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 452546937840963528}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb27bb0d0f6cecb4e98ab296ab2057a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  manaCost: 20
-  cooldownTime: 30
-  statStore: {fileID: 9134965200569341792}
-  audioClip: {fileID: 0}
-  icon: {fileID: 21300000, guid: f6eba69adf6393c4dac4c662468659c1, type: 3}
-  smartCast: 0
-  indicatorPrefab: {fileID: 2726156333138317243, guid: e49fdf0fe03ad394880183322ea11d43,
-    type: 3}
-  damageRectPrefab: {fileID: 2726156333138317243, guid: fc7f15d385167fb4da78c58e3435cb54,
-    type: 3}
-  spellPrefab: {fileID: 6097260162213657970, guid: 0d9b3c6c410c8df409d36096904da2a5,
-    type: 3}
-  spellEffectOffset: 2
-  networkAnimator: {fileID: 1861298204142979517}
-  animationEventHandler: {fileID: 2928662850204982764}
-  animationTrigger: abilityR
-  actionLocker: {fileID: 2654738810189758476}
-  attackLayer:
-    serializedVersion: 2
-    m_Bits: 38912
-  baseDamage: 50
-  length: 5
-  width: 5
-  delayTime: 0.6
-  destroyTime: 2
---- !u!114 &-4999459388117059341
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 452546937840963528}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9fc6af7e4879c74a8a7e9a5cfe2d14b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerStateData: {fileID: 11400000, guid: 9e4c1b410fe25ef45a44f3fcb023d907, type: 2}
---- !u!114 &-4533690763673579477
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 452546937840963528}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52bf61089dc9acc49ae19af364fc2971, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  manaCost: 5
-  cooldownTime: 5
-  statStore: {fileID: 9134965200569341792}
-  audioClip: {fileID: 0}
-  icon: {fileID: 21300000, guid: 4637953d65a24364aab3372a525b9ed2, type: 3}
-  smartCast: 0
-  indicatorPrefab: {fileID: 7509079907997610509, guid: f7e58577928620441a8e147c3a9eaf13,
-    type: 3}
-  spellRangePrefab: {fileID: 3863486996862453941, guid: bf00ad13d1f143542a75c4b4b93f9805,
-    type: 3}
-  damageRadiusPrefab: {fileID: 7449486549517724255, guid: 39273ae671b38d5429ffc87492fe8995,
-    type: 3}
-  spellPrefab: {fileID: 1210069404974878, guid: f9d5b69e96abfb2499f3e5babf223986,
-    type: 3}
-  networkAnimator: {fileID: 1861298204142979517}
-  animationEventHandler: {fileID: 2928662850204982764}
-  animationTrigger: abilityW
-  actionLocker: {fileID: 2654738810189758476}
-  attackLayer:
-    serializedVersion: 2
-    m_Bits: 38912
-  maxRange: 6
-  baseDamage: 10
-  damageRadius: 2
-  delayTime: 1
-  destroyTime: 0.8
---- !u!114 &-3679921401897041321
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 452546937840963528}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69258fdf309e93a4dbb86f525c6c1f76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  manaCost: 20
-  cooldownTime: 2
-  statStore: {fileID: 9134965200569341792}
-  audioClip: {fileID: 0}
-  icon: {fileID: 21300000, guid: 2e350bcef09f70943ba03de78d8c063a, type: 3}
-  smartCast: 1
-  networkAnimator: {fileID: 1861298204142979517}
-  animationEventHandler: {fileID: 2928662850204982764}
-  actionLocker: {fileID: 2654738810189758476}
-  health: {fileID: 1187138297185360588}
-  baseHeal: 10
-  animationTrigger: abilityE
-  baseArmorBuff: 10
-  spellPrefab: {fileID: 100000, guid: 1ccc170aa4bae6a47ae1827131a363ae, type: 3}
-  destroyTime: 2
-  castHeight: 0
---- !u!114 &538770581797919719
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 452546937840963528}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb27bb0d0f6cecb4e98ab296ab2057a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  manaCost: 20
-  cooldownTime: 2
-  statStore: {fileID: 9134965200569341792}
-  audioClip: {fileID: 0}
-  icon: {fileID: 21300000, guid: 2c04f4986ebc72e48a8b0c3eb2e42db2, type: 3}
-  smartCast: 0
-  indicatorPrefab: {fileID: 2726156333138317243, guid: e49fdf0fe03ad394880183322ea11d43,
-    type: 3}
-  damageRectPrefab: {fileID: 2726156333138317243, guid: fc7f15d385167fb4da78c58e3435cb54,
-    type: 3}
-  spellPrefab: {fileID: 1344482632029174, guid: 994a88eb98ff7f742bdc2845a23979f8,
-    type: 3}
-  spellEffectOffset: 3
-  networkAnimator: {fileID: 1861298204142979517}
-  animationEventHandler: {fileID: 2928662850204982764}
-  animationTrigger: abilityQ
-  actionLocker: {fileID: 2654738810189758476}
-  attackLayer:
-    serializedVersion: 2
-    m_Bits: 38912
-  baseDamage: 10
-  length: 6
-  width: 1
-  delayTime: 0.4
-  destroyTime: 0.6
---- !u!114 &4583548578950598173
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 452546937840963528}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb05060cf5f748747bd3570711739dc6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
---- !u!114 &4968188805439103641
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 452546937840963528}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ba32ca4e29c30a40af0a03041e3280c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  mover: {fileID: 452546937840963535}
-  fighter: {fileID: 4873311908163361665}
-  health: {fileID: 1187138297185360588}
-  clickableLayer:
-    serializedVersion: 2
-    m_Bits: 47360
 --- !u!1001 &6543793052980821921
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -611,7 +607,7 @@ PrefabInstance:
     - target: {fileID: -7159978106751353337, guid: b31cb8edadf36634680f82045f41209b,
         type: 3}
       propertyPath: baseStats.maxMana
-      value: 120
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: -7159978106751353337, guid: b31cb8edadf36634680f82045f41209b,
         type: 3}
@@ -621,7 +617,7 @@ PrefabInstance:
     - target: {fileID: -7159978106751353337, guid: b31cb8edadf36634680f82045f41209b,
         type: 3}
       propertyPath: baseStats.maxHealth
-      value: 150
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: -7159978106751353337, guid: b31cb8edadf36634680f82045f41209b,
         type: 3}

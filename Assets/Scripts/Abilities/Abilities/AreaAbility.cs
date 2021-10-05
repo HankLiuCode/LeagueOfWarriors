@@ -54,8 +54,9 @@ public class AreaAbility : Ability
             Health health = go.GetComponent<Health>();
             if (health && !TeamChecker.IsSameTeam(gameObject, health.gameObject))
             {
-                float damage = baseDamage + statStore.GetStats().magicDamage;
-                health.ServerTakeDamage(damage);
+                float damage = baseDamage + statStore.GetStats().attackDamage;
+                
+                health.ServerTakeDamage(damage, abilityData.caster.netIdentity);
             }
         }
 

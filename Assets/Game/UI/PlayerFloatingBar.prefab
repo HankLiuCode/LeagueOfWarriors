@@ -57,7 +57,8 @@ MonoBehaviour:
   isAlly: 0
   healthDisplay: {fileID: 426819144903554670}
   manaDisplay: {fileID: 7332297539151967564}
-  level: {fileID: 5052268747648085170}
+  levelImage: {fileID: 5052268747648085170}
+  levelText: {fileID: 1892099217369837942}
   healthBorder: {fileID: 3546485755773224715}
   manaBorder: {fileID: 7048528427654648936}
   healthFill: {fileID: 3546485755509907919}

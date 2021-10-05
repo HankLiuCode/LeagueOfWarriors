@@ -1,0 +1,141 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1eeed3ad6fced414e851ef00503e64eb, type: 3}
+  m_Name: StatsProgression
+  m_EditorClassIdentifier: 
+  stats:
+  - maxHealth: 100
+    maxMana: 100
+    manaRegen: 1
+    healthRegen: 1
+    moveSpeed: 5
+    attackDamage: 10
+    armor: 10
+  - maxHealth: 105
+    maxMana: 105
+    manaRegen: 1
+    healthRegen: 1
+    moveSpeed: 5
+    attackDamage: 11
+    armor: 11
+  - maxHealth: 110
+    maxMana: 110
+    manaRegen: 1
+    healthRegen: 1
+    moveSpeed: 5
+    attackDamage: 12
+    armor: 12
+  - maxHealth: 120
+    maxMana: 120
+    manaRegen: 1
+    healthRegen: 1
+    moveSpeed: 5
+    attackDamage: 13
+    armor: 13
+  - maxHealth: 130
+    maxMana: 130
+    manaRegen: 1
+    healthRegen: 1
+    moveSpeed: 5
+    attackDamage: 13
+    armor: 13
+  - maxHealth: 140
+    maxMana: 140
+    manaRegen: 1
+    healthRegen: 1
+    moveSpeed: 5
+    attackDamage: 15
+    armor: 15
+  - maxHealth: 140
+    maxMana: 140
+    manaRegen: 1
+    healthRegen: 1
+    moveSpeed: 5
+    attackDamage: 17
+    armor: 17
+  - maxHealth: 140
+    maxMana: 140
+    manaRegen: 1
+    healthRegen: 1
+    moveSpeed: 5
+    attackDamage: 20
+    armor: 20
+  - maxHealth: 140
+    maxMana: 140
+    manaRegen: 1
+    healthRegen: 1
+    moveSpeed: 5
+    attackDamage: 21
+    armor: 21
+  - maxHealth: 150
+    maxMana: 150
+    manaRegen: 1
+    healthRegen: 1
+    moveSpeed: 5
+    attackDamage: 15
+    armor: 15
+  - maxHealth: 150
+    maxMana: 150
+    manaRegen: 1
+    healthRegen: 1
+    moveSpeed: 5
+    attackDamage: 22
+    armor: 22
+  - maxHealth: 160
+    maxMana: 160
+    manaRegen: 1
+    healthRegen: 1
+    moveSpeed: 5
+    attackDamage: 22
+    armor: 22
+  - maxHealth: 200
+    maxMana: 200
+    manaRegen: 1
+    healthRegen: 1
+    moveSpeed: 5
+    attackDamage: 23
+    armor: 23
+  - maxHealth: 210
+    maxMana: 210
+    manaRegen: 1
+    healthRegen: 1
+    moveSpeed: 5
+    attackDamage: 15
+    armor: 15
+  - maxHealth: 220
+    maxMana: 220
+    manaRegen: 1
+    healthRegen: 1
+    moveSpeed: 5
+    attackDamage: 15
+    armor: 15
+  - maxHealth: 230
+    maxMana: 230
+    manaRegen: 1
+    healthRegen: 1
+    moveSpeed: 5
+    attackDamage: 15
+    armor: 15
+  - maxHealth: 250
+    maxMana: 250
+    manaRegen: 1
+    healthRegen: 1
+    moveSpeed: 5
+    attackDamage: 15
+    armor: 15
+  - maxHealth: 220
+    maxMana: 220
+    manaRegen: 1
+    healthRegen: 1
+    moveSpeed: 5
+    attackDamage: 15
+    armor: 15

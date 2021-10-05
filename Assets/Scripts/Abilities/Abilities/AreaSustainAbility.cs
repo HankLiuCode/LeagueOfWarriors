@@ -60,8 +60,9 @@ public class AreaSustainAbility : Ability
                 Health health = go.GetComponent<Health>();
                 if (health && !TeamChecker.IsSameTeam(gameObject, health.gameObject))
                 {
-                    float damage = (baseDamage + statStore.GetStats().magicDamage) * Time.deltaTime;
-                    health.ServerTakeDamage(damage);
+                    float damage = (baseDamage + statStore.GetStats().attackDamage) * Time.deltaTime;
+                    
+                    health.ServerTakeDamage(damage, abilityData.caster.netIdentity);
                 }
             }
             yield return null;

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 
 
@@ -18,7 +19,12 @@ public class FloatingBar : MonoBehaviour
     [SerializeField] HealthDisplay healthDisplay = null;
     [SerializeField] ManaDisplay manaDisplay = null;
 
-    [SerializeField] Image level = null;
+    Level level;
+    [SerializeField] Image levelImage = null;
+    [SerializeField] TextMeshProUGUI levelText = null;
+
+
+
     [SerializeField] Image healthBorder= null;
     [SerializeField] Image manaBorder = null;
     [SerializeField] Image healthFill = null;
@@ -28,6 +34,10 @@ public class FloatingBar : MonoBehaviour
         if(target != null)
         {
             UpdateFloatingBarPosition(target.transform.position);
+            if(level != null)
+            {
+                levelText.text = level.GetLevel().ToString();
+            }
         }
     }
 
@@ -35,6 +45,12 @@ public class FloatingBar : MonoBehaviour
     {
         Vector3 screenPos = Camera.main.WorldToScreenPoint(followPoint + offset);
         transform.position = screenPos;
+    }
+
+    public void SetLevel(Level level)
+    {
+        this.level = level;
+        this.levelImage.gameObject.SetActive(true);
     }
 
     public void Setup(Health health, Mana mana, Team localPlayerTeam, Team targetTeam, Vector3 offset)
@@ -72,7 +88,8 @@ public class FloatingBar : MonoBehaviour
                 color = Color.blue;
                 break;
         }
-        level.color = color;
+
+        levelImage.color = color;
         healthBorder.color = color;
         manaBorder.color = color;
     }

@@ -33,7 +33,7 @@ namespace Dota.Combat
         [Server]
         public void ServerDealDamageTo(Health health, float damage)
         {
-            health.ServerTakeDamage(damage);
+            health.ServerTakeDamage(damage, netIdentity);
         }
 
         [Command]
