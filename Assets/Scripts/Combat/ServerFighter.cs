@@ -1,4 +1,5 @@
 using Dota.Attributes;
+using Dota.Core;
 using Dota.Movement;
 using Dota.Utils;
 using Mirror;
@@ -6,8 +7,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ServerFighter : NetworkBehaviour
+public class ServerFighter : NetworkBehaviour, IAction
 {
+    public const int FIGHT_ACTION_PRIORITY = 1;
     public const float MOVE_EPSILON = 0.1f;
 
     CombatTarget target;
@@ -24,6 +26,7 @@ public class ServerFighter : NetworkBehaviour
     [SerializeField] Health health = null;
     [SerializeField] ServerMover mover = null;
     [SerializeField] StatStore statStore = null;
+    [SerializeField] ActionLocker actionLocker = null;
     
 
     [SerializeField] bool hasFinishedBackswing = true;
@@ -32,7 +35,7 @@ public class ServerFighter : NetworkBehaviour
     [Server]
     public void ServerDealDamageTo(Health health, float damage)
     {
-        health.ServerTakeDamage(damage);
+        health.ServerTakeDamage(damage, netIdentity);
     }
 
     public override void OnStartServer()
@@ -78,6 +81,7 @@ public class ServerFighter : NetworkBehaviour
         {
             target = null;
             hasFinishedBackswing = true;
+            actionLocker.ReleaseLock(this);
             TriggerStopAttackAnimation();
         }
     }
@@ -148,7 +152,7 @@ public class ServerFighter : NetworkBehaviour
         }
         else
         {
-            if (attackCooldownTimer <= 0)
+            if (attackCooldownTimer <= 0 && actionLocker.TryGetLock(this))
             {
                 attackCooldownTimer = timeBetweenAttacks;
                 transform.LookAt(target.transform);
@@ -166,5 +170,20 @@ public class ServerFighter : NetworkBehaviour
         {
             Gizmos.DrawCube(target.transform.position, Vector3.one);
         }
+    }
+
+    public int GetPriority()
+    {
+        return FIGHT_ACTION_PRIORITY;
+    }
+
+    public void Begin()
+    {
+        
+    }
+
+    public void End()
+    {
+        StopAttack();
     }
 }

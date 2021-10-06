@@ -30,6 +30,7 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
 
     public static event System.Action<Champion> ServerOnChampionDead;
     public static event System.Action<Champion> ClientOnChampionDead;
+    public static event System.Action<Champion, NetworkIdentity> ClientOnChampionDeadAttacker;
 
     #region Client
 
@@ -40,14 +41,15 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
         health.ClientOnHealthDeadEnd += Health_ClientOnHealthDeadEnd;
     }
 
+    private void Health_ClientOnHealthDead(Health arg1, NetworkIdentity attacker)
+    {
+        ClientOnChampionDead?.Invoke(this);
+        ClientOnChampionDeadAttacker?.Invoke(this, attacker);
+    }
+
     private void Health_ClientOnHealthDeadEnd()
     {
         disolver.StartDisolve();
-    }
-
-    private void Health_ClientOnHealthDead(Health health)
-    {
-        ClientOnChampionDead?.Invoke(this);
     }
 
     public override void OnStopClient()
@@ -67,10 +69,10 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
 
     public override void OnStartServer()
     {
-        health.ServerOnHealthDead += Health_ServerOnHealthDead;
+        health.ServerOnHealthDead += Health_ServerOnHealthDead1;
     }
 
-    private void Health_ServerOnHealthDead(Health health)
+    private void Health_ServerOnHealthDead1(Health arg1, NetworkIdentity arg2)
     {
         StartCoroutine(DestroyAfter(disolver.GetDisolveDuration() + dealthAnimDuration));
         ServerOnChampionDead?.Invoke(this);

@@ -77,20 +77,19 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner
     public override void OnStartClient()
     {
         OnTowerSpawned?.Invoke(this);
-        health.ClientOnHealthDead += Health_ClientOnHealthDead;
+        health.ClientOnHealthDead += Health_ClientOnHealthDead1;
+    }
+
+    private void Health_ClientOnHealthDead1(Health arg1, NetworkIdentity arg2)
+    {
+        disolver.StartDisolve();
+        ClientOnTowerDead?.Invoke(this);
     }
 
     public override void OnStopClient()
     {
         OnTowerDestroyed?.Invoke(this);
     }
-
-    private void Health_ClientOnHealthDead(Health health)
-    {
-        disolver.StartDisolve();
-        ClientOnTowerDead?.Invoke(this);
-    }
-
     #endregion
 
     #region Server
@@ -102,7 +101,7 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner
         bulletFireRoutine = StartCoroutine(FireBulletRoutine());
     }
 
-    private void Health_ServerOnHealthDead(Health obj)
+    private void Health_ServerOnHealthDead(Health arg1, NetworkIdentity arg2)
     {
         ServerOnTowerDied?.Invoke(this);
 

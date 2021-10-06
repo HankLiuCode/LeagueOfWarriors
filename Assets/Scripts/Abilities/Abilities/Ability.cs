@@ -5,7 +5,7 @@ using Dota.Attributes;
 
 public abstract class Ability : NetworkBehaviour, IAction
 {
-    public const int ABILITY_ACTION_PRIORITY = 1;
+    public const int ABILITY_ACTION_PRIORITY = 10;
 
     [SyncVar]
     [SerializeField] 

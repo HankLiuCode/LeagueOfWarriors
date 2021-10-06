@@ -24,7 +24,7 @@ namespace Dota.Movement
             health.ServerOnHealthDead += Health_ServerOnHealthDead;
         }
 
-        private void Health_ServerOnHealthDead(Health obj)
+        private void Health_ServerOnHealthDead(Health obj, NetworkIdentity attacker)
         {
             agent.enabled = false;
         }
@@ -38,7 +38,7 @@ namespace Dota.Movement
             health.ClientOnHealthDead += Health_ClientOnHealthDead;
         }
 
-        private void Health_ClientOnHealthDead(Health obj)
+        private void Health_ClientOnHealthDead(Health obj, NetworkIdentity attacker)
         {
             agent.enabled = false;
         }
