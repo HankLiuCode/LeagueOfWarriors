@@ -131,7 +131,7 @@ PrefabInstance:
         type: 3}
       propertyPath: renderers.Array.data[0]
       value: 
-      objectReference: {fileID: 1138249141745888048}
+      objectReference: {fileID: 1138249141745888050}
     - target: {fileID: 6002377142173262689, guid: a3b42f2814c77f24e9a9da1fcba31460,
         type: 3}
       propertyPath: sceneId
@@ -253,6 +253,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slime
       objectReference: {fileID: 0}
+    - target: {fileID: 3447780350781233685, guid: a16a1b7b4f5c1124087cd813db3b73ea,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3447780350781233687, guid: a16a1b7b4f5c1124087cd813db3b73ea,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3447780350781326903, guid: a16a1b7b4f5c1124087cd813db3b73ea,
         type: 3}
       propertyPath: m_RootOrder
@@ -334,3 +344,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96ec5fe4c00163f499f1bf840990a0e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1138249141745888050 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3447780350781233687, guid: a16a1b7b4f5c1124087cd813db3b73ea,
+    type: 3}
+  m_PrefabInstance: {fileID: 2311233255183692069}
+  m_PrefabAsset: {fileID: 0}

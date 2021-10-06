@@ -182,6 +182,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scorpion
       objectReference: {fileID: 0}
+    - target: {fileID: 5605869864739980284, guid: b1412b26cfc690d40b3b34112fb4e44d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5605869864739980286, guid: b1412b26cfc690d40b3b34112fb4e44d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1412b26cfc690d40b3b34112fb4e44d, type: 3}
 --- !u!1 &6767549471846403265 stripped
@@ -208,6 +218,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96ec5fe4c00163f499f1bf840990a0e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &6767549471846403267 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5605869864739980286, guid: b1412b26cfc690d40b3b34112fb4e44d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1163941444280209213}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7219708363469056374
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -224,7 +240,7 @@ PrefabInstance:
         type: 3}
       propertyPath: renderers.Array.data[0]
       value: 
-      objectReference: {fileID: 6767549471846403265}
+      objectReference: {fileID: 6767549471846403267}
     - target: {fileID: 6002377142173262689, guid: a3b42f2814c77f24e9a9da1fcba31460,
         type: 3}
       propertyPath: sceneId
