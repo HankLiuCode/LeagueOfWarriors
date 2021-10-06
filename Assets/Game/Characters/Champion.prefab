@@ -391,6 +391,5 @@ MonoBehaviour:
   statStore: {fileID: -7159978106751353337}
   exp: 0
   currentLevel: 1
-  levelUpEffect: {fileID: 1397451955840750, guid: 98d4e8619209e9f469b6312561f0fded,
-    type: 3}
+  levelUpEffect: {fileID: 100002, guid: c91d4459473d29946afd5abb3ff004ee, type: 3}
   progression: {fileID: 11400000, guid: 267cd0f0455beb649ac1a48ebbd6d08e, type: 2}

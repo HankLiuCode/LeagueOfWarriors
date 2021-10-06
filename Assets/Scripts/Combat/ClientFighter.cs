@@ -1,4 +1,5 @@
 ﻿using Dota.Attributes;
+using Dota.Core;
 using Dota.Movement;
 using Dota.Utils;
 using Mirror;
@@ -25,6 +26,7 @@ namespace Dota.Combat
         [SerializeField] AnimationEventHandler animationEventHandler = null;
         [SerializeField] ClientMover mover = null;
         [SerializeField] StatStore statStore = null;
+        [SerializeField] ActionLocker actionLocker = null;
 
         [SerializeField] bool hasFinishedBackswing = true;
 
@@ -79,6 +81,7 @@ namespace Dota.Combat
         public void StartAttack(GameObject combatTarget)
         {
             CombatTarget target = combatTarget.GetComponent<CombatTarget>();
+
             if (target == null) { return; }
 
             this.target = target;

@@ -105,8 +105,9 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner
     private void Health_ServerOnHealthDead(Health obj)
     {
         ServerOnTowerDied?.Invoke(this);
-        GameObject deathEffectInstance = Instantiate(towerDeadEffect, transform);
-        deathEffectInstance.transform.localPosition = Vector3.up;
+
+        GameObject deathEffectInstance = Instantiate(towerDeadEffect, transform.position + Vector3.up, Quaternion.identity);
+
         NetworkServer.Spawn(deathEffectInstance);
 
         StartCoroutine(DestroyAfter(disolver.GetDisolveDuration() + dealthAnimDuration));
