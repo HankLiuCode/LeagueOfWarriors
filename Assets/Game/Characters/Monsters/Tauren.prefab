@@ -127,6 +127,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tauren
       objectReference: {fileID: 0}
+    - target: {fileID: 524797964914851108, guid: df5c1c3df6bf8ea49ad3b822c2bf0e47,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 524797964914851110, guid: df5c1c3df6bf8ea49ad3b822c2bf0e47,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 524797964915269892, guid: df5c1c3df6bf8ea49ad3b822c2bf0e47,
         type: 3}
       propertyPath: m_RootOrder
@@ -208,6 +218,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96ec5fe4c00163f499f1bf840990a0e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &4177566326938021138 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 524797964914851110, guid: df5c1c3df6bf8ea49ad3b822c2bf0e47,
+    type: 3}
+  m_PrefabInstance: {fileID: 4517610185348272180}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7410806616862313409
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -224,7 +240,7 @@ PrefabInstance:
         type: 3}
       propertyPath: renderers.Array.data[0]
       value: 
-      objectReference: {fileID: 4177566326938021136}
+      objectReference: {fileID: 4177566326938021138}
     - target: {fileID: 6002377142173262689, guid: a3b42f2814c77f24e9a9da1fcba31460,
         type: 3}
       propertyPath: sceneId

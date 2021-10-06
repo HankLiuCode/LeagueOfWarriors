@@ -122,10 +122,20 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2856393900053598538}
     m_Modifications:
+    - target: {fileID: 1904197886796228584, guid: 8553091ce513df94ba5709354ed2061f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1904197886796228590, guid: 8553091ce513df94ba5709354ed2061f,
         type: 3}
       propertyPath: m_Name
       value: Golem
+      objectReference: {fileID: 0}
+    - target: {fileID: 1904197886796228590, guid: 8553091ce513df94ba5709354ed2061f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1904197886796528520, guid: 8553091ce513df94ba5709354ed2061f,
         type: 3}
@@ -208,6 +218,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96ec5fe4c00163f499f1bf840990a0e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &7963024709919636496 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1904197886796228584, guid: 8553091ce513df94ba5709354ed2061f,
+    type: 3}
+  m_PrefabInstance: {fileID: 8426033876947901432}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8426033877677568553
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -224,7 +240,7 @@ PrefabInstance:
         type: 3}
       propertyPath: renderers.Array.data[0]
       value: 
-      objectReference: {fileID: 7963024709919636502}
+      objectReference: {fileID: 7963024709919636496}
     - target: {fileID: 6002377142173262689, guid: a3b42f2814c77f24e9a9da1fcba31460,
         type: 3}
       propertyPath: sceneId

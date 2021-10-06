@@ -1857,6 +1857,7 @@ MonoBehaviour:
   - {fileID: 452546937840963528, guid: 3dbc6cd5f5aa16d48baca7aa12e1cef9, type: 3}
   - {fileID: 5252308120716157901, guid: 1c5d525e699ff3b488b424db5cfba49d, type: 3}
   - {fileID: 2136612336401763621, guid: 840b9e1749073a44fa678a357e63d622, type: 3}
+  - {fileID: 4765008198558255937, guid: c60ec82f01bf1784dbd64b5453b62fd6, type: 3}
   - {fileID: 7449486549517724255, guid: 39273ae671b38d5429ffc87492fe8995, type: 3}
   - {fileID: 2726156333138317243, guid: fc7f15d385167fb4da78c58e3435cb54, type: 3}
   - {fileID: 3171829230800741641, guid: 1071c91a612857a44b822507620ac825, type: 3}
@@ -1882,6 +1883,7 @@ MonoBehaviour:
   - {fileID: 100008, guid: df5d061754763e844a90e67ea235a721, type: 3}
   - {fileID: 100006, guid: 4f2b3cc0bce7b574d8c471a8c442dd28, type: 3}
   - {fileID: 1397451955840750, guid: 98d4e8619209e9f469b6312561f0fded, type: 3}
+  - {fileID: 100002, guid: c91d4459473d29946afd5abb3ff004ee, type: 3}
   gameScene: Assets/Game/Scene/Game.unity
   maxPlayers: 2
   serverPlayers: []
