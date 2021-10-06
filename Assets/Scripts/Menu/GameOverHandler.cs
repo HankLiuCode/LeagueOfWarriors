@@ -76,13 +76,13 @@ public class GameOverHandler : NetworkBehaviour
     private void Base_ClientOnBaseDead(Base teamBase)
     {
         OnClientGameOver?.Invoke(teamBase);
-        StartCoroutine(ShowCanvasAfter(teamBase, gameOverAnimationLength));
+
+        ShowGameOverVideo(teamBase);
+        StartCoroutine(ShowButtonAfter(gameOverAnimationLength));
     }
 
-    IEnumerator ShowCanvasAfter(Base destroyedBase, float seconds)
+    public void ShowGameOverVideo(Base destroyedBase)
     {
-        yield return new WaitForSeconds(seconds);
-
         if (destroyedBase.GetTeam() == localPlayerTeam)
         {
             gameOverCanvas.ShowDefeat();
@@ -92,6 +92,13 @@ public class GameOverHandler : NetworkBehaviour
             gameOverCanvas.ShowVictory();
         }
     }
+
+    IEnumerator ShowButtonAfter(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        gameOverCanvas.ShowContinueButton();
+    }
+
 
     #endregion
 }

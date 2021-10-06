@@ -5,7 +5,13 @@ public class GameOverCanvas : NetworkBehaviour
 {
     [SerializeField] GameObject victory;
     [SerializeField] GameObject defeat;
+    [SerializeField] GameObject continueButton;
     [Scene] [SerializeField] string roomScene;
+
+    public void ShowContinueButton()
+    {
+        continueButton.gameObject.SetActive(true);
+    }
 
     public void ShowVictory()
     {
