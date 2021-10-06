@@ -7,8 +7,8 @@ public class ObstacleManager : NetworkBehaviour
 {
     public static ObstacleManager instance;
 
-    [SerializeField] MinionSpawner minionManager = null;
-    [SerializeField] PlayerManager playerManager = null;
+    [SerializeField] MinionSpawner minionManager ;
+    [SerializeField] PlayerManager playerManager;
     [SerializeField] List<DotaObstacle> obstacles = new List<DotaObstacle>();
 
     private void Awake()

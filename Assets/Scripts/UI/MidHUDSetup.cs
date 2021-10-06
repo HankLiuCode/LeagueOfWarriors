@@ -5,10 +5,10 @@ using Mirror;
 
 public class MidHUDSetup : MonoBehaviour
 {
-    [SerializeField] IconDisplay iconDisplay = null;
-    [SerializeField] HealthDisplay healthDisplay = null;
-    [SerializeField] ManaDisplay manaDisplay = null;
-    [SerializeField] GameObject abilitiesContainer = null;
+    [SerializeField] IconDisplay iconDisplay ;
+    [SerializeField] HealthDisplay healthDisplay ;
+    [SerializeField] ManaDisplay manaDisplay;
+    [SerializeField] GameObject abilitiesContainer ;
 
     private void Start()
     {

@@ -10,7 +10,7 @@ public class Mana : NetworkBehaviour
     [SyncVar(hook = nameof(OnManaChanged))]
     float manaPoint;
 
-    [SerializeField] StatStore statStore = null;
+    [SerializeField] StatStore statStore;
 
     public event System.Action OnManaModified;
 

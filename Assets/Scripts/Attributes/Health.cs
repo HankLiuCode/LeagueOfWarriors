@@ -12,11 +12,11 @@ namespace Dota.Attributes
         [SyncVar]
         bool isDead = false;
 
-        [SerializeField] Animator animator = null;
-        [SerializeField] StatStore stats = null;
-        [SerializeField] Collider healthCollider = null;
+        [SerializeField] Animator animator ;
+        [SerializeField] StatStore stats;
+        [SerializeField] Collider healthCollider;
 
-        [SerializeField] AnimationEventHandler animationEventHandler = null;
+        [SerializeField] AnimationEventHandler animationEventHandler;
 
         [SerializeField] float healthDisplayOffset = 3f;
 

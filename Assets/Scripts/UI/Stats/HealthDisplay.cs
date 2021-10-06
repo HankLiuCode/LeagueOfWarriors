@@ -12,8 +12,8 @@ namespace Dota.UI
         // for debugging
         [SerializeField] Health health;
 
-        [SerializeField] Image healthFill = null;
-        [SerializeField] TextMeshProUGUI healthText = null;
+        [SerializeField] Image healthFill;
+        [SerializeField] TextMeshProUGUI healthText;
         [SerializeField] float fillSpeed = 0.01f;
 
         public void SetHealth(Health health)
@@ -22,7 +22,7 @@ namespace Dota.UI
             healthFill.fillAmount = health.GetHealthPercent();
         }
 
-        private void Update()
+        private void UpdateHealth()
         {
             // gameObject is disabled before this function is called
             if (healthFill == null)
