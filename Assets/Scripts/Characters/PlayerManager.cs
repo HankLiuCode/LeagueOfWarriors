@@ -6,7 +6,7 @@ using Dota.Networking;
 
 public class PlayerManager : NetworkBehaviour
 {
-    [Scene] 
+    [Scene]
     [SerializeField]
     string gameScene;
 
@@ -18,6 +18,7 @@ public class PlayerManager : NetworkBehaviour
     [SerializeField] Transform[] redStartPositions;
 
     [SerializeField] List<Champion> serverChampions = new List<Champion>();
+    [SerializeField] Dictionary<DotaRoomPlayer, int> playerLevel = new Dictionary<DotaRoomPlayer, int>();
     [SerializeField] GameObject rebirthPrefab = null;
 
     int blueStartPositionIndex = 0;
@@ -40,9 +41,9 @@ public class PlayerManager : NetworkBehaviour
     [Server]
     private void DotaNetworkManager_ServerOnClientDisconnect(DotaRoomPlayer player)
     {
-        foreach(Champion champion in serverChampions)
+        foreach (Champion champion in serverChampions)
         {
-            if(champion.GetOwner() == player)
+            if (champion.GetOwner() == player)
             {
                 champion.netIdentity.RemoveClientAuthority();
                 Debug.Log("Champion Authority Removed");
@@ -54,13 +55,20 @@ public class PlayerManager : NetworkBehaviour
     private void Champion_ServerOnChampionDead(Champion champion)
     {
         serverChampions.Remove(champion);
+
+        int level = champion.GetComponent<Level>().GetLevel();
+
+        Debug.Log("Champion Dead: Level: " + level);
+
+        playerLevel[champion.GetOwner()] = level;
+
         StartCoroutine(SpawnChampionForPlayerAfterSeconds(champion.GetOwner(), Champion.REVIVE_TIME));
     }
 
     [Server]
     private void DotaNetworkManager_ServerOnAllClientSceneLoaded(string scene)
     {
-        if(scene == gameScene)
+        if (scene == gameScene)
         {
             List<DotaRoomPlayer> roomPlayers = ((DotaNetworkManager)NetworkManager.singleton).GetServerPlayers();
             SpawnChampionsForPlayers(roomPlayers);
@@ -70,7 +78,7 @@ public class PlayerManager : NetworkBehaviour
     [Server]
     public void SpawnChampionsForPlayers(List<DotaRoomPlayer> players)
     {
-        foreach(DotaRoomPlayer player in players)
+        foreach (DotaRoomPlayer player in players)
         {
             SpawnChampionForPlayer(player);
         }
@@ -100,12 +108,21 @@ public class PlayerManager : NetworkBehaviour
 
         champion.ServerSetTeam(championTeam);
 
+        int level;
+
+        playerLevel.TryGetValue(player, out level);
+
+        level = level == 0 ? 1 : level;
+
+        champion.SetLevel(level);
+
         serverChampions.Add(champion);
 
-        GameObject rebirthInstance = Instantiate(rebirthPrefab, (championTeam == Team.Red) ? redStartParent.position : blueStartParent.position, Quaternion.identity);
-        NetworkServer.Spawn(rebirthInstance);
-
         NetworkServer.Spawn(championInstance, player.connectionToClient);
+
+        GameObject rebirthInstance = Instantiate(rebirthPrefab, (championTeam == Team.Red) ? redStartParent.position : blueStartParent.position, Quaternion.identity);
+
+        NetworkServer.Spawn(rebirthInstance);
     }
 
     [Server]

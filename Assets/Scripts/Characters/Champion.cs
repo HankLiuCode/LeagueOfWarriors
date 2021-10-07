@@ -66,6 +66,12 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
 
     #region Server
 
+    [Server]
+    public void SetLevel(int l)
+    {
+        level.SetLevel(l);
+    }
+
     [ServerCallback]
     private void Update()
     {

@@ -9,6 +9,8 @@ using Dota.Attributes;
 public class Level : NetworkBehaviour
 {
     public const float LEVEL_UP_THRESHOLD = 100f;
+    public const int MAX_LEVEL = 30;
+    public const int MIN_LEVEL = 1;
 
     [SerializeField] StatStore statStore = null;
     [SerializeField] private float exp;
@@ -27,6 +29,13 @@ public class Level : NetworkBehaviour
         return currentLevel;
     }
 
+    public void SetLevel(int level)
+    {
+        currentLevel = level;
+        currentLevel = Mathf.Clamp(currentLevel, MIN_LEVEL, MAX_LEVEL);
+        statStore.SetStats(progression.GetStats(currentLevel));
+    }
+
 
     [Server]
     public void AddExperience(float addExp)
@@ -41,7 +50,7 @@ public class Level : NetworkBehaviour
             GameObject levelUpInstance = Instantiate(levelUpEffect, transform.position, Quaternion.identity);
             NetworkServer.Spawn(levelUpInstance);
         }
-        statStore.SetStats(progression.GetStats(currentLevel));
+        SetLevel(currentLevel);
     }
 
 
