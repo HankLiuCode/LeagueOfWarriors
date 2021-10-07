@@ -12,11 +12,18 @@ public class Projectile : NetworkBehaviour
     [SerializeField] 
     CombatTarget target;
 
+    NetworkIdentity owner;
+
     [SerializeField] Vector3 spawnPosition;
     [SerializeField] float speed = 5f;
     float damage = 10f;
 
     #region Server
+
+    public void SetOwner(NetworkIdentity owner)
+    {
+        this.owner = owner;
+    }
 
     public void SetTarget(CombatTarget target, float damage, Vector3 spawnPosition)
     {
@@ -37,7 +44,7 @@ public class Projectile : NetworkBehaviour
             transform.position += direction * delta;
             if (targetVec.magnitude <= DESTROY_EPSILON)
             {
-                target.GetHealth().ServerTakeDamage(damage);
+                target.GetHealth().ServerTakeDamage(damage, netIdentity);
                 NetworkServer.Destroy(gameObject);
             }
         }

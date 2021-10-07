@@ -32,7 +32,7 @@ public class ServerFighter : NetworkBehaviour
     [Server]
     public void ServerDealDamageTo(Health health, float damage)
     {
-        health.ServerTakeDamage(damage);
+        health.ServerTakeDamage(damage, netIdentity);
     }
 
     public override void OnStartServer()

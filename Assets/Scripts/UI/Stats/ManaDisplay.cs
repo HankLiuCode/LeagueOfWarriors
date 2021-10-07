@@ -40,7 +40,7 @@ public class ManaDisplay : MonoBehaviour
         // gameObject is disabled before this function is called
         if (manaFill == null)
         {
-            Debug.Log("Mana Fill is Null");
+            //Debug.Log("Mana Fill is Null");
             return;
         }
 

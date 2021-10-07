@@ -30,6 +30,7 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
 
     public static event System.Action<Champion> ServerOnChampionDead;
     public static event System.Action<Champion> ClientOnChampionDead;
+    public static event System.Action<Champion, NetworkIdentity> ClientOnChampionDeadAttacker;
 
     #region Client
 
@@ -38,6 +39,12 @@ public class Champion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntit
         OnChampionSpawned?.Invoke(this);
         health.ClientOnHealthDead += Health_ClientOnHealthDead;
         health.ClientOnHealthDeadEnd += Health_ClientOnHealthDeadEnd;
+        health.ClientOnHealthDeadAttacker += Health_ClientOnHealthDeadAttacker;
+    }
+
+    private void Health_ClientOnHealthDeadAttacker(Health arg1, NetworkIdentity attacker)
+    {
+        ClientOnChampionDeadAttacker?.Invoke(this, attacker);
     }
 
     private void Health_ClientOnHealthDeadEnd()

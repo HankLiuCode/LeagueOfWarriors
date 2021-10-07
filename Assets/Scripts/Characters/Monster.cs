@@ -294,7 +294,7 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
     [Server]
     private void AnimationEventHandler_OnAttackPoint()
     {
-        target.GetHealth().ServerTakeDamage(statStore.GetStats().attackDamage);
+        target.GetHealth().ServerTakeDamage(statStore.GetStats().attackDamage, netIdentity);
     }
 
     /// <summary>
