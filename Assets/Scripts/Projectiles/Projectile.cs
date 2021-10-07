@@ -37,7 +37,7 @@ public class Projectile : NetworkBehaviour
             transform.position += direction * delta;
             if (targetVec.magnitude <= DESTROY_EPSILON)
             {
-                target.GetHealth().ServerTakeDamage(damage, netIdentity);
+                target.GetHealth().ServerTakeDamage(damage);
                 NetworkServer.Destroy(gameObject);
             }
         }

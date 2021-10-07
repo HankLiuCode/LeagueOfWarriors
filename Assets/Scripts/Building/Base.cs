@@ -25,10 +25,10 @@ public class Base : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
     public override void OnStartClient()
     {
         OnBaseSpawned?.Invoke(this);
-        health.ClientOnHealthDead += Health_ClientOnHealthDead1;
-
+        health.ClientOnHealthDead += Health_ClientOnHealthDead;
     }
-    private void Health_ClientOnHealthDead1(Health arg1, NetworkIdentity arg2)
+
+    private void Health_ClientOnHealthDead(Health health)
     {
         disolver.StartDisolve();
         ClientOnBaseDead?.Invoke(this);
@@ -47,17 +47,16 @@ public class Base : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
         health.ServerOnHealthDead += Health_ServerOnHealthDead;
     }
 
-    private void Health_ServerOnHealthDead(Health arg1, NetworkIdentity arg2)
+    private void Health_ServerOnHealthDead(Health health)
     {
         Vector3 spawnPos = health.transform.position + Vector3.up;
 
         GameObject deathEffectInstance = Instantiate(destroyEffect, spawnPos, Quaternion.identity);
-
+        
         NetworkServer.Spawn(deathEffectInstance);
 
         ServerOnBaseDead?.Invoke(this);
     }
-
 
     #endregion
 

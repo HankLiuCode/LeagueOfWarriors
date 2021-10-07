@@ -9,10 +9,8 @@ using UnityEngine;
 
 namespace Dota.Combat
 {
-    public class ClientFighter : NetworkBehaviour, IAction
+    public class ClientFighter : NetworkBehaviour
     {
-        public const int FIGHT_ACTION_PRIORITY = 1;
-
         public const float MOVE_EPSILON = 0.1f;
 
         CombatTarget target;
@@ -95,7 +93,6 @@ namespace Dota.Combat
             {
                 target = null;
                 hasFinishedBackswing = true;
-                actionLocker.ReleaseLock(this);
                 TriggerStopAttackAnimation();
             }
         }
@@ -144,7 +141,7 @@ namespace Dota.Combat
             {
                 transform.LookAt(target.transform);
 
-                if (attackCooldownTimer <= 0 && actionLocker.TryGetLock(this))
+                if (attackCooldownTimer <= 0)
                 {
                     attackCooldownTimer = timeBetweenAttacks;
                     netAnimator.ResetTrigger("stopAttack");
@@ -152,21 +149,6 @@ namespace Dota.Combat
                     hasFinishedBackswing = false;
                 }
             }
-        }
-
-        public int GetPriority()
-        {
-            return FIGHT_ACTION_PRIORITY;
-        }
-
-        public void Begin()
-        {
-            
-        }
-
-        public void End()
-        {
-            StopAttack();
         }
         #endregion
     }

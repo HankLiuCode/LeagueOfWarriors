@@ -71,7 +71,7 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
         RandomAction();
     }
 
-    private void Health_ServerOnHealthDead(Health arg1, NetworkIdentity arg2)
+    private void Health_ServerOnHealthDead(Health obj)
     {
         agent.enabled = false;
         StartCoroutine(DestroyAfter(destroyTime));
@@ -294,7 +294,7 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
     [Server]
     private void AnimationEventHandler_OnAttackPoint()
     {
-        target.GetHealth().ServerTakeDamage(statStore.GetStats().attackDamage, netIdentity);
+        target.GetHealth().ServerTakeDamage(statStore.GetStats().attackDamage);
     }
 
     /// <summary>
@@ -344,7 +344,7 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
         health.ClientOnHealthDead += Health_ClientOnHealthDead;
     }
 
-    private void Health_ClientOnHealthDead(Health obj, NetworkIdentity attacker)
+    private void Health_ClientOnHealthDead(Health obj)
     {
         agent.enabled = false;
         ClientOnMonsterDead?.Invoke(this);

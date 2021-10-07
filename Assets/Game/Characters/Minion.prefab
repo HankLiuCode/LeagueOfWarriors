@@ -122,7 +122,6 @@ MonoBehaviour:
   healthCollider: {fileID: 9052095073136874282}
   animationEventHandler: {fileID: 0}
   healthDisplayOffset: 3
-  deadExp: 50
 --- !u!114 &1884173398059766069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,9 +157,14 @@ MonoBehaviour:
     maxMana: 100
     manaRegen: 1
     healthRegen: 1
+    attackSpeed: 1
     moveSpeed: 3.5
     attackDamage: 5
+    magicDamage: 5
     armor: 10
+    magicResist: 10
+    attackRange: 0
+    cooldownReduction: 0
 --- !u!114 &8741716338738734724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,14 +263,13 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   attackCooldownTimer: 0
-  attackRange: 1.5
+  attackRange: 2
   timeBetweenAttacks: 1
   netAnimator: {fileID: 1884173398059766069}
   animationEventHandler: {fileID: 0}
   health: {fileID: 0}
   mover: {fileID: -7754430342046818133}
   statStore: {fileID: 9022028439047737320}
-  actionLocker: {fileID: 3089244958819557603}
   hasFinishedBackswing: 1
 --- !u!114 &-3417598627266572922
 MonoBehaviour:

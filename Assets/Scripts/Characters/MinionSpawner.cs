@@ -25,7 +25,6 @@ public class MinionSpawner : NetworkBehaviour
     [SerializeField] BuildingManager buildingManager = null;
 
     [SerializeField] GameObject minionSpawnEffect = null;
-    [SerializeField] float minionSpawnEffectDuration = 1f;
 
     IEnumerator redSpawnRoutine;
     IEnumerator blueSpawnRoutine;
@@ -117,18 +116,11 @@ public class MinionSpawner : NetworkBehaviour
 
         minion.SetRoad(GetMask(lane));
 
-        NetworkServer.Spawn(minionInstance);
-
-        StartCoroutine(SpawnEffectForSeconds(minionSpawnEffectDuration, spawnPosition));
-    }
-
-    [Server]
-    IEnumerator SpawnEffectForSeconds(float seconds, Vector3 spawnPosition)
-    {
         GameObject spawnEffectInstance = Instantiate(minionSpawnEffect, spawnPosition, Quaternion.identity);
+
         NetworkServer.Spawn(spawnEffectInstance);
-        yield return new WaitForSeconds(seconds);
-        NetworkServer.Destroy(spawnEffectInstance);
+
+        NetworkServer.Spawn(minionInstance);
     }
 
     private Quaternion GetMinionOrientation(Team team, Lane lane)

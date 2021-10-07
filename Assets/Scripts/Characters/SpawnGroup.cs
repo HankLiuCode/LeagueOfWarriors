@@ -41,7 +41,7 @@ public class SpawnGroup : NetworkBehaviour
     }
 
     [Server]
-    private void Health_ServerOnHealthDead(Health health, NetworkIdentity attacker)
+    private void Health_ServerOnHealthDead(Health health)
     {
         Monster monster = health.GetComponent<Monster>();
 
@@ -52,7 +52,6 @@ public class SpawnGroup : NetworkBehaviour
             OnGroupDead?.Invoke(this);
         }
     }
-
 }
 
 

@@ -55,11 +55,6 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
         }
     }
 
-    private void Health_ServerOnHealthDead(Health arg1, NetworkIdentity arg2)
-    {
-        StartCoroutine(DestroyAfter(disolver.GetDisolveDuration() + dealthAnimDuration));
-    }
-
     private void GameOverHandler_OnServerGameOver(Base obj)
     {
         stopAllMovement = true;
@@ -67,6 +62,10 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
         serverMover.End();
     }
 
+    private void Health_ServerOnHealthDead(Health obj)
+    {
+        StartCoroutine(DestroyAfter(disolver.GetDisolveDuration() + dealthAnimDuration));
+    }
 
     IEnumerator DestroyAfter(float seconds)
     {
@@ -211,8 +210,9 @@ public class Minion : NetworkBehaviour, ITeamMember, IIconOwner, IMinimapEntity
         health.ClientOnHealthDeadEnd += Health_ClientOnHealthDeadEnd;
     }
 
-    private void Health_ClientOnHealthDead(Health health, NetworkIdentity attacker)
+    private void Health_ClientOnHealthDead(Health health)
     {
+
         ClientOnMinionDead?.Invoke(this);
     }
 

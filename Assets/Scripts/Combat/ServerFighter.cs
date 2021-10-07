@@ -1,5 +1,4 @@
 using Dota.Attributes;
-using Dota.Core;
 using Dota.Movement;
 using Dota.Utils;
 using Mirror;
@@ -7,9 +6,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ServerFighter : NetworkBehaviour, IAction
+public class ServerFighter : NetworkBehaviour
 {
-    public const int FIGHT_ACTION_PRIORITY = 1;
     public const float MOVE_EPSILON = 0.1f;
 
     CombatTarget target;
@@ -26,7 +24,6 @@ public class ServerFighter : NetworkBehaviour, IAction
     [SerializeField] Health health = null;
     [SerializeField] ServerMover mover = null;
     [SerializeField] StatStore statStore = null;
-    [SerializeField] ActionLocker actionLocker = null;
     
 
     [SerializeField] bool hasFinishedBackswing = true;
@@ -35,7 +32,7 @@ public class ServerFighter : NetworkBehaviour, IAction
     [Server]
     public void ServerDealDamageTo(Health health, float damage)
     {
-        health.ServerTakeDamage(damage, netIdentity);
+        health.ServerTakeDamage(damage);
     }
 
     public override void OnStartServer()
@@ -81,7 +78,6 @@ public class ServerFighter : NetworkBehaviour, IAction
         {
             target = null;
             hasFinishedBackswing = true;
-            actionLocker.ReleaseLock(this);
             TriggerStopAttackAnimation();
         }
     }
@@ -152,7 +148,7 @@ public class ServerFighter : NetworkBehaviour, IAction
         }
         else
         {
-            if (attackCooldownTimer <= 0 && actionLocker.TryGetLock(this))
+            if (attackCooldownTimer <= 0)
             {
                 attackCooldownTimer = timeBetweenAttacks;
                 transform.LookAt(target.transform);
@@ -170,20 +166,5 @@ public class ServerFighter : NetworkBehaviour, IAction
         {
             Gizmos.DrawCube(target.transform.position, Vector3.one);
         }
-    }
-
-    public int GetPriority()
-    {
-        return FIGHT_ACTION_PRIORITY;
-    }
-
-    public void Begin()
-    {
-        
-    }
-
-    public void End()
-    {
-        StopAttack();
     }
 }
