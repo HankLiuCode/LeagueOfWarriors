@@ -369,6 +369,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2433690888149234406, guid: b31cb8edadf36634680f82045f41209b,
         type: 3}
+      propertyPath: actionLocker
+      value: 
+      objectReference: {fileID: 7670669767896853513}
+    - target: {fileID: 2433690888149234406, guid: b31cb8edadf36634680f82045f41209b,
+        type: 3}
       propertyPath: animationEventHandler
       value: 
       objectReference: {fileID: 676414953242045597}

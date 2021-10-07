@@ -58,8 +58,6 @@ public class PlayerManager : NetworkBehaviour
 
         int level = champion.GetComponent<Level>().GetLevel();
 
-        Debug.Log("Champion Dead: Level: " + level);
-
         playerLevel[champion.GetOwner()] = level;
 
         StartCoroutine(SpawnChampionForPlayerAfterSeconds(champion.GetOwner(), Champion.REVIVE_TIME));

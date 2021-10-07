@@ -8,18 +8,18 @@ public class GameEventCanvas : NetworkBehaviour
 {
     [SerializeField] Team localPlayerTeam;
 
-    private void Awake()
-    {
-        Team team = NetworkClient.localPlayer.GetComponent<DotaRoomPlayer>().GetTeam();
-        localPlayerTeam = team;
 
-        Champion.ClientOnChampionDeadAttacker += Champion_ClientOnChampionDeadAttacker;
-    }
+    //public override void OnStartClient()
+    //{
+    //    Team team = NetworkClient.localPlayer.GetComponent<DotaRoomPlayer>().GetTeam();
+    //    localPlayerTeam = team;
+    //    Champion.ClientOnChampionDeadAttacker += Champion_ClientOnChampionDeadAttacker;
+    //}
 
-    private void OnDestroy()
-    {
-        Champion.ClientOnChampionDeadAttacker -= Champion_ClientOnChampionDeadAttacker;
-    }
+    //public override void OnStopClient()
+    //{
+    //    Champion.ClientOnChampionDeadAttacker -= Champion_ClientOnChampionDeadAttacker;
+    //}
 
     private void Champion_ClientOnChampionDeadAttacker(Champion deadChampion, NetworkIdentity slayer)
     {
