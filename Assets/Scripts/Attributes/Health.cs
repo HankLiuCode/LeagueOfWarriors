@@ -20,7 +20,7 @@ namespace Dota.Attributes
 
         [SerializeField] float healthDisplayOffset = 3f;
 
-        [SerializeField] float deadExp = 50f;
+        [SerializeField] float deadExp = 20f;
 
         public event System.Action<float, float> ClientOnHealthModified;
         public event System.Action<Health> ClientOnHealthDead;

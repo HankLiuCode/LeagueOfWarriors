@@ -122,6 +122,7 @@ MonoBehaviour:
   healthCollider: {fileID: 9052095073136874282}
   animationEventHandler: {fileID: 0}
   healthDisplayOffset: 3
+  deadExp: 20
 --- !u!114 &1884173398059766069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,14 +158,9 @@ MonoBehaviour:
     maxMana: 100
     manaRegen: 1
     healthRegen: 1
-    attackSpeed: 1
     moveSpeed: 3.5
     attackDamage: 5
-    magicDamage: 5
     armor: 10
-    magicResist: 10
-    attackRange: 0
-    cooldownReduction: 0
 --- !u!114 &8741716338738734724
 MonoBehaviour:
   m_ObjectHideFlags: 0

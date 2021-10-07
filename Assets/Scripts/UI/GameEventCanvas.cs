@@ -1,12 +1,18 @@
+using Dota.Networking;
 using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameEventCanvas : MonoBehaviour
+public class GameEventCanvas : NetworkBehaviour
 {
+    [SerializeField] Team localPlayerTeam;
+
     private void Awake()
     {
+        Team team = NetworkClient.localPlayer.GetComponent<DotaRoomPlayer>().GetTeam();
+        localPlayerTeam = team;
+
         Champion.ClientOnChampionDeadAttacker += Champion_ClientOnChampionDeadAttacker;
     }
 
@@ -15,8 +21,55 @@ public class GameEventCanvas : MonoBehaviour
         Champion.ClientOnChampionDeadAttacker -= Champion_ClientOnChampionDeadAttacker;
     }
 
-    private void Champion_ClientOnChampionDeadAttacker(Champion arg1, NetworkIdentity arg2)
+    private void Champion_ClientOnChampionDeadAttacker(Champion deadChampion, NetworkIdentity slayer)
     {
-        Debug.Log(arg1.name + "has been slain by" + arg2.name);
+        // localPlayerDead
+        bool isLocalPlayerDead = (deadChampion.GetOwner() == NetworkClient.localPlayer.GetComponent<DotaRoomPlayer>());
+        Champion champion = slayer.GetComponent<Champion>();
+        bool isLocalPlayerSlainEnemy = (champion.GetOwner() == NetworkClient.localPlayer.GetComponent<DotaRoomPlayer>());
+        
+        if (isLocalPlayerDead)
+        {
+            SelfSlain();
+            return;
+        }
+        else if (isLocalPlayerSlainEnemy)
+        {
+            SelfSlainEnemy();
+            return;
+        }
+
+        bool isDeadChampionSameTeam = deadChampion.GetTeam() == localPlayerTeam;
+
+        if (isDeadChampionSameTeam)
+        {
+            AllySlain();
+            return;
+        }
+        else
+        {
+            EnemySlain();
+            return;
+        }
+    }
+
+    private void SelfSlain()
+    {
+        Debug.Log("Self Slain");
+    }
+
+    private void SelfSlainEnemy()
+    {
+        Debug.Log("Self Slain Enemy");
+    }
+
+    private void AllySlain()
+    {
+        Debug.Log("Ally Slain");
+    }
+
+    private void EnemySlain()
+    {
+        Debug.Log("Enemy Slain");
     }
 }

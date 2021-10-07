@@ -357,6 +357,11 @@ PrefabInstance:
       propertyPath: animationEventHandler
       value: 
       objectReference: {fileID: 7531642278342173659}
+    - target: {fileID: 6002377142173262694, guid: a3b42f2814c77f24e9a9da1fcba31460,
+        type: 3}
+      propertyPath: baseStats.maxHealth
+      value: 500
+      objectReference: {fileID: 0}
     - target: {fileID: 8305178916994596866, guid: a3b42f2814c77f24e9a9da1fcba31460,
         type: 3}
       propertyPath: animator
