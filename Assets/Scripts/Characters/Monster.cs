@@ -151,7 +151,7 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
 
             //待機狀態，由於觀察動畫時間較長，並希望動畫完整播放，故等待時間是根據一個完整動畫的播放長度，而不是指令間隔時間
             case MonsterState.RELAX:
-                //transform.rotation = Quaternion.Slerp(transform.rotation, initalRotation, turnSpeed);
+                transform.rotation = Quaternion.Slerp(transform.rotation, initalRotation, turnSpeed);
 
                 if (Time.time - lastActTime > animator.GetCurrentAnimatorStateInfo(0).length)
                 {
@@ -359,7 +359,7 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
 
     public Sprite GetIcon()
     {
-        return null;
+        return icon;
     }
 
     public Team GetTeam()
