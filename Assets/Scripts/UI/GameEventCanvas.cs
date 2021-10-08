@@ -8,6 +8,8 @@ public class GameEventCanvas : NetworkBehaviour
 {
     [SerializeField] Team localPlayerTeam;
     [SerializeField] GameEventNotification notification;
+    [SerializeField] EventSound eventsound;
+
 
 
     public override void OnStartClient()
@@ -60,24 +62,28 @@ public class GameEventCanvas : NetworkBehaviour
     private void SelfSlain(IIconOwner slayer, IIconOwner victim)
     {
         DisplayKillCanvas(slayer, victim);
+        eventsound.PlayEventSound("Self Slain");
         Debug.Log("Self Slain");
     }
 
     private void SelfSlainEnemy(IIconOwner slayer, IIconOwner victim)
     {
         DisplayKillCanvas(slayer, victim);
+        eventsound.PlayEventSound("Self Slain Enemy");
         Debug.Log("Self Slain Enemy");
     }
 
     private void AllySlain(IIconOwner slayer, IIconOwner victim)
     {
         DisplayKillCanvas(slayer, victim);
+        eventsound.PlayEventSound("Ally Slain");
         Debug.Log("Ally Slain");
     }
 
     private void EnemySlain(IIconOwner slayer, IIconOwner victim)
     {
         DisplayKillCanvas(slayer, victim);
+        eventsound.PlayEventSound("Enemy Slain");
         Debug.Log("Enemy Slain");
     }
 
