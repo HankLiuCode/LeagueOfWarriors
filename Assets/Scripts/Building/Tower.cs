@@ -158,6 +158,7 @@ public class Tower : NetworkBehaviour, ITeamMember, IMinimapEntity, IIconOwner
         
         NetworkServer.Spawn(bulletInstance);
         projectile.SetTarget(target, towerDamage, projectileSpawnPos.position);
+        projectile.SetOwner(netIdentity);
     }
 
     private CombatTarget GetTarget()
