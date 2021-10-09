@@ -90,7 +90,7 @@ public class GameEventCanvas : NetworkBehaviour
     private void DisplayKillCanvas(IIconOwner slayer, IIconOwner victim)
     {
         notification.SetNotification(slayer.GetIcon(), victim.GetIcon());
-        StartCoroutine(ShowNotificationForSeconds(2f));
+        StartCoroutine(ShowNotificationForSeconds(3.5f));
     }
 
 
