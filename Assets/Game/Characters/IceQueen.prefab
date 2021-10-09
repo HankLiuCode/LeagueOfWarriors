@@ -35,7 +35,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   manaCost: 10
-  cooldownTime: 2
+  cooldownTime: 5
   statStore: {fileID: 3486310655393381221}
   icon: {fileID: 21300000, guid: f4327c91edee7144488e12afb0b9dc7d, type: 3}
   smartCast: 0
@@ -110,7 +110,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   manaCost: 10
-  cooldownTime: 2
+  cooldownTime: 30
   statStore: {fileID: 3486310655393381221}
   icon: {fileID: 21300000, guid: 6f98b3e70c3ad8a48a0396785dad48e8, type: 3}
   smartCast: 0
@@ -162,7 +162,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   manaCost: 10
-  cooldownTime: 2
+  cooldownTime: 3
   statStore: {fileID: 3486310655393381221}
   icon: {fileID: 21300000, guid: c69e5ff9431f05d4f9e3e6a02f853c86, type: 3}
   smartCast: 1

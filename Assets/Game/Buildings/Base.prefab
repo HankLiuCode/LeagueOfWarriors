@@ -69,12 +69,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  healthPoint: 100
+  healthPoint: 300
   animator: {fileID: 0}
   stats: {fileID: 6131693119581513618}
   healthCollider: {fileID: 2211041439223768276}
   animationEventHandler: {fileID: 0}
   healthDisplayOffset: 3
+  deadExp: 50
 --- !u!114 &6131693119581513618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94,14 +95,9 @@ MonoBehaviour:
     maxMana: 0
     manaRegen: 0
     healthRegen: 0
-    attackSpeed: 0
     moveSpeed: 0
     attackDamage: 0
-    magicDamage: 0
     armor: 0
-    magicResist: 0
-    attackRange: 0
-    cooldownReduction: 0
 --- !u!114 &5903093996623051485
 MonoBehaviour:
   m_ObjectHideFlags: 0
