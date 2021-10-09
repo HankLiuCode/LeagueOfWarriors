@@ -172,10 +172,11 @@ public class Monster : NetworkBehaviour, IIconOwner, ITeamMember, IMinimapEntity
                     animator.SetBool("running", true);
                     is_Running = true;
                 }
-
-                Vector3 targetVec = target.transform.position - transform.position;
-
-                agent.Move(targetVec.normalized * Time.deltaTime * runSpeed);
+                if(target != null)
+                {
+                    Vector3 targetVec = target.transform.position - transform.position;
+                    agent.Move(targetVec.normalized * Time.deltaTime * runSpeed);
+                }
 
                 ChaseRadiusCheck();
                 break;

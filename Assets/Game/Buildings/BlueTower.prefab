@@ -168,7 +168,7 @@ PrefabInstance:
         type: 3}
       propertyPath: towerIcon
       value: 
-      objectReference: {fileID: 21300000, guid: b91680691ecc13b4090afe5d003e6687,
+      objectReference: {fileID: 21300000, guid: f5faa90decb8e3246bed30ecb3f8a0c2,
         type: 3}
     - target: {fileID: 9128435532647562802, guid: 2115a164068207c4a9c541518fc36c3f,
         type: 3}

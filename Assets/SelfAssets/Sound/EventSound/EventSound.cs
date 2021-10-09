@@ -27,7 +27,7 @@ public class EventSound : MonoBehaviour
         }
         if (audio == "Ally Slain")
         {
-            eventAudioSource.PlayOneShot(eventSoundFX3, 1.0f);
+            eventAudioSource.PlayOneShot(eventSoundFX4, 1.0f);
         }
         if (audio == "Enemy Slain")
         {
