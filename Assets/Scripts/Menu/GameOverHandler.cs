@@ -15,6 +15,7 @@ public class GameOverHandler : NetworkBehaviour
 {
     [SerializeField] Team localPlayerTeam;
     [SerializeField] GameOverCanvas gameOverCanvas;
+    [SerializeField] FloatingBarManager floatingBarCanvas;
 
     [SyncVar]
     private GameState gameState;
@@ -77,6 +78,7 @@ public class GameOverHandler : NetworkBehaviour
     {
         OnClientGameOver?.Invoke(teamBase);
 
+        floatingBarCanvas.gameObject.SetActive(false);
         ShowGameOverVideo(teamBase);
         StartCoroutine(ShowButtonAfter(gameOverAnimationLength));
     }
